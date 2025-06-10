@@ -1,0 +1,63 @@
+# NixOS System Configuration
+/etc/nixos/hardware-configuration.nix
+hardware-configuration.nix
+
+# Nix build artifacts
+/result
+/nix/store/*
+/nix/var/nix/db/*
+/nix/var/nix/profiles/*
+/nix/var/nix/gcroots/*
+/nix/var/log/*
+/nix/var/cache/*
+/nix/var/spool/*
+/var/lib/nixos/*
+/var/log/*
+/var/tmp/*
+
+# Secrets and Sensitive Files
+secrets/
+*.key
+*.pem
+*.crt
+*.enc
+*.gpg
+*.asc
+*.kbx
+*.sqlite
+*.nixops
+
+# Shell History and User-Specific Files
+.bash_history
+.zsh_history
+.fish_history
+.lesshst
+.inputrc
+
+# Editor and IDE Files
+*.swp
+*.swo
+*.bak
+*.tmp
+*.~*
+*.orig
+.vscode/
+.idea/
+*.code-workspace
+*.sublime-workspace
+*.sublime-project
+
+# User Cache and Logs
+.cache/
+.local/share/
+.local/state/
+.xsession-errors*
+/tmp/
+*~
+
+# Lock Files and Dependencies
+.lock
+*.lock
+node_modules/
+vendor/
+**/lazy-lock.json

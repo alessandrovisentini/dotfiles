@@ -1,0 +1,41 @@
+# dunstrc
+
+[global]
+    origin = bottom-right
+    font = DejaVuSansM Nerd Font Mono 11
+    format = "%s %b"
+    sort = yes
+    indicate_hidden = yes
+    word_wrap = yes
+    horizontal_padding = 20
+    separator_height = 2
+    title = "Dunst"
+    follow = none
+    sticky_history = yes
+    line_height = 0
+    corner_radius = 10
+    padding = 10
+    alignment = center
+    follow = keyboard
+
+[urgency_low]
+    background = "#383c4a"
+    foreground = "#ffffff"
+    timeout = 10
+    icon_position = left
+    format = "%s %b"
+
+[urgency_normal]
+    background = "#383c4a"
+    foreground = "#ffffff"
+    timeout = 10
+    icon_position = left
+    format = "%s %b"
+
+[urgency_critical]
+    background = "#980020"
+    foreground = "#ffffff"
+    timeout = 0
+    icon_position = left
+    format = "%s %b"
+

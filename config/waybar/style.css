@@ -1,0 +1,99 @@
+/* Define colors */
+@define-color white #ffffff;
+@define-color gray #383c4a;
+@define-color light_gray #7c818c;
+@define-color accent_red #980020;
+@define-color success_green #176C4e;
+@define-color warning_yellow #fbbb03;
+@define-color blue #F0F0F0;
+@define-color black #000000;
+
+* {
+    border: none;
+    font-family: DejaVuSansM Nerd Font Mono;
+    min-height: 18px;
+    font-size: 14px; 
+}
+
+window#waybar {
+    background: @gray;
+}
+
+#workspaces button {
+    color: @light_gray;
+    padding: 5px;
+}
+
+#workspaces button.persistent {
+    color: @light_gray;
+    font-size: 10px
+}
+
+#workspaces button:hover {
+    box-shadow: inherit;
+    text-shadow: inherit;
+    border-radius: inherit;
+    color: @gray;
+    background: @light_gray;
+}
+
+#workspaces button.focused {
+    color: @white;
+}
+
+#clock,
+#wireplumber,
+#pulseaudio,
+#backlight,
+#battery,
+#tray {
+    padding-left: 8px;
+    padding-right: 8px;
+    color: @white;
+}
+
+#wireplumber.muted {
+    color: @light_gray;
+}
+
+#temperature.critical {
+    background-color: @accent_red;
+}
+
+#battery.full{
+    background-color: @success_green;
+    color: @white;
+}
+
+#battery.plugged {
+    background-color: @success_green;
+    color: @white;
+}
+
+#battery.charging{
+    background-color: @success_green;
+    color: @white;
+}
+
+#battery.warning:not(.charging) {
+    background-color: @warning_yellow;
+    color: @black;
+}
+
+#battery.critical:not(.charging) {
+    background-color: @accent_red;
+    color: @white;
+    animation-name: blink;
+    animation-duration: 5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+@keyframes blink {
+    to {
+        background-color: @gray;
+        color: @white;
+    }
+}
+

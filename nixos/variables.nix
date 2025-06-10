@@ -1,0 +1,4 @@
+{
+  mainUserName = "vsnlsn";
+  hostName = "laptop";
+}

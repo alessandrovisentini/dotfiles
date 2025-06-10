@@ -1,0 +1,5 @@
+scaling=fill
+color=000000
+ignore-empty-password
+show-failed-attempts
+daemonize
