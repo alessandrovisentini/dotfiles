@@ -61,3 +61,6 @@ secrets/
 node_modules/
 vendor/
 **/lazy-lock.json
+
+# OS Specific
+.DS_Store
