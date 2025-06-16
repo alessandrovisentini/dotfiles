@@ -1,4 +1,4 @@
 {
-  mainUserName = "vsnlsn";
+  mainUserName = "alessandrovisentini";
   hostName = "laptop";
 }

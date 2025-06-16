@@ -3,7 +3,7 @@
   pkgs,
   ...
 }: let
-  home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/release-24.11.tar.gz";
+  home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/release-25.05.tar.gz";
   configDir = builtins.dirOf (toString ./.); # Gets the directory of the .nix file
   parentDir = builtins.dirOf configDir; # Moves one level up
   vars = import ./variables.nix;
@@ -76,8 +76,8 @@ in {
   services.gnome.gnome-keyring.enable = true;
 
   # Nerd Fonts
-  fonts.packages = with pkgs; [
-    (nerdfonts.override {fonts = ["DejaVuSansMono"];})
+  fonts.packages = [
+    pkgs.nerd-fonts.dejavu-sans-mono
   ];
 
   # Sound
@@ -136,7 +136,7 @@ in {
     config,
     ...
   }: {
-    home.stateVersion = "24.11";
+    home.stateVersion = "25.05";
 
     home.username = vars.mainUserName;
 
