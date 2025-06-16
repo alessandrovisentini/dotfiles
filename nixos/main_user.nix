@@ -48,7 +48,6 @@ in {
       pandoc
       python312Packages.weasyprint
       inkscape-with-extensions
-      okular
     ];
   };
   users.groups.${vars.mainUserName} = {
