@@ -1,5 +1,20 @@
 # Read `man 5 sway` for a complete reference.
 
+# Custom theme
+set $bg0          #383C4A
+set $bg1          #000000
+set $bg2          #3D3D3D
+set $highlight    #7C818C
+set $white        #ffffff
+set $gray_text    #969696
+set $red_accent   #980020
+
+client.focused          $highlight $bg0     $white     $white     $highlight
+client.unfocused        $bg0       $bg0     $gray_text $bg0       $bg0
+client.urgent           $red_accent $red_accent $white $white     $red_accent
+client.focused_inactive $bg2       $bg2     $gray_text $bg2       $bg2
+client.background       $bg1
+
 # Logo key. Use Mod1 for Alt.
 set $mod Mod4
 

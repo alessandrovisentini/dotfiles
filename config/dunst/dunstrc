@@ -13,7 +13,6 @@
     follow = none
     sticky_history = yes
     line_height = 0
-    corner_radius = 10
     padding = 10
     alignment = center
     follow = keyboard
