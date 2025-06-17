@@ -475,6 +475,8 @@ require('lazy').setup({
         },
 
         dcm = {},
+
+        alejandra = {},
       }
 
       local ensure_installed = vim.tbl_keys(servers or {})
