@@ -48,6 +48,9 @@ in {
       pandoc
       python312Packages.weasyprint
       inkscape-with-extensions
+      losslesscut-bin
+      texlivePackages.heros-otf
+      obsidian
     ];
   };
   users.groups.${vars.mainUserName} = {

@@ -11,6 +11,7 @@ in {
   programs.tcpdump.enable = true;
   services.fwupd.enable = true;
   programs.git.enable = true;
+  programs.git.lfs.enable = true;
   environment.systemPackages = with pkgs; [
     nano
     wget
