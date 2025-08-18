@@ -24,7 +24,7 @@ in {
     packages = with pkgs; [
       alacritty
       delta
-      keepassxc
+      proton-pass
       deja-dup
       gnome-calendar
       geary
