@@ -1,4 +1,4 @@
-{...}: {
+{pkgs, ...}: {
   specialisation = {
     egpu.configuration = {
       system.nixos.tags = ["egpu"];
@@ -8,17 +8,24 @@
         initrd.kernelModules = ["amdgpu"];
 
         # Disable the integrated graphics module
-        blacklistedKernelModules = ["i915"];
+        blacklistedKernelModules = ["i915" "xe"];
 
         kernelParams = [
           "pcie_port_pm=off"
-          "module_blacklist=i915"
+          "module_blacklist=i915,xe"
+          "i915.modeset=0"
+          "xe.modeset=0"
           "amdgpu.pcie_gen_cap=0x40000" # Force AMD GPU to use full width (optional)
         ];
       };
 
       # Use external graphics
       services.xserver.videoDrivers = ["amdgpu"];
+
+      hardware.graphics = {
+        enable = true;
+        enable32Bit = true;
+     };
     };
   };
 }
