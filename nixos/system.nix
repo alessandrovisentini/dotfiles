@@ -62,14 +62,4 @@ in {
       turbo = "auto";
     };
   };
-
-  # Thunderbolt
-  services.hardware.bolt.enable = true;
-
-  # Bluetooth
-  hardware.bluetooth = {
-    enable = true;
-    powerOnBoot = false;
-    settings.General.Enable = "Source,Sink,Media,Socket";
-  };
 }

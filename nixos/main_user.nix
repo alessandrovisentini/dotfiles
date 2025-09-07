@@ -38,7 +38,6 @@ in {
       protonmail-bridge
       protonmail-bridge-gui
       gnome-disk-utility
-      brave
       yt-dlp
       vlc
       calibre
@@ -51,6 +50,8 @@ in {
       losslesscut-bin
       texlivePackages.heros-otf
       obsidian
+      brave
+      ungoogled-chromium
     ];
   };
   users.groups.${vars.mainUserName} = {
@@ -70,6 +71,12 @@ in {
   services.tumbler.enable = true;
 
   services.deluge.enable = true;
+
+  services.jellyfin = {
+    enable = true;
+    openFirewall = true;
+    user=vars.mainUserName;
+  };
 
   # Polkit
   security.polkit.enable = true;
@@ -105,10 +112,6 @@ in {
   # To install hp printer run: NIXPKGS_ALLOW_UNFREE=1 nix-shell -p hplipWithPlugin --run 'sudo -E hp-setup'
   services.printing.drivers = [pkgs.hplipWithPlugin];
   programs.system-config-printer.enable = true;
-
-  # Keyboard
-  hardware.keyboard.zsa.enable = true;
-
   # Session Variables
   environment.sessionVariables = {
     XDG_CACHE_HOME = "$HOME/.cache";

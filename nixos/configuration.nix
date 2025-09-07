@@ -8,6 +8,7 @@
     ./hardware-configuration.nix
     ./specialisation.nix
     ./system.nix
+    ./hardware.nix
     ./main_user.nix
     ./sway.nix
     ./development.nix
