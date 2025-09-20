@@ -13,7 +13,7 @@
     ./sway.nix
     ./development.nix
     ./music.nix
-    #./gaming.nix
+    ./gaming.nix
   ];
 
   boot = {
