@@ -1,9 +1,7 @@
 # Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
+# your system. Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 {...}: {
-  nix.settings.auto-optimise-store = true;
-
   imports = [
     ./hardware-configuration.nix
     ./specialisation.nix
@@ -13,8 +11,11 @@
     ./sway.nix
     ./development.nix
     ./music.nix
+    ./videomaking.nix
     ./gaming.nix
   ];
+
+  nix.settings.auto-optimise-store = true;
 
   boot = {
     loader.efi.canTouchEfiVariables = true;

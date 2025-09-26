@@ -43,15 +43,15 @@ in {
       calibre
       keymapp
       gimp
-      ffmpeg
       pandoc
       python312Packages.weasyprint
       inkscape-with-extensions
-      losslesscut-bin
       texlivePackages.heros-otf
       obsidian
       brave
       ungoogled-chromium
+      jellyfin-media-player
+      claude-code
     ];
   };
   users.groups.${vars.mainUserName} = {
@@ -77,6 +77,10 @@ in {
     openFirewall = true;
     user=vars.mainUserName;
   };
+
+  # Appimages
+  programs.appimage.enable = true;
+  programs.appimage.binfmt = true;
 
   # Polkit
   security.polkit.enable = true;

@@ -7,8 +7,8 @@
 
     "modules-right": [
         "tray",
-	"backlight",
-	"pulseaudio",
+        "backlight",
+        "pulseaudio",
         "battery",
         "clock",
     ],
@@ -32,7 +32,7 @@
         "tooltip": false,
         "scroll-step": 5,
         "format": "{icon} {volume}%",
-	"format-muted": "🔇 {volume}%",
+        "format-muted": "🔇 {volume}%",
         "format-source": "🎤 {volume}%",
         "on-click": "pavucontrol",
         "format-icons": {
@@ -66,12 +66,12 @@
     "battery": {
         "format": "{icon} {capacity}%",
         "states": {
-	    "warning": 15,
-	    "critical": 5 
-	},
-	"format-icons": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
-	"format-charging": "󰂄 {capacity}%",
-	"format-full": "󰂄 {capacity}%" 
+        "warning": 15,
+        "critical": 5 
+        },
+        "format-icons": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
+        "format-charging": "󰂄 {capacity}%",
+        "format-full": "󰂄 {capacity}%" 
     },
 
     "memory": {
@@ -87,7 +87,7 @@
     "temperature": {
         "critical-threshold": 80,
         "format": "{icon} {temperatureC}°C",
-	"format-icons": ["", "", "", ""]
+        "format-icons": ["", "", "", ""]
     },
 
     "tray": {
