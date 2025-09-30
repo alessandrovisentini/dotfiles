@@ -12,10 +12,7 @@ vim.g.have_nerd_font = true
 -- NOTE: You can change these options as you wish!
 --  For more options, you can see `:help option-list`
 
--- Make line numbers default
-vim.opt.number = true
--- You can also add relative line numbers, to help with jumping.
---  Experiment for yourself to see if you like it!
+-- vim.opt.number = true
 -- vim.opt.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
@@ -70,6 +67,11 @@ vim.opt.cursorline = true
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
 
+-- Enable spell checking
+vim.opt.spell = true
+vim.opt.spelllang = { 'en_us' }
+vim.opt.spelloptions = 'camel'
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -82,6 +84,16 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 
 -- Open a float window to show the full error
 vim.keymap.set({ 'n' }, '<leader>e', vim.diagnostic.open_float, { desc = 'Open float diagnostic' })
+
+-- Spell checking keymaps
+vim.keymap.set('n', '<leader>ts', function()
+  vim.opt.spell = not vim.opt.spell:get()
+end, { desc = '[T]oggle [S]pell checking' })
+vim.keymap.set('n', 'zn', ']s', { desc = 'Next misspelled word' })
+vim.keymap.set('n', 'zp', '[s', { desc = 'Previous misspelled word' })
+vim.keymap.set('n', 'za', 'zg', { desc = 'Add word to dictionary' })
+vim.keymap.set('n', 'zr', 'zw', { desc = 'Remove word from dictionary' })
+vim.keymap.set('n', 'zs', 'z=', { desc = 'Suggest spelling corrections' })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which

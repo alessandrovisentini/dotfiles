@@ -44,7 +44,6 @@ in {
       keymapp
       gimp
       pandoc
-      python312Packages.weasyprint
       inkscape-with-extensions
       texlivePackages.heros-otf
       obsidian
@@ -52,6 +51,7 @@ in {
       ungoogled-chromium
       jellyfin-media-player
       claude-code
+      openai-whisper
     ];
   };
   users.groups.${vars.mainUserName} = {
