@@ -1,11 +1,14 @@
-/*******************************************************************************
- * ROUNDED THEME FOR ROFI 
- * User                 : LR-Tech               
- * Theme Repo           : https://github.com/lr-tech/rofi-themes-collection
- *******************************************************************************/
-
 * {
-    font:   "Roboto 12";
+    bg0:    #383C4A;
+    bg1:    #000000;
+    bg2:    #3D3D3D80;
+    bg3:    #7C818C;
+    fg0:    #E6E6E6;
+    fg1:    #FFFFFF;
+    fg2:    #969696;
+    fg3:    #3D3D3D;
+
+    font:   "DejaVuSansM Nerd Font Mono 13";
 
     background-color:   transparent;
     text-color:         @fg1;

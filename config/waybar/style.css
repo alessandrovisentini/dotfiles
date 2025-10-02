@@ -46,10 +46,20 @@ window#waybar {
 #pulseaudio,
 #backlight,
 #battery,
+#cpu,
+#memory,
+#temperature,
 #tray {
     padding-left: 8px;
     padding-right: 8px;
     color: @white;
+}
+
+#network {
+    padding-left: 8px;
+    padding-right: 8px;
+    color: @white;
+    min-width: 200px;  /* Adjust this value to fit your needs */
 }
 
 #wireplumber.muted {
@@ -58,6 +68,31 @@ window#waybar {
 
 #temperature.critical {
     background-color: @accent_red;
+}
+
+#cpu.warning {
+    background-color: @warning_yellow;
+    color: @black;
+}
+
+#cpu.critical {
+    background-color: @accent_red;
+    color: @white;
+}
+
+#memory.warning {
+    background-color: @warning_yellow;
+    color: @black;
+}
+
+#memory.critical {
+    background-color: @accent_red;
+    color: @white;
+}
+
+#temperature.warning {
+    background-color: @warning_yellow;
+    color: @black;
 }
 
 #battery.full{

@@ -46,12 +46,13 @@ in {
       pandoc
       inkscape-with-extensions
       texlivePackages.heros-otf
-      obsidian
       brave
+      obsidian
       ungoogled-chromium
       jellyfin-media-player
       claude-code
       openai-whisper
+      python314
     ];
   };
   users.groups.${vars.mainUserName} = {

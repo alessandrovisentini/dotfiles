@@ -64,3 +64,6 @@ vendor/
 
 # OS Specific
 .DS_Store
+
+# AI
+**/.claude/settings.local.json
