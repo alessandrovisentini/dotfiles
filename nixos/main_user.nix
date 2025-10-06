@@ -79,6 +79,11 @@ in {
     user=vars.mainUserName;
   };
 
+  programs.localsend = {
+    enable = true;
+    openFirewall = true;
+  };
+
   # Appimages
   programs.appimage.enable = true;
   programs.appimage.binfmt = true;

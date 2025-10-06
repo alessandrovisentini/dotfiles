@@ -1,6 +1,4 @@
 {pkgs, ...}: {
-  services.displayManager.ly.enable = true;
-
   programs.sway = {
     enable = true;
     wrapperFeatures.gtk = true;
