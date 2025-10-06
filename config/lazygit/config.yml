@@ -4,5 +4,5 @@ git:
     pager: delta --dark --paging=never --line-numbers -s
 
 gui:
-  sidePanelWidth: 0.15
+  sidePanelWidth: 0.20
   mainPanelSplitMode: 'horizontal'

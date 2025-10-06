@@ -41,12 +41,16 @@ if tmux has-session -t "$SESSION_NAME" 2>/dev/null; then
     exit 0
 fi
 
-tmux new-session -d -s "$SESSION_NAME" -c "$REPO_PATH" -n "terminal"
-tmux split-window -v -c "$REPO_PATH" -t "$SESSION_NAME:1"
-tmux resize-pane -t "$SESSION_NAME:1.1" -D 15
-setup_window "$SESSION_NAME" "1.1" "$REPO_PATH" "lazygit"
+tmux new-session -d -s "$SESSION_NAME" -c "$REPO_PATH" -n "editor"
+setup_window "$SESSION_NAME" "1" "$REPO_PATH" "nvim ."
 
-tmux new-window -t "$SESSION_NAME" -c "$REPO_PATH" -n "editor"
-setup_window "$SESSION_NAME" "2" "$REPO_PATH" "nvim ."
+tmux new-window -t "$SESSION_NAME" -c "$REPO_PATH" -n "terminal"
+tmux split-window -h -c "$REPO_PATH" -t "$SESSION_NAME:2"
 
+if [ -d "$REPO_PATH/.git" ]; then
+    tmux new-window -t "$SESSION_NAME" -c "$REPO_PATH" -n "git"
+    setup_window "$SESSION_NAME" "3" "$REPO_PATH" "lazygit"
+fi
+
+tmux select-window -t "$SESSION_NAME:1"
 tmux attach -t "$SESSION_NAME"
