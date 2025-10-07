@@ -30,9 +30,16 @@ setup_window() {
     local CMD="$4"
 
     if [ -f "$REPO_PATH/flake.nix" ]; then
-        tmux send-keys -t "$SESSION":"$WINDOW_INDEX" "nix develop --command $CMD" C-m
+        if [ "$CMD" = "bash" ]; then
+            tmux send-keys -t "$SESSION":"$WINDOW_INDEX" "nix develop" C-m
+            tmux send-keys -t "$SESSION":"$WINDOW_INDEX" "clear" C-m
+        else
+            tmux send-keys -t "$SESSION":"$WINDOW_INDEX" "nix develop --command $CMD" C-m
+        fi
     else
-        tmux send-keys -t "$SESSION":"$WINDOW_INDEX" "$CMD" C-m
+        if [ "$CMD" != "bash" ]; then
+            tmux send-keys -t "$SESSION":"$WINDOW_INDEX" "$CMD" C-m
+        fi
     fi
 }
 
@@ -45,7 +52,9 @@ tmux new-session -d -s "$SESSION_NAME" -c "$REPO_PATH" -n "editor"
 setup_window "$SESSION_NAME" "1" "$REPO_PATH" "nvim ."
 
 tmux new-window -t "$SESSION_NAME" -c "$REPO_PATH" -n "terminal"
+setup_window "$SESSION_NAME" "2" "$REPO_PATH" "bash"
 tmux split-window -h -c "$REPO_PATH" -t "$SESSION_NAME:2"
+setup_window "$SESSION_NAME" "2" "$REPO_PATH" "bash"
 
 if [ -d "$REPO_PATH/.git" ]; then
     tmux new-window -t "$SESSION_NAME" -c "$REPO_PATH" -n "git"

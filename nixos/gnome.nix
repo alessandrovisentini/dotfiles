@@ -5,7 +5,6 @@ in
 {
   services.xserver.desktopManager.gnome.enable = true;
 
-  services.gnome.core-apps.enable = false;
   services.gnome.games.enable = false;
   services.power-profiles-daemon.enable = false; # Conflicts with autocpu-freq
   environment.gnome.excludePackages = with pkgs; [ gnome-tour gnome-user-docs ];
@@ -64,6 +63,14 @@ in
           "switch-to-application-9" = lib.gvariant.mkEmptyArray "s";
         };
 
+        "org/gnome/mutter" = {
+          overlay-key = "";
+        };
+
+        "org/gnome/shell/keybindings" = {
+          toggle-overview = ["<Super>d"];
+        };
+
         "org/gnome/desktop/wm/keybindings" = {
           "switch-to-workspace-1" = [ "<Super>1" ];
           "switch-to-workspace-2" = [ "<Super>2" ];
@@ -91,12 +98,13 @@ in
 
         "org/gnome/settings-daemon/plugins/media-keys" = {
           screensaver = [ "<Super><Control>q" ];
+          custom-keybindings = [ "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/" "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/" ];
         };
 
-        "org/gnome/shell" = {
-          enabled-extensions = [
-            "gsconnect@andyholmes.github.io"
-          ];
+        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
+          binding = "<Super>Return";
+          command = "alacritty --option window.startup_mode='\"Maximized\"'";
+          name = "Launch Alacritty Fullscreen";
         };
       };
     }
