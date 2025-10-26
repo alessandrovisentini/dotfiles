@@ -94,6 +94,7 @@ in
 
           "close" = [ "<Super><Shift>q" ];
           "maximize" = [ "<Super>f" ];
+          "minimize" = lib.gvariant.mkEmptyArray "s";
         };
 
         "org/gnome/settings-daemon/plugins/media-keys" = {
