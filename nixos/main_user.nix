@@ -1,12 +1,16 @@
 {
   lib,
   pkgs,
+  config,
   ...
 }: let
   home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/release-25.05.tar.gz";
   configDir = builtins.dirOf (toString ./.); # Gets the directory of the .nix file
   parentDir = builtins.dirOf configDir; # Moves one level up
   vars = import ./variables.nix;
+  unstable = import (fetchTarball "https://channels.nixos.org/nixos-unstable/nixexprs.tar.xz") {
+    config = config.nixpkgs.config;
+  };
 in {
   imports = [
     (import "${home-manager}/nixos")
@@ -53,6 +57,9 @@ in {
       claude-code
       openai-whisper
       python314
+      discord
+      spotify
+      unstable.easyeffects
     ];
   };
   users.groups.${vars.mainUserName} = {
@@ -84,6 +91,9 @@ in {
     openFirewall = true;
   };
 
+  # Spotify Firewall
+  networking.firewall.allowedTCPPorts = [ 57621 ];
+
   # Appimages
   programs.appimage.enable = true;
   programs.appimage.binfmt = true;
@@ -106,6 +116,16 @@ in {
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
+
+    extraConfig.pipewire.adjust-sample-rate = {
+      "context.properties" = {
+        "default.clock.rate" = 48000;
+        "defautlt.allowed-rates" = [ 192000 48000 42100 ];
+        "default.clock.min-quantum" = 32;
+        "default.clock.quantum" = 64;
+        "default.clock.max-quantum" = 512;
+      };
+    };
   };
 
   # Printing
