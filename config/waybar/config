@@ -38,7 +38,7 @@
         "format": "{icon} {volume}%",
         "format-muted": "🔇 {volume}%",
         "format-source": "🎤 {volume}%",
-        "on-click": "pavucontrol",
+        "on-click": "pwvucontrol",
         "format-icons": {
             "headphone": "🎧",
             "default": [

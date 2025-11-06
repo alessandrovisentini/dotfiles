@@ -26,7 +26,7 @@
       networkmanagerapplet
 
       # audio
-      pavucontrol
+      pwvucontrol
       pulseaudio
 
       # screenshot
