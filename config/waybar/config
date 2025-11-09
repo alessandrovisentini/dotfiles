@@ -71,8 +71,8 @@
         "interval": 1,
         "format": "{icon} {capacity}%",
         "states": {
-        "warning": 15,
-        "critical": 5 
+        "warning": 20,
+        "critical": 10 
         },
         "format-icons": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
         "format-charging": "󰂄 {capacity}%",
