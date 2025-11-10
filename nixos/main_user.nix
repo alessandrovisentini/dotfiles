@@ -116,14 +116,15 @@ in {
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
+    jack.enable = true;
 
     extraConfig.pipewire.adjust-sample-rate = {
       "context.properties" = {
         "default.clock.rate" = 48000;
-        "defautlt.allowed-rates" = [ 192000 48000 42100 ];
+        "defautlt.allowed-rates" = [ 192000 48000 44100 ];
         "default.clock.min-quantum" = 32;
         "default.clock.quantum" = 64;
-        "default.clock.max-quantum" = 512;
+        "default.clock.max-quantum" = 128;
       };
     };
   };
