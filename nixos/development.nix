@@ -4,8 +4,13 @@ in {
   # Enable Flakes (for .flake files)
   nix.settings.experimental-features = ["nix-command" "flakes"];
 
+  virtualisation.docker = {
+    enable = true;
+  };
+
   environment.systemPackages = with pkgs; [
     nodejs
+    docker-compose
   ];
 
   programs.adb.enable = true;
@@ -17,6 +22,7 @@ in {
     ];
     extraGroups = [
       "adbusers"
+      "docker"
     ];
   };
 }
