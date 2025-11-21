@@ -44,4 +44,11 @@
 
   #bluetooth
   services.blueman.enable = true;
+
+  # Fix swaylock PAM authentication when using GDM
+  security.pam.services.swaylock = {
+    text = ''
+      auth include login
+    '';
+  };
 }
