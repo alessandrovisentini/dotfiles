@@ -50,7 +50,6 @@ in {
       pandoc
       inkscape-with-extensions
       texlivePackages.heros-otf
-      brave
       obsidian
       ungoogled-chromium
       jellyfin-media-player

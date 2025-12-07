@@ -11,6 +11,12 @@ return {
         ignore_list = {},
       },
       view = { adaptive_size = true },
+      git = {
+        ignore = false,
+      },
+      filters = {
+        git_ignored = false,
+      },
     }
 
     vim.api.nvim_set_keymap('n', '<leader>tt', ':NvimTreeToggle<CR>:NvimTreeFocus<CR>', { noremap = true, silent = true, desc = '[T]ree [T]oggle' })

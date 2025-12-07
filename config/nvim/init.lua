@@ -243,14 +243,30 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
       vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
-      vim.keymap.set('n', '<leader>se', function()
+      vim.keymap.set('n', '<leader>sF', function()
         require('telescope.builtin').find_files {
           hidden = true,
           no_ignore = true,
+          file_ignore_patterns = {
+            'node_modules/.*',
+            '%.git/.*',
+            'target/.*',
+            'build/.*',
+            'dist/.*',
+            '%.next/.*',
+            'coverage/.*',
+            '%.nuxt/.*',
+            'vendor/.*',
+            '__pycache__/.*',
+            '%.cache/.*',
+            '%.temp/.*',
+            '%.tmp/.*',
+          },
         }
-      end, { desc = '[S]earch in [E]very Files' })
+      end, { desc = '[S]earch in All [F]iles (inc. gitignored)' })
       vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
       vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
+      vim.keymap.set('n', '<leader>se', builtin.find_files, { desc = '[S]earch [E]xplore files' })
       vim.keymap.set('n', '<leader>sg', function()
         builtin.live_grep {
           additional_args = function()
@@ -258,6 +274,14 @@ require('lazy').setup({
           end,
         }
       end, { desc = '[S]earch by [G]rep' })
+      vim.keymap.set('n', '<leader>sG', function()
+        builtin.live_grep {
+          additional_args = function()
+            return { '--fixed-strings', '--no-ignore', '--hidden' }
+          end,
+          glob_pattern = {'!**/node_modules/**', '!{target,build,dist,.next,coverage,.nuxt,vendor,__pycache__,.cache,.temp,.tmp,.git}/**'},
+        }
+      end, { desc = '[S]earch by [G]rep in all files (inc. gitignored)' })
       vim.keymap.set('n', '<leader>sx', builtin.live_grep, { desc = '[S]earch by grep with rege[X]' })
       vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
