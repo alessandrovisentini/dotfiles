@@ -34,24 +34,8 @@ install_git() {
 
     case "$1" in
         "nixos")
-            if command -v nix-shell &> /dev/null; then
-                log_info "Using nix-shell to temporarily provide git..."
-                # Create a wrapper script that uses nix-shell
-                cat > /tmp/git-wrapper.sh << 'EOF'
-#!/usr/bin/env bash
-exec nix-shell -p git --run "git $*"
-EOF
-                chmod +x /tmp/git-wrapper.sh
-                # Add to PATH for this session
-                export PATH="/tmp:$PATH"
-                # Create git symlink
-                ln -sf /tmp/git-wrapper.sh /tmp/git
-                log_success "Temporary git installation set up"
-            else
-                log_error "NixOS detected but nix-shell not available. Please add git to your system configuration or install it manually."
-                log_info "To add git permanently, add 'git' to environment.systemPackages in your /etc/nixos/configuration.nix"
-                exit 1
-            fi
+            log_info "Using nix-shell to provide git temporarily..."
+            log_info "All git commands will run in nix-shell environment"
             ;;
         "macos")
             if command -v brew &> /dev/null; then
@@ -118,16 +102,30 @@ mkdir -p "$HOME/Development/repos"
 if [ -d "$TARGET_DIR" ]; then
     log_warning "Directory $TARGET_DIR already exists. Updating..."
     cd "$TARGET_DIR"
-    git pull origin main || {
-        log_error "Failed to update repository. Please check your internet connection."
-        exit 1
-    }
+    if [[ "$TEMP_OS" == "nixos" ]] && ! command -v git &> /dev/null; then
+        nix-shell -p git --run "git pull origin main" || {
+            log_error "Failed to update repository. Please check your internet connection."
+            exit 1
+        }
+    else
+        git pull origin main || {
+            log_error "Failed to update repository. Please check your internet connection."
+            exit 1
+        }
+    fi
 else
     log_info "Cloning dotfiles repository..."
-    git clone "$REPO_URL" "$TARGET_DIR" || {
-        log_error "Failed to clone repository. Please check your internet connection."
-        exit 1
-    }
+    if [[ "$TEMP_OS" == "nixos" ]] && ! command -v git &> /dev/null; then
+        nix-shell -p git --run "git clone $REPO_URL $TARGET_DIR" || {
+            log_error "Failed to clone repository. Please check your internet connection."
+            exit 1
+        }
+    else
+        git clone "$REPO_URL" "$TARGET_DIR" || {
+            log_error "Failed to clone repository. Please check your internet connection."
+            exit 1
+        }
+    fi
 fi
 
 cd "$TARGET_DIR"
