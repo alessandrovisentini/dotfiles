@@ -19,9 +19,6 @@
     settings.General.Enable = "Source,Sink,Media,Socket";
   };
 
-  # Keyboard
-  hardware.keyboard.zsa.enable = true;
-
   # Fingerprint Scanner
   systemd.services.fprintd = {
     wantedBy = [ "multi-user.target" ];

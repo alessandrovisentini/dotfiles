@@ -34,13 +34,22 @@ install_git() {
 
     case "$1" in
         "nixos")
-            if command -v nix-env &> /dev/null; then
-                nix-env -iA nixpkgs.git || {
-                    log_error "Failed to install git with nix-env"
-                    exit 1
-                }
+            if command -v nix-shell &> /dev/null; then
+                log_info "Using nix-shell to temporarily provide git..."
+                # Create a wrapper script that uses nix-shell
+                cat > /tmp/git-wrapper.sh << 'EOF'
+#!/usr/bin/env bash
+exec nix-shell -p git --run "git $*"
+EOF
+                chmod +x /tmp/git-wrapper.sh
+                # Add to PATH for this session
+                export PATH="/tmp:$PATH"
+                # Create git symlink
+                ln -sf /tmp/git-wrapper.sh /tmp/git
+                log_success "Temporary git installation set up"
             else
-                log_error "NixOS detected but nix-env not available. Please install git manually."
+                log_error "NixOS detected but nix-shell not available. Please add git to your system configuration or install it manually."
+                log_info "To add git permanently, add 'git' to environment.systemPackages in your /etc/nixos/configuration.nix"
                 exit 1
             fi
             ;;

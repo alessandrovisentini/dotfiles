@@ -28,10 +28,12 @@ in {
     packages = with pkgs; [
       alacritty
       delta
+      protonmail-bridge
+      protonmail-bridge-gui
+      geary
       proton-pass
       deja-dup
       gnome-calendar
-      geary
       telegram-desktop
       pdfarranger
       evince
@@ -39,23 +41,15 @@ in {
       f3d
       mpv
       imv
-      protonmail-bridge
-      protonmail-bridge-gui
       gnome-disk-utility
       yt-dlp
       vlc
       calibre
-      keymapp
       gimp
-      pandoc
       inkscape-with-extensions
-      texlivePackages.heros-otf
       obsidian
       ungoogled-chromium
-      jellyfin-media-player
       claude-code
-      openai-whisper
-      python314
       discord
       spotify
       unstable.easyeffects
@@ -78,12 +72,6 @@ in {
   services.tumbler.enable = true;
 
   services.deluge.enable = true;
-
-  services.jellyfin = {
-    enable = true;
-    openFirewall = true;
-    user=vars.mainUserName;
-  };
 
   programs.localsend = {
     enable = true;
@@ -142,6 +130,7 @@ in {
   # To install hp printer run: NIXPKGS_ALLOW_UNFREE=1 nix-shell -p hplipWithPlugin --run 'sudo -E hp-setup'
   services.printing.drivers = [pkgs.hplipWithPlugin];
   programs.system-config-printer.enable = true;
+
   # Session Variables
   environment.sessionVariables = {
     XDG_CACHE_HOME = "$HOME/.cache";
@@ -183,6 +172,7 @@ in {
         gtk-theme = "Adwaita-dark";
       };
     };
+
     gtk = {
       enable = true;
       theme = {
@@ -190,6 +180,7 @@ in {
         package = pkgs.gnome-themes-extra;
       };
     };
+
     qt = {
       enable = true;
       style.name = "adwaita-dark";

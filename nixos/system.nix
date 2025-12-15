@@ -24,7 +24,6 @@ in {
     traceroute
     ripgrep
     fzf
-    cargo
     unzip
   ];
 

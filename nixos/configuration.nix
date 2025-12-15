@@ -9,11 +9,10 @@
     ./hardware.nix
     ./main_user.nix
     ./display_manager.nix
-    ./gnome.nix
+    #    ./gnome.nix
     ./sway.nix
     ./development.nix
     ./music.nix
-    ./videomaking.nix
     ./gaming.nix
   ];
 
