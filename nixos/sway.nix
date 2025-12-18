@@ -10,7 +10,7 @@
       swayidle
 
       # app launcher
-      rofi-wayland
+      rofi
 
       # status bar
       waybar
