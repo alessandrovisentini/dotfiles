@@ -26,8 +26,9 @@ in {
     description = vars.mainUserName;
     extraGroups = ["networkmanager" "wheel" "video" "audio" "disk" "pcap" "input"];
     packages = with pkgs; [
-      alacritty
+      kitty
       delta
+      python314
       protonmail-bridge
       protonmail-bridge-gui
       geary
