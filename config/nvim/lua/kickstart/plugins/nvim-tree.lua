@@ -4,7 +4,31 @@ return {
     'nvim-tree/nvim-web-devicons',
   },
   config = function()
+    local function on_attach(bufnr)
+      local api = require 'nvim-tree.api'
+
+      local function opts(desc)
+        return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+      end
+
+      -- Default mappings
+      api.config.mappings.default_on_attach(bufnr)
+
+      -- Custom mapping: 'v' to view images with imv
+      vim.keymap.set('n', 'v', function()
+        local node = api.tree.get_node_under_cursor()
+        if node and node.type == 'file' then
+          local extension = node.name:match '^.+%.(.+)$'
+          if extension and vim.tbl_contains({ 'png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'bmp', 'ico' }, extension:lower()) then
+            -- View image with imv
+            vim.fn.jobstart({ 'imv', node.absolute_path }, { detach = true })
+          end
+        end
+      end, opts 'View image with imv')
+    end
+
     require('nvim-tree').setup {
+      on_attach = on_attach,
       update_focused_file = {
         enable = true,
         update_cwd = true,

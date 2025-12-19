@@ -225,7 +225,35 @@ require('lazy').setup({
     config = function()
       -- [[ Configure Telescope ]]
       -- See `:help telescope` and `:help telescope.setup()`
+      local actions = require 'telescope.actions'
+      local action_state = require 'telescope.actions.state'
+
+      -- Custom action to view images with imv
+      local view_image_with_imv = function(prompt_bufnr)
+        local entry = action_state.get_selected_entry()
+        if entry then
+          local filepath = entry.path or entry.filename or entry.value
+          if filepath then
+            local extension = filepath:match '^.+%.(.+)$'
+            if extension and vim.tbl_contains({ 'png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'bmp', 'ico' }, extension:lower()) then
+              actions.close(prompt_bufnr)
+              vim.fn.jobstart({ 'imv', filepath }, { detach = true })
+            end
+          end
+        end
+      end
+
       require('telescope').setup {
+        defaults = {
+          mappings = {
+            i = {
+              ['<C-v>'] = view_image_with_imv,
+            },
+            n = {
+              ['v'] = view_image_with_imv,
+            },
+          },
+        },
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
