@@ -47,6 +47,9 @@ in {
   # Networking
   networking.hostName = vars.hostName;
   networking.networkmanager.enable = true;
+  networking.networkmanager.plugins = with pkgs; [
+    networkmanager-openvpn
+  ];
   networking.firewall.enable = true;
 
   # Power Profiles
