@@ -8,9 +8,6 @@
   configDir = builtins.dirOf (toString ./.); # Gets the directory of the .nix file
   parentDir = builtins.dirOf configDir; # Moves one level up
   vars = import ./variables.nix;
-  unstable = import (fetchTarball "https://channels.nixos.org/nixos-unstable/nixexprs.tar.xz") {
-    config = config.nixpkgs.config;
-  };
 in {
   imports = [
     (import "${home-manager}/nixos")
@@ -29,9 +26,9 @@ in {
       kitty
       delta
       python314
+      geary
       protonmail-bridge
       protonmail-bridge-gui
-      geary
       proton-pass
       deja-dup
       gnome-calendar
@@ -53,7 +50,10 @@ in {
       claude-code
       discord
       spotify
-      unstable.easyeffects
+      easyeffects
+      musescore
+      audacity
+      transcribe
     ];
   };
   users.groups.${vars.mainUserName} = {
@@ -116,21 +116,6 @@ in {
       };
     };
   };
-
-  # Printing
-  services.printing.enable = true;
-  services.avahi = {
-    enable = true;
-    nssmdns4 = true;
-    openFirewall = true;
-  };
-  nixpkgs.config.allowUnfreePredicate = pkg:
-    builtins.elem (lib.getName pkg) [
-      "hplip"
-    ];
-  # To install hp printer run: NIXPKGS_ALLOW_UNFREE=1 nix-shell -p hplipWithPlugin --run 'sudo -E hp-setup'
-  services.printing.drivers = [pkgs.hplipWithPlugin];
-  programs.system-config-printer.enable = true;
 
   # Session Variables
   environment.sessionVariables = {
