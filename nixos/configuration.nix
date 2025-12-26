@@ -11,7 +11,7 @@
     ./display_manager.nix
     ./sway.nix
     ./development.nix
-    ./music.nix
+    ./printing.nix
     ./gaming.nix
   ];
 
