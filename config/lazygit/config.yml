@@ -1,8 +1,7 @@
 git:
-  paging:
-    colorArg: always
-    pager: delta --dark --paging=never --line-numbers -s
-
+  pagers:
+    - colorArg: always
+      pager: delta --dark --paging=never --line-numbers -s
 gui:
   sidePanelWidth: 0.20
   mainPanelSplitMode: 'horizontal'
