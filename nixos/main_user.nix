@@ -23,7 +23,7 @@ in {
     description = vars.mainUserName;
     extraGroups = ["networkmanager" "wheel" "video" "audio" "disk" "pcap" "input"];
     packages = with pkgs; [
-      kitty
+      alacritty
       delta
       python314
       geary
