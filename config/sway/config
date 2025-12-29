@@ -23,7 +23,7 @@ set $down j
 set $up k
 set $right l
 
-set $term kitty
+set $term alacritty
 
 set $menu rofi -terminal '$term' -show drun
 
