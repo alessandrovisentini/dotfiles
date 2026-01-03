@@ -54,6 +54,7 @@ in {
       musescore
       audacity
       transcribe
+      spotdl
     ];
   };
   users.groups.${vars.mainUserName} = {
@@ -78,6 +79,17 @@ in {
     enable = true;
     openFirewall = true;
   };
+
+  services.jellyfin = {
+    enable = true;
+    openFirewall = true;
+    user = vars.mainUserName;
+  };
+  environment.systemPackages = [
+    pkgs.jellyfin
+    pkgs.jellyfin-web
+    pkgs.jellyfin-ffmpeg
+  ];
 
   # Spotify Firewall
   networking.firewall.allowedTCPPorts = [ 57621 ];
