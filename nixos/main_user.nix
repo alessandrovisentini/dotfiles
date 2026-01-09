@@ -34,7 +34,6 @@ in {
       gnome-calendar
       telegram-desktop
       pdfarranger
-      evince
       libreoffice
       f3d
       mpv
@@ -72,6 +71,9 @@ in {
   ];
   services.gvfs.enable = true;
   services.tumbler.enable = true;
+  xdg.mime.enable = true;
+  xdg.portal.enable = true;
+  xdg.portal.wlr.enable = true;
 
   services.deluge.enable = true;
 
