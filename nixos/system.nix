@@ -26,6 +26,9 @@ in {
     fzf
     unzip
   ];
+  programs.bash.interactiveShellInit = ''
+    eval "$(fzf --bash)"
+  '';
 
   # Timezone
   time.timeZone = "Europe/Rome";

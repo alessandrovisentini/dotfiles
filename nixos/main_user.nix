@@ -30,9 +30,11 @@ in {
       protonmail-bridge
       protonmail-bridge-gui
       proton-pass
+      tor-browser
       deja-dup
       gnome-calendar
       telegram-desktop
+      pdftk
       pdfarranger
       libreoffice
       f3d
@@ -50,6 +52,7 @@ in {
       discord
       spotify
       easyeffects
+      qpwgraph
       musescore
       audacity
       transcribe
