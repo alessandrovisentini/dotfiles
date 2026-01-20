@@ -13,7 +13,6 @@
     ./development.nix
     ./printing.nix
     ./gaming.nix
-    ./remote.nix
   ];
 
   nix.settings.auto-optimise-store = true;
