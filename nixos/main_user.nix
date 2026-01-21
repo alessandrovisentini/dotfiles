@@ -40,6 +40,7 @@ in {
       f3d
       mpv
       imv
+      gnome-system-monitor
       gnome-disk-utility
       yt-dlp
       vlc
