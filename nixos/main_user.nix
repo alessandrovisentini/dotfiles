@@ -57,6 +57,7 @@ in {
       audacity
       transcribe
       spotdl
+      parsec-bin
     ];
   };
   users.groups.${vars.mainUserName} = {
