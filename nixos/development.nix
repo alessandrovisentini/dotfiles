@@ -11,6 +11,7 @@ in {
   environment.systemPackages = with pkgs; [
     nodejs
     docker-compose
+    glow
   ];
 
   programs.adb.enable = true;
