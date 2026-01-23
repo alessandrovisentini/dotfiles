@@ -9,8 +9,8 @@ return {
     ft = { 'markdown' },
     opts = {
       -- Use most defaults, they look good
-      enabled = true,
-      render_modes = { 'n', 'c' },
+      enabled = false, -- Start disabled, toggle manually with <leader>mm
+      render_modes = { 'n', 'c', 'v' }, -- Only render in normal, command, visual modes (not insert)
       anti_conceal = { enabled = false },
       -- Headings with background highlight and icons
       heading = {
@@ -79,45 +79,6 @@ return {
           end
         end,
       })
-    end,
-  },
-
-  -- Zen mode for distraction-free reading with margins
-  {
-    'folke/zen-mode.nvim',
-    ft = { 'markdown' },
-    opts = {
-      window = {
-        backdrop = 1,
-        width = 120, -- Width of the centered text area (wider for tables)
-        height = 1, -- Full height
-        options = {
-          signcolumn = 'no',
-          number = false,
-          relativenumber = false,
-          cursorline = false,
-          foldcolumn = '0',
-          wrap = true,
-          linebreak = true, -- Wrap at word boundaries, not mid-word
-        },
-      },
-      plugins = {
-        options = {
-          enabled = true,
-          ruler = false,
-          showcmd = false,
-          laststatus = 0,
-        },
-        gitsigns = { enabled = false },
-        tmux = { enabled = false },
-      },
-    },
-    keys = {
-      { '<leader>mz', '<cmd>ZenMode<CR>', desc = '[M]arkdown: [Z]en mode toggle' },
-    },
-    config = function(_, opts)
-      require('zen-mode').setup(opts)
-      -- Use <leader>mz to manually toggle zen mode, no auto-open
     end,
   },
 
