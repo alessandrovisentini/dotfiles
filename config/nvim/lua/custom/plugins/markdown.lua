@@ -66,14 +66,14 @@ return {
       end, { desc = '[M]arkdown: Toggle [M]arkup rendering' })
 
       -- Disable spellcheck for vault folder (markdownlint disabled via .markdownlint.jsonc in vault)
-      local vault_path = vim.fn.expand('~/Development/repos/ttrpg-notes')
+      local vault_path = vim.fn.expand '~/Development/repos/ttrpg-notes'
       local vault_group = vim.api.nvim_create_augroup('VaultSettings', { clear = true })
 
       vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter' }, {
         group = vault_group,
         pattern = '*.md',
         callback = function()
-          local filepath = vim.fn.expand('%:p')
+          local filepath = vim.fn.expand '%:p'
           if filepath:find(vault_path, 1, true) then
             vim.opt_local.spell = false
           end
@@ -102,7 +102,7 @@ return {
       end,
       preferred_link_style = 'wiki',
       follow_url_func = function(url)
-        vim.fn.jobstart({ 'xdg-open', url })
+        vim.fn.jobstart { 'xdg-open', url }
       end,
       picker = { name = 'telescope.nvim' },
     },
@@ -116,76 +116,8 @@ return {
       { '<leader>ml', '<cmd>ObsidianLinks<CR>', desc = '[M]arkdown: [L]inks in note' },
       { '<leader>mt', '<cmd>ObsidianTags<CR>', desc = '[M]arkdown: Search [T]ags' },
       { '<leader>mr', '<cmd>ObsidianRename<CR>', desc = '[M]arkdown: [R]ename note' },
-      { '<leader>mk', '<cmd>ObsidianFollowLink<CR>', desc = '[M]arkdown: Follow lin[K]' },
+      { 'gd', '<cmd>ObsidianFollowLink<CR>', desc = '[G]o to [D]efinition link' },
     },
   },
 
-  -- Vault-specific Telescope searches with glow preview
-  -- Using keys instead of config to avoid overriding main Telescope setup
-  {
-    'nvim-telescope/telescope.nvim',
-    optional = true,
-    keys = {
-      {
-        '<leader>mF',
-        function()
-          local previewers = require('telescope.previewers')
-          local Job = require('plenary.job')
-
-          local glow_previewer = previewers.new_buffer_previewer({
-            title = 'Markdown Preview (Glow)',
-            define_preview = function(self, entry, status)
-              local filepath = entry.path or entry.filename
-              if not filepath then
-                return
-              end
-
-              local ext = filepath:match('%.([^%.]+)$')
-              if ext and (ext == 'md' or ext == 'markdown') then
-                local width = vim.api.nvim_win_get_width(status.preview_win)
-                Job:new({
-                  command = 'glow',
-                  args = { '-s', 'dark', '-w', tostring(width), filepath },
-                  on_exit = function(j, return_val)
-                    if return_val == 0 then
-                      vim.schedule(function()
-                        if self.state and self.state.bufnr and vim.api.nvim_buf_is_valid(self.state.bufnr) then
-                          vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, j:result())
-                        end
-                      end)
-                    end
-                  end,
-                }):start()
-              else
-                previewers.buffer_previewer_maker(filepath, self.state.bufnr, {
-                  bufname = self.state.bufname,
-                  winid = self.state.winid,
-                })
-              end
-            end,
-          })
-
-          require('telescope.builtin').find_files({
-            cwd = vim.fn.expand('~/Development/repos/ttrpg-notes'),
-            prompt_title = 'Find Notes (Vault)',
-            previewer = glow_previewer,
-          })
-        end,
-        desc = '[M]arkdown: [F]ind files in vault',
-      },
-      {
-        '<leader>mG',
-        function()
-          require('telescope.builtin').live_grep({
-            cwd = vim.fn.expand('~/Development/repos/ttrpg-notes'),
-            prompt_title = 'Grep Notes (Vault)',
-            additional_args = function()
-              return { '--type', 'md' }
-            end,
-          })
-        end,
-        desc = '[M]arkdown: [G]rep in vault',
-      },
-    },
-  },
 }
