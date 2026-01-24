@@ -257,7 +257,8 @@ require('lazy').setup({
 
             local extension = filepath:match '^.+%.(.+)$'
             if extension and vim.tbl_contains({ 'md', 'markdown', 'mkd', 'mdx' }, extension:lower()) then
-              return { 'sh', '-c', 'PAGER="less -R +g" glow -s dark -p ' .. vim.fn.shellescape(filepath) }
+              local glow_style = vim.fn.expand '~/.config/glow/github-dark.json'
+              return { 'sh', '-c', 'PAGER="less -R +g" glow -s ' .. vim.fn.shellescape(glow_style) .. ' -p ' .. vim.fn.shellescape(filepath) }
             else
               return { 'bat', '--style=numbers,changes', '--color=always', '--paging=always', '--theme=GitHub-Dark', filepath }
             end
