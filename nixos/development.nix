@@ -12,6 +12,7 @@ in {
     nodejs
     docker-compose
     glow
+    bat
   ];
 
   programs.adb.enable = true;

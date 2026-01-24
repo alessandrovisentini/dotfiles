@@ -228,6 +228,7 @@ require('lazy').setup({
       -- See `:help telescope` and `:help telescope.setup()`
       local actions = require 'telescope.actions'
       local action_state = require 'telescope.actions.state'
+      local previewers = require 'telescope.previewers'
 
       -- Custom action to view images with imv
       local view_image_with_imv = function(prompt_bufnr)
@@ -244,8 +245,29 @@ require('lazy').setup({
         end
       end
 
+      -- Custom previewer using glow for markdown and bat for other files
+      local custom_file_previewer = function(opts)
+        opts = opts or {}
+        return previewers.new_termopen_previewer {
+          get_command = function(entry)
+            local filepath = entry.path or entry.filename or entry.value
+            if filepath == nil then
+              return { 'echo', 'No file path' }
+            end
+
+            local extension = filepath:match '^.+%.(.+)$'
+            if extension and vim.tbl_contains({ 'md', 'markdown', 'mkd', 'mdx' }, extension:lower()) then
+              return { 'glow', '-s', 'dark', '-p', filepath }
+            else
+              return { 'bat', '--style=numbers,changes', '--color=always', '--paging=always', '--theme=Visual Studio Dark+', filepath }
+            end
+          end,
+        }
+      end
+
       require('telescope').setup {
         defaults = {
+          file_previewer = custom_file_previewer,
           mappings = {
             i = {
               ['<C-v>'] = view_image_with_imv,
