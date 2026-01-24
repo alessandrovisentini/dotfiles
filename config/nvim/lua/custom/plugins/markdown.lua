@@ -12,14 +12,29 @@ return {
       enabled = false, -- Start disabled, toggle manually with <leader>mm
       render_modes = { 'n', 'c', 'v' }, -- Only render in normal, command, visual modes (not insert)
       anti_conceal = { enabled = false },
-      -- Headings with background highlight and icons
+      -- Headings with GitHub Dark colors (matching glow preview)
       heading = {
         enabled = true,
         sign = true,
         position = 'overlay',
         width = 'full',
-        -- Default nerd font icons
         icons = { '󰲡 ', '󰲣 ', '󰲥 ', '󰲧 ', '󰲩 ', '󰲫 ' },
+        backgrounds = {
+          'RenderMarkdownH1Bg',
+          'RenderMarkdownH2Bg',
+          'RenderMarkdownH3Bg',
+          'RenderMarkdownH4Bg',
+          'RenderMarkdownH5Bg',
+          'RenderMarkdownH6Bg',
+        },
+        foregrounds = {
+          'RenderMarkdownH1Bg',
+          'RenderMarkdownH2Bg',
+          'RenderMarkdownH3Bg',
+          'RenderMarkdownH4Bg',
+          'RenderMarkdownH5Bg',
+          'RenderMarkdownH6Bg',
+        },
       },
       code = {
         enabled = true,
@@ -48,15 +63,38 @@ return {
       },
     },
     config = function(_, opts)
-      -- Set custom highlight for links (cyan/blue color for visibility)
-      vim.api.nvim_set_hl(0, 'RenderMarkdownLink', { fg = '#58a6ff', underline = true })
+      -- GitHub Dark color palette (matching glow preview style)
+      local colors = {
+        blue = '#58a6ff',
+        green = '#7ee787',
+        purple = '#d2a8ff',
+        orange = '#ffa657',
+        red = '#ff7b72',
+        gray = '#8b949e',
+        bg_blue = '#388bfd',
+        bg_dark = '#161b22',
+      }
 
-      -- Also set Treesitter highlights for link text to be colored and underlined
-      vim.api.nvim_set_hl(0, '@markup.link.label.markdown_inline', { fg = '#58a6ff', underline = true })
-      vim.api.nvim_set_hl(0, '@markup.link.url.markdown_inline', { fg = '#58a6ff', underline = true })
-      vim.api.nvim_set_hl(0, '@markup.link.markdown_inline', { fg = '#58a6ff', underline = true })
-      -- Wiki links for obsidian
-      vim.api.nvim_set_hl(0, '@markup.link', { fg = '#58a6ff', underline = true })
+      -- Heading highlights (matching glow github-dark.json)
+      vim.api.nvim_set_hl(0, 'RenderMarkdownH1Bg', { fg = '#ffffff', bg = colors.bg_blue, bold = true })
+      vim.api.nvim_set_hl(0, 'RenderMarkdownH2Bg', { fg = colors.blue, bold = true })
+      vim.api.nvim_set_hl(0, 'RenderMarkdownH3Bg', { fg = colors.green, bold = true })
+      vim.api.nvim_set_hl(0, 'RenderMarkdownH4Bg', { fg = colors.purple, bold = true })
+      vim.api.nvim_set_hl(0, 'RenderMarkdownH5Bg', { fg = colors.orange, bold = true })
+      vim.api.nvim_set_hl(0, 'RenderMarkdownH6Bg', { fg = colors.gray })
+
+      -- Link highlights (blue)
+      vim.api.nvim_set_hl(0, 'RenderMarkdownLink', { fg = colors.blue, bold = true, italic = true })
+
+      -- Wiki links (blue like regular links)
+      vim.api.nvim_set_hl(0, '@markup.link.label.markdown_inline', { fg = colors.blue, underline = true })
+      vim.api.nvim_set_hl(0, '@markup.link.url.markdown_inline', { fg = colors.blue, underline = true })
+      vim.api.nvim_set_hl(0, '@markup.link.markdown_inline', { fg = colors.blue, underline = true })
+      vim.api.nvim_set_hl(0, '@markup.link', { fg = colors.blue, bold = true, italic = true })
+
+      -- Code highlights
+      vim.api.nvim_set_hl(0, 'RenderMarkdownCode', { bg = colors.bg_dark })
+      vim.api.nvim_set_hl(0, 'RenderMarkdownCodeInline', { fg = colors.red, bg = colors.bg_dark })
 
       require('render-markdown').setup(opts)
 
