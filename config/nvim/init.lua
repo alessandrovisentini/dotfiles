@@ -258,7 +258,24 @@ require('lazy').setup({
             local extension = filepath:match '^.+%.(.+)$'
             if extension and vim.tbl_contains({ 'md', 'markdown', 'mkd', 'mdx' }, extension:lower()) then
               local glow_style = vim.fn.expand '~/.config/glow/github-dark.json'
-              return { 'sh', '-c', 'PAGER="less -R +g" glow -s ' .. vim.fn.shellescape(glow_style) .. ' -p ' .. vim.fn.shellescape(filepath) }
+              -- Pre-process Obsidian wiki links to styled text (bold+italic=purple) since glow shows URLs
+              local sed_cmd = table.concat({
+                -- Wiki link with alias: [[note|alias]] → ***alias***
+                's/\\[\\[\\([^]|]*\\)|\\([^]]*\\)\\]\\]/***\\2***/g',
+                -- Embed with alias: ![[note|alias]] → ***🔗 alias***
+                's/!\\[\\[\\([^]|]*\\)|\\([^]]*\\)\\]\\]/***🔗 \\2***/g',
+                -- Embed with heading/block (no alias): ![[note#h]] → ***🔗 note***
+                's/!\\[\\[\\([^]#^|]*\\)[#^][^]]*\\]\\]/***🔗 \\1***/g',
+                -- Simple embed: ![[note]] → ***🔗 note***
+                's/!\\[\\[\\([^]]*\\)\\]\\]/***🔗 \\1***/g',
+                -- Wiki link with heading (no alias): [[note#heading]] → ***heading***
+                's/\\[\\[\\([^]#^|]*\\)#\\([^]|]*\\)\\]\\]/***\\2***/g',
+                -- Wiki link with block ref (no alias): [[note^block]] → ***block***
+                's/\\[\\[\\([^]#^|]*\\)\\^\\([^]|]*\\)\\]\\]/***\\2***/g',
+                -- Simple wiki link: [[note]] → ***note***
+                's/\\[\\[\\([^]]*\\)\\]\\]/***\\1***/g',
+              }, '; ')
+              return { 'sh', '-c', 'sed "' .. sed_cmd .. '" ' .. vim.fn.shellescape(filepath) .. ' | PAGER="less -R +g" glow -s ' .. vim.fn.shellescape(glow_style) .. ' -p -' }
             else
               return { 'bat', '--style=numbers,changes', '--color=always', '--paging=always', '--theme=GitHub-Dark', filepath }
             end

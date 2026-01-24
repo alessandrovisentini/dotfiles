@@ -50,7 +50,8 @@
     "crossed_out": true
   },
   "emph": {
-    "italic": true
+    "italic": true,
+    "color": "#d2a8ff"
   },
   "strong": {
     "bold": true
