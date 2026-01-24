@@ -26,24 +26,39 @@
     "bold": true
   },
   "h2": {
-    "color": "#58a6ff",
+    "prefix": " ",
+    "suffix": " ",
+    "color": "#ffffff",
+    "background_color": "#388bfd",
     "bold": true
   },
   "h3": {
-    "color": "#7ee787",
+    "prefix": " ",
+    "suffix": " ",
+    "color": "#ffffff",
+    "background_color": "#238636",
     "bold": true
   },
   "h4": {
-    "color": "#d2a8ff",
+    "prefix": " ",
+    "suffix": " ",
+    "color": "#ffffff",
+    "background_color": "#8957e5",
     "bold": true
   },
   "h5": {
-    "color": "#ffa657",
+    "prefix": " ",
+    "suffix": " ",
+    "color": "#ffffff",
+    "background_color": "#d29922",
     "bold": true
   },
   "h6": {
-    "color": "#8b949e",
-    "bold": false
+    "prefix": " ",
+    "suffix": " ",
+    "color": "#ffffff",
+    "background_color": "#484f58",
+    "bold": true
   },
   "text": {},
   "strikethrough": {

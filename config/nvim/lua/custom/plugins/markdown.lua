@@ -72,16 +72,20 @@ return {
         red = '#ff7b72',
         gray = '#8b949e',
         bg_blue = '#388bfd',
+        bg_green = '#238636',
+        bg_purple = '#8957e5',
+        bg_orange = '#d29922',
+        bg_gray = '#484f58',
         bg_dark = '#161b22',
       }
 
       -- Heading highlights (matching glow github-dark.json)
       vim.api.nvim_set_hl(0, 'RenderMarkdownH1Bg', { fg = '#ffffff', bg = colors.bg_blue, bold = true })
-      vim.api.nvim_set_hl(0, 'RenderMarkdownH2Bg', { fg = colors.blue, bold = true })
-      vim.api.nvim_set_hl(0, 'RenderMarkdownH3Bg', { fg = colors.green, bold = true })
-      vim.api.nvim_set_hl(0, 'RenderMarkdownH4Bg', { fg = colors.purple, bold = true })
-      vim.api.nvim_set_hl(0, 'RenderMarkdownH5Bg', { fg = colors.orange, bold = true })
-      vim.api.nvim_set_hl(0, 'RenderMarkdownH6Bg', { fg = colors.gray })
+      vim.api.nvim_set_hl(0, 'RenderMarkdownH2Bg', { fg = '#ffffff', bg = colors.bg_blue, bold = true })
+      vim.api.nvim_set_hl(0, 'RenderMarkdownH3Bg', { fg = '#ffffff', bg = colors.bg_green, bold = true })
+      vim.api.nvim_set_hl(0, 'RenderMarkdownH4Bg', { fg = '#ffffff', bg = colors.bg_purple, bold = true })
+      vim.api.nvim_set_hl(0, 'RenderMarkdownH5Bg', { fg = '#ffffff', bg = colors.bg_orange, bold = true })
+      vim.api.nvim_set_hl(0, 'RenderMarkdownH6Bg', { fg = '#ffffff', bg = colors.bg_gray, bold = true })
 
       -- Link highlights (blue)
       vim.api.nvim_set_hl(0, 'RenderMarkdownLink', { fg = colors.blue, bold = true, italic = true })
