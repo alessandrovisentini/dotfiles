@@ -13,6 +13,7 @@ in {
     docker-compose
     glow
     bat
+    jq
   ];
 
   programs.adb.enable = true;

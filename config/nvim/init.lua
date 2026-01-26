@@ -311,7 +311,9 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>gs', builtin.git_status, { desc = '[G]it [S]tatus' })
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
-      vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
+      vim.keymap.set('n', '<leader>sf', function()
+        builtin.find_files { follow = true }
+      end, { desc = '[S]earch [F]iles' })
       vim.keymap.set('n', '<leader>sF', function()
         require('telescope.builtin').find_files {
           hidden = true,
@@ -335,7 +337,9 @@ require('lazy').setup({
       end, { desc = '[S]earch in All [F]iles (inc. gitignored)' })
       vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
       vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
-      vim.keymap.set('n', '<leader>se', builtin.find_files, { desc = '[S]earch [E]xplore files' })
+      vim.keymap.set('n', '<leader>se', function()
+        builtin.find_files { follow = true }
+      end, { desc = '[S]earch [E]xplore files' })
       vim.keymap.set('n', '<leader>sg', function()
         builtin.live_grep {
           additional_args = function()

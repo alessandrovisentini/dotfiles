@@ -5,6 +5,9 @@
   ...
 }: let
   home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/release-25.11.tar.gz";
+  unstable = import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz") {
+    config.allowUnfree = true;
+  };
   configDir = builtins.dirOf (toString ./.); # Gets the directory of the .nix file
   parentDir = builtins.dirOf configDir; # Moves one level up
   vars = import ./variables.nix;
@@ -35,7 +38,6 @@ in {
       gnome-calendar
       telegram-desktop
       pdftk
-      pdfarranger
       libreoffice
       f3d
       mpv
@@ -49,7 +51,6 @@ in {
       inkscape-with-extensions
       obsidian
       ungoogled-chromium
-      claude-code
       discord
       spotify
       easyeffects
@@ -59,6 +60,9 @@ in {
       transcribe
       spotdl
       parsec-bin
+      unstable.evince
+      unstable.pdfarranger
+      unstable.claude-code
     ];
   };
   users.groups.${vars.mainUserName} = {
