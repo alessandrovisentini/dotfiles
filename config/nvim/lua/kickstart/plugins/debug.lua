@@ -60,6 +60,13 @@ return {
       end,
       desc = 'Debug: Set Breakpoint',
     },
+    {
+      '<leader>dc',
+      function()
+        require('dap').clear_breakpoints()
+      end,
+      desc = 'Debug: [C]lear all breakpoints',
+    },
     -- Toggle to see last session result. Without this, you can't see session output in case of unhandled exception.
     {
       '<F7>',
@@ -137,21 +144,31 @@ return {
       },
     }
 
-    -- Highlight colors for breakpoints and stopped line
-    vim.api.nvim_set_hl(0, 'DapBreak', { fg = '#e51400' })
-    vim.api.nvim_set_hl(0, 'DapStop', { fg = '#ffcc00' })
-    vim.api.nvim_set_hl(0, 'DapStoppedLine', { bg = '#3a3a00' })
+    -- Setup highlights and signs for DAP
+    local function setup_dap_signs()
+      -- Highlight colors for breakpoints and stopped line
+      vim.api.nvim_set_hl(0, 'DapBreak', { fg = '#e51400' })
+      vim.api.nvim_set_hl(0, 'DapStop', { fg = '#ffcc00' })
+      vim.api.nvim_set_hl(0, 'DapStoppedLine', { bg = '#2e4d2e' })
 
-    -- Define signs for breakpoints and stopped position
-    local breakpoint_icons = vim.g.have_nerd_font
-        and { Breakpoint = '', BreakpointCondition = '', BreakpointRejected = '', LogPoint = '', Stopped = '' }
-      or { Breakpoint = '●', BreakpointCondition = '⊜', BreakpointRejected = '⊘', LogPoint = '◆', Stopped = '⭔' }
-    for type, icon in pairs(breakpoint_icons) do
-      local tp = 'Dap' .. type
-      local hl = (type == 'Stopped') and 'DapStop' or 'DapBreak'
-      local linehl = (type == 'Stopped') and 'DapStoppedLine' or nil
-      vim.fn.sign_define(tp, { text = icon, texthl = hl, numhl = hl, linehl = linehl })
+      -- Define signs for breakpoints and stopped position
+      local breakpoint_icons = vim.g.have_nerd_font
+          and { Breakpoint = '', BreakpointCondition = '', BreakpointRejected = '', LogPoint = '', Stopped = '' }
+        or { Breakpoint = '●', BreakpointCondition = '⊜', BreakpointRejected = '⊘', LogPoint = '◆', Stopped = '⭔' }
+      for type, icon in pairs(breakpoint_icons) do
+        local tp = 'Dap' .. type
+        local hl = (type == 'Stopped') and 'DapStop' or 'DapBreak'
+        local linehl = (type == 'Stopped') and 'DapStoppedLine' or nil
+        vim.fn.sign_define(tp, { text = icon, texthl = hl, numhl = hl, linehl = linehl })
+      end
     end
+
+    -- Apply now and reapply when colorscheme changes
+    setup_dap_signs()
+    vim.api.nvim_create_autocmd('ColorScheme', {
+      pattern = '*',
+      callback = setup_dap_signs,
+    })
 
     dap.listeners.after.event_initialized['dapui_config'] = dapui.open
     dap.listeners.before.event_terminated['dapui_config'] = dapui.close
