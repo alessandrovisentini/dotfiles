@@ -27,8 +27,8 @@ return {
       end, opts 'View image with imv')
     end
 
-    local FIXED_WIDTH = 30
-    local adaptive_mode = true
+    local FIXED_WIDTH = 40
+    local adaptive_mode = false
 
     require('nvim-tree').setup {
       on_attach = on_attach,
@@ -38,7 +38,7 @@ return {
         ignore_list = {},
       },
       view = {
-        adaptive_size = true,
+        adaptive_size = false,
         width = FIXED_WIDTH,
       },
       git = {

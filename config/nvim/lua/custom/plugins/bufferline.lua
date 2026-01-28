@@ -1,7 +1,10 @@
 return {
   'akinsho/bufferline.nvim',
   version = '*',
-  dependencies = { 'nvim-tree/nvim-web-devicons' },
+  dependencies = {
+    'nvim-tree/nvim-web-devicons',
+    'famiu/bufdelete.nvim',
+  },
   event = 'VeryLazy',
   keys = {
     -- Navigate buffers
@@ -14,7 +17,7 @@ return {
     { '<A-l>', '<cmd>BufferLineMoveNext<cr>', desc = 'Move Buffer Right' },
     -- Buffer actions
     { '<leader>bp', '<cmd>BufferLineTogglePin<cr>', desc = '[B]uffer [P]in' },
-    { '<leader>bc', '<cmd>bdelete<cr>', desc = '[B]uffer [C]lose' },
+    { '<leader>bc', '<cmd>Bdelete<cr>', desc = '[B]uffer [C]lose' },
     { '<leader>bC', '<cmd>BufferLineCloseOthers<cr>', desc = '[B]uffer [C]lose Others' },
     { '<leader>bb', '<cmd>BufferLinePick<cr>', desc = '[B]uffer Pick' },
     { '<leader>bx', '<cmd>BufferLinePickClose<cr>', desc = '[B]uffer Pick Close' },
@@ -35,10 +38,10 @@ return {
         mode = 'buffers',
         themable = true,
         numbers = 'ordinal',
-        close_command = 'bdelete! %d',
-        right_mouse_command = 'bdelete! %d',
+        close_command = 'Bdelete! %d',
+        right_mouse_command = 'Bdelete! %d',
         left_mouse_command = 'buffer %d',
-        middle_mouse_command = 'bdelete! %d',
+        middle_mouse_command = 'Bdelete! %d',
         indicator = {
           icon = '▎',
           style = 'icon',
