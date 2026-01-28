@@ -27,6 +27,9 @@ return {
       end, opts 'View image with imv')
     end
 
+    local FIXED_WIDTH = 30
+    local adaptive_mode = true
+
     require('nvim-tree').setup {
       on_attach = on_attach,
       update_focused_file = {
@@ -34,7 +37,10 @@ return {
         update_cwd = true,
         ignore_list = {},
       },
-      view = { adaptive_size = true },
+      view = {
+        adaptive_size = true,
+        width = FIXED_WIDTH,
+      },
       git = {
         ignore = false,
       },
@@ -43,8 +49,37 @@ return {
       },
     }
 
+    -- Toggle between adaptive and fixed width
+    local function toggle_adaptive_width()
+      adaptive_mode = not adaptive_mode
+      local api = require 'nvim-tree.api'
+      api.tree.close()
+      require('nvim-tree').setup {
+        on_attach = on_attach,
+        update_focused_file = {
+          enable = true,
+          update_cwd = true,
+          ignore_list = {},
+        },
+        view = {
+          adaptive_size = adaptive_mode,
+          width = FIXED_WIDTH,
+        },
+        git = {
+          ignore = false,
+        },
+        filters = {
+          git_ignored = false,
+        },
+      }
+      api.tree.open()
+      local mode_name = adaptive_mode and 'adaptive' or 'fixed (' .. FIXED_WIDTH .. ')'
+      vim.notify('NvimTree width: ' .. mode_name, vim.log.levels.INFO)
+    end
+
     vim.api.nvim_set_keymap('n', '<leader>tt', ':NvimTreeToggle<CR>:NvimTreeFocus<CR>', { noremap = true, silent = true, desc = '[T]ree [T]oggle' })
     vim.api.nvim_set_keymap('n', '<leader>tc', ':NvimTreeClose<CR>', { noremap = true, silent = true, desc = '[T]ree [C]lose' })
     vim.api.nvim_set_keymap('n', '<leader>tb', ':wincmd p<CR>', { noremap = true, silent = true, desc = '[T]ree [B]uffer focus' })
+    vim.keymap.set('n', '<leader>tw', toggle_adaptive_width, { noremap = true, silent = true, desc = '[T]ree [W]idth toggle' })
   end,
 }
