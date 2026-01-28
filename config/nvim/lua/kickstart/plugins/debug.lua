@@ -154,12 +154,20 @@ return {
         and { breakpoint = '', condition = '', rejected = '', logpoint = '', stopped = '' }
       or { breakpoint = '●', condition = '⊜', rejected = '⊘', logpoint = '◆', stopped = '→' }
 
-    -- Define signs AFTER dap is loaded - must use exact names nvim-dap expects
-    vim.fn.sign_define('DapBreakpoint', { text = icons.breakpoint, texthl = 'DapBreak', linehl = '', numhl = '' })
-    vim.fn.sign_define('DapBreakpointCondition', { text = icons.condition, texthl = 'DapBreak', linehl = '', numhl = '' })
-    vim.fn.sign_define('DapBreakpointRejected', { text = icons.rejected, texthl = 'DapBreak', linehl = '', numhl = '' })
-    vim.fn.sign_define('DapLogPoint', { text = icons.logpoint, texthl = 'DapBreak', linehl = '', numhl = '' })
-    vim.fn.sign_define('DapStopped', { text = icons.stopped, texthl = 'DapStop', linehl = 'DapStoppedLine', numhl = '' })
+    -- Function to define DAP signs
+    local function define_dap_signs()
+      vim.fn.sign_define('DapBreakpoint', { text = icons.breakpoint, texthl = 'DapBreak', linehl = '', numhl = '' })
+      vim.fn.sign_define('DapBreakpointCondition', { text = icons.condition, texthl = 'DapBreak', linehl = '', numhl = '' })
+      vim.fn.sign_define('DapBreakpointRejected', { text = icons.rejected, texthl = 'DapBreak', linehl = '', numhl = '' })
+      vim.fn.sign_define('DapLogPoint', { text = icons.logpoint, texthl = 'DapBreak', linehl = '', numhl = '' })
+      vim.fn.sign_define('DapStopped', { text = icons.stopped, texthl = 'DapStop', linehl = 'DapStoppedLine', numhl = '' })
+    end
+
+    -- Define signs now
+    define_dap_signs()
+
+    -- Redefine when debug session initializes (in case something overwrites them)
+    dap.listeners.after.event_initialized['dap_signs'] = define_dap_signs
 
     dap.listeners.after.event_initialized['dapui_config'] = dapui.open
     dap.listeners.before.event_terminated['dapui_config'] = dapui.close
