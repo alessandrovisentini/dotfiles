@@ -77,13 +77,20 @@ return {
       mode = { 'n', 'v' },
       desc = 'Debug: Inspect variable under cursor',
     },
-    -- Open REPL to evaluate expressions
+    -- Navigate call stack
     {
-      '<leader>dr',
+      '<leader>du',
       function()
-        require('dap').repl.open()
+        require('dap').up()
       end,
-      desc = 'Debug: Open REPL',
+      desc = 'Debug: Go [U]p in call stack',
+    },
+    {
+      '<leader>dd',
+      function()
+        require('dap').down()
+      end,
+      desc = 'Debug: Go [D]own in call stack',
     },
   },
   config = function()
@@ -130,17 +137,21 @@ return {
       },
     }
 
-    -- Change breakpoint icons
-    -- vim.api.nvim_set_hl(0, 'DapBreak', { fg = '#e51400' })
-    -- vim.api.nvim_set_hl(0, 'DapStop', { fg = '#ffcc00' })
-    -- local breakpoint_icons = vim.g.have_nerd_font
-    --     and { Breakpoint = '', BreakpointCondition = '', BreakpointRejected = '', LogPoint = '', Stopped = '' }
-    --   or { Breakpoint = '●', BreakpointCondition = '⊜', BreakpointRejected = '⊘', LogPoint = '◆', Stopped = '⭔' }
-    -- for type, icon in pairs(breakpoint_icons) do
-    --   local tp = 'Dap' .. type
-    --   local hl = (type == 'Stopped') and 'DapStop' or 'DapBreak'
-    --   vim.fn.sign_define(tp, { text = icon, texthl = hl, numhl = hl })
-    -- end
+    -- Highlight colors for breakpoints and stopped line
+    vim.api.nvim_set_hl(0, 'DapBreak', { fg = '#e51400' })
+    vim.api.nvim_set_hl(0, 'DapStop', { fg = '#ffcc00' })
+    vim.api.nvim_set_hl(0, 'DapStoppedLine', { bg = '#3a3a00' })
+
+    -- Define signs for breakpoints and stopped position
+    local breakpoint_icons = vim.g.have_nerd_font
+        and { Breakpoint = '', BreakpointCondition = '', BreakpointRejected = '', LogPoint = '', Stopped = '' }
+      or { Breakpoint = '●', BreakpointCondition = '⊜', BreakpointRejected = '⊘', LogPoint = '◆', Stopped = '⭔' }
+    for type, icon in pairs(breakpoint_icons) do
+      local tp = 'Dap' .. type
+      local hl = (type == 'Stopped') and 'DapStop' or 'DapBreak'
+      local linehl = (type == 'Stopped') and 'DapStoppedLine' or nil
+      vim.fn.sign_define(tp, { text = icon, texthl = hl, numhl = hl, linehl = linehl })
+    end
 
     dap.listeners.after.event_initialized['dapui_config'] = dapui.open
     dap.listeners.before.event_terminated['dapui_config'] = dapui.close
