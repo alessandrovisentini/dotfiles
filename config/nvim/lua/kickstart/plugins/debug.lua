@@ -47,18 +47,18 @@ return {
       desc = 'Debug: Step Out',
     },
     {
-      '<leader>b',
+      '<leader>db',
       function()
         require('dap').toggle_breakpoint()
       end,
-      desc = 'Debug: Toggle Breakpoint',
+      desc = 'Debug: Toggle [B]reakpoint',
     },
     {
-      '<leader>B',
+      '<leader>dB',
       function()
         require('dap').set_breakpoint(vim.fn.input 'Breakpoint condition: ')
       end,
-      desc = 'Debug: Set Breakpoint',
+      desc = 'Debug: Conditional [B]reakpoint',
     },
     {
       '<leader>dc',
@@ -144,31 +144,22 @@ return {
       },
     }
 
-    -- Setup highlights and signs for DAP
-    local function setup_dap_signs()
-      -- Highlight colors for breakpoints and stopped line
-      vim.api.nvim_set_hl(0, 'DapBreak', { fg = '#e51400' })
-      vim.api.nvim_set_hl(0, 'DapStop', { fg = '#ffcc00' })
-      vim.api.nvim_set_hl(0, 'DapStoppedLine', { bg = '#2e4d2e' })
+    -- Highlight colors for breakpoints and stopped line
+    vim.api.nvim_set_hl(0, 'DapBreak', { fg = '#e51400' })
+    vim.api.nvim_set_hl(0, 'DapStop', { fg = '#ffcc00' })
+    vim.api.nvim_set_hl(0, 'DapStoppedLine', { bg = '#2e4d2e' })
 
-      -- Define signs for breakpoints and stopped position
-      local breakpoint_icons = vim.g.have_nerd_font
-          and { Breakpoint = '', BreakpointCondition = '', BreakpointRejected = '', LogPoint = '', Stopped = '' }
-        or { Breakpoint = '●', BreakpointCondition = '⊜', BreakpointRejected = '⊘', LogPoint = '◆', Stopped = '⭔' }
-      for type, icon in pairs(breakpoint_icons) do
-        local tp = 'Dap' .. type
-        local hl = (type == 'Stopped') and 'DapStop' or 'DapBreak'
-        local linehl = (type == 'Stopped') and 'DapStoppedLine' or nil
-        vim.fn.sign_define(tp, { text = icon, texthl = hl, numhl = hl, linehl = linehl })
-      end
-    end
+    -- Icons for breakpoints and stopped position
+    local icons = vim.g.have_nerd_font
+        and { breakpoint = '', condition = '', rejected = '', logpoint = '', stopped = '' }
+      or { breakpoint = '●', condition = '⊜', rejected = '⊘', logpoint = '◆', stopped = '→' }
 
-    -- Apply now and reapply when colorscheme changes
-    setup_dap_signs()
-    vim.api.nvim_create_autocmd('ColorScheme', {
-      pattern = '*',
-      callback = setup_dap_signs,
-    })
+    -- Define signs AFTER dap is loaded - must use exact names nvim-dap expects
+    vim.fn.sign_define('DapBreakpoint', { text = icons.breakpoint, texthl = 'DapBreak', linehl = '', numhl = '' })
+    vim.fn.sign_define('DapBreakpointCondition', { text = icons.condition, texthl = 'DapBreak', linehl = '', numhl = '' })
+    vim.fn.sign_define('DapBreakpointRejected', { text = icons.rejected, texthl = 'DapBreak', linehl = '', numhl = '' })
+    vim.fn.sign_define('DapLogPoint', { text = icons.logpoint, texthl = 'DapBreak', linehl = '', numhl = '' })
+    vim.fn.sign_define('DapStopped', { text = icons.stopped, texthl = 'DapStop', linehl = 'DapStoppedLine', numhl = '' })
 
     dap.listeners.after.event_initialized['dapui_config'] = dapui.open
     dap.listeners.before.event_terminated['dapui_config'] = dapui.close
