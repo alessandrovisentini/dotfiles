@@ -68,6 +68,23 @@ return {
       end,
       desc = 'Debug: See last session result.',
     },
+    -- Hover to inspect variable under cursor
+    {
+      '<leader>k',
+      function()
+        require('dapui').eval()
+      end,
+      mode = { 'n', 'v' },
+      desc = 'Debug: Inspect variable under cursor',
+    },
+    -- Open REPL to evaluate expressions
+    {
+      '<leader>dr',
+      function()
+        require('dap').repl.open()
+      end,
+      desc = 'Debug: Open REPL',
+    },
   },
   config = function()
     local dap = require 'dap'
