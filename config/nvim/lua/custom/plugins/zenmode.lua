@@ -21,11 +21,30 @@ return {
         ruler = false,
         showcmd = false,
         laststatus = 0,
+        showtabline = 2,
       },
       gitsigns = { enabled = false },
       tmux = { enabled = false },
     },
-    on_open = function()
+    on_open = function(win)
+      -- Reposition zen window and backdrop to leave space for tabline
+      vim.schedule(function()
+        -- Find and reposition all zen-mode floating windows
+        for _, w in ipairs(vim.api.nvim_list_wins()) do
+          local config = vim.api.nvim_win_get_config(w)
+          if config.relative ~= '' then -- It's a floating window
+            local buf = vim.api.nvim_win_get_buf(w)
+            local ft = vim.bo[buf].filetype
+            -- Reposition zen windows (main window or backdrop)
+            if ft == 'zenmode-bg' or w == win then
+              config.row = (config.row or 0) + 1
+              config.height = config.height - 1
+              vim.api.nvim_win_set_config(w, config)
+            end
+          end
+        end
+      end)
+
       -- Apply zen settings to any buffer opened while in zen mode
       vim.api.nvim_create_augroup('ZenModeBufferSwitch', { clear = true })
       vim.api.nvim_create_autocmd('BufEnter', {
