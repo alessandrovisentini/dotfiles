@@ -131,23 +131,49 @@ return {
     lazy = true,
     ft = 'markdown',
     dependencies = { 'nvim-lua/plenary.nvim' },
-    opts = {
-      workspaces = {
-        { name = 'ttrpg-notes', path = '~/Development/repos/ttrpg-notes' },
-      },
-      ui = { enable = false }, -- Use render-markdown.nvim instead
-      note_id_func = function(title)
-        if title then
-          return title:gsub(' ', '-'):gsub('[^A-Za-z0-9-]', ''):lower()
-        end
-        return tostring(os.time())
-      end,
-      preferred_link_style = 'wiki',
-      follow_url_func = function(url)
-        vim.fn.jobstart { 'xdg-open', url }
-      end,
-      picker = { name = 'telescope.nvim' },
-    },
+    config = function()
+      require('obsidian').setup {
+        workspaces = {
+          { name = 'ttrpg-notes', path = vim.fn.expand '~/Development/repos/ttrpg-notes' },
+        },
+        ui = { enable = false }, -- Use render-markdown.nvim instead
+        note_id_func = function(title)
+          if title then
+            return title:gsub(' ', '-'):gsub('[^A-Za-z0-9-]', ''):lower()
+          end
+          return tostring(os.time())
+        end,
+        preferred_link_style = 'wiki',
+        follow_url_func = function(url)
+          vim.fn.jobstart { 'xdg-open', url }
+        end,
+        picker = { name = 'telescope.nvim' },
+      }
+
+      -- gd for markdown: TTRPG mode searches cwd only, otherwise uses ObsidianFollowLink
+      vim.api.nvim_create_autocmd('FileType', {
+        pattern = 'markdown',
+        callback = function()
+          vim.keymap.set('n', 'gd', function()
+            if vim.env.TTRPG_GAME_NAME then
+              local link = vim.fn.expand '<cword>'
+              local files = vim.fn.glob(vim.fn.getcwd() .. '/**/' .. link .. '.md', false, true)
+              if #files == 1 then
+                vim.cmd('edit ' .. vim.fn.fnameescape(files[1]))
+              elseif #files > 1 then
+                vim.ui.select(files, { prompt = 'Select file:' }, function(choice)
+                  if choice then vim.cmd('edit ' .. vim.fn.fnameescape(choice)) end
+                end)
+              else
+                vim.notify('Not found: ' .. link .. '.md', vim.log.levels.WARN)
+              end
+            else
+              vim.cmd 'ObsidianFollowLink'
+            end
+          end, { buffer = true, desc = '[G]o to [D]efinition' })
+        end,
+      })
+    end,
     keys = {
       { '<CR>', '<cmd>ObsidianFollowLink<CR>', desc = 'Follow Obsidian link', ft = 'markdown' },
       { '<leader>mo', '<cmd>ObsidianOpen<CR>', desc = '[M]arkdown: [O]pen in Obsidian' },
@@ -158,7 +184,6 @@ return {
       { '<leader>ml', '<cmd>ObsidianLinks<CR>', desc = '[M]arkdown: [L]inks in note' },
       { '<leader>mt', '<cmd>ObsidianTags<CR>', desc = '[M]arkdown: Search [T]ags' },
       { '<leader>mr', '<cmd>ObsidianRename<CR>', desc = '[M]arkdown: [R]ename note' },
-      { 'gd', '<cmd>ObsidianFollowLink<CR>', desc = '[G]o to [D]efinition link' },
     },
   },
 
