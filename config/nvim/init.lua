@@ -148,6 +148,7 @@ require('lazy').setup({
       -- delay between pressing a key and opening which-key (milliseconds)
       -- this setting is independent of vim.opt.timeoutlen
       delay = 0,
+      preset = 'modern',
       icons = {
         -- set icon mappings to true if you have a Nerd Font
         mappings = vim.g.have_nerd_font,
@@ -197,6 +198,7 @@ require('lazy').setup({
         { '<leader>m', group = '[M]arkdown' },
         { '<leader>n', group = '[N]eotest' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+        { 'g', group = '[G]oto' },
       },
     },
   },
@@ -314,7 +316,12 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
       vim.keymap.set('n', '<leader>sf', function()
-        builtin.find_files { follow = true }
+        local opts = { follow = true }
+        -- TTRPG mode: include gitignored Rules directories
+        if vim.env.TTRPG_GAME_NAME then
+          opts.no_ignore = true
+        end
+        builtin.find_files(opts)
       end, { desc = '[S]earch [F]iles' })
       vim.keymap.set('n', '<leader>sF', function()
         require('telescope.builtin').find_files {
@@ -343,11 +350,16 @@ require('lazy').setup({
         builtin.find_files { follow = true }
       end, { desc = '[S]earch [E]xplore files' })
       vim.keymap.set('n', '<leader>sg', function()
-        builtin.live_grep {
+        local opts = {
           additional_args = function()
+            -- TTRPG mode: include gitignored Rules directories
+            if vim.env.TTRPG_GAME_NAME then
+              return { '--fixed-strings', '--no-ignore-vcs' }
+            end
             return { '--fixed-strings' }
           end,
         }
+        builtin.live_grep(opts)
       end, { desc = '[S]earch by [G]rep' })
       vim.keymap.set('n', '<leader>sG', function()
         builtin.live_grep {

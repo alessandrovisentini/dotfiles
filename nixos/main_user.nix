@@ -155,12 +155,10 @@ in {
     nixos-switch = "sudo nixos-rebuild switch";
     nixos-update = "sudo nix-channel --update & sudo nixos-rebuild switch --upgrade";
 
-    tn = "tmux new";
-    ta = "tmux attach";
     tk = "tmux kill-session";
-    td = "tmux detach";
 
-    tdev = "$REPOS_HOME/dotfiles/scripts/tmux_env.sh";
+    td = "$REPOS_HOME/dotfiles/scripts/tmux_env.sh";
+    tt = "$REPOS_HOME/dotfiles/scripts/tt.sh";
   };
 
   # Home manager
