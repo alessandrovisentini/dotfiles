@@ -9,7 +9,7 @@ return {
     ft = { 'markdown' },
     opts = {
       -- Use most defaults, they look good
-      enabled = false, -- Start disabled, toggle manually with <leader>mm
+      enabled = true, -- Enabled by default, toggle with <leader>mm
       render_modes = { 'n', 'c', 'v' }, -- Only render in normal, command, visual modes (not insert)
       anti_conceal = { enabled = false },
       -- Headings with GitHub Dark colors (matching glow preview)
