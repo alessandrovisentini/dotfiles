@@ -150,27 +150,11 @@ return {
         picker = { name = 'telescope.nvim' },
       }
 
-      -- gd for markdown: TTRPG mode searches cwd only, otherwise uses ObsidianFollowLink
+      -- gd for markdown: use ObsidianFollowLink
       vim.api.nvim_create_autocmd('FileType', {
         pattern = 'markdown',
         callback = function()
-          vim.keymap.set('n', 'gd', function()
-            if vim.env.TTRPG_GAME_NAME then
-              local link = vim.fn.expand '<cword>'
-              local files = vim.fn.glob(vim.fn.getcwd() .. '/**/' .. link .. '.md', false, true)
-              if #files == 1 then
-                vim.cmd('edit ' .. vim.fn.fnameescape(files[1]))
-              elseif #files > 1 then
-                vim.ui.select(files, { prompt = 'Select file:' }, function(choice)
-                  if choice then vim.cmd('edit ' .. vim.fn.fnameescape(choice)) end
-                end)
-              else
-                vim.notify('Not found: ' .. link .. '.md', vim.log.levels.WARN)
-              end
-            else
-              vim.cmd 'ObsidianFollowLink'
-            end
-          end, { buffer = true, desc = '[G]o to [D]efinition' })
+          vim.keymap.set('n', 'gd', '<cmd>ObsidianFollowLink<CR>', { buffer = true, desc = '[G]o to [D]efinition' })
         end,
       })
     end,
