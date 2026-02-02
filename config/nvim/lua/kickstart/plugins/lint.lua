@@ -51,10 +51,6 @@ return {
           -- avoid superfluous noise, notably within the handy LSP pop-ups that
           -- describe the hovered symbol using Markdown.
           if vim.opt_local.modifiable:get() then
-            -- Skip markdown linting in TTRPG mode
-            if vim.env.TTRPG_GAME_NAME and vim.bo.filetype == 'markdown' then
-              return
-            end
             lint.try_lint()
           end
         end,

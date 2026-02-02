@@ -57,17 +57,11 @@ FULL_PATH="${GAME_PATH//\$TTRPG_NOTES_HOME/$TTRPG_NOTES_HOME}"
 # Sync rules into game folder
 sync_rules "$FULL_PATH" "${GAME_RULES[@]}"
 
-# Create vault-specific config files
+# Disable markdownlint for vault
 cat > "$FULL_PATH/.markdownlint.jsonc" << 'EOF'
 {
-  // Disable markdownlint for TTRPG vault
   "default": false
 }
-EOF
-
-cat > "$FULL_PATH/.nvim.lua" << 'EOF'
--- Disable spellcheck for TTRPG vault
-vim.opt_local.spell = false
 EOF
 
 # Export for nvim to read

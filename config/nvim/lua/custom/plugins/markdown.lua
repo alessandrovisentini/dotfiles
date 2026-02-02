@@ -171,6 +171,7 @@ return {
         pattern = 'markdown',
         callback = function()
           vim.keymap.set('n', 'gd', '<cmd>ObsidianFollowLink<CR>', { buffer = true, desc = '[G]o to [D]efinition' })
+          vim.opt_local.spell = false
         end,
       })
     end,
