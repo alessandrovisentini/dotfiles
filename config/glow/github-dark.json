@@ -22,7 +22,7 @@
     "prefix": " ",
     "suffix": " ",
     "color": "#ffffff",
-    "background_color": "#388bfd",
+    "background_color": "#b62324",
     "bold": true
   },
   "h2": {
@@ -36,28 +36,28 @@
     "prefix": " ",
     "suffix": " ",
     "color": "#ffffff",
-    "background_color": "#238636",
+    "background_color": "#1f6feb",
     "bold": true
   },
   "h4": {
     "prefix": " ",
     "suffix": " ",
     "color": "#ffffff",
-    "background_color": "#8957e5",
+    "background_color": "#238636",
     "bold": true
   },
   "h5": {
     "prefix": " ",
     "suffix": " ",
     "color": "#ffffff",
-    "background_color": "#d29922",
+    "background_color": "#8957e5",
     "bold": true
   },
   "h6": {
     "prefix": " ",
     "suffix": " ",
     "color": "#ffffff",
-    "background_color": "#484f58",
+    "background_color": "#d29922",
     "bold": true
   },
   "text": {},

@@ -10,12 +10,20 @@ return {
       enabled = true,
       render_modes = { 'n', 'c' },
       anti_conceal = { enabled = false },
+      win_options = {
+        conceallevel = { default = 0, rendered = 3 },
+        concealcursor = { default = '', rendered = 'nc' },
+      },
       heading = {
         enabled = true,
-        sign = true,
-        position = 'overlay',
-        width = 'full',
-        icons = { '󰲡 ', '󰲣 ', '󰲥 ', '󰲧 ', '󰲩 ', '󰲫 ' },
+        sign = false,
+        position = 'inline',
+        icons = { '', '', '', '', '', '' },
+        width = 'block',
+        left_margin = 0,
+        left_pad = 1,
+        right_pad = 1,
+        min_width = 0,
         backgrounds = {
           'RenderMarkdownH1Bg',
           'RenderMarkdownH2Bg',
@@ -68,7 +76,9 @@ return {
         orange = '#ffa657',
         red = '#ff7b72',
         gray = '#8b949e',
+        bg_red = '#b62324',
         bg_blue = '#388bfd',
+        bg_cyan = '#1f6feb',
         bg_green = '#238636',
         bg_purple = '#8957e5',
         bg_orange = '#d29922',
@@ -76,12 +86,13 @@ return {
         bg_dark = '#161b22',
       }
 
-      vim.api.nvim_set_hl(0, 'RenderMarkdownH1Bg', { fg = '#ffffff', bg = colors.bg_blue, bold = true })
+      -- Heading highlights (combined fg + bg)
+      vim.api.nvim_set_hl(0, 'RenderMarkdownH1Bg', { fg = '#ffffff', bg = colors.bg_red, bold = true })
       vim.api.nvim_set_hl(0, 'RenderMarkdownH2Bg', { fg = '#ffffff', bg = colors.bg_blue, bold = true })
-      vim.api.nvim_set_hl(0, 'RenderMarkdownH3Bg', { fg = '#ffffff', bg = colors.bg_green, bold = true })
-      vim.api.nvim_set_hl(0, 'RenderMarkdownH4Bg', { fg = '#ffffff', bg = colors.bg_purple, bold = true })
-      vim.api.nvim_set_hl(0, 'RenderMarkdownH5Bg', { fg = '#ffffff', bg = colors.bg_orange, bold = true })
-      vim.api.nvim_set_hl(0, 'RenderMarkdownH6Bg', { fg = '#ffffff', bg = colors.bg_gray, bold = true })
+      vim.api.nvim_set_hl(0, 'RenderMarkdownH3Bg', { fg = '#ffffff', bg = colors.bg_cyan, bold = true })
+      vim.api.nvim_set_hl(0, 'RenderMarkdownH4Bg', { fg = '#ffffff', bg = colors.bg_green, bold = true })
+      vim.api.nvim_set_hl(0, 'RenderMarkdownH5Bg', { fg = '#ffffff', bg = colors.bg_purple, bold = true })
+      vim.api.nvim_set_hl(0, 'RenderMarkdownH6Bg', { fg = '#ffffff', bg = colors.bg_orange, bold = true })
 
       vim.api.nvim_set_hl(0, 'RenderMarkdownLink', { fg = colors.blue, bold = true, italic = true })
       vim.api.nvim_set_hl(0, '@markup.link.label.markdown_inline', { fg = colors.blue, underline = true })
