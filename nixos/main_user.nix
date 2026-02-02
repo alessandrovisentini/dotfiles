@@ -148,6 +148,7 @@ in {
     XDG_STATE_HOME = "$HOME/.local/state";
 
     REPOS_HOME = parentDir;
+    TTRPG_NOTES_HOME = "${parentDir}/ttrpg-notes";
   };
 
   # Aliases

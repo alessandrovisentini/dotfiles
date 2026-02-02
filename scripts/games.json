@@ -1,0 +1,34 @@
+{
+  "games": [
+    {
+      "name": "Waterdeep",
+      "path": "$TTRPG_NOTES_HOME/Campagne/Universe 1/Current Era",
+      "rules": ["5", "5.5"]
+    },
+    {
+      "name": "OSE",
+      "path": "$TTRPG_NOTES_HOME/Campagne/Universe 1/Old Era",
+      "rules": ["OSE"]
+    },
+    {
+      "name": "WM",
+      "path": "$TTRPG_NOTES_HOME/Campagne/Universe 2 (WM)/Current Era",
+      "rules": ["5.5"]
+    },
+    {
+      "name": "[Rules] D&D 5e",
+      "path": "$TTRPG_NOTES_HOME/Rules/5",
+      "rules": []
+    },
+    {
+      "name": "[Rules] D&D 5.5",
+      "path": "$TTRPG_NOTES_HOME/Rules/5.5",
+      "rules": []
+    },
+    {
+      "name": "[Rules] OSE",
+      "path": "$TTRPG_NOTES_HOME/Rules/OSE",
+      "rules": []
+    }
+  ]
+}
