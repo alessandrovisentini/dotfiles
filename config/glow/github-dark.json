@@ -36,7 +36,7 @@
     "prefix": " ",
     "suffix": " ",
     "color": "#ffffff",
-    "background_color": "#1f6feb",
+    "background_color": "#8957e5",
     "bold": true
   },
   "h4": {
@@ -50,14 +50,14 @@
     "prefix": " ",
     "suffix": " ",
     "color": "#ffffff",
-    "background_color": "#8957e5",
+    "background_color": "#d29922",
     "bold": true
   },
   "h6": {
     "prefix": " ",
     "suffix": " ",
     "color": "#ffffff",
-    "background_color": "#d29922",
+    "background_color": "#0d9488",
     "bold": true
   },
   "text": {},

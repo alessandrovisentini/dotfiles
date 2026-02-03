@@ -78,7 +78,7 @@ return {
         gray = '#8b949e',
         bg_red = '#b62324',
         bg_blue = '#388bfd',
-        bg_cyan = '#1f6feb',
+        bg_cyan = '#0d9488',
         bg_green = '#238636',
         bg_purple = '#8957e5',
         bg_orange = '#d29922',
@@ -89,10 +89,10 @@ return {
       -- Heading highlights (combined fg + bg)
       vim.api.nvim_set_hl(0, 'RenderMarkdownH1Bg', { fg = '#ffffff', bg = colors.bg_red, bold = true })
       vim.api.nvim_set_hl(0, 'RenderMarkdownH2Bg', { fg = '#ffffff', bg = colors.bg_blue, bold = true })
-      vim.api.nvim_set_hl(0, 'RenderMarkdownH3Bg', { fg = '#ffffff', bg = colors.bg_cyan, bold = true })
+      vim.api.nvim_set_hl(0, 'RenderMarkdownH3Bg', { fg = '#ffffff', bg = colors.bg_purple, bold = true })
       vim.api.nvim_set_hl(0, 'RenderMarkdownH4Bg', { fg = '#ffffff', bg = colors.bg_green, bold = true })
-      vim.api.nvim_set_hl(0, 'RenderMarkdownH5Bg', { fg = '#ffffff', bg = colors.bg_purple, bold = true })
-      vim.api.nvim_set_hl(0, 'RenderMarkdownH6Bg', { fg = '#ffffff', bg = colors.bg_orange, bold = true })
+      vim.api.nvim_set_hl(0, 'RenderMarkdownH5Bg', { fg = '#ffffff', bg = colors.bg_orange, bold = true })
+      vim.api.nvim_set_hl(0, 'RenderMarkdownH6Bg', { fg = '#ffffff', bg = colors.bg_cyan, bold = true })
 
       vim.api.nvim_set_hl(0, 'RenderMarkdownLink', { fg = colors.blue, bold = true, italic = true })
       vim.api.nvim_set_hl(0, '@markup.link.label.markdown_inline', { fg = colors.blue, underline = true })
@@ -111,10 +111,9 @@ return {
     end,
   },
 
-  -- Obsidian.nvim for TTRPG vault management
+  -- Obsidian.nvim for TTRPG vault management (using community fork)
   {
-    'epwalsh/obsidian.nvim',
-    version = '*',
+    'obsidian-nvim/obsidian.nvim',
     lazy = true,
     ft = 'markdown',
     dependencies = { 'nvim-lua/plenary.nvim' },
@@ -172,30 +171,28 @@ return {
           return tostring(os.time())
         end,
         preferred_link_style = 'wiki',
-        follow_url_func = function(url)
-          vim.fn.jobstart { 'xdg-open', url }
-        end,
         picker = { name = 'telescope.nvim' },
+        legacy_commands = false,
       }
 
       vim.api.nvim_create_autocmd('FileType', {
         pattern = 'markdown',
         callback = function()
-          vim.keymap.set('n', 'gd', '<cmd>ObsidianFollowLink<CR>', { buffer = true, desc = '[G]o to [D]efinition' })
+          vim.keymap.set('n', 'gd', '<cmd>Obsidian follow_link<CR>', { buffer = true, desc = '[G]o to [D]efinition' })
           vim.opt_local.spell = false
         end,
       })
     end,
     keys = {
-      { '<CR>', '<cmd>ObsidianFollowLink<CR>', desc = 'Follow Obsidian link', ft = 'markdown' },
-      { '<leader>oo', '<cmd>ObsidianOpen<CR>', desc = '[O]bsidian: [O]pen in app' },
-      { '<leader>on', '<cmd>ObsidianNew<CR>', desc = '[O]bsidian: [N]ew note' },
-      { '<leader>os', '<cmd>ObsidianQuickSwitch<CR>', desc = '[O]bsidian: Quick [S]witch' },
-      { '<leader>of', '<cmd>ObsidianSearch<CR>', desc = '[O]bsidian: Search [F]ind' },
-      { '<leader>ob', '<cmd>ObsidianBacklinks<CR>', desc = '[O]bsidian: [B]acklinks' },
-      { '<leader>ol', '<cmd>ObsidianLinks<CR>', desc = '[O]bsidian: [L]inks in note' },
-      { '<leader>ot', '<cmd>ObsidianTags<CR>', desc = '[O]bsidian: Search [T]ags' },
-      { '<leader>or', '<cmd>ObsidianRename<CR>', desc = '[O]bsidian: [R]ename note' },
+      { '<CR>', '<cmd>Obsidian follow_link<CR>', desc = 'Follow Obsidian link', ft = 'markdown' },
+      { '<leader>oo', '<cmd>Obsidian open<CR>', desc = '[O]bsidian: [O]pen in app' },
+      { '<leader>on', '<cmd>Obsidian new<CR>', desc = '[O]bsidian: [N]ew note' },
+      { '<leader>os', '<cmd>Obsidian quick_switch<CR>', desc = '[O]bsidian: Quick [S]witch' },
+      { '<leader>of', '<cmd>Obsidian search<CR>', desc = '[O]bsidian: Search [F]ind' },
+      { '<leader>ob', '<cmd>Obsidian backlinks<CR>', desc = '[O]bsidian: [B]acklinks' },
+      { '<leader>ol', '<cmd>Obsidian links<CR>', desc = '[O]bsidian: [L]inks in note' },
+      { '<leader>ot', '<cmd>Obsidian tags<CR>', desc = '[O]bsidian: Search [T]ags' },
+      { '<leader>or', '<cmd>Obsidian rename<CR>', desc = '[O]bsidian: [R]ename note' },
     },
   },
 }
