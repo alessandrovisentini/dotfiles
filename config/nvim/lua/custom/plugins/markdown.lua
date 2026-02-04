@@ -116,7 +116,10 @@ return {
     'obsidian-nvim/obsidian.nvim',
     lazy = true,
     ft = 'markdown',
-    dependencies = { 'nvim-lua/plenary.nvim' },
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'hrsh7th/nvim-cmp',
+    },
     config = function()
       local function load_workspaces()
         local games_file = os.getenv 'TTRPG_GAMES_CONFIG'
@@ -173,6 +176,10 @@ return {
         preferred_link_style = 'wiki',
         picker = { name = 'telescope.nvim' },
         legacy_commands = false,
+        completion = {
+          nvim_cmp = true,
+          min_chars = 2,
+        },
       }
 
       vim.api.nvim_create_autocmd('FileType', {
