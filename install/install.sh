@@ -1,37 +1,17 @@
 #!/usr/bin/env bash
 
-# Root install.sh - Redirects to install/install.sh
-# This file maintains backward compatibility for existing documentation
+# Main installation entry point
+# Detects OS and dispatches to the appropriate OS-specific installer
 
 set -e
 
-REPO_URL="https://github.com/alessandrovisentini/dotfiles.git"
-TARGET_DIR="$HOME/Development/repos/dotfiles"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_DIR="$(dirname "$SCRIPT_DIR")"
 
-# Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m'
+# Source common functions
+source "$SCRIPT_DIR/lib/common.sh"
 
-log_info() {
-    echo -e "${BLUE}[INFO]${NC} $1"
-}
-
-log_error() {
-    echo -e "${RED}[ERROR]${NC} $1"
-}
-
-log_warning() {
-    echo -e "${YELLOW}[WARNING]${NC} $1"
-}
-
-log_success() {
-    echo -e "${GREEN}[SUCCESS]${NC} $1"
-}
-
-# Detect OS for git installation
+# Detect operating system
 detect_os() {
     if [[ "$OSTYPE" == "darwin"* ]]; then
         echo "macos"
@@ -49,23 +29,13 @@ detect_os() {
     fi
 }
 
-# Run git command, using nix-shell on NixOS if git is not installed
-run_git() {
-    if command -v git &> /dev/null; then
-        git "$@"
-    elif [[ "$DETECTED_OS" == "nixos" ]]; then
-        nix-shell -p git --run "git $*"
-    else
-        log_error "git is not available"
-        return 1
-    fi
-}
-
 # Install git if not available
 install_git() {
+    local os="$1"
+
     log_info "Git not found. Installing git..."
 
-    case "$DETECTED_OS" in
+    case "$os" in
         "nixos")
             log_info "Using nix-shell to provide git temporarily..."
             return 0
@@ -104,38 +74,29 @@ install_git() {
 }
 
 # Main execution
-DETECTED_OS=$(detect_os)
+main() {
+    DETECTED_OS=$(detect_os)
+    export DETECTED_OS
 
-# Check if git is available
-if ! command -v git &> /dev/null && [[ "$DETECTED_OS" != "nixos" ]]; then
-    install_git
-fi
+    log_info "Detected operating system: $DETECTED_OS"
 
-# Create Development directory structure
-log_info "Creating directory structure..."
-mkdir -p "$HOME/Development/repos"
+    # Check if git is available
+    if ! command -v git &> /dev/null; then
+        install_git "$DETECTED_OS"
+    fi
 
-# Clone or update repository
-if [ -d "$TARGET_DIR" ]; then
-    log_info "Repository exists at $TARGET_DIR. Updating..."
-    cd "$TARGET_DIR"
-    run_git pull origin main || {
-        log_warning "Failed to update repository. Continuing with existing files."
-    }
-else
-    log_info "Cloning dotfiles repository..."
-    run_git clone "$REPO_URL" "$TARGET_DIR" || {
-        log_error "Failed to clone repository. Please check your internet connection."
+    # Dispatch to OS-specific installer
+    local installer="$SCRIPT_DIR/install-$DETECTED_OS.sh"
+
+    if [[ ! -f "$installer" ]]; then
+        log_error "No installer found for OS: $DETECTED_OS"
+        log_info "Available installers:"
+        ls -1 "$SCRIPT_DIR"/install-*.sh 2>/dev/null || echo "  None found"
         exit 1
-    }
-fi
+    fi
 
-# Dispatch to main installer
-cd "$TARGET_DIR"
+    log_info "Running $DETECTED_OS installer..."
+    exec "$installer"
+}
 
-if [[ -x "./install/install.sh" ]]; then
-    exec ./install/install.sh
-else
-    chmod +x ./install/install.sh
-    exec ./install/install.sh
-fi
+main "$@"

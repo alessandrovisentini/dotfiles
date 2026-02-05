@@ -1,0 +1,111 @@
+{
+  "version": "1.0",
+  "repository": {
+    "url": "https://github.com/alessandrovisentini/dotfiles.git",
+    "target_dir": "$HOME/Development/repos/dotfiles"
+  },
+  "os": {
+    "nixos": {
+      "config_symlinks": [
+        "alacritty",
+        "bat",
+        "dunst",
+        "git",
+        "glow",
+        "lazygit",
+        "nvim",
+        "rofi",
+        "sway",
+        "swaylock",
+        "tmux",
+        "waybar"
+      ],
+      "nixos_symlinks": {
+        "enabled": true,
+        "source_dir": "nixos",
+        "target_dir": "/etc/nixos",
+        "exclude": ["hardware-configuration.nix"]
+      },
+      "post_install": [
+        "command -v bat >/dev/null && bat cache --build || true",
+        "echo 'Run: sudo nixos-rebuild switch'"
+      ]
+    },
+    "macos": {
+      "config_symlinks": [
+        "alacritty",
+        "bat",
+        "git",
+        "glow",
+        "lazygit",
+        "nvim",
+        "shell",
+        "tmux"
+      ],
+      "nixos_symlinks": {
+        "enabled": false
+      },
+      "packages": {
+        "homebrew": {
+          "taps": [],
+          "formulae": [
+            "neovim",
+            "tmux",
+            "lazygit",
+            "bat",
+            "glow",
+            "ripgrep",
+            "fd",
+            "fzf"
+          ],
+          "casks": ["alacritty"]
+        }
+      },
+      "post_install": ["command -v bat >/dev/null && bat cache --build || true"]
+    },
+    "linux": {
+      "config_symlinks": [
+        "alacritty",
+        "bat",
+        "git",
+        "glow",
+        "lazygit",
+        "nvim",
+        "shell",
+        "tmux"
+      ],
+      "nixos_symlinks": {
+        "enabled": false
+      },
+      "packages": {
+        "apt": [
+          "neovim",
+          "tmux",
+          "bat",
+          "ripgrep",
+          "fd-find",
+          "fzf"
+        ],
+        "dnf": [
+          "neovim",
+          "tmux",
+          "bat",
+          "ripgrep",
+          "fd-find",
+          "fzf"
+        ],
+        "pacman": [
+          "neovim",
+          "tmux",
+          "lazygit",
+          "bat",
+          "glow",
+          "ripgrep",
+          "fd",
+          "fzf"
+        ]
+      },
+      "post_install": ["command -v bat >/dev/null && bat cache --build || true"]
+    }
+  }
+}
