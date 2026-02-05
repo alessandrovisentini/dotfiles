@@ -47,7 +47,7 @@
       },
       "packages": {
         "homebrew": {
-          "taps": [],
+          "taps": ["FelixKratz/formulae"],
           "formulae": [
             "neovim",
             "tmux",
@@ -56,12 +56,16 @@
             "glow",
             "ripgrep",
             "fd",
-            "fzf"
+            "fzf",
+            "sketchybar"
           ],
-          "casks": ["alacritty"]
+          "casks": ["alacritty", "scroll-reverser"]
         }
       },
-      "post_install": ["command -v bat >/dev/null && bat cache --build || true"]
+      "post_install": [
+        "command -v bat >/dev/null && bat cache --build || true",
+        "$HOME/Development/repos/dotfiles/config/macos/defaults.sh"
+      ]
     },
     "linux": {
       "config_symlinks": [
