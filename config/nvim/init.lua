@@ -12,7 +12,7 @@ vim.g.have_nerd_font = true
 -- NOTE: You can change these options as you wish!
 --  For more options, you can see `:help option-list`
 
--- vim.opt.number = true
+vim.opt.number = true
 vim.opt.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
@@ -94,6 +94,12 @@ vim.keymap.set('n', 'zp', '[s', { desc = 'Previous misspelled word' })
 vim.keymap.set('n', 'za', 'zg', { desc = 'Add word to dictionary' })
 vim.keymap.set('n', 'zr', 'zw', { desc = 'Remove word from dictionary' })
 vim.keymap.set('n', 'zs', 'z=', { desc = 'Suggest spelling corrections' })
+
+-- Toggle line numbers (relative/absolute)
+vim.keymap.set('n', '<leader>tn', function()
+  vim.opt.relativenumber = not vim.opt.relativenumber:get()
+  vim.opt.number = true
+end, { desc = '[T]oggle line [N]umbers (relative/absolute)' })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
