@@ -293,6 +293,28 @@ require('lazy').setup({
         }
       end
 
+      -- Custom git diff previewer using delta (no side-by-side for compact view)
+      local delta_git_previewer = previewers.new_termopen_previewer {
+        get_command = function(entry)
+          local file = entry.value
+          if not file then
+            return { 'echo', 'No file' }
+          end
+
+          local status = entry.status or ''
+
+          if status:sub(1, 1) == '?' then
+            return { 'bat', '--style=numbers', '--color=always', file }
+          else
+            return {
+              'sh',
+              '-c',
+              'git diff HEAD -- ' .. vim.fn.shellescape(file) .. ' | delta --dark --line-numbers',
+            }
+          end
+        end,
+      }
+
       require('telescope').setup {
         defaults = {
           file_previewer = custom_file_previewer,
@@ -318,7 +340,9 @@ require('lazy').setup({
 
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
-      vim.keymap.set('n', '<leader>gs', builtin.git_status, { desc = '[G]it [S]tatus' })
+      vim.keymap.set('n', '<leader>gs', function()
+        builtin.git_status { previewer = delta_git_previewer }
+      end, { desc = '[G]it [S]tatus' })
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
       vim.keymap.set('n', '<leader>sf', function()
