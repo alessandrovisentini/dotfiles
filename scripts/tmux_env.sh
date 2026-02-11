@@ -32,7 +32,8 @@ setup_window() {
     if [ -f "$REPO_PATH/flake.nix" ]; then
         if [ "$CMD" = "bash" ]; then
             tmux send-keys -t "$SESSION":"$WINDOW_INDEX" "nix develop" C-m
-            tmux send-keys -t "$SESSION":"$WINDOW_INDEX" "clear && sleep 1 && clear" C-m
+            tmux send-keys -t "$SESSION":"$WINDOW_INDEX" "clear && sleep 2" C-m
+            tmux send-keys -t "$SESSION":"$WINDOW_INDEX" "clear" C-m
         else
             tmux send-keys -t "$SESSION":"$WINDOW_INDEX" "nix develop --command $CMD" C-m
         fi
