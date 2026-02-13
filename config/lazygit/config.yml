@@ -1,7 +1,7 @@
 git:
-  pagers:
-    - colorArg: never
-      pager: bash ~/.config/lazygit/delta-wrapper.sh
+  paging:
+    colorArg: never
+    pager: bash ~/.config/lazygit/delta-wrapper.sh
 gui:
   sidePanelWidth: 0.20
   mainPanelSplitMode: 'horizontal'
