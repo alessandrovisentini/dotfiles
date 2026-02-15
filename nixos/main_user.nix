@@ -63,6 +63,7 @@ in {
       unstable.evince
       unstable.pdfarranger
       unstable.claude-code
+      brave
     ];
   };
   users.groups.${vars.mainUserName} = {

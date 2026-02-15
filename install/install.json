@@ -59,7 +59,7 @@
             "fzf",
             "sketchybar"
           ],
-          "casks": ["alacritty", "scroll-reverser"]
+          "casks": ["alacritty", "amethyst", "scroll-reverser"]
         }
       },
       "post_install": [

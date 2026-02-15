@@ -78,6 +78,62 @@ defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 defaults write com.apple.finder ShowPathbar -bool true
 
 # =============================================================================
+# Mission Control / Spaces
+# =============================================================================
+
+# Disable automatic rearranging of Spaces based on most recent use
+defaults write com.apple.dock mru-spaces -bool false
+
+# =============================================================================
+# Keyboard Shortcuts - Switch to Desktop with Option+N
+# =============================================================================
+# Symbolic hotkey IDs: 118=Desktop1 ... 126=Desktop9, 127=Desktop10
+# Parameters: (ASCII code, virtual keycode, modifier flags)
+# Option modifier = 524288
+
+# Option+1 → Desktop 1
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 118 "<dict><key>enabled</key><true/><key>value</key><dict><key>parameters</key><array><integer>49</integer><integer>18</integer><integer>524288</integer></array><key>type</key><string>standard</string></dict></dict>"
+
+# Option+2 → Desktop 2
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 119 "<dict><key>enabled</key><true/><key>value</key><dict><key>parameters</key><array><integer>50</integer><integer>19</integer><integer>524288</integer></array><key>type</key><string>standard</string></dict></dict>"
+
+# Option+3 → Desktop 3
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 120 "<dict><key>enabled</key><true/><key>value</key><dict><key>parameters</key><array><integer>51</integer><integer>20</integer><integer>524288</integer></array><key>type</key><string>standard</string></dict></dict>"
+
+# Option+4 → Desktop 4
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 121 "<dict><key>enabled</key><true/><key>value</key><dict><key>parameters</key><array><integer>52</integer><integer>21</integer><integer>524288</integer></array><key>type</key><string>standard</string></dict></dict>"
+
+# Option+5 → Desktop 5
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 122 "<dict><key>enabled</key><true/><key>value</key><dict><key>parameters</key><array><integer>53</integer><integer>23</integer><integer>524288</integer></array><key>type</key><string>standard</string></dict></dict>"
+
+# Option+6 → Desktop 6
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 123 "<dict><key>enabled</key><true/><key>value</key><dict><key>parameters</key><array><integer>54</integer><integer>22</integer><integer>524288</integer></array><key>type</key><string>standard</string></dict></dict>"
+
+# Option+7 → Desktop 7
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 124 "<dict><key>enabled</key><true/><key>value</key><dict><key>parameters</key><array><integer>55</integer><integer>26</integer><integer>524288</integer></array><key>type</key><string>standard</string></dict></dict>"
+
+# Option+8 → Desktop 8
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 125 "<dict><key>enabled</key><true/><key>value</key><dict><key>parameters</key><array><integer>56</integer><integer>28</integer><integer>524288</integer></array><key>type</key><string>standard</string></dict></dict>"
+
+# Option+9 → Desktop 9
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 126 "<dict><key>enabled</key><true/><key>value</key><dict><key>parameters</key><array><integer>57</integer><integer>25</integer><integer>524288</integer></array><key>type</key><string>standard</string></dict></dict>"
+
+# Option+0 → Desktop 10
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 127 "<dict><key>enabled</key><true/><key>value</key><dict><key>parameters</key><array><integer>48</integer><integer>29</integer><integer>524288</integer></array><key>type</key><string>standard</string></dict></dict>"
+
+# =============================================================================
+# Keyboard Shortcuts - Spotlight
+# =============================================================================
+
+# Option+D → Show Spotlight search (replaces default Cmd+Space)
+# Symbolic hotkey ID 64 = Spotlight search
+# D: ASCII 100, keycode 2, Option modifier 524288
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 "<dict><key>enabled</key><true/><key>value</key><dict><key>parameters</key><array><integer>100</integer><integer>2</integer><integer>524288</integer></array><key>type</key><string>standard</string></dict></dict>"
+
+# Disable Finder search window shortcut (Cmd+Option+Space) to avoid conflicts
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 65 "<dict><key>enabled</key><false/><key>value</key><dict><key>parameters</key><array><integer>65535</integer><integer>49</integer><integer>1572864</integer></array><key>type</key><string>standard</string></dict></dict>"
+
+# =============================================================================
 # Apply changes
 # =============================================================================
 

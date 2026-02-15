@@ -37,6 +37,9 @@
       slurp
       imagemagick_light
 
+      # mirroring
+      wl-mirror
+
       # icons
       adwaita-icon-theme
     ];
