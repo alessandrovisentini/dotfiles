@@ -159,8 +159,11 @@ in {
 
     tk = "tmux kill-session";
 
-    td = "$REPOS_HOME/dotfiles/scripts/tmux_env.sh";
+    td = "$REPOS_HOME/dotfiles/scripts/td.sh";
     tt = "$REPOS_HOME/dotfiles/scripts/tt.sh";
+
+    ai = "$REPOS_HOME/dotfiles/scripts/ai.sh";
+    aim = "$REPOS_HOME/dotfiles/scripts/ai.sh -m";
   };
 
   # Home manager

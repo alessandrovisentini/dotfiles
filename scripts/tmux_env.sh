@@ -45,7 +45,11 @@ setup_window() {
 }
 
 if tmux has-session -t "$SESSION_NAME" 2>/dev/null; then
-    tmux attach -t "$SESSION_NAME"
+    if [ -n "$TMUX" ]; then
+        tmux switch-client -t "$SESSION_NAME"
+    else
+        tmux attach -t "$SESSION_NAME"
+    fi
     exit 0
 fi
 
@@ -63,4 +67,8 @@ if [ -d "$REPO_PATH/.git" ]; then
 fi
 
 tmux select-window -t "$SESSION_NAME:1"
-tmux attach -t "$SESSION_NAME"
+if [ -n "$TMUX" ]; then
+    tmux switch-client -t "$SESSION_NAME"
+else
+    tmux attach -t "$SESSION_NAME"
+fi
