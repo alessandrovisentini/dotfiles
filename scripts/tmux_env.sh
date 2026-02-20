@@ -23,7 +23,7 @@ if [ $# -eq 0 ]; then
         fi
     done)
 
-    LIST=$(printf '%s\n%s' "$ACTIVE" "$INACTIVE" | sed '/^$/d')
+    LIST=$(printf '%s\n%s' "$INACTIVE" "$ACTIVE" | sed '/^$/d' | tac)
 
     SELECTION=$(echo "$LIST" | fzf --ansi --tac)
 
