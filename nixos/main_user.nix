@@ -157,8 +157,6 @@ in {
     nixos-switch = "sudo nixos-rebuild switch";
     nixos-update = "sudo nix-channel --update & sudo nixos-rebuild switch --upgrade";
 
-    tk = "tmux kill-session";
-
     td = "$REPOS_HOME/dotfiles/scripts/td.sh";
     tt = "$REPOS_HOME/dotfiles/scripts/tt.sh";
 
