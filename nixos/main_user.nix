@@ -157,7 +157,7 @@ in {
     nixos-switch = "sudo nixos-rebuild switch";
     nixos-update = "sudo nix-channel --update & sudo nixos-rebuild switch --upgrade";
 
-    td = "$REPOS_HOME/dotfiles/scripts/td.sh";
+    t = "$REPOS_HOME/dotfiles/scripts/td.sh";
     tt = "$REPOS_HOME/dotfiles/scripts/tt.sh";
 
     ai = "$REPOS_HOME/dotfiles/scripts/ai.sh";

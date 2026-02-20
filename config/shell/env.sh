@@ -12,7 +12,7 @@ export REPOS_HOME="$HOME/Development/repos"
 export TTRPG_NOTES_HOME="$REPOS_HOME/ttrpg-notes"
 
 # Aliases
-alias td='$REPOS_HOME/dotfiles/scripts/td.sh'
+alias t='$REPOS_HOME/dotfiles/scripts/td.sh'
 alias tt='$REPOS_HOME/dotfiles/scripts/tt.sh'
 
 alias ai='$REPOS_HOME/dotfiles/scripts/ai.sh'
