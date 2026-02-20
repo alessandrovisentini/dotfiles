@@ -25,7 +25,7 @@ if [ $# -eq 0 ]; then
 
     LIST=$(printf '%s\n%s' "$ACTIVE" "$INACTIVE" | sed '/^$/d')
 
-    SELECTION=$(echo "$LIST" | fzf --no-sort --ansi)
+    SELECTION=$(echo "$LIST" | fzf --ansi --tac)
 
     if [ -z "$SELECTION" ]; then
         echo "No repository selected."
