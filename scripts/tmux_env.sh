@@ -8,13 +8,31 @@ if [ $# -eq 0 ]; then
         exit 1
     fi
 
-    REPO_NAME=$(ls "$BASE_PATH" | fzf)
+    ACTIVE_SESSIONS=$(tmux list-sessions -F '#{session_name}' 2>/dev/null)
+    REPOS=$(ls "$BASE_PATH")
 
-    if [ -z "$REPO_NAME" ]; then
+    # Active sessions last so they appear at the bottom near the prompt
+    INACTIVE=$(echo "$REPOS" | while read -r repo; do
+        if ! echo "$ACTIVE_SESSIONS" | grep -qx "$repo"; then
+            echo "$repo"
+        fi
+    done)
+    ACTIVE=$(echo "$ACTIVE_SESSIONS" | while read -r session; do
+        if [ -n "$session" ] && [ "$session" != "_launcher" ]; then
+            printf '\033[32m%s (active)\033[0m\n' "$session"
+        fi
+    done)
+
+    LIST=$(printf '%s\n%s' "$ACTIVE" "$INACTIVE" | sed '/^$/d')
+
+    SELECTION=$(echo "$LIST" | fzf --no-sort --ansi)
+
+    if [ -z "$SELECTION" ]; then
         echo "No repository selected."
         exit 1
     fi
 
+    REPO_NAME="${SELECTION% (active)}"
     REPO_PATH="$BASE_PATH/$REPO_NAME"
 else
     REPO_PATH="$(realpath "$1")"
