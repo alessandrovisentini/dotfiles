@@ -27,6 +27,25 @@ return {
           vim.keymap.set(mode, l, r, opts)
         end
 
+        local function get_repo_url()
+          local remote = vim.fn.system({ 'git', 'remote', 'get-url', 'origin' }):gsub('%s+$', '')
+          remote = remote:gsub('ssh://git@([^/]+)/', 'https://%1/')
+          remote = remote:gsub('^git@([^:]+):', 'https://%1/')
+          remote = remote:gsub('%.git$', '')
+          return remote
+        end
+
+        local function get_blame_sha()
+          local file = vim.fn.expand '%'
+          local line = vim.fn.line '.'
+          local sha = vim.fn.system({ 'git', 'blame', '-l', '-L', line .. ',' .. line, '--', file }):match '^(%x+)'
+          if not sha or sha:match '^0+$' then
+            vim.notify('No commit found for this line', vim.log.levels.WARN)
+            return nil
+          end
+          return sha
+        end
+
         -- Navigation
         map('n', ']c', function()
           if vim.wo.diff then
@@ -59,7 +78,25 @@ return {
         map('n', '<leader>hu', gitsigns.stage_hunk, { desc = 'git [u]ndo stage hunk' })
         map('n', '<leader>hR', gitsigns.reset_buffer, { desc = 'git [R]eset buffer' })
         map('n', '<leader>hp', gitsigns.preview_hunk, { desc = 'git [p]review hunk' })
-        map('n', '<leader>hb', gitsigns.blame_line, { desc = 'git [b]lame line' })
+        map('n', '<leader>gb', function()
+          gitsigns.blame_line { full = true }
+        end, { desc = 'git [b]lame line' })
+        map('n', '<leader>goc', function()
+          local sha = get_blame_sha()
+          if not sha then return end
+          vim.ui.open(get_repo_url() .. '/commit/' .. sha)
+        end, { desc = 'git open [c]ommit in browser' })
+        map('n', '<leader>gop', function()
+          local sha = get_blame_sha()
+          if not sha then return end
+          local msg = vim.fn.system({ 'git', 'log', '-1', '--format=%s', sha })
+          local pr = msg:match '#(%d+)'
+          if not pr then
+            vim.notify('No PR number found in commit message', vim.log.levels.WARN)
+            return
+          end
+          vim.ui.open(get_repo_url() .. '/pull/' .. pr)
+        end, { desc = 'git open [p]r in browser' })
         map('n', '<leader>hd', gitsigns.diffthis, { desc = 'git [d]iff against index' })
         map('n', '<leader>hD', function()
           gitsigns.diffthis '@'
