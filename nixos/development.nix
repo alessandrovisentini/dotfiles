@@ -12,7 +12,6 @@ in {
     nodejs
     docker-compose
     glow
-    bat
     jq
   ];
 

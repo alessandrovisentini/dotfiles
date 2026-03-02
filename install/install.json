@@ -8,7 +8,6 @@
     "nixos": {
       "config_symlinks": [
         "alacritty",
-        "bat",
         "dunst",
         "git",
         "glow",
@@ -27,14 +26,12 @@
         "exclude": ["hardware-configuration.nix"]
       },
       "post_install": [
-        "command -v bat >/dev/null && bat cache --build || true",
         "echo 'Run: sudo nixos-rebuild switch'"
       ]
     },
     "macos": {
       "config_symlinks": [
         "alacritty",
-        "bat",
         "git",
         "glow",
         "lazygit",
@@ -52,7 +49,6 @@
             "neovim",
             "tmux",
             "lazygit",
-            "bat",
             "glow",
             "ripgrep",
             "fd",
@@ -63,14 +59,12 @@
         }
       },
       "post_install": [
-        "command -v bat >/dev/null && bat cache --build || true",
         "$HOME/Development/repos/dotfiles/config/macos/defaults.sh"
       ]
     },
     "linux": {
       "config_symlinks": [
         "alacritty",
-        "bat",
         "git",
         "glow",
         "lazygit",
@@ -85,7 +79,6 @@
         "apt": [
           "neovim",
           "tmux",
-          "bat",
           "ripgrep",
           "fd-find",
           "fzf"
@@ -93,7 +86,6 @@
         "dnf": [
           "neovim",
           "tmux",
-          "bat",
           "ripgrep",
           "fd-find",
           "fzf"
@@ -102,14 +94,13 @@
           "neovim",
           "tmux",
           "lazygit",
-          "bat",
           "glow",
           "ripgrep",
           "fd",
           "fzf"
         ]
       },
-      "post_install": ["command -v bat >/dev/null && bat cache --build || true"]
+      "post_install": []
     }
   }
 }

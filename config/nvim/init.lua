@@ -239,6 +239,70 @@ require('lazy').setup({
       local actions = require 'telescope.actions'
       local action_state = require 'telescope.actions.state'
       local previewers = require 'telescope.previewers'
+      local from_entry = require 'telescope.from_entry'
+      local conf = require('telescope.config').values
+
+      -- Obsidian wiki link sed substitutions for glow preview
+      local obsidian_sed_cmd = table.concat({
+        's/\\[\\[\\([^]|]*\\)|\\([^]]*\\)\\]\\]/***\\2***/g',
+        's/!\\[\\[\\([^]|]*\\)|\\([^]]*\\)\\]\\]/***🔗 \\2***/g',
+        's/!\\[\\[\\([^]#^|]*\\)[#^][^]]*\\]\\]/***🔗 \\1***/g',
+        's/!\\[\\[\\([^]]*\\)\\]\\]/***🔗 \\1***/g',
+        's/\\[\\[\\([^]#^|]*\\)#\\([^]|]*\\)\\]\\]/***\\2***/g',
+        's/\\[\\[\\([^]#^|]*\\)\\^\\([^]|]*\\)\\]\\]/***\\2***/g',
+        's/\\[\\[\\([^]]*\\)\\]\\]/***\\1***/g',
+      }, '; ')
+
+      local markdown_extensions = { 'md', 'markdown', 'mkd', 'mdx' }
+
+      local function is_markdown(path)
+        local ext = path:match '^.+%.(.+)$'
+        return ext and vim.tbl_contains(markdown_extensions, ext:lower())
+      end
+
+      -- Custom file previewer: glow for markdown, buffer previewer (treesitter) for everything else.
+      -- Markdown uses termopen on the pool buffer for colored glow output. If the pool buffer
+      -- was turned into a terminal by a previous markdown preview, it gets replaced before reuse.
+      local custom_file_previewer = function(opts)
+        opts = opts or {}
+        return previewers.new_buffer_previewer {
+          title = 'File Preview',
+
+          define_preview = function(self, entry)
+            local filepath = entry.path or entry.filename or entry.value
+            if not filepath then
+              return
+            end
+
+            local p = from_entry.path(entry, true, false)
+            if p == nil or p == '' then
+              return
+            end
+
+            -- Recover pool buffer if a previous markdown preview turned it into a terminal
+            if vim.api.nvim_buf_is_valid(self.state.bufnr) and vim.bo[self.state.bufnr].buftype == 'terminal' then
+              pcall(vim.api.nvim_buf_delete, self.state.bufnr, { force = true })
+              self.state.bufnr = vim.api.nvim_create_buf(false, true)
+              pcall(vim.api.nvim_win_set_buf, self.state.winid, self.state.bufnr)
+            end
+
+            if is_markdown(filepath) then
+              local glow_style = vim.fn.expand '~/.config/glow/github-dark.json'
+              local width = vim.api.nvim_win_get_width(self.state.winid)
+              local cmd = 'sed "' .. obsidian_sed_cmd .. '" ' .. vim.fn.shellescape(filepath) .. ' | glow -s ' .. vim.fn.shellescape(glow_style) .. ' -w ' .. width .. ' -'
+
+              vim.api.nvim_buf_call(self.state.bufnr, function()
+                vim.fn.termopen({ 'sh', '-c', cmd })
+              end)
+            else
+              conf.buffer_previewer_maker(p, self.state.bufnr, {
+                bufname = self.state.bufname,
+                winid = self.state.winid,
+              })
+            end
+          end,
+        }
+      end
 
       -- Custom action to view images with imv
       local view_image_with_imv = function(prompt_bufnr)
@@ -255,62 +319,40 @@ require('lazy').setup({
         end
       end
 
-      -- Custom previewer using glow for markdown and bat for other files
-      local custom_file_previewer = function(opts)
-        opts = opts or {}
-        return previewers.new_termopen_previewer {
-          get_command = function(entry)
-            local filepath = entry.path or entry.filename or entry.value
-            if filepath == nil then
-              return { 'echo', 'No file path' }
-            end
+      -- Custom git diff previewer: delta for diffs, buffer previewer (treesitter) for untracked files
+      local delta_git_previewer = previewers.new_buffer_previewer {
+        title = 'Git Preview',
 
-            local extension = filepath:match '^.+%.(.+)$'
-            if extension and vim.tbl_contains({ 'md', 'markdown', 'mkd', 'mdx' }, extension:lower()) then
-              local glow_style = vim.fn.expand '~/.config/glow/github-dark.json'
-              -- Pre-process Obsidian wiki links to styled text (bold+italic=purple) since glow shows URLs
-              local sed_cmd = table.concat({
-                -- Wiki link with alias: [[note|alias]] → ***alias***
-                's/\\[\\[\\([^]|]*\\)|\\([^]]*\\)\\]\\]/***\\2***/g',
-                -- Embed with alias: ![[note|alias]] → ***🔗 alias***
-                's/!\\[\\[\\([^]|]*\\)|\\([^]]*\\)\\]\\]/***🔗 \\2***/g',
-                -- Embed with heading/block (no alias): ![[note#h]] → ***🔗 note***
-                's/!\\[\\[\\([^]#^|]*\\)[#^][^]]*\\]\\]/***🔗 \\1***/g',
-                -- Simple embed: ![[note]] → ***🔗 note***
-                's/!\\[\\[\\([^]]*\\)\\]\\]/***🔗 \\1***/g',
-                -- Wiki link with heading (no alias): [[note#heading]] → ***heading***
-                's/\\[\\[\\([^]#^|]*\\)#\\([^]|]*\\)\\]\\]/***\\2***/g',
-                -- Wiki link with block ref (no alias): [[note^block]] → ***block***
-                's/\\[\\[\\([^]#^|]*\\)\\^\\([^]|]*\\)\\]\\]/***\\2***/g',
-                -- Simple wiki link: [[note]] → ***note***
-                's/\\[\\[\\([^]]*\\)\\]\\]/***\\1***/g',
-              }, '; ')
-              return { 'sh', '-c', 'sed "' .. sed_cmd .. '" ' .. vim.fn.shellescape(filepath) .. ' | PAGER="less -R +g" glow -s ' .. vim.fn.shellescape(glow_style) .. ' -p -' }
-            else
-              return { 'bat', '--style=numbers,changes', '--color=always', '--paging=always', '--theme=GitHub-Dark', filepath }
-            end
-          end,
-        }
-      end
-
-      -- Custom git diff previewer using delta (no side-by-side for compact view)
-      local delta_git_previewer = previewers.new_termopen_previewer {
-        get_command = function(entry)
+        define_preview = function(self, entry)
           local file = entry.value
           if not file then
-            return { 'echo', 'No file' }
+            return
+          end
+
+          -- Recover pool buffer if a previous delta preview turned it into a terminal
+          if vim.api.nvim_buf_is_valid(self.state.bufnr) and vim.bo[self.state.bufnr].buftype == 'terminal' then
+            pcall(vim.api.nvim_buf_delete, self.state.bufnr, { force = true })
+            self.state.bufnr = vim.api.nvim_create_buf(false, true)
+            pcall(vim.api.nvim_win_set_buf, self.state.winid, self.state.bufnr)
           end
 
           local status = entry.status or ''
 
           if status:sub(1, 1) == '?' then
-            return { 'bat', '--style=numbers', '--color=always', file }
+            -- Untracked file: buffer preview with treesitter
+            local p = from_entry.path(entry, true, false)
+            if p and p ~= '' then
+              conf.buffer_previewer_maker(p, self.state.bufnr, {
+                bufname = self.state.bufname,
+                winid = self.state.winid,
+              })
+            end
           else
-            return {
-              'sh',
-              '-c',
-              'git diff HEAD -- ' .. vim.fn.shellescape(file) .. ' | delta --dark --line-numbers',
-            }
+            -- Tracked file: delta diff via termopen
+            local cmd = 'git diff HEAD -- ' .. vim.fn.shellescape(file) .. ' | delta --dark --line-numbers'
+            vim.api.nvim_buf_call(self.state.bufnr, function()
+              vim.fn.termopen({ 'sh', '-c', cmd })
+            end)
           end
         end,
       }
