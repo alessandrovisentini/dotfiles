@@ -1,31 +1,32 @@
 /* Define colors */
-@define-color white #ffffff;
-@define-color gray #383c4a;
-@define-color light_gray #7c818c;
-@define-color accent_red #980020;
-@define-color success_green #176C4e;
-@define-color warning_yellow #fbbb03;
-@define-color blue #F0F0F0;
-@define-color black #000000;
+@define-color bg #1d1d20;
+@define-color surface #222226;
+@define-color headerbar #2e2e32;
+@define-color fg #ffffff;
+@define-color muted #9a9996;
+@define-color accent #3584e4;
+@define-color danger #c01c28;
+@define-color success #26a269;
+@define-color warning #cd9309;
 
 * {
     border: none;
     font-family: DejaVuSansM Nerd Font Mono;
     min-height: 18px;
-    font-size: 14px; 
+    font-size: 14px;
 }
 
 window#waybar {
-    background: @gray;
+    background: @headerbar;
 }
 
 #workspaces button {
-    color: @light_gray;
+    color: @muted;
     padding: 5px;
 }
 
 #workspaces button.persistent {
-    color: @light_gray;
+    color: @muted;
     font-size: 10px
 }
 
@@ -33,12 +34,12 @@ window#waybar {
     box-shadow: inherit;
     text-shadow: inherit;
     border-radius: inherit;
-    color: @gray;
-    background: @light_gray;
+    color: @headerbar;
+    background: @muted;
 }
 
 #workspaces button.focused {
-    color: @white;
+    color: @fg;
 }
 
 #clock,
@@ -52,72 +53,72 @@ window#waybar {
 #tray {
     padding-left: 8px;
     padding-right: 8px;
-    color: @white;
+    color: @fg;
 }
 
 #network {
     padding-left: 8px;
     padding-right: 8px;
-    color: @white;
+    color: @fg;
     min-width: 200px;  /* Adjust this value to fit your needs */
 }
 
 #wireplumber.muted {
-    color: @light_gray;
+    color: @muted;
 }
 
 #temperature.critical {
-    background-color: @accent_red;
+    background-color: @danger;
 }
 
 #cpu.warning {
-    background-color: @warning_yellow;
-    color: @black;
+    background-color: @warning;
+    color: @bg;
 }
 
 #cpu.critical {
-    background-color: @accent_red;
-    color: @white;
+    background-color: @danger;
+    color: @fg;
 }
 
 #memory.warning {
-    background-color: @warning_yellow;
-    color: @black;
+    background-color: @warning;
+    color: @bg;
 }
 
 #memory.critical {
-    background-color: @accent_red;
-    color: @white;
+    background-color: @danger;
+    color: @fg;
 }
 
 #temperature.warning {
-    background-color: @warning_yellow;
-    color: @black;
+    background-color: @warning;
+    color: @bg;
 }
 
 #battery.full{
-    background-color: @success_green;
-    color: @white;
+    background-color: @success;
+    color: @fg;
 }
 
 #battery.plugged {
-    background-color: @success_green;
-    color: @white;
+    background-color: @success;
+    color: @fg;
 }
 
 #battery.charging{
-    background-color: @success_green;
-    color: @white;
+    background-color: @success;
+    color: @fg;
 }
 
 #battery.warning:not(.charging) {
-    background-color: @warning_yellow;
-    color: @black;
+    background-color: @warning;
+    color: @bg;
 }
 
 #battery.critical:not(.charging) {
-    background-color: @accent_red;
-    color: @white;
+    background-color: @danger;
+    color: @fg;
     animation-name: blink;
     animation-duration: 5s;
     animation-timing-function: linear;
@@ -127,8 +128,7 @@ window#waybar {
 
 @keyframes blink {
     to {
-        background-color: @gray;
-        color: @white;
+        background-color: @headerbar;
+        color: @fg;
     }
 }
-

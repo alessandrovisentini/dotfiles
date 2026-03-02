@@ -1,12 +1,12 @@
 * {
-    bg0:    #383C4A;
-    bg1:    #000000;
-    bg2:    #3D3D3D80;
-    bg3:    #7C818C;
-    fg0:    #E6E6E6;
-    fg1:    #FFFFFF;
-    fg2:    #969696;
-    fg3:    #3D3D3D;
+    bg0:    #222226;
+    bg1:    #1d1d20;
+    bg2:    #36363a80;
+    bg3:    #3584e4;
+    fg0:    #ffffff;
+    fg1:    #ffffff;
+    fg2:    #9a9996;
+    fg3:    #5e5c64;
 
     font:   "DejaVuSansM Nerd Font Mono 13";
 
@@ -26,6 +26,8 @@ window {
     width:          480;
 
     background-color:   @bg0;
+    border:             2px;
+    border-color:       @fg3;
 }
 
 mainbox {

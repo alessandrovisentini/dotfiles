@@ -16,24 +16,29 @@
     padding = 10
     alignment = center
     follow = keyboard
+    frame_color = "#5e5c64"
+    separator_color = "#5e5c64"
 
 [urgency_low]
-    background = "#383c4a"
-    foreground = "#ffffff"
+    background = "#2e2e32"
+    foreground = "#9a9996"
+    frame_color = "#5e5c64"
     timeout = 10
     icon_position = left
     format = "%s %b"
 
 [urgency_normal]
-    background = "#383c4a"
+    background = "#222226"
     foreground = "#ffffff"
+    frame_color = "#5e5c64"
     timeout = 10
     icon_position = left
     format = "%s %b"
 
 [urgency_critical]
-    background = "#980020"
+    background = "#c01c28"
     foreground = "#ffffff"
+    frame_color = "#c01c28"
     timeout = 0
     icon_position = left
     format = "%s %b"
