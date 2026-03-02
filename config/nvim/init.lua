@@ -349,7 +349,7 @@ require('lazy').setup({
             end
           else
             -- Tracked file: delta diff via termopen
-            local cmd = 'git diff HEAD -- ' .. vim.fn.shellescape(file) .. ' | delta --dark --line-numbers'
+            local cmd = 'git diff HEAD -- ' .. vim.fn.shellescape(file) .. ' | delta'
             vim.api.nvim_buf_call(self.state.bufnr, function()
               vim.fn.termopen({ 'sh', '-c', cmd })
             end)

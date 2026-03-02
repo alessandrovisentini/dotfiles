@@ -6,8 +6,8 @@ input=$(cat)
 
 if echo "$input" | grep -q '^--- /dev/null'; then
     # New file: use unified view (no -s)
-    echo "$input" | delta --dark --paging=never --line-numbers
+    echo "$input" | delta --paging=never
 else
     # Edited file: use side-by-side view
-    echo "$input" | delta --dark --paging=never --line-numbers -s
+    echo "$input" | delta --paging=never -s
 fi
