@@ -2,7 +2,7 @@
   "document": {
     "block_prefix": "\n",
     "block_suffix": "\n",
-    "color": "#c9d1d9",
+    "color": "#e6edf3",
     "margin": 2
   },
   "block_quote": {
@@ -108,11 +108,11 @@
     "background_color": "#161b22"
   },
   "code_block": {
-    "color": "#c9d1d9",
+    "color": "#e6edf3",
     "margin": 2,
     "chroma": {
       "text": {
-        "color": "#c9d1d9"
+        "color": "#e6edf3"
       },
       "error": {
         "color": "#f0f6fc",
@@ -140,10 +140,10 @@
         "color": "#ff7b72"
       },
       "punctuation": {
-        "color": "#c9d1d9"
+        "color": "#e6edf3"
       },
       "name": {
-        "color": "#c9d1d9"
+        "color": "#e6edf3"
       },
       "name_builtin": {
         "color": "#79c0ff"

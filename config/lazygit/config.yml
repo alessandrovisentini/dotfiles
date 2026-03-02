@@ -5,3 +5,30 @@ git:
 gui:
   sidePanelWidth: 0.20
   mainPanelSplitMode: 'horizontal'
+  theme:
+    activeBorderColor:
+      - '#58a6ff'
+      - bold
+    inactiveBorderColor:
+      - '#7d8590'
+    searchingActiveBorderColor:
+      - '#d29922'
+      - bold
+    optionsTextColor:
+      - '#7d8590'
+    selectedLineBgColor:
+      - '#30363d'
+    inactiveViewSelectedLineBgColor:
+      - '#161b22'
+    cherryPickedCommitFgColor:
+      - '#58a6ff'
+    cherryPickedCommitBgColor:
+      - '#161b22'
+    markedBaseCommitFgColor:
+      - '#d29922'
+    markedBaseCommitBgColor:
+      - '#161b22'
+    unstagedChangesColor:
+      - '#f85149'
+    defaultFgColor:
+      - '#e6edf3'

@@ -10,18 +10,6 @@
 	syntax-theme = GitHub-Dark
 	line-numbers = true
 	untracked-line-numbers = true
-	minus-style = syntax "#25171c"
-	minus-emph-style = syntax "#6b2b2b"
-	plus-style = syntax "#12261e"
-	plus-emph-style = syntax "#1a4a29"
-	line-numbers-minus-style = "#f85149"
-	line-numbers-plus-style = "#3fb950"
-	line-numbers-zero-style = "#6e7681"
-	file-style = "#e6edf3" bold
-	file-decoration-style = "#30363d" ol
-	hunk-header-style = "#d2a8ff"
-	hunk-header-decoration-style = "#2f81f7" ul
-	hunk-header-line-number-style = "#2f81f7"
 [merge]
 	conflictstyle = zdiff3
 [page]
