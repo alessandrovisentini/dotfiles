@@ -14,25 +14,38 @@ source "$SCRIPT_DIR/lib/packages.sh"
 
 DETECTED_OS="macos"
 
+# Parse which steps to run
+parse_install_steps "$@"
+
 log_info "Starting macOS installation..."
 
-# Install Homebrew if missing
-install_homebrew_if_missing
+# Install Homebrew if missing (needed for packages and jq)
+if should_run "packages"; then
+    install_homebrew_if_missing
+fi
 
 # Ensure jq is available
 ensure_jq
 
 # Install packages from Homebrew
-log_info "Installing packages via Homebrew..."
-install_packages_homebrew "$JSON_FILE"
+if should_run "packages"; then
+    log_info "Installing packages via Homebrew..."
+    install_packages_homebrew "$JSON_FILE"
+fi
 
 # Create config symlinks
-create_config_symlinks "$JSON_FILE" "macos" "$REPO_DIR"
+if should_run "symlinks"; then
+    create_config_symlinks "$JSON_FILE" "macos" "$REPO_DIR"
+fi
 
 # Setup shell environment
-setup_shell_env
+if should_run "shell"; then
+    setup_shell_env
+fi
 
 # Run post-install commands
-run_post_install "$JSON_FILE" "macos"
+if should_run "post"; then
+    run_post_install "$JSON_FILE" "macos"
+fi
 
 log_success "macOS installation complete!"

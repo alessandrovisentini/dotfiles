@@ -134,8 +134,8 @@ fi
 cd "$TARGET_DIR"
 
 if [[ -x "./install/install.sh" ]]; then
-    exec ./install/install.sh
+    exec ./install/install.sh "$@"
 else
     chmod +x ./install/install.sh
-    exec ./install/install.sh
+    exec ./install/install.sh "$@"
 fi

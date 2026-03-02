@@ -14,22 +14,33 @@ source "$SCRIPT_DIR/lib/packages.sh"
 
 DETECTED_OS="linux"
 
+# Parse which steps to run
+parse_install_steps "$@"
+
 log_info "Starting Linux installation..."
 
 # Ensure jq is available
 ensure_jq
 
 # Install packages based on detected package manager
-log_info "Installing packages..."
-install_linux_packages "$JSON_FILE"
+if should_run "packages"; then
+    log_info "Installing packages..."
+    install_linux_packages "$JSON_FILE"
+fi
 
 # Create config symlinks
-create_config_symlinks "$JSON_FILE" "linux" "$REPO_DIR"
+if should_run "symlinks"; then
+    create_config_symlinks "$JSON_FILE" "linux" "$REPO_DIR"
+fi
 
 # Setup shell environment
-setup_shell_env
+if should_run "shell"; then
+    setup_shell_env
+fi
 
 # Run post-install commands
-run_post_install "$JSON_FILE" "linux"
+if should_run "post"; then
+    run_post_install "$JSON_FILE" "linux"
+fi
 
 log_success "Linux installation complete!"

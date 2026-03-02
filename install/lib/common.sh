@@ -9,6 +9,29 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
+# Step selection helpers
+# Parse arguments into INSTALL_STEPS array. No arguments means "all".
+parse_install_steps() {
+    INSTALL_STEPS=()
+    if [[ $# -eq 0 ]]; then
+        INSTALL_STEPS=("all")
+    else
+        INSTALL_STEPS=("$@")
+    fi
+    export INSTALL_STEPS
+}
+
+# Check if a given step should run
+should_run() {
+    local step="$1"
+    for s in "${INSTALL_STEPS[@]}"; do
+        if [[ "$s" == "all" || "$s" == "$step" ]]; then
+            return 0
+        fi
+    done
+    return 1
+}
+
 # Logging functions
 log_info() {
     echo -e "${BLUE}[INFO]${NC} $1"

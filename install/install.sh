@@ -2,6 +2,18 @@
 
 # Main installation entry point
 # Detects OS and dispatches to the appropriate OS-specific installer
+#
+# Usage:
+#   ./install.sh              Run all install steps
+#   ./install.sh <step> ...   Run only the specified steps
+#
+# Available steps:
+#   symlinks   Create config symlinks (~/.config/*)
+#   packages   Install software packages
+#   nixos      Setup NixOS system config symlinks (/etc/nixos)
+#   shell      Setup shell environment sourcing (.bashrc/.zshrc)
+#   post       Run post-install commands
+#   all        Run everything (default)
 
 set -e
 
@@ -73,8 +85,36 @@ install_git() {
     log_success "Git installed successfully"
 }
 
+# Show usage help
+show_help() {
+    echo "Usage: $(basename "$0") [step ...]"
+    echo ""
+    echo "Run the dotfiles installer. With no arguments, runs all steps."
+    echo "Specify one or more steps to run only those."
+    echo ""
+    echo "Steps:"
+    echo "  symlinks   Create config symlinks (~/.config/*)"
+    echo "  packages   Install software packages"
+    echo "  nixos      Setup NixOS system config symlinks (/etc/nixos)"
+    echo "  shell      Setup shell environment sourcing (.bashrc/.zshrc)"
+    echo "  post       Run post-install commands"
+    echo "  all        Run everything (default)"
+    echo ""
+    echo "Examples:"
+    echo "  $(basename "$0")                  # run everything"
+    echo "  $(basename "$0") symlinks         # only recreate symlinks"
+    echo "  $(basename "$0") symlinks post    # symlinks + post-install"
+    echo "  $(basename "$0") packages         # only install missing software"
+}
+
 # Main execution
 main() {
+    # Handle help flag
+    if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+        show_help
+        exit 0
+    fi
+
     DETECTED_OS=$(detect_os)
     export DETECTED_OS
 
@@ -96,7 +136,7 @@ main() {
     fi
 
     log_info "Running $DETECTED_OS installer..."
-    exec "$installer"
+    exec "$installer" "$@"
 }
 
 main "$@"
