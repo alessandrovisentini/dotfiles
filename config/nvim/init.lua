@@ -435,6 +435,23 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
+      vim.keymap.set('n', '<leader>sdf', function()
+        local dir = vim.fn.input('Directory: ', '', 'dir')
+        if dir ~= '' then
+          builtin.find_files { follow = true, cwd = dir }
+        end
+      end, { desc = '[S]earch [D]irectory [F]iles' })
+      vim.keymap.set('n', '<leader>sdg', function()
+        local dir = vim.fn.input('Directory: ', '', 'dir')
+        if dir ~= '' then
+          builtin.live_grep {
+            additional_args = function()
+              return { '--fixed-strings' }
+            end,
+            search_dirs = { dir },
+          }
+        end
+      end, { desc = '[S]earch [D]irectory [G]rep' })
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
 
       vim.keymap.set('n', '<leader>/', function()
