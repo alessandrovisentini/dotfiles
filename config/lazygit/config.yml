@@ -6,7 +6,6 @@ customCommands:
   - key: 'e'
     context: 'files'
     command: "nvim --server /tmp/nvim-$(tmux display-message -p '#S').sock --remote {{.SelectedFile.Name}} && tmux select-window -t :1"
-    subprocess: false
     description: 'Open file in nvim (window 1)'
 gui:
   sidePanelWidth: 0.20
