@@ -72,7 +72,7 @@ if tmux has-session -t "$SESSION_NAME" 2>/dev/null; then
 fi
 
 tmux new-session -d -s "$SESSION_NAME" -c "$REPO_PATH" -n "editor"
-setup_window "$SESSION_NAME" "1" "$REPO_PATH" "nvim ."
+setup_window "$SESSION_NAME" "1" "$REPO_PATH" "nvim --listen /tmp/nvim-$SESSION_NAME.sock ."
 
 tmux new-window -t "$SESSION_NAME" -c "$REPO_PATH" -n "terminal"
 setup_window "$SESSION_NAME" "2" "$REPO_PATH" "bash"
