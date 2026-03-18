@@ -1,0 +1,46 @@
+theme "github-dark"
+
+// UI settings
+ui {
+    pane_frames {
+        rounded_corners false
+        hide_session_name false
+    }
+}
+
+// Keybindings
+// Ctrl+Space opens session picker as floating pane (like prefix+t in tmux)
+keybinds clear-defaults=false {
+    normal {
+        bind "Ctrl Space" {
+            Run "bash" "-c" "exec $REPOS_HOME/dotfiles/scripts/zellij_env.sh" {
+                floating true
+                close_on_exit true
+                name "session-picker"
+            };
+        }
+    }
+}
+
+// GitHub Dark theme (matching tmux/alacritty)
+themes {
+    github-dark {
+        // fg: #7d8590, bg: #161b22
+        fg 125 133 144
+        bg 22 27 34
+        // black: #161b22, red: #ff7b72
+        black 22 27 34
+        red 255 123 114
+        // green: #3fb950, yellow: #d29922
+        green 63 185 80
+        yellow 210 153 34
+        // blue: #58a6ff, magenta: #bc8cff
+        blue 88 166 255
+        magenta 188 140 255
+        // cyan: #39c5cf, white: #e6edf3
+        cyan 57 197 207
+        white 230 237 243
+        // orange: #d29922
+        orange 210 153 34
+    }
+}

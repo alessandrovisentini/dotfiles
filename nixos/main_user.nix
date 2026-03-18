@@ -159,6 +159,8 @@ in {
     t = "$REPOS_HOME/dotfiles/scripts/td.sh";
     tt = "$REPOS_HOME/dotfiles/scripts/tt.sh";
 
+    z = "$REPOS_HOME/dotfiles/scripts/zd.sh";
+
     ai = "$REPOS_HOME/dotfiles/scripts/ai.sh";
     aim = "$REPOS_HOME/dotfiles/scripts/ai.sh -m";
   };

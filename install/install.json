@@ -17,7 +17,8 @@
         "sway",
         "swaylock",
         "tmux",
-        "waybar"
+        "waybar",
+        "zellij"
       ],
       "nixos_symlinks": {
         "enabled": true,
