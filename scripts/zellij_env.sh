@@ -8,7 +8,7 @@ if [ $# -eq 0 ]; then
         exit 1
     fi
 
-    ACTIVE_SESSIONS=$(zellij list-sessions 2>/dev/null | sed 's/\x1b\[[0-9;]*m//g' | awk '{print $1}')
+    ACTIVE_SESSIONS=$(zellij list-sessions 2>/dev/null | perl -pe 's/\x1b\[[0-9;]*m//g' | awk '{print $1}')
     REPOS=$(ls "$BASE_PATH")
 
     # Active sessions last so they appear at the bottom near the prompt
@@ -42,7 +42,7 @@ fi
 SESSION_NAME="$REPO_NAME"
 
 # If session already exists, switch/attach to it
-if zellij list-sessions 2>/dev/null | sed 's/\x1b\[[0-9;]*m//g' | awk '{print $1}' | grep -qx "$SESSION_NAME"; then
+if zellij list-sessions 2>/dev/null | perl -pe 's/\x1b\[[0-9;]*m//g' | awk '{print $1}' | grep -qx "$SESSION_NAME"; then
     if [ -n "$ZELLIJ" ]; then
         zellij action switch-session --name "$SESSION_NAME"
     else
