@@ -2,18 +2,25 @@
 
 BASE_PATH="$REPOS_HOME"
 
+# Returns clean session names, one per line
+_zellij_sessions() {
+    zellij list-sessions 2>/dev/null \
+        | perl -pe 's/\x1b\[[0-9;?]*[A-Za-z]//g' \
+        | awk 'NF {print $1}'
+}
+
 if [ $# -eq 0 ]; then
     if [ -z "$BASE_PATH" ]; then
         echo "Error: REPOS_HOME is not set."
         exit 1
     fi
 
-    ACTIVE_SESSIONS=$(zellij list-sessions 2>/dev/null | perl -pe 's/\x1b\[[0-9;]*m//g' | awk '{print $1}')
+    ACTIVE_SESSIONS=$(_zellij_sessions)
     REPOS=$(ls "$BASE_PATH")
 
     # Active sessions last so they appear at the bottom near the prompt
     INACTIVE=$(echo "$REPOS" | while read -r repo; do
-        if ! echo "$ACTIVE_SESSIONS" | grep -qx "$repo"; then
+        if ! echo "$ACTIVE_SESSIONS" | grep -qxF "$repo"; then
             echo "$repo"
         fi
     done)
@@ -42,7 +49,7 @@ fi
 SESSION_NAME="$REPO_NAME"
 
 # If session already exists, switch/attach to it
-if zellij list-sessions 2>/dev/null | perl -pe 's/\x1b\[[0-9;]*m//g' | awk '{print $1}' | grep -qx "$SESSION_NAME"; then
+if _zellij_sessions | grep -qxF "$SESSION_NAME"; then
     if [ -n "$ZELLIJ" ]; then
         zellij action switch-session --name "$SESSION_NAME"
     else
