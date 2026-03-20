@@ -14,6 +14,7 @@ export TTRPG_NOTES_HOME="$REPOS_HOME/ttrpg-notes"
 # Aliases
 alias t='$REPOS_HOME/dotfiles/scripts/td.sh'
 alias tt='$REPOS_HOME/dotfiles/scripts/tt.sh'
+alias z='$REPOS_HOME/dotfiles/scripts/zd.sh'
 
 alias ai='$REPOS_HOME/dotfiles/scripts/ai.sh'
 alias aim='$REPOS_HOME/dotfiles/scripts/ai.sh -m'

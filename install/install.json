@@ -17,7 +17,8 @@
         "sway",
         "swaylock",
         "tmux",
-        "waybar"
+        "waybar",
+        "zellij"
       ],
       "nixos_symlinks": {
         "enabled": true,
@@ -37,7 +38,8 @@
         "lazygit",
         "nvim",
         "shell",
-        "tmux"
+        "tmux",
+        "zellij"
       ],
       "nixos_symlinks": {
         "enabled": false
@@ -53,7 +55,8 @@
             "ripgrep",
             "fd",
             "fzf",
-            "sketchybar"
+            "sketchybar",
+            "zellij"
           ],
           "casks": ["alacritty", "amethyst", "scroll-reverser"]
         }
