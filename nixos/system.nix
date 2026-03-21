@@ -4,7 +4,6 @@ in {
   # System Packages and Programs
   programs.nix-ld.enable = true; # Fixes some issues with dynamically linked executables
   programs.tmux.enable = true;
-  programs.zellij.enable = true;
   programs.neovim = {
     enable = true;
     defaultEditor = true;
@@ -26,6 +25,7 @@ in {
     ripgrep
     fzf
     unzip
+    zellij
   ];
   programs.bash.interactiveShellInit = ''
     eval "$(fzf --bash)"
