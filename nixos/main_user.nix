@@ -63,6 +63,7 @@ in {
       unstable.evince
       unstable.pdfarranger
       unstable.claude-code
+      brave
     ];
   };
   users.groups.${vars.mainUserName} = {
@@ -103,7 +104,7 @@ in {
   ];
 
   # Spotify Firewall
-  networking.firewall.allowedTCPPorts = [ 57621 ];
+  networking.firewall.allowedTCPPorts = [57621];
 
   # Appimages
   programs.appimage.enable = true;
@@ -132,7 +133,7 @@ in {
     extraConfig.pipewire.adjust-sample-rate = {
       "context.properties" = {
         "default.clock.rate" = 48000;
-        "defautlt.allowed-rates" = [ 192000 48000 44100 ];
+        "defautlt.allowed-rates" = [192000 48000 44100];
         "default.clock.min-quantum" = 32;
         "default.clock.quantum" = 64;
         "default.clock.max-quantum" = 128;
