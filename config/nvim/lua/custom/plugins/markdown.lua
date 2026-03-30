@@ -64,7 +64,7 @@ return {
         image = '󰥶 ',
         hyperlink = '󰌹 ',
         highlight = 'RenderMarkdownLink',
-        wiki = { icon = '󰌹 ', highlight = 'RenderMarkdownLink' },
+        wiki = { icon = '󰌹 ', highlight = 'RenderMarkdownLink', scope_highlight = 'RenderMarkdownLink' },
       },
     },
     config = function(_, opts)
@@ -94,7 +94,7 @@ return {
       vim.api.nvim_set_hl(0, 'RenderMarkdownH5Bg', { fg = '#ffffff', bg = colors.bg_orange, bold = true })
       vim.api.nvim_set_hl(0, 'RenderMarkdownH6Bg', { fg = '#ffffff', bg = colors.bg_cyan, bold = true })
 
-      vim.api.nvim_set_hl(0, 'RenderMarkdownLink', { fg = colors.blue, bold = true, italic = true })
+      vim.api.nvim_set_hl(0, 'RenderMarkdownLink', { fg = colors.purple, underline = true })
       vim.api.nvim_set_hl(0, '@markup.link.label.markdown_inline', { fg = colors.blue, underline = true })
       vim.api.nvim_set_hl(0, '@markup.link.url.markdown_inline', { fg = colors.blue, underline = true })
       vim.api.nvim_set_hl(0, '@markup.link.markdown_inline', { fg = colors.blue, underline = true })
