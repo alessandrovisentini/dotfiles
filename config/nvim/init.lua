@@ -141,6 +141,7 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end ---@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(lazypath)
 
+
 -- [[ Configure and install plugins ]]
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
@@ -234,6 +235,15 @@ require('lazy').setup({
       { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
     },
     config = function()
+      -- nvim-treesitter was rewritten and removed the configs/parsers modules that
+      -- telescope's previewer uses. Shim them so previewer falls back to regex highlighting.
+      package.loaded['nvim-treesitter.configs'] = package.loaded['nvim-treesitter.configs']
+        or { is_enabled = function() return false end }
+      local ok, parsers = pcall(require, 'nvim-treesitter.parsers')
+      if ok and type(parsers) == 'table' and not parsers.ft_to_lang then
+        parsers.ft_to_lang = function(ft) return vim.treesitter.language.get_lang(ft) or ft end
+      end
+
       -- [[ Configure Telescope ]]
       -- See `:help telescope` and `:help telescope.setup()`
       local actions = require 'telescope.actions'
