@@ -73,14 +73,6 @@ in {
   # Programs
   programs.firefox.enable = true;
 
-  programs.thunar.enable = true;
-  programs.xfconf.enable = true;
-  programs.thunar.plugins = with pkgs.xfce; [
-    thunar-archive-plugin
-    thunar-volman
-  ];
-  services.gvfs.enable = true;
-  services.tumbler.enable = true;
   xdg.mime.enable = true;
   xdg.portal.enable = true;
   xdg.portal.wlr.enable = true;
@@ -91,17 +83,6 @@ in {
     enable = true;
     openFirewall = true;
   };
-
-  services.jellyfin = {
-    enable = true;
-    openFirewall = true;
-    user = vars.mainUserName;
-  };
-  environment.systemPackages = [
-    pkgs.jellyfin
-    pkgs.jellyfin-web
-    pkgs.jellyfin-ffmpeg
-  ];
 
   # Spotify Firewall
   networking.firewall.allowedTCPPorts = [57621];
@@ -159,8 +140,9 @@ in {
     t = "$REPOS_HOME/dotfiles/scripts/td.sh";
     tt = "$REPOS_HOME/dotfiles/scripts/tt.sh";
 
-    ai = "$REPOS_HOME/dotfiles/scripts/ai.sh";
-    aim = "$REPOS_HOME/dotfiles/scripts/ai.sh -m";
+    ai = "$REPOS_HOME/dotfiles/scripts/ai/ai.sh";
+    aim = "$REPOS_HOME/dotfiles/scripts/ai/ai.sh -m";
+    h = "$REPOS_HOME/dotfiles/scripts/ai/h";
   };
 
   # Home manager
