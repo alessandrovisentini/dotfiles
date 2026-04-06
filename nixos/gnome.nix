@@ -28,6 +28,7 @@ in {
         "org/gnome/desktop/interface" = {
           accent-color = "blue";
           enable-animations = false;
+          enable-hot-corners = false;
         };
 
         "org/gnome/desktop/input-sources" = {

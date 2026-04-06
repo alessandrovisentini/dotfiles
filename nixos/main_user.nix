@@ -62,7 +62,7 @@ in {
       parsec-bin
       unstable.evince
       unstable.pdfarranger
-      unstable.claude-code
+      claude-code
       brave
     ];
   };
@@ -134,8 +134,9 @@ in {
 
   # Aliases
   environment.shellAliases = {
-    nixos-switch = "sudo nixos-rebuild switch";
-    nixos-update = "sudo nix-channel --update & sudo nixos-rebuild switch --upgrade";
+    ns = "sudo nixos-rebuild switch";
+    nu = "sudo nix-channel --update & sudo nixos-rebuild switch --upgrade";
+    nd = "nix develop";
 
     t = "$REPOS_HOME/dotfiles/scripts/td.sh";
     tt = "$REPOS_HOME/dotfiles/scripts/tt.sh";
