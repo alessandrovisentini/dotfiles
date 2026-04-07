@@ -60,7 +60,6 @@ in {
       transcribe
       spotdl
       parsec-bin
-      unstable.evince
       unstable.pdfarranger
       claude-code
       brave

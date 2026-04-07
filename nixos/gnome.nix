@@ -116,6 +116,11 @@ in {
           command = "alacritty --option window.startup_mode='\"Maximized\"'";
           name = "Launch Alacritty Fullscreen";
         };
+
+        "org/gnome/settings-daemon/plugins/power" = {
+          sleep-inactive-ac-type = "nothing";
+          sleep-inactive-battery-type = "nothing";
+        };
       };
     }
   ];

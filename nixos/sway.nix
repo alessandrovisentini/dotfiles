@@ -42,6 +42,9 @@
 
       # icons
       adwaita-icon-theme
+
+      # PDF reader
+      evince
     ];
   };
 
