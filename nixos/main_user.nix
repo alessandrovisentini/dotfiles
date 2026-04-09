@@ -61,7 +61,7 @@ in {
       spotdl
       parsec-bin
       unstable.pdfarranger
-      claude-code
+      unstable.claude-code
       brave
     ];
   };
