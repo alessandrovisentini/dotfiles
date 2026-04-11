@@ -29,6 +29,9 @@
       pwvucontrol
       pulseaudio
 
+      # media control
+      playerctl
+
       # screenshot
       sway-contrib.grimshot
 
@@ -43,22 +46,33 @@
       # icons
       adwaita-icon-theme
 
-      # PDF reader
-      evince
+      # apps
+      nautilus
+      gnome-calculator
+      gnome-contacts
+      gnome-font-viewer
+      snapshot
+      gnome-music
+      papers
     ];
   };
 
-  programs.thunar.enable = true;
-  programs.xfconf.enable = true;
-  programs.thunar.plugins = with pkgs.xfce; [
-    thunar-archive-plugin
-    thunar-volman
-  ];
   services.gvfs.enable = true;
-  services.tumbler.enable = true;
 
   #bluetooth
   services.blueman.enable = true;
+
+  # mpris-proxy bridges Bluetooth AVRCP controls (earphone buttons) to MPRIS D-Bus
+  # so playerctl can receive play/pause/next/prev from BT headset controls
+  systemd.user.services.mpris-proxy = {
+    description = "Bluetooth MPRIS proxy";
+    after = [ "bluetooth.target" ];
+    wantedBy = [ "default.target" ];
+    serviceConfig = {
+      ExecStart = "${pkgs.bluez}/bin/mpris-proxy";
+      Restart = "on-failure";
+    };
+  };
 
   # Fix swaylock PAM authentication when using GDM
   security.pam.services.swaylock = {
