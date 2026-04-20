@@ -14,6 +14,7 @@
     ./development.nix
     ./printing.nix
     ./gaming.nix
+    ./mime_apps.nix
   ];
 
   nix.settings.auto-optimise-store = true;
