@@ -106,7 +106,9 @@ run_jq() {
     if command -v jq &> /dev/null; then
         jq "$@"
     elif [[ "$DETECTED_OS" == "nixos" ]]; then
-        nix-shell -p jq --run "jq $*"
+        local args
+        args=$(printf '%q ' "$@")
+        nix-shell -p jq --run "jq $args"
     else
         log_error "jq is not available"
         return 1

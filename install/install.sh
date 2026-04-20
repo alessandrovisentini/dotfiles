@@ -49,8 +49,11 @@ install_git() {
 
     case "$os" in
         "nixos")
-            log_info "Using nix-shell to provide git temporarily..."
-            return 0
+            log_info "Installing git via nix-env..."
+            nix-env -iA nixpkgs.git || {
+                log_error "Failed to install git. Try running: nix-env -iA nixpkgs.git"
+                exit 1
+            }
             ;;
         "macos")
             if command -v brew &> /dev/null; then

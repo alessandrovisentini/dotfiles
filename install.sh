@@ -54,7 +54,9 @@ run_git() {
     if command -v git &> /dev/null; then
         git "$@"
     elif [[ "$DETECTED_OS" == "nixos" ]]; then
-        nix-shell -p git --run "git $*"
+        local args
+        args=$(printf '%q ' "$@")
+        nix-shell -p git --run "git $args"
     else
         log_error "git is not available"
         return 1

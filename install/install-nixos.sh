@@ -27,6 +27,15 @@ if [[ $EUID -eq 0 ]]; then
     exit 1
 fi
 
+# Pre-cache sudo credentials early if the nixos step will need them
+if should_run "nixos"; then
+    log_info "Sudo is required for NixOS configuration setup. Please authenticate:"
+    sudo -v || {
+        log_error "sudo authentication failed"
+        exit 1
+    }
+fi
+
 # Create config symlinks
 if should_run "symlinks"; then
     create_config_symlinks "$JSON_FILE" "nixos" "$REPO_DIR"
