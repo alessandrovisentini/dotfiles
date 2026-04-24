@@ -173,7 +173,7 @@ return {
           end
           return tostring(os.time())
         end,
-        preferred_link_style = 'wiki',
+        link = { style = 'wiki' },
         picker = { name = 'telescope.nvim' },
         legacy_commands = false,
         completion = {

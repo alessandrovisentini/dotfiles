@@ -12,6 +12,8 @@ return {
     { '<S-l>', '<cmd>BufferLineCycleNext<cr>', desc = 'Next Buffer' },
     { '[b', '<cmd>BufferLineCyclePrev<cr>', desc = 'Prev Buffer' },
     { ']b', '<cmd>BufferLineCycleNext<cr>', desc = 'Next Buffer' },
+    { '<leader>bn', '<cmd>BufferLineCycleNext<cr>', desc = '[B]uffer [N]ext' },
+    { '<leader>bN', '<cmd>BufferLineCyclePrev<cr>', desc = '[B]uffer [N]ext (prev)' },
     -- Move buffers
     { '<A-h>', '<cmd>BufferLineMovePrev<cr>', desc = 'Move Buffer Left' },
     { '<A-l>', '<cmd>BufferLineMoveNext<cr>', desc = 'Move Buffer Right' },
@@ -21,16 +23,16 @@ return {
     { '<leader>bC', '<cmd>BufferLineCloseOthers<cr>', desc = '[B]uffer [C]lose Others' },
     { '<leader>bb', '<cmd>BufferLinePick<cr>', desc = '[B]uffer Pick' },
     { '<leader>bx', '<cmd>BufferLinePickClose<cr>', desc = '[B]uffer Pick Close' },
-    -- Jump to buffer by number
-    { '<leader>1', '<cmd>BufferLineGoToBuffer 1<cr>', desc = 'Buffer 1' },
-    { '<leader>2', '<cmd>BufferLineGoToBuffer 2<cr>', desc = 'Buffer 2' },
-    { '<leader>3', '<cmd>BufferLineGoToBuffer 3<cr>', desc = 'Buffer 3' },
-    { '<leader>4', '<cmd>BufferLineGoToBuffer 4<cr>', desc = 'Buffer 4' },
-    { '<leader>5', '<cmd>BufferLineGoToBuffer 5<cr>', desc = 'Buffer 5' },
-    { '<leader>6', '<cmd>BufferLineGoToBuffer 6<cr>', desc = 'Buffer 6' },
-    { '<leader>7', '<cmd>BufferLineGoToBuffer 7<cr>', desc = 'Buffer 7' },
-    { '<leader>8', '<cmd>BufferLineGoToBuffer 8<cr>', desc = 'Buffer 8' },
-    { '<leader>9', '<cmd>BufferLineGoToBuffer 9<cr>', desc = 'Buffer 9' },
+    -- Jump to buffer by absolute position (works even when tabs are truncated)
+    { '<leader>1', function() require('bufferline').go_to(1, true) end, desc = 'Buffer 1' },
+    { '<leader>2', function() require('bufferline').go_to(2, true) end, desc = 'Buffer 2' },
+    { '<leader>3', function() require('bufferline').go_to(3, true) end, desc = 'Buffer 3' },
+    { '<leader>4', function() require('bufferline').go_to(4, true) end, desc = 'Buffer 4' },
+    { '<leader>5', function() require('bufferline').go_to(5, true) end, desc = 'Buffer 5' },
+    { '<leader>6', function() require('bufferline').go_to(6, true) end, desc = 'Buffer 6' },
+    { '<leader>7', function() require('bufferline').go_to(7, true) end, desc = 'Buffer 7' },
+    { '<leader>8', function() require('bufferline').go_to(8, true) end, desc = 'Buffer 8' },
+    { '<leader>9', function() require('bufferline').go_to(9, true) end, desc = 'Buffer 9' },
   },
   config = function()
     require('bufferline').setup {
