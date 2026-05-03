@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 
-AI_CMD="claude"
+AI_CMD="claude --dangerously-skip-permissions"
 MULTI=false
 
-while getopts "m" opt; do
+while getopts "ms" opt; do
     case $opt in
         m) MULTI=true ;;
+        s) AI_CMD="claude" ;;
     esac
 done
 shift $((OPTIND - 1))

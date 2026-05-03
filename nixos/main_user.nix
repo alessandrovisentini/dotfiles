@@ -140,7 +140,6 @@ in {
     tt = "$REPOS_HOME/dotfiles/scripts/tt.sh";
 
     ai = "$REPOS_HOME/dotfiles/scripts/ai/ai.sh";
-    aim = "$REPOS_HOME/dotfiles/scripts/ai/ai.sh -m";
     h = "$REPOS_HOME/dotfiles/scripts/ai/h";
   };
 
