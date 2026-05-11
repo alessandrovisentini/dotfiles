@@ -66,6 +66,9 @@ defaults write com.apple.dock autohide-delay -float 0
 # Dock icon size
 defaults write com.apple.dock tilesize -int 48
 
+# Empty the Dock of all pinned apps
+defaults write com.apple.dock persistent-apps -array
+
 # =============================================================================
 # Finder
 # =============================================================================
@@ -161,9 +164,12 @@ fi
 # Sketchybar
 # =============================================================================
 
-if command -v brew &>/dev/null && brew services list 2>/dev/null | grep -q '^sketchybar'; then
-    echo "Restarting sketchybar..."
-    brew services restart sketchybar >/dev/null
+if command -v brew &>/dev/null && brew list sketchybar &>/dev/null; then
+    echo "Starting sketchybar service (registers it to autostart on login)..."
+    # `start` registers the LaunchAgent so it survives reboot. Errors are harmless
+    # if it's already started; the follow-up restart picks up the latest config.
+    brew services start sketchybar &>/dev/null || true
+    brew services restart sketchybar &>/dev/null || true
 fi
 
 # =============================================================================
