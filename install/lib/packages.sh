@@ -43,12 +43,10 @@ install_homebrew_if_missing() {
 
 # Install packages via Homebrew (macOS)
 #
-# Strategy: bulk-install everything in a single `brew install …` call (brew's
-# supported path — continues past per-package failures), then verify each
-# package with `brew list` afterward. Verification is essential because brew
-# sometimes returns 0 even when a specific keg silently didn't get installed
-# (bottle clash, partial download, tap not refreshed, etc). Per-formula loops
-# couldn't catch that.
+# Strategy: one bulk `brew install …` call for all missing formulae, one for
+# all missing casks. Brew handles the list internally — that's the path that
+# reliably works here. We then verify with `brew list` so any silently-skipped
+# package is surfaced in a final summary instead of lost in scrollback.
 install_packages_homebrew() {
     local json_file="$1"
     local failed_taps=()
@@ -71,7 +69,6 @@ install_packages_homebrew() {
 
     if [[ ${#failed_taps[@]} -gt 0 ]]; then
         log_error "Cannot continue: tap(s) failed to add: ${failed_taps[*]}"
-        log_error "Resolve the tap errors above and re-run."
         return 1
     fi
 
@@ -87,36 +84,17 @@ install_packages_homebrew() {
     done <<< "$(get_json_array "$json_file" ".os.macos.packages.homebrew.formulae")"
 
     if [[ ${#formulae_to_install[@]} -gt 0 ]]; then
-        log_info "Installing formulae in one batch: ${formulae_to_install[*]}"
-        # `|| true` because brew exits non-zero if ANY formula fails — we'll
-        # ask brew itself which kegs are present and report each individually.
+        log_info "Installing formulae: ${formulae_to_install[*]}"
         brew install "${formulae_to_install[@]}" || true
 
         for f in "${formulae_to_install[@]}"; do
             if brew list --formula "$f" &>/dev/null; then
                 log_success "Verified formula installed: $f"
             else
-                log_error "Formula NOT installed after brew install: $f"
+                log_error "Formula NOT installed: $f"
                 failed_formulae+=("$f")
             fi
         done
-
-        # Retry pass — many "missing" packages are transient (network, lock
-        # contention, bottle redirect). One sequential retry per failure with
-        # full brew output is usually enough, and surfaces the real error.
-        if [[ ${#failed_formulae[@]} -gt 0 ]]; then
-            log_warning "Retrying ${#failed_formulae[@]} failed formula(e) one-by-one..."
-            local still_failed=()
-            for f in "${failed_formulae[@]}"; do
-                log_info "Retry: brew install $f"
-                if brew install "$f" && brew list --formula "$f" &>/dev/null; then
-                    log_success "Recovered formula on retry: $f"
-                else
-                    still_failed+=("$f")
-                fi
-            done
-            failed_formulae=("${still_failed[@]}")
-        fi
     fi
 
     # ---- Casks ------------------------------------------------------------
@@ -131,37 +109,23 @@ install_packages_homebrew() {
     done <<< "$(get_json_array "$json_file" ".os.macos.packages.homebrew.casks")"
 
     if [[ ${#casks_to_install[@]} -gt 0 ]]; then
-        log_info "Installing casks in one batch: ${casks_to_install[*]}"
+        log_info "Installing casks: ${casks_to_install[*]}"
         brew install --cask "${casks_to_install[@]}" || true
 
         for c in "${casks_to_install[@]}"; do
             if brew list --cask "$c" &>/dev/null; then
                 log_success "Verified cask installed: $c"
             else
-                log_error "Cask NOT installed after brew install: $c"
+                log_error "Cask NOT installed: $c"
                 failed_casks+=("$c")
             fi
         done
-
-        if [[ ${#failed_casks[@]} -gt 0 ]]; then
-            log_warning "Retrying ${#failed_casks[@]} failed cask(s) one-by-one..."
-            local still_failed_casks=()
-            for c in "${failed_casks[@]}"; do
-                log_info "Retry: brew install --cask $c"
-                if brew install --cask "$c" && brew list --cask "$c" &>/dev/null; then
-                    log_success "Recovered cask on retry: $c"
-                else
-                    still_failed_casks+=("$c")
-                fi
-            done
-            failed_casks=("${still_failed_casks[@]}")
-        fi
     fi
 
     # ---- Summary ----------------------------------------------------------
     if [[ ${#failed_formulae[@]} -gt 0 || ${#failed_casks[@]} -gt 0 ]]; then
         log_error "============================================================"
-        log_error "Homebrew install summary: some packages still missing after retry."
+        log_error "Homebrew install summary: some packages did not install."
         [[ ${#failed_formulae[@]} -gt 0 ]] && log_error "  formulae: ${failed_formulae[*]}"
         [[ ${#failed_casks[@]} -gt 0 ]] && log_error "  casks:    ${failed_casks[*]}"
         log_error "Scroll up to see brew's output for each failure."
