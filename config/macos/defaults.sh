@@ -105,8 +105,8 @@ defaults write com.apple.dock autohide-delay -float 0
 # Dock icon size
 defaults write com.apple.dock tilesize -int 48
 
-# Empty the Dock of all pinned apps, keeping only Launchpad
-defaults write com.apple.dock persistent-apps -array '{"tile-data" = {"file-data" = {"_CFURLString" = "/System/Applications/Launchpad.app"; "_CFURLStringType" = 0;};}; "tile-type" = "file-tile";}'
+# Empty the Dock of all pinned apps
+defaults write com.apple.dock persistent-apps -array
 
 # =============================================================================
 # Finder
