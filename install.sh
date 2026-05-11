@@ -83,9 +83,17 @@ install_git() {
                     exit 1
                 }
             elif command -v xcode-select &> /dev/null; then
-                log_info "Installing Xcode Command Line Tools (includes git)..."
-                xcode-select --install
-                log_info "Please complete the Xcode Command Line Tools installation and run this script again."
+                log_info "Triggering Xcode Command Line Tools install (provides git)..."
+                # xcode-select --install returns non-zero in several cases even when
+                # the install dialog launches successfully — don't let `set -e` trip on it.
+                xcode-select --install 2>/dev/null || true
+                log_info ""
+                log_info "============================================================"
+                log_info "The Command Line Tools GUI installer has been triggered."
+                log_info "Wait for it to finish (it can take several minutes), then"
+                log_info "re-run this script:"
+                log_info "  curl -fsSL https://raw.githubusercontent.com/alessandrovisentini/dotfiles/main/install.sh | bash"
+                log_info "============================================================"
                 exit 0
             else
                 log_error "Neither Homebrew nor Xcode Command Line Tools available. Please install git manually."

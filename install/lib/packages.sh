@@ -10,10 +10,26 @@ install_homebrew_if_missing() {
     fi
 
     log_info "Installing Homebrew..."
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" || {
+    log_info "Homebrew needs sudo access. You may be prompted for your password."
+
+    # Prime sudo. Read from /dev/tty so the prompt works even when this script
+    # is run via `curl | bash` (stdin is the pipe, not the terminal).
+    if ! sudo -v < /dev/tty; then
+        log_error "Could not obtain sudo access. Homebrew install aborted."
+        return 1
+    fi
+
+    # Keep sudo creds fresh while the installer runs.
+    ( while true; do sudo -n true; sleep 50; kill -0 "$$" 2>/dev/null || exit; done ) 2>/dev/null &
+    local sudo_keepalive_pid=$!
+
+    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" || {
+        kill "$sudo_keepalive_pid" 2>/dev/null || true
         log_error "Failed to install Homebrew"
         return 1
     }
+
+    kill "$sudo_keepalive_pid" 2>/dev/null || true
 
     # Add Homebrew to PATH for this session
     if [[ -f /opt/homebrew/bin/brew ]]; then

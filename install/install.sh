@@ -46,51 +46,6 @@ detect_os() {
     echo "unsupported"
 }
 
-# Install git if not available
-install_git() {
-    local os="$1"
-
-    log_info "Git not found. Installing git..."
-
-    case "$os" in
-        "nixos")
-            log_info "Installing git via nix-env..."
-            nix-env -iA nixpkgs.git || {
-                log_error "Failed to install git. Try running: nix-env -iA nixpkgs.git"
-                exit 1
-            }
-            ;;
-        "macos")
-            if command -v brew &> /dev/null; then
-                brew install git || {
-                    log_error "Failed to install git with brew"
-                    exit 1
-                }
-            elif command -v xcode-select &> /dev/null; then
-                log_info "Installing Xcode Command Line Tools (includes git)..."
-                xcode-select --install
-                log_info "Please complete the Xcode Command Line Tools installation and run this script again."
-                exit 0
-            else
-                log_error "Neither Homebrew nor Xcode Command Line Tools available. Please install git manually."
-                exit 1
-            fi
-            ;;
-        "fedora")
-            sudo dnf install -y git || {
-                log_error "Failed to install git with dnf"
-                exit 1
-            }
-            ;;
-        *)
-            log_error "Unsupported OS. Please install git manually."
-            exit 1
-            ;;
-    esac
-
-    log_success "Git installed successfully"
-}
-
 # Show usage help
 show_help() {
     echo "Usage: $(basename "$0") [step ...]"
@@ -136,11 +91,6 @@ main() {
     if [[ "$DETECTED_OS" == "unsupported" ]]; then
         log_error "Unsupported OS. This installer supports NixOS, macOS, and Fedora."
         exit 1
-    fi
-
-    # Check if git is available
-    if ! command -v git &> /dev/null; then
-        install_git "$DETECTED_OS"
     fi
 
     # Dispatch to OS-specific installer
