@@ -18,3 +18,18 @@ alias tt='$REPOS_HOME/dotfiles/scripts/tt.sh'
 alias ai='$REPOS_HOME/dotfiles/scripts/ai/ai.sh'
 
 alias h='$REPOS_HOME/dotfiles/scripts/ai/h'
+
+# nvm (macOS — installed via Homebrew). Looks for the brew-managed nvm.sh in
+# both common prefixes so the same env.sh works on Intel and Apple Silicon.
+if [[ "$(uname)" == "Darwin" ]]; then
+    export NVM_DIR="$HOME/.nvm"
+    [ -d "$NVM_DIR" ] || mkdir -p "$NVM_DIR"
+    for nvm_prefix in /opt/homebrew /usr/local; do
+        if [ -s "$nvm_prefix/opt/nvm/nvm.sh" ]; then
+            # shellcheck disable=SC1090
+            . "$nvm_prefix/opt/nvm/nvm.sh"
+            break
+        fi
+    done
+    unset nvm_prefix
+fi

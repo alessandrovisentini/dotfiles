@@ -8,6 +8,18 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(dirname "$SCRIPT_DIR")"
 JSON_FILE="$SCRIPT_DIR/install.json"
 
+# When run via `curl | bash`, stdin is the curl pipe — any brew (or sudo) prompt
+# during install reads EOF and aborts that one step, which is how we silently
+# lost sketchybar/fzf/amethyst before. Reattach stdin to the controlling TTY.
+if [ ! -t 0 ] && [ -e /dev/tty ]; then
+    exec < /dev/tty
+fi
+
+# Stop brew from running `brew update` before every install (slow + noisy +
+# can introduce extra prompts) and from printing setup hints we don't need.
+export HOMEBREW_NO_AUTO_UPDATE=1
+export HOMEBREW_NO_ENV_HINTS=1
+
 # Source common functions
 source "$SCRIPT_DIR/lib/common.sh"
 source "$SCRIPT_DIR/lib/packages.sh"

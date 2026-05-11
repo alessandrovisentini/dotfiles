@@ -54,6 +54,7 @@
             "ripgrep",
             "fd",
             "fzf",
+            "nvm",
             "sketchybar"
           ],
           "casks": ["alacritty", "iterm2", "amethyst", "scroll-reverser", "font-dejavu-sans-mono-nerd-font"]

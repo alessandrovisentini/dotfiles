@@ -128,6 +128,11 @@ defaults write com.apple.finder ShowPathbar -bool true
 # Disable automatic rearranging of Spaces based on most recent use
 defaults write com.apple.dock mru-spaces -bool false
 
+# Disable Spaces / Mission Control slide animation
+# Uses the system "Reduce Motion" accessibility flag, which makes space
+# switches an instant cross-fade instead of the long horizontal slide.
+defaults write com.apple.universalaccess reduceMotion -bool true
+
 # =============================================================================
 # Keyboard Shortcuts - Switch to Desktop with Option+N
 # =============================================================================
