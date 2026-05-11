@@ -49,3 +49,24 @@ if should_run "post"; then
 fi
 
 log_success "macOS installation complete!"
+
+echo ""
+log_info "============================================================"
+log_info "Manual step: create your Mission Control desktops"
+log_info "============================================================"
+log_info "macOS does not expose a reliable way to script the number of"
+log_info "Spaces. To add more desktops:"
+log_info "  1. Press F3 (or swipe up with 3 fingers) to open Mission Control"
+log_info "  2. Hover the top edge and click '+' once per extra desktop"
+log_info "  3. Option+<n> will then switch between them"
+log_info "============================================================"
+
+echo ""
+log_info "============================================================"
+log_info "Manual step: have Amethyst start at login"
+log_info "============================================================"
+log_info "Amethyst's YAML config has no 'start-at-login' option, so this"
+log_info "must be enabled in macOS Login Items:"
+log_info "  System Settings > General > Login Items & Extensions"
+log_info "  Under 'Open at Login', click '+' and add Amethyst.app"
+log_info "============================================================"

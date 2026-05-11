@@ -56,7 +56,7 @@
             "fzf",
             "sketchybar"
           ],
-          "casks": ["alacritty", "amethyst", "scroll-reverser"]
+          "casks": ["alacritty", "iterm2", "amethyst", "scroll-reverser", "font-dejavu-sans-mono-nerd-font"]
         }
       },
       "post_install": [

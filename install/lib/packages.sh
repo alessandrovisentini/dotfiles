@@ -44,16 +44,29 @@ install_homebrew_if_missing() {
 # Install packages via Homebrew (macOS)
 install_packages_homebrew() {
     local json_file="$1"
+    local failed_taps=()
+    local failed_formulae=()
+    local failed_casks=()
 
-    # Install taps
+    # Install taps. Failures here are fatal-ish: formulae from a missing tap
+    # will fail downstream, so we collect them and exit before the formulae loop.
     local taps
     taps=$(get_json_array "$json_file" ".os.macos.packages.homebrew.taps")
     while IFS= read -r tap; do
         if [[ -n "$tap" ]]; then
             log_info "Adding Homebrew tap: $tap"
-            brew tap "$tap" 2>/dev/null || true
+            if ! brew tap "$tap"; then
+                log_error "Failed to add tap: $tap"
+                failed_taps+=("$tap")
+            fi
         fi
     done <<< "$taps"
+
+    if [[ ${#failed_taps[@]} -gt 0 ]]; then
+        log_error "Cannot continue: tap(s) failed to add: ${failed_taps[*]}"
+        log_error "Resolve the tap errors above and re-run."
+        return 1
+    fi
 
     # Install formulae
     local formulae
@@ -64,7 +77,10 @@ install_packages_homebrew() {
                 log_info "Formula already installed: $formula"
             else
                 log_info "Installing formula: $formula"
-                brew install "$formula" || log_warning "Failed to install: $formula"
+                if ! brew install "$formula"; then
+                    log_error "Failed to install formula: $formula"
+                    failed_formulae+=("$formula")
+                fi
             fi
         fi
     done <<< "$formulae"
@@ -78,10 +94,22 @@ install_packages_homebrew() {
                 log_info "Cask already installed: $cask"
             else
                 log_info "Installing cask: $cask"
-                brew install --cask "$cask" || log_warning "Failed to install cask: $cask"
+                if ! brew install --cask "$cask"; then
+                    log_error "Failed to install cask: $cask"
+                    failed_casks+=("$cask")
+                fi
             fi
         fi
     done <<< "$casks"
+
+    # Summary so failures aren't lost in the scrollback.
+    if [[ ${#failed_formulae[@]} -gt 0 || ${#failed_casks[@]} -gt 0 ]]; then
+        log_error "Homebrew install summary: some packages failed."
+        [[ ${#failed_formulae[@]} -gt 0 ]] && log_error "  formulae: ${failed_formulae[*]}"
+        [[ ${#failed_casks[@]} -gt 0 ]] && log_error "  casks:    ${failed_casks[*]}"
+        log_error "Scroll up to see the underlying brew error for each."
+        return 1
+    fi
 }
 
 # Collect dnf packages for the active DE-selected groups (common + gnome/sway).

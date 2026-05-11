@@ -27,6 +27,45 @@ defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 # (requires: System Settings > Keyboard > Keyboard Shortcuts > Function Keys)
 defaults write NSGlobalDomain com.apple.keyboard.fnState -bool true
 
+# Remap Caps Lock to Escape via the same per-device plist mechanism that
+# System Settings > Keyboard > Modifier Keys uses. Each currently-connected
+# keyboard gets its own entry keyed by USB vendor/product ID. New keyboards
+# plugged in later won't be remapped — re-run defaults.sh to cover them.
+# HID usage: 0x700000039 (Caps Lock) = 30064771129, 0x700000029 (Esc) = 30064771113.
+KB_IDS=$(ioreg -arc IOHIDKeyboard 2>/dev/null | python3 -c '
+import plistlib, sys
+try:
+    data = plistlib.loads(sys.stdin.buffer.read())
+except Exception:
+    sys.exit(0)
+seen = set()
+for d in data:
+    v = d.get("VendorID")
+    p = d.get("ProductID")
+    if v is None or p is None: continue
+    if (v, p) in seen: continue
+    seen.add((v, p))
+    print(f"{v}-{p}")
+' 2>/dev/null)
+
+if [[ -n "$KB_IDS" ]]; then
+    for kb in $KB_IDS; do
+        echo "Remapping Caps Lock -> Escape for keyboard ${kb}..."
+        defaults -currentHost write -g "com.apple.keyboard.modifiermapping.${kb}-0" -array \
+            '{HIDKeyboardModifierMappingDst=30064771113;HIDKeyboardModifierMappingSrc=30064771129;}'
+    done
+    echo "Note: log out and back in for the remap to take effect."
+else
+    echo "Could not enumerate keyboards via ioreg; skipping Caps Lock remap."
+fi
+
+# Clean up any previous hidutil LaunchAgent left over from an older version of this script.
+LEGACY_CAPSLOCK_AGENT="$HOME/Library/LaunchAgents/com.user.capslock-to-esc.plist"
+if [[ -f "$LEGACY_CAPSLOCK_AGENT" ]]; then
+    launchctl unload "$LEGACY_CAPSLOCK_AGENT" 2>/dev/null || true
+    rm -f "$LEGACY_CAPSLOCK_AGENT"
+fi
+
 # =============================================================================
 # Text Input / Autocorrect
 # =============================================================================
@@ -66,8 +105,8 @@ defaults write com.apple.dock autohide-delay -float 0
 # Dock icon size
 defaults write com.apple.dock tilesize -int 48
 
-# Empty the Dock of all pinned apps
-defaults write com.apple.dock persistent-apps -array
+# Empty the Dock of all pinned apps, keeping only Launchpad
+defaults write com.apple.dock persistent-apps -array '{"tile-data" = {"file-data" = {"_CFURLString" = "/System/Applications/Launchpad.app"; "_CFURLStringType" = 0;};}; "tile-type" = "file-tile";}'
 
 # =============================================================================
 # Finder
