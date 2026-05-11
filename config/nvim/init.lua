@@ -235,15 +235,6 @@ require('lazy').setup({
       { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
     },
     config = function()
-      -- nvim-treesitter was rewritten and removed the configs/parsers modules that
-      -- telescope's previewer uses. Shim them so previewer falls back to regex highlighting.
-      package.loaded['nvim-treesitter.configs'] = package.loaded['nvim-treesitter.configs']
-        or { is_enabled = function() return false end }
-      local ok, parsers = pcall(require, 'nvim-treesitter.parsers')
-      if ok and type(parsers) == 'table' and not parsers.ft_to_lang then
-        parsers.ft_to_lang = function(ft) return vim.treesitter.language.get_lang(ft) or ft end
-      end
-
       -- [[ Configure Telescope ]]
       -- See `:help telescope` and `:help telescope.setup()`
       local actions = require 'telescope.actions'
@@ -922,10 +913,12 @@ require('lazy').setup({
   },
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
+    branch = 'master',
     build = ':TSUpdate',
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
+    main = 'nvim-treesitter.configs',
     config = function(_, opts)
-      require('nvim-treesitter').setup(opts)
+      require('nvim-treesitter.configs').setup(opts)
     end,
     opts = {
       ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
