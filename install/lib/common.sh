@@ -145,17 +145,11 @@ ensure_jq() {
                 return 1
             fi
             ;;
-        "linux")
-            if command -v apt-get &> /dev/null; then
-                sudo apt-get update && sudo apt-get install -y jq
-            elif command -v dnf &> /dev/null; then
-                sudo dnf install -y jq
-            elif command -v pacman &> /dev/null; then
-                sudo pacman -S --noconfirm jq
-            else
-                log_error "No supported package manager found. Please install jq manually."
+        "fedora")
+            sudo dnf install -y jq || {
+                log_error "Failed to install jq with dnf"
                 return 1
-            fi
+            }
             ;;
         *)
             log_error "Unknown OS. Please install jq manually."

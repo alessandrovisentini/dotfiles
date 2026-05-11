@@ -24,22 +24,26 @@ REPO_DIR="$(dirname "$SCRIPT_DIR")"
 # Source common functions
 source "$SCRIPT_DIR/lib/common.sh"
 
-# Detect operating system
+# Detect operating system. Supported: nixos, macos, fedora.
 detect_os() {
     if [[ "$OSTYPE" == "darwin"* ]]; then
         echo "macos"
-    elif [ -f /etc/nixos/configuration.nix ] || command -v nixos-rebuild &> /dev/null; then
-        echo "nixos"
-    elif [ -f /etc/os-release ]; then
-        . /etc/os-release
-        if [[ "$ID" == "nixos" ]]; then
-            echo "nixos"
-        else
-            echo "linux"
-        fi
-    else
-        echo "linux"
+        return
     fi
+    if [ -f /etc/nixos/configuration.nix ] || command -v nixos-rebuild &> /dev/null; then
+        echo "nixos"
+        return
+    fi
+    if [ -f /etc/os-release ]; then
+        . /etc/os-release
+        case "$ID" in
+            nixos)  echo "nixos" ;;
+            fedora) echo "fedora" ;;
+            *)      echo "unsupported" ;;
+        esac
+        return
+    fi
+    echo "unsupported"
 }
 
 # Install git if not available
@@ -72,17 +76,15 @@ install_git() {
                 exit 1
             fi
             ;;
-        *)
-            if command -v apt-get &> /dev/null; then
-                sudo apt-get update && sudo apt-get install -y git
-            elif command -v dnf &> /dev/null; then
-                sudo dnf install -y git
-            elif command -v pacman &> /dev/null; then
-                sudo pacman -S --noconfirm git
-            else
-                log_error "No supported package manager found. Please install git manually."
+        "fedora")
+            sudo dnf install -y git || {
+                log_error "Failed to install git with dnf"
                 exit 1
-            fi
+            }
+            ;;
+        *)
+            log_error "Unsupported OS. Please install git manually."
+            exit 1
             ;;
     esac
 
@@ -105,12 +107,12 @@ show_help() {
     echo "  post       Run post-install commands"
     echo "  all        Run everything (default)"
     echo ""
-    echo "Linux-only flags:"
+    echo "Fedora-only flags:"
     echo "  --de=gnome|sway|both   Which desktop environment(s) to install."
     echo "                         Skips prompt. Filters packages and config symlinks."
     echo ""
     echo "Examples:"
-    echo "  $(basename "$0")                       # run everything (prompts for DE on Linux)"
+    echo "  $(basename "$0")                       # run everything (prompts for DE on Fedora)"
     echo "  $(basename "$0") symlinks              # only recreate symlinks"
     echo "  $(basename "$0") symlinks post         # symlinks + post-install"
     echo "  $(basename "$0") packages              # only install missing software"
@@ -130,6 +132,11 @@ main() {
     export DETECTED_OS
 
     log_info "Detected operating system: $DETECTED_OS"
+
+    if [[ "$DETECTED_OS" == "unsupported" ]]; then
+        log_error "Unsupported OS. This installer supports NixOS, macOS, and Fedora."
+        exit 1
+    fi
 
     # Check if git is available
     if ! command -v git &> /dev/null; then

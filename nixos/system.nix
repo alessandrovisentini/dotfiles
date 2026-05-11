@@ -16,7 +16,7 @@ in {
     nano
     wget
     htop
-    neofetch
+    fastfetch
     wl-screenrec
     wl-clipboard
     gcc_multi

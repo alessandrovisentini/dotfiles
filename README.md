@@ -1,6 +1,6 @@
 # dotfiles
 
-Personal configs and an installer that works on NixOS, macOS, Fedora, Debian/Ubuntu, Arch.
+Personal configs and an installer that works on NixOS, macOS, and Fedora.
 
 ## Quick install
 
@@ -23,13 +23,13 @@ sudo nixos-rebuild switch
 1. **packages** — installs software
 2. **symlinks** — links `config/*` into `~/.config/*`
 3. **nixos** *(NixOS only)* — symlinks `nixos/*.nix` into `/etc/nixos`
-4. **gnome** *(non-NixOS Linux)* — applies GNOME settings from `config/gnome/dconf-settings.ini`
+4. **gnome** *(Fedora)* — applies GNOME settings from `config/gnome/dconf-settings.ini`
 5. **shell** — sources `config/shell/env.sh` from `.bashrc` / `.zshrc`
 6. **post** — runs OS-specific post-install commands
 
-## Linux: pick a desktop environment
+## Fedora: pick a desktop environment
 
-On first run on a non-NixOS Linux box, the installer asks:
+On first run on Fedora, the installer asks:
 
 ```
 1) gnome — GNOME only

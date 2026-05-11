@@ -68,87 +68,24 @@ install_packages_homebrew() {
     done <<< "$casks"
 }
 
-# Detect Linux package manager
-detect_linux_package_manager() {
-    if command -v dnf &> /dev/null; then
-        echo "dnf"
-    elif command -v apt-get &> /dev/null; then
-        echo "apt"
-    elif command -v pacman &> /dev/null; then
-        echo "pacman"
-    else
-        echo "unknown"
-    fi
-}
-
-# Collect packages for a given manager + DE-selected groups.
-# Echoes one package per line. Supports both flat array and {common,gnome,sway} object.
-collect_de_packages() {
+# Collect dnf packages for the active DE-selected groups (common + gnome/sway).
+# Echoes one package per line.
+collect_dnf_de_packages() {
     local json_file="$1"
-    local mgr="$2"   # dnf|apt|pacman
-    local sub_key="$3"  # "" for top-level array form, or sub-key like "packages" for dnf legacy
+    local base=".os.fedora.packages.dnf"
 
-    local base=".os.linux.packages.$mgr"
-    local node_type
-    node_type=$(run_jq -r "$base | type" "$json_file" 2>/dev/null)
-
-    # Legacy: dnf had {rpm_repos, copr, packages: [...]} flat array
-    if [[ "$node_type" == "object" ]]; then
-        # Object form — could be {common,gnome,sway} or legacy with "packages" key
-        local has_groups
-        has_groups=$(run_jq -r "($base | has(\"common\")) or ($base | has(\"gnome\")) or ($base | has(\"sway\"))" "$json_file" 2>/dev/null)
-        if [[ "$has_groups" == "true" ]]; then
-            for group in common gnome sway; do
-                if de_group_active "$group"; then
-                    get_json_array "$json_file" "$base.$group"
-                fi
-            done
-            return 0
+    for group in common gnome sway; do
+        if de_group_active "$group"; then
+            get_json_array "$json_file" "$base.$group"
         fi
-        # Legacy dnf shape: .packages array
-        if [[ -n "$sub_key" ]]; then
-            get_json_array "$json_file" "$base.$sub_key"
-        fi
-        return 0
-    fi
-
-    if [[ "$node_type" == "array" ]]; then
-        get_json_array "$json_file" "$base"
-    fi
+    done
 }
 
-# Install packages via apt (Debian/Ubuntu)
-install_packages_apt() {
-    local json_file="$1"
-
-    local packages
-    packages=$(collect_de_packages "$json_file" "apt" "")
-
-    if [[ -z "$packages" ]]; then
-        log_info "No apt packages configured for current DE selection"
-        return 0
-    fi
-
-    log_info "Updating apt cache..."
-    sudo apt-get update
-
-    while IFS= read -r pkg; do
-        if [[ -n "$pkg" ]]; then
-            if dpkg -l "$pkg" &>/dev/null; then
-                log_info "Package already installed: $pkg"
-            else
-                log_info "Installing package: $pkg"
-                sudo apt-get install -y "$pkg" || log_warning "Failed to install: $pkg"
-            fi
-        fi
-    done <<< "$packages"
-}
-
-# Add RPM repositories listed under .os.linux.packages.dnf.rpm_repos
+# Add RPM repositories listed under .os.fedora.packages.dnf.rpm_repos
 install_dnf_rpm_repos() {
     local json_file="$1"
     local repos
-    repos=$(get_json_array "$json_file" ".os.linux.packages.dnf.rpm_repos")
+    repos=$(get_json_array "$json_file" ".os.fedora.packages.dnf.rpm_repos")
 
     if [[ -z "$repos" ]]; then
         return 0
@@ -170,17 +107,13 @@ install_dnf_rpm_repos() {
     done <<< "$repos"
 }
 
-# Enable COPR repos listed under .os.linux.packages.dnf.copr
+# Enable COPR repos listed under .os.fedora.packages.dnf.copr
 install_dnf_copr() {
     local json_file="$1"
     local copr_repos
-    copr_repos=$(get_json_array "$json_file" ".os.linux.packages.dnf.copr")
+    copr_repos=$(get_json_array "$json_file" ".os.fedora.packages.dnf.copr")
 
     if [[ -z "$copr_repos" ]]; then
-        return 0
-    fi
-
-    if ! command -v dnf &>/dev/null; then
         return 0
     fi
 
@@ -202,18 +135,15 @@ install_dnf_copr() {
     done <<< "$copr_repos"
 }
 
-# Install packages via dnf (Fedora/RHEL)
+# Install packages via dnf
 install_packages_dnf() {
     local json_file="$1"
 
-    # Pre-install repos (RPM Fusion, etc.)
     install_dnf_rpm_repos "$json_file"
-
-    # Pre-install COPR repos
     install_dnf_copr "$json_file"
 
     local packages
-    packages=$(collect_de_packages "$json_file" "dnf" "packages")
+    packages=$(collect_dnf_de_packages "$json_file")
 
     if [[ -z "$packages" ]]; then
         log_info "No dnf packages configured for current DE selection"
@@ -232,50 +162,21 @@ install_packages_dnf() {
     done <<< "$packages"
 }
 
-# Install packages via pacman (Arch Linux)
-install_packages_pacman() {
-    local json_file="$1"
-
-    local packages
-    packages=$(collect_de_packages "$json_file" "pacman" "")
-
-    if [[ -z "$packages" ]]; then
-        log_info "No pacman packages configured for current DE selection"
-        return 0
-    fi
-
-    while IFS= read -r pkg; do
-        if [[ -n "$pkg" ]]; then
-            if pacman -Q "$pkg" &>/dev/null; then
-                log_info "Package already installed: $pkg"
-            else
-                log_info "Installing package: $pkg"
-                sudo pacman -S --noconfirm "$pkg" || log_warning "Failed to install: $pkg"
-            fi
-        fi
-    done <<< "$packages"
-}
-
 # Ensure flatpak itself is installed, then add remotes
 ensure_flatpak_and_remotes() {
     local json_file="$1"
 
     if ! command -v flatpak &>/dev/null; then
         log_info "Installing flatpak..."
-        case "$(detect_linux_package_manager)" in
-            "dnf")    sudo dnf install -y flatpak ;;
-            "apt")    sudo apt-get install -y flatpak ;;
-            "pacman") sudo pacman -S --noconfirm flatpak ;;
-            *)
-                log_warning "Cannot install flatpak: no supported package manager"
-                return 1
-                ;;
-        esac
+        sudo dnf install -y flatpak || {
+            log_warning "Failed to install flatpak"
+            return 1
+        }
     fi
 
     # Add remotes defined in JSON
     local remote_count
-    remote_count=$(run_jq -r '.os.linux.packages.flatpak.remotes | length // 0' "$json_file" 2>/dev/null)
+    remote_count=$(run_jq -r '.os.fedora.packages.flatpak.remotes | length // 0' "$json_file" 2>/dev/null)
     if [[ -z "$remote_count" || "$remote_count" == "null" ]]; then
         remote_count=0
     fi
@@ -283,8 +184,8 @@ ensure_flatpak_and_remotes() {
     local i
     for ((i = 0; i < remote_count; i++)); do
         local name url
-        name=$(get_json_value "$json_file" ".os.linux.packages.flatpak.remotes[$i].name")
-        url=$(get_json_value "$json_file" ".os.linux.packages.flatpak.remotes[$i].url")
+        name=$(get_json_value "$json_file" ".os.fedora.packages.flatpak.remotes[$i].name")
+        url=$(get_json_value "$json_file" ".os.fedora.packages.flatpak.remotes[$i].url")
         if [[ -n "$name" && -n "$url" ]]; then
             log_info "Adding flatpak remote: $name ($url)"
             flatpak remote-add --if-not-exists --user "$name" "$url" || \
@@ -297,14 +198,14 @@ ensure_flatpak_and_remotes() {
 install_packages_flatpak() {
     local json_file="$1"
 
-    if ! json_value_exists "$json_file" ".os.linux.packages.flatpak"; then
+    if ! json_value_exists "$json_file" ".os.fedora.packages.flatpak"; then
         return 0
     fi
 
     ensure_flatpak_and_remotes "$json_file" || return 0
 
     local packages
-    packages=$(get_json_array "$json_file" ".os.linux.packages.flatpak.packages")
+    packages=$(get_json_array "$json_file" ".os.fedora.packages.flatpak.packages")
 
     if [[ -z "$packages" ]]; then
         log_info "No flatpak packages configured"
@@ -327,7 +228,7 @@ install_packages_flatpak() {
 install_packages_npm() {
     local json_file="$1"
 
-    if ! json_value_exists "$json_file" ".os.linux.packages.npm_global"; then
+    if ! json_value_exists "$json_file" ".os.fedora.packages.npm_global"; then
         return 0
     fi
 
@@ -337,7 +238,7 @@ install_packages_npm() {
     fi
 
     local packages
-    packages=$(get_json_array "$json_file" ".os.linux.packages.npm_global")
+    packages=$(get_json_array "$json_file" ".os.fedora.packages.npm_global")
 
     while IFS= read -r pkg; do
         if [[ -z "$pkg" ]]; then continue; fi
@@ -354,7 +255,7 @@ install_packages_npm() {
 install_packages_pip() {
     local json_file="$1"
 
-    if ! json_value_exists "$json_file" ".os.linux.packages.pip_user"; then
+    if ! json_value_exists "$json_file" ".os.fedora.packages.pip_user"; then
         return 0
     fi
 
@@ -371,7 +272,7 @@ install_packages_pip() {
     fi
 
     local packages
-    packages=$(get_json_array "$json_file" ".os.linux.packages.pip_user")
+    packages=$(get_json_array "$json_file" ".os.fedora.packages.pip_user")
 
     while IFS= read -r pkg; do
         if [[ -z "$pkg" ]]; then continue; fi
@@ -380,31 +281,16 @@ install_packages_pip() {
     done <<< "$packages"
 }
 
-# Install packages based on detected package manager
-install_linux_packages() {
+# Install all Fedora packages (dnf, flatpak, npm, pip)
+install_fedora_packages() {
     local json_file="$1"
-    local pkg_manager
 
-    pkg_manager=$(detect_linux_package_manager)
-    log_info "Detected package manager: $pkg_manager"
+    if ! command -v dnf &>/dev/null; then
+        log_error "dnf not found. This installer supports Fedora only."
+        return 1
+    fi
 
-    case "$pkg_manager" in
-        "apt")
-            install_packages_apt "$json_file"
-            ;;
-        "dnf")
-            install_packages_dnf "$json_file"
-            ;;
-        "pacman")
-            install_packages_pacman "$json_file"
-            ;;
-        *)
-            log_warning "Unknown package manager. Skipping native package installation."
-            log_info "Please install required packages manually."
-            ;;
-    esac
-
-    # Cross-distro: Flatpak, npm, pip
+    install_packages_dnf "$json_file"
     install_packages_flatpak "$json_file"
     install_packages_npm "$json_file"
     install_packages_pip "$json_file"

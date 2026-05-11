@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Generic Linux installation script
+# Fedora-specific installation script
 
 set -e
 
@@ -12,12 +12,12 @@ JSON_FILE="$SCRIPT_DIR/install.json"
 source "$SCRIPT_DIR/lib/common.sh"
 source "$SCRIPT_DIR/lib/packages.sh"
 
-DETECTED_OS="linux"
+DETECTED_OS="fedora"
 
 # Parse step args + --de=<value>
 parse_install_steps "$@"
 
-log_info "Starting Linux installation..."
+log_info "Starting Fedora installation..."
 
 # Ensure jq is available before we read DE-related JSON
 ensure_jq
@@ -25,20 +25,20 @@ ensure_jq
 # Determine which DE(s) to install
 prompt_de_selection
 
-# Install packages based on detected package manager
+# Install packages
 if should_run "packages"; then
     log_info "Installing packages (DE=$DE_SELECTION)..."
-    install_linux_packages "$JSON_FILE"
+    install_fedora_packages "$JSON_FILE"
 fi
 
 # Create config symlinks
 if should_run "symlinks"; then
-    create_config_symlinks "$JSON_FILE" "linux" "$REPO_DIR"
+    create_config_symlinks "$JSON_FILE" "fedora" "$REPO_DIR"
 fi
 
 # Apply GNOME dconf settings when GNOME is active and selected
 if should_run "gnome"; then
-    apply_gnome_dconf "$JSON_FILE" "linux" "$REPO_DIR"
+    apply_gnome_dconf "$JSON_FILE" "fedora" "$REPO_DIR"
 fi
 
 # Setup shell environment
@@ -48,7 +48,7 @@ fi
 
 # Run post-install commands
 if should_run "post"; then
-    run_post_install "$JSON_FILE" "linux"
+    run_post_install "$JSON_FILE" "fedora"
 fi
 
-log_success "Linux installation complete!"
+log_success "Fedora installation complete!"

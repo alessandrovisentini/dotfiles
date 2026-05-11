@@ -31,22 +31,26 @@ log_success() {
     echo -e "${GREEN}[SUCCESS]${NC} $1"
 }
 
-# Detect OS for git installation
+# Detect OS for git installation. Supported: nixos, macos, fedora.
 detect_os() {
     if [[ "$OSTYPE" == "darwin"* ]]; then
         echo "macos"
-    elif [ -f /etc/nixos/configuration.nix ] || command -v nixos-rebuild &> /dev/null; then
-        echo "nixos"
-    elif [ -f /etc/os-release ]; then
-        . /etc/os-release
-        if [[ "$ID" == "nixos" ]]; then
-            echo "nixos"
-        else
-            echo "linux"
-        fi
-    else
-        echo "linux"
+        return
     fi
+    if [ -f /etc/nixos/configuration.nix ] || command -v nixos-rebuild &> /dev/null; then
+        echo "nixos"
+        return
+    fi
+    if [ -f /etc/os-release ]; then
+        . /etc/os-release
+        case "$ID" in
+            nixos)  echo "nixos" ;;
+            fedora) echo "fedora" ;;
+            *)      echo "unsupported" ;;
+        esac
+        return
+    fi
+    echo "unsupported"
 }
 
 # Run git command, using nix-shell on NixOS if git is not installed
@@ -88,17 +92,15 @@ install_git() {
                 exit 1
             fi
             ;;
-        *)
-            if command -v apt-get &> /dev/null; then
-                sudo apt-get update && sudo apt-get install -y git
-            elif command -v dnf &> /dev/null; then
-                sudo dnf install -y git
-            elif command -v pacman &> /dev/null; then
-                sudo pacman -S --noconfirm git
-            else
-                log_error "No supported package manager found. Please install git manually."
+        "fedora")
+            sudo dnf install -y git || {
+                log_error "Failed to install git with dnf"
                 exit 1
-            fi
+            }
+            ;;
+        *)
+            log_error "Unsupported OS. This installer supports NixOS, macOS, and Fedora."
+            exit 1
             ;;
     esac
 
@@ -107,6 +109,11 @@ install_git() {
 
 # Main execution
 DETECTED_OS=$(detect_os)
+
+if [[ "$DETECTED_OS" == "unsupported" ]]; then
+    log_error "Unsupported OS. This installer supports NixOS, macOS, and Fedora."
+    exit 1
+fi
 
 # Check if git is available
 if ! command -v git &> /dev/null && [[ "$DETECTED_OS" != "nixos" ]]; then
