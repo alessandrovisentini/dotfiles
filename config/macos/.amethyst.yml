@@ -1,0 +1,141 @@
+# Amethyst configuration
+# Loaded from ~/.amethyst.yml — symlinked by config/macos/defaults.sh.
+# Restart Amethyst after edits. If changes don't apply:
+#   defaults delete com.amethyst.Amethyst && killall Amethyst
+
+layouts:
+  - fullscreen
+  - tall
+  - wide
+
+mod1:
+  - option
+  - shift
+
+mod2:
+  - option
+  - shift
+  - control
+
+mod3:
+  - option
+
+cycle-layout:
+  mod: mod3
+  key: t
+
+cycle-layout-backward:
+  mod: mod2
+  key: space
+
+toggle-tiling:
+  mod: mod2
+  key: t
+
+toggle-float:
+  mod: mod1
+  key: space
+
+relaunch-amethyst:
+  mod: mod1
+  key: r
+
+shrink-main:
+  mod: mod2
+  key: h
+
+expand-main:
+  mod: mod2
+  key: l
+
+focus-cw:
+  mod: mod3
+  key: l
+
+focus-ccw:
+  mod: mod3
+  key: tab
+
+throw-space-1:
+  mod: mod1
+  key: '1'
+
+throw-space-2:
+  mod: mod1
+  key: '2'
+
+throw-space-3:
+  mod: mod1
+  key: '3'
+
+throw-space-4:
+  mod: mod1
+  key: '4'
+
+throw-space-5:
+  mod: mod1
+  key: '5'
+
+throw-space-6:
+  mod: mod1
+  key: '6'
+
+throw-space-7:
+  mod: mod1
+  key: '7'
+
+throw-space-8:
+  mod: mod1
+  key: '8'
+
+throw-space-9:
+  mod: mod1
+  key: '9'
+
+throw-space-10:
+  mod: mod1
+  key: '0'
+
+throw-space-left:
+  mod: mod2
+  key: left
+
+throw-space-right:
+  mod: mod2
+  key: right
+
+floating:
+  - com.apple.systempreferences
+
+floating-is-blacklist: true
+
+float-small-windows: true
+small-window-size: 500
+
+window-margins: false
+window-margin-size: 0
+window-minimum-width: 0
+window-minimum-height: 0
+window-max-count: 0
+window-resize-step: 5
+
+screen-padding-top: 25
+screen-padding-bottom: 0
+screen-padding-left: 0
+screen-padding-right: 0
+disable-padding-on-builtin-display: true
+
+ignore-menu-bar: false
+focus-follows-mouse: false
+mouse-follows-focus: false
+mouse-resizes-windows: true
+new-windows-to-main: false
+follow-space-thrown-windows: false
+
+enables-layout-hud: true
+enables-layout-hud-on-space-change: false
+enables-window-count-hud: false
+
+restore-layouts-on-launch: false
+debug-layout-info: false
+use-canary-build: false

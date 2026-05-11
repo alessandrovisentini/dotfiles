@@ -37,6 +37,7 @@
         "lazygit",
         "nvim",
         "shell",
+        "sketchybar",
         "tmux"
       ],
       "nixos_symlinks": {
@@ -407,7 +408,6 @@
             "com.spotify.Client",
             "com.discordapp.Discord",
             "md.obsidian.Obsidian",
-            "com.parsecgaming.parsec",
             "org.localsend.localsend_app",
             "com.vscodium.codium",
             "io.github.ungoogled_software.ungoogled_chromium",

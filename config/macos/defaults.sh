@@ -6,6 +6,8 @@
 
 set -e
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 echo "Applying macOS defaults..."
 
 # =============================================================================
@@ -132,6 +134,37 @@ defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 "<dic
 
 # Disable Finder search window shortcut (Cmd+Option+Space) to avoid conflicts
 defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 65 "<dict><key>enabled</key><false/><key>value</key><dict><key>parameters</key><array><integer>65535</integer><integer>49</integer><integer>1572864</integer></array><key>type</key><string>standard</string></dict></dict>"
+
+# =============================================================================
+# Amethyst preferences (YAML config at ~/.amethyst.yml)
+# =============================================================================
+
+AMETHYST_YAML_SRC="$SCRIPT_DIR/.amethyst.yml"
+AMETHYST_YAML_DST="$HOME/.amethyst.yml"
+if [[ -f "$AMETHYST_YAML_SRC" ]]; then
+    echo "Linking Amethyst YAML config..."
+    if [[ -L "$AMETHYST_YAML_DST" && "$(readlink "$AMETHYST_YAML_DST")" == "$AMETHYST_YAML_SRC" ]]; then
+        :
+    else
+        if [[ -e "$AMETHYST_YAML_DST" || -L "$AMETHYST_YAML_DST" ]]; then
+            mv "$AMETHYST_YAML_DST" "${AMETHYST_YAML_DST}.backup.$(date +%Y%m%d%H%M%S)"
+        fi
+        ln -s "$AMETHYST_YAML_SRC" "$AMETHYST_YAML_DST"
+    fi
+    # Clear stale prefs that would override the YAML, then restart.
+    defaults delete com.amethyst.Amethyst 2>/dev/null || true
+    killall cfprefsd 2>/dev/null || true
+    killall Amethyst 2>/dev/null || true
+fi
+
+# =============================================================================
+# Sketchybar
+# =============================================================================
+
+if command -v brew &>/dev/null && brew services list 2>/dev/null | grep -q '^sketchybar'; then
+    echo "Restarting sketchybar..."
+    brew services restart sketchybar >/dev/null
+fi
 
 # =============================================================================
 # Apply changes

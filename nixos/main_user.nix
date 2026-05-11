@@ -59,7 +59,6 @@ in {
       audacity
       transcribe
       spotdl
-      parsec-bin
       unstable.pdfarranger
       unstable.claude-code
     ];
