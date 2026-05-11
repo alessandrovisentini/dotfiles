@@ -11,14 +11,79 @@ NC='\033[0m' # No Color
 
 # Step selection helpers
 # Parse arguments into INSTALL_STEPS array. No arguments means "all".
+# Also intercepts `--de=<value>` and stores it in DE_SELECTION.
 parse_install_steps() {
     INSTALL_STEPS=()
-    if [[ $# -eq 0 ]]; then
+    local rest=()
+    for arg in "$@"; do
+        case "$arg" in
+            --de=*) DE_SELECTION="${arg#--de=}"; export DE_SELECTION ;;
+            *) rest+=("$arg") ;;
+        esac
+    done
+    if [[ ${#rest[@]} -eq 0 ]]; then
         INSTALL_STEPS=("all")
     else
-        INSTALL_STEPS=("$@")
+        INSTALL_STEPS=("${rest[@]}")
     fi
     export INSTALL_STEPS
+}
+
+# Interactively choose the desktop environment(s) to install.
+# Honors DE_SELECTION if already set (e.g. via --de=, env var).
+# Falls back to "both" when stdin is non-interactive.
+prompt_de_selection() {
+    if [[ -n "${DE_SELECTION:-}" ]]; then
+        case "$DE_SELECTION" in
+            gnome|sway|both) ;;
+            *)
+                log_warning "Invalid DE_SELECTION='$DE_SELECTION'; defaulting to 'both'"
+                DE_SELECTION="both"
+                ;;
+        esac
+        export DE_SELECTION
+        log_info "Desktop environment: $DE_SELECTION"
+        return 0
+    fi
+
+    if [[ ! -t 0 || ! -t 1 ]]; then
+        DE_SELECTION="both"
+        export DE_SELECTION
+        log_info "Non-interactive run; defaulting DE_SELECTION=both"
+        return 0
+    fi
+
+    echo
+    log_info "Which desktop environment(s) should be installed?"
+    echo "  1) gnome  — GNOME only (skips Sway and its WM tools)"
+    echo "  2) sway   — Sway only (skips GNOME shell/tweaks and dconf)"
+    echo "  3) both   — install everything"
+    local choice
+    read -r -p "Select [1/2/3] (default: 3): " choice
+    case "${choice:-3}" in
+        1|gnome) DE_SELECTION="gnome" ;;
+        2|sway)  DE_SELECTION="sway"  ;;
+        3|both|"") DE_SELECTION="both" ;;
+        *)
+            log_warning "Invalid selection '$choice'; defaulting to 'both'"
+            DE_SELECTION="both"
+            ;;
+    esac
+    export DE_SELECTION
+    log_info "Desktop environment: $DE_SELECTION"
+}
+
+# Whether a given DE group ("common", "gnome", "sway") should be installed
+# given the current DE_SELECTION. "common" is always included.
+de_group_active() {
+    local group="$1"
+    local de="${DE_SELECTION:-both}"
+    case "$group" in
+        common) return 0 ;;
+        gnome)  [[ "$de" == "gnome" || "$de" == "both" ]] && return 0 || return 1 ;;
+        sway)   [[ "$de" == "sway"  || "$de" == "both" ]] && return 0 || return 1 ;;
+        *) return 1 ;;
+    esac
 }
 
 # Check if a given step should run
@@ -209,28 +274,116 @@ json_value_exists() {
     [[ -n "$value" ]]
 }
 
-# Create config symlinks from JSON
+# Create config symlinks from JSON.
+# Supports two shapes:
+#   - array form: .os.<os>.config_symlinks = [ "folder", ... ]
+#   - object form: .os.<os>.config_symlinks = { common: [...], gnome: [...], sway: [...] }
+# In object form, "common" is always installed; "gnome"/"sway" lists are filtered
+# by DE_SELECTION.
 create_config_symlinks() {
     local json_file="$1"
     local os="$2"
     local repo_dir="$3"
     local config_dir="${XDG_CONFIG_HOME:-$HOME/.config}"
 
-    # Ensure config directory exists
     mkdir -p "$config_dir"
-
     log_info "Creating config symlinks..."
 
-    local symlinks
-    symlinks=$(get_json_array "$json_file" ".os.$os.config_symlinks")
+    local sym_type
+    sym_type=$(run_jq -r ".os.$os.config_symlinks | type" "$json_file" 2>/dev/null)
 
-    while IFS= read -r folder; do
-        if [[ -n "$folder" ]]; then
-            local source_path="$repo_dir/config/$folder"
-            local target_path="$config_dir/$folder"
-            create_symlink "$source_path" "$target_path"
-        fi
-    done <<< "$symlinks"
+    local folders=()
+    if [[ "$sym_type" == "object" ]]; then
+        for group in common gnome sway; do
+            if ! de_group_active "$group"; then
+                continue
+            fi
+            while IFS= read -r f; do
+                [[ -n "$f" ]] && folders+=("$f")
+            done < <(get_json_array "$json_file" ".os.$os.config_symlinks.$group")
+        done
+    else
+        while IFS= read -r f; do
+            [[ -n "$f" ]] && folders+=("$f")
+        done < <(get_json_array "$json_file" ".os.$os.config_symlinks")
+    fi
+
+    if [[ ${#folders[@]} -eq 0 ]]; then
+        log_info "No config symlinks to create for this selection"
+        return 0
+    fi
+
+    for folder in "${folders[@]}"; do
+        local source_path="$repo_dir/config/$folder"
+        local target_path="$config_dir/$folder"
+        create_symlink "$source_path" "$target_path"
+    done
+}
+
+# Detect whether GNOME is the active or installed desktop environment.
+# Returns 0 if GNOME is detected, 1 otherwise.
+gnome_detected() {
+    if [[ "${XDG_CURRENT_DESKTOP:-}" == *GNOME* ]]; then
+        return 0
+    fi
+    if [[ "${DESKTOP_SESSION:-}" == *gnome* ]]; then
+        return 0
+    fi
+    if command -v gnome-shell &>/dev/null; then
+        return 0
+    fi
+    return 1
+}
+
+# Apply GNOME dconf settings from a keyfile, when relevant.
+# Reads .os.<os>.gnome_dconf from JSON: { enabled, source, path }
+apply_gnome_dconf() {
+    local json_file="$1"
+    local os="$2"
+    local repo_dir="$3"
+
+    if ! json_value_exists "$json_file" ".os.$os.gnome_dconf"; then
+        return 0
+    fi
+
+    local enabled
+    enabled=$(get_json_value "$json_file" ".os.$os.gnome_dconf.enabled")
+    if [[ "$enabled" != "true" ]]; then
+        return 0
+    fi
+
+    if ! de_group_active gnome; then
+        log_info "DE_SELECTION=${DE_SELECTION:-?} excludes GNOME; skipping dconf settings"
+        return 0
+    fi
+
+    if ! gnome_detected; then
+        log_info "GNOME not detected; skipping dconf settings"
+        return 0
+    fi
+
+    if ! command -v dconf &>/dev/null; then
+        log_warning "dconf not available; cannot apply GNOME settings"
+        return 0
+    fi
+
+    local source dconf_path
+    source=$(get_json_value "$json_file" ".os.$os.gnome_dconf.source")
+    dconf_path=$(get_json_value "$json_file" ".os.$os.gnome_dconf.path")
+    [[ -z "$dconf_path" || "$dconf_path" == "null" ]] && dconf_path="/"
+
+    local source_path="$repo_dir/$source"
+    if [[ ! -f "$source_path" ]]; then
+        log_warning "GNOME dconf source not found: $source_path"
+        return 0
+    fi
+
+    log_info "Applying GNOME dconf settings from $source_path (path: $dconf_path)..."
+    if dconf load "$dconf_path" < "$source_path"; then
+        log_success "GNOME dconf settings applied"
+    else
+        log_warning "dconf load reported an error"
+    fi
 }
 
 # Setup shell environment sourcing

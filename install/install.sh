@@ -11,6 +11,7 @@
 #   symlinks   Create config symlinks (~/.config/*)
 #   packages   Install software packages
 #   nixos      Setup NixOS system config symlinks (/etc/nixos)
+#   gnome      Apply GNOME dconf settings (non-NixOS, when GNOME is active)
 #   shell      Setup shell environment sourcing (.bashrc/.zshrc)
 #   post       Run post-install commands
 #   all        Run everything (default)
@@ -99,15 +100,22 @@ show_help() {
     echo "  symlinks   Create config symlinks (~/.config/*)"
     echo "  packages   Install software packages"
     echo "  nixos      Setup NixOS system config symlinks (/etc/nixos)"
+    echo "  gnome      Apply GNOME dconf settings (non-NixOS, when GNOME is active)"
     echo "  shell      Setup shell environment sourcing (.bashrc/.zshrc)"
     echo "  post       Run post-install commands"
     echo "  all        Run everything (default)"
     echo ""
+    echo "Linux-only flags:"
+    echo "  --de=gnome|sway|both   Which desktop environment(s) to install."
+    echo "                         Skips prompt. Filters packages and config symlinks."
+    echo ""
     echo "Examples:"
-    echo "  $(basename "$0")                  # run everything"
-    echo "  $(basename "$0") symlinks         # only recreate symlinks"
-    echo "  $(basename "$0") symlinks post    # symlinks + post-install"
-    echo "  $(basename "$0") packages         # only install missing software"
+    echo "  $(basename "$0")                       # run everything (prompts for DE on Linux)"
+    echo "  $(basename "$0") symlinks              # only recreate symlinks"
+    echo "  $(basename "$0") symlinks post         # symlinks + post-install"
+    echo "  $(basename "$0") packages              # only install missing software"
+    echo "  $(basename "$0") --de=gnome            # install everything, GNOME only"
+    echo "  $(basename "$0") packages --de=sway    # install only Sway-side packages"
 }
 
 # Main execution
