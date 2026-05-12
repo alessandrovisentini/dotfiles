@@ -127,7 +127,6 @@
             "pdfarranger",
             "firefox",
             "gnome-keyring",
-            "dejavu-sans-mono-nerd-fonts",
             "nano",
             "wget",
             "htop",
@@ -228,7 +227,9 @@
           "spotdl"
         ]
       },
-      "post_install": []
+      "post_install": [
+        "$HOME/Development/repos/dotfiles/install/install-fedora-nerd-font.sh"
+      ]
     }
   }
 }

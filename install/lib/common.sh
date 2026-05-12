@@ -46,20 +46,34 @@ prompt_de_selection() {
         return 0
     fi
 
-    if [[ ! -t 0 || ! -t 1 ]]; then
+    # When stdin/stdout isn't a TTY (e.g. `curl … | bash`), borrow /dev/tty
+    # so the user can still answer. Only default to "both" if /dev/tty is
+    # unavailable (truly non-interactive context).
+    local tty_dev=""
+    if [[ -t 0 && -t 1 ]]; then
+        :
+    elif [[ -r /dev/tty && -w /dev/tty ]]; then
+        tty_dev="/dev/tty"
+    else
         DE_SELECTION="both"
         export DE_SELECTION
         log_info "Non-interactive run; defaulting DE_SELECTION=both"
         return 0
     fi
 
-    echo
-    log_info "Which desktop environment(s) should be installed?"
-    echo "  1) gnome  — GNOME only (skips Sway and its WM tools)"
-    echo "  2) sway   — Sway only (skips GNOME shell/tweaks and dconf)"
-    echo "  3) both   — install everything"
+    {
+        echo
+        log_info "Which desktop environment(s) should be installed?"
+        echo "  1) gnome  — GNOME only (skips Sway and its WM tools)"
+        echo "  2) sway   — Sway only (skips GNOME shell/tweaks and dconf)"
+        echo "  3) both   — install everything"
+    } >"${tty_dev:-/dev/stdout}"
     local choice
-    read -r -p "Select [1/2/3] (default: 3): " choice
+    if [[ -n "$tty_dev" ]]; then
+        read -r -p "Select [1/2/3] (default: 3): " choice <"$tty_dev" >"$tty_dev" 2>"$tty_dev"
+    else
+        read -r -p "Select [1/2/3] (default: 3): " choice
+    fi
     case "${choice:-3}" in
         1|gnome) DE_SELECTION="gnome" ;;
         2|sway)  DE_SELECTION="sway"  ;;
