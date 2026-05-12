@@ -17,9 +17,4 @@
     options = "--delete-older-than 14d";
     persistent = true;
   };
-
-  programs.direnv = {
-    enable = true;
-    nix-direnv.enable = true;
-  };
 }
