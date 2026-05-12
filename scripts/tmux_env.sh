@@ -50,7 +50,6 @@ setup_window() {
     if [ -f "$REPO_PATH/flake.nix" ]; then
         if [ "$CMD" = "bash" ]; then
             tmux send-keys -t "$SESSION":"$WINDOW_INDEX" "nix develop" C-m
-            tmux send-keys -t "$SESSION":"$WINDOW_INDEX" "clear && sleep 2" C-m
             tmux send-keys -t "$SESSION":"$WINDOW_INDEX" "clear" C-m
         else
             tmux send-keys -t "$SESSION":"$WINDOW_INDEX" "nix develop --command $CMD" C-m
@@ -72,8 +71,12 @@ if tmux has-session -t "$SESSION_NAME" 2>/dev/null; then
 fi
 
 # Pin the dev shell as a GC root so nix-collect-garbage can't reclaim it.
+# Backgrounded so the launcher popup closes immediately; the build runs in
+# parallel with pane setup, and Nix's build lock dedupes against the panes'
+# own `nix develop` calls.
 if [ -f "$REPO_PATH/flake.nix" ]; then
-    (cd "$REPO_PATH" && nix develop --profile .nix-dev-profile --command true)
+    (cd "$REPO_PATH" && nix develop --profile .nix-dev-profile --command true) >/dev/null 2>&1 &
+    disown
 fi
 
 tmux new-session -d -s "$SESSION_NAME" -c "$REPO_PATH" -n "editor"
