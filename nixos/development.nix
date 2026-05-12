@@ -1,9 +1,6 @@
 {pkgs, ...}: let
   vars = import ./variables.nix;
 in {
-  # Enable Flakes (for .flake files)
-  nix.settings.experimental-features = ["nix-command" "flakes"];
-
   virtualisation.docker = {
     enable = true;
   };

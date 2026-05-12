@@ -15,9 +15,8 @@
     ./printing.nix
     ./gaming.nix
     ./mime_apps.nix
+    ./nix.nix
   ];
-
-  nix.settings.auto-optimise-store = true;
 
   boot = {
     loader.efi.canTouchEfiVariables = true;
