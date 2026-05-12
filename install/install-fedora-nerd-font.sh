@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-
-# Install DejaVu Sans Mono Nerd Font from the upstream GitHub release.
-# Fedora doesn't ship this font as a package, so we fetch it directly to
-# keep parity with the macOS (Homebrew cask) and NixOS (nerd-fonts.dejavu-sans-mono) setups.
+#
+# Fedora doesn't ship DejaVu Sans Mono Nerd Font as a package, so we fetch it
+# from the upstream GitHub release to keep parity with macOS (Homebrew cask)
+# and NixOS (nerd-fonts.dejavu-sans-mono).
 
 set -e
 
@@ -18,23 +18,16 @@ if fc-list 2>/dev/null | grep -qi "DejaVuSansM Nerd Font"; then
     exit 0
 fi
 
-if ! command -v curl &>/dev/null; then
-    log_error "curl is required to download the nerd font"
-    exit 1
-fi
-if ! command -v unzip &>/dev/null; then
-    log_error "unzip is required to extract the nerd font"
-    exit 1
-fi
+for cmd in curl unzip; do
+    command -v "$cmd" &>/dev/null || { log_error "$cmd is required"; exit 1; }
+done
 
 tmpdir=$(mktemp -d)
 trap 'rm -rf "$tmpdir"' EXIT
 
 log_info "Downloading DejaVu Sans Mono Nerd Font..."
-curl -fsSL "$RELEASE_URL" -o "$tmpdir/${FONT_NAME}.zip" || {
-    log_error "Failed to download $RELEASE_URL"
-    exit 1
-}
+curl -fsSL "$RELEASE_URL" -o "$tmpdir/${FONT_NAME}.zip" \
+    || { log_error "Failed to download $RELEASE_URL"; exit 1; }
 
 mkdir -p "$FONT_DIR"
 log_info "Extracting fonts to $FONT_DIR..."

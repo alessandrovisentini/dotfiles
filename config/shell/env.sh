@@ -17,7 +17,7 @@ alias tt='$REPOS_HOME/dotfiles/scripts/tt.sh'
 
 alias ai='$REPOS_HOME/dotfiles/scripts/ai/ai.sh'
 
-alias h='$REPOS_HOME/dotfiles/scripts/ai/h'
+alias h='$REPOS_HOME/dotfiles/scripts/ai/h.sh'
 
 # nvm (macOS — installed via Homebrew). Looks for the brew-managed nvm.sh in
 # both common prefixes so the same env.sh works on Intel and Apple Silicon.

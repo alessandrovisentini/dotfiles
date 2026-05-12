@@ -139,7 +139,7 @@ in {
     tt = "$REPOS_HOME/dotfiles/scripts/tt.sh";
 
     ai = "$REPOS_HOME/dotfiles/scripts/ai/ai.sh";
-    h = "$REPOS_HOME/dotfiles/scripts/ai/h";
+    h = "$REPOS_HOME/dotfiles/scripts/ai/h.sh";
   };
 
   # Home manager

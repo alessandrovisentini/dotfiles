@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 
-# Common functions shared across all installation scripts
-
-# Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+NC='\033[0m'
 
-# Step selection helpers
-# Parse arguments into INSTALL_STEPS array. No arguments means "all".
-# Also intercepts `--de=<value>` and stores it in DE_SELECTION.
+log_info()    { echo -e "${BLUE}[INFO]${NC} $1"; }
+log_success() { echo -e "${GREEN}[SUCCESS]${NC} $1"; }
+log_warning() { echo -e "${YELLOW}[WARNING]${NC} $1"; }
+log_error()   { echo -e "${RED}[ERROR]${NC} $1"; }
+
+# Parse positional args into INSTALL_STEPS; intercept --de=<value> into DE_SELECTION.
 parse_install_steps() {
     INSTALL_STEPS=()
     local rest=()
@@ -29,26 +29,19 @@ parse_install_steps() {
     export INSTALL_STEPS
 }
 
-# Interactively choose the desktop environment(s) to install.
-# Honors DE_SELECTION if already set (e.g. via --de=, env var).
-# Falls back to "both" when stdin is non-interactive.
 prompt_de_selection() {
     if [[ -n "${DE_SELECTION:-}" ]]; then
         case "$DE_SELECTION" in
             gnome|sway|both) ;;
-            *)
-                log_warning "Invalid DE_SELECTION='$DE_SELECTION'; defaulting to 'both'"
-                DE_SELECTION="both"
-                ;;
+            *) log_warning "Invalid DE_SELECTION='$DE_SELECTION'; defaulting to 'both'"
+               DE_SELECTION="both" ;;
         esac
         export DE_SELECTION
         log_info "Desktop environment: $DE_SELECTION"
         return 0
     fi
 
-    # When stdin/stdout isn't a TTY (e.g. `curl … | bash`), borrow /dev/tty
-    # so the user can still answer. Only default to "both" if /dev/tty is
-    # unavailable (truly non-interactive context).
+    # Under `curl … | bash` stdin is the pipe; borrow /dev/tty so the prompt still works.
     local tty_dev=""
     if [[ -t 0 && -t 1 ]]; then
         :
@@ -68,115 +61,64 @@ prompt_de_selection() {
         echo "  2) sway   — Sway only (skips GNOME shell/tweaks and dconf)"
         echo "  3) both   — install everything"
     } >"${tty_dev:-/dev/stdout}"
+
     local choice
     if [[ -n "$tty_dev" ]]; then
         read -r -p "Select [1/2/3] (default: 3): " choice <"$tty_dev" >"$tty_dev" 2>"$tty_dev"
     else
         read -r -p "Select [1/2/3] (default: 3): " choice
     fi
+
     case "${choice:-3}" in
-        1|gnome) DE_SELECTION="gnome" ;;
-        2|sway)  DE_SELECTION="sway"  ;;
-        3|both|"") DE_SELECTION="both" ;;
-        *)
-            log_warning "Invalid selection '$choice'; defaulting to 'both'"
-            DE_SELECTION="both"
-            ;;
+        1|gnome)   DE_SELECTION="gnome" ;;
+        2|sway)    DE_SELECTION="sway"  ;;
+        3|both|"") DE_SELECTION="both"  ;;
+        *) log_warning "Invalid selection '$choice'; defaulting to 'both'"
+           DE_SELECTION="both" ;;
     esac
     export DE_SELECTION
     log_info "Desktop environment: $DE_SELECTION"
 }
 
-# Whether a given DE group ("common", "gnome", "sway") should be installed
-# given the current DE_SELECTION. "common" is always included.
 de_group_active() {
-    local group="$1"
-    local de="${DE_SELECTION:-both}"
+    local group="$1" de="${DE_SELECTION:-both}"
     case "$group" in
         common) return 0 ;;
-        gnome)  [[ "$de" == "gnome" || "$de" == "both" ]] && return 0 || return 1 ;;
-        sway)   [[ "$de" == "sway"  || "$de" == "both" ]] && return 0 || return 1 ;;
+        gnome)  [[ "$de" == "gnome" || "$de" == "both" ]] ;;
+        sway)   [[ "$de" == "sway"  || "$de" == "both" ]] ;;
         *) return 1 ;;
     esac
 }
 
-# Check if a given step should run
 should_run() {
     local step="$1"
     for s in "${INSTALL_STEPS[@]}"; do
-        if [[ "$s" == "all" || "$s" == "$step" ]]; then
-            return 0
-        fi
+        [[ "$s" == "all" || "$s" == "$step" ]] && return 0
     done
     return 1
 }
 
-# Logging functions
-log_info() {
-    echo -e "${BLUE}[INFO]${NC} $1"
-}
+expand_vars() { eval echo "$1"; }
 
-log_success() {
-    echo -e "${GREEN}[SUCCESS]${NC} $1"
-}
-
-log_warning() {
-    echo -e "${YELLOW}[WARNING]${NC} $1"
-}
-
-log_error() {
-    echo -e "${RED}[ERROR]${NC} $1"
-}
-
-# Expand variables like $HOME in strings
-expand_vars() {
-    local input="$1"
-    eval echo "$input"
-}
-
-# Ensure jq is available, install if missing
 ensure_jq() {
-    if command -v jq &> /dev/null; then
-        return 0
-    fi
-
+    command -v jq &>/dev/null && return 0
     log_info "jq not found. Installing jq..."
-
     case "$DETECTED_OS" in
-        "nixos")
-            log_info "Using nix-shell to provide jq..."
-            # For NixOS, we'll use nix-shell inline
-            return 0
+        nixos)  return 0 ;;  # provided on-demand via nix-shell in run_jq
+        macos)
+            command -v brew &>/dev/null || { log_error "Homebrew not found. Install jq manually."; return 1; }
+            brew install jq || { log_error "Failed to install jq with Homebrew"; return 1; }
             ;;
-        "macos")
-            if command -v brew &> /dev/null; then
-                brew install jq || {
-                    log_error "Failed to install jq with Homebrew"
-                    return 1
-                }
-            else
-                log_error "Homebrew not found. Please install jq manually."
-                return 1
-            fi
+        fedora)
+            sudo dnf install -y jq || { log_error "Failed to install jq with dnf"; return 1; }
             ;;
-        "fedora")
-            sudo dnf install -y jq || {
-                log_error "Failed to install jq with dnf"
-                return 1
-            }
-            ;;
-        *)
-            log_error "Unknown OS. Please install jq manually."
-            return 1
-            ;;
+        *) log_error "Unknown OS. Install jq manually."; return 1 ;;
     esac
-
     log_success "jq installed successfully"
 }
 
-# Run jq command, using nix-shell on NixOS if jq is not installed
 run_jq() {
-    if command -v jq &> /dev/null; then
+    if command -v jq &>/dev/null; then
         jq "$@"
     elif [[ "$DETECTED_OS" == "nixos" ]]; then
         local args
@@ -188,44 +130,34 @@ run_jq() {
     fi
 }
 
-# Create symlink idempotently
-# Arguments: source_path target_path [backup]
-# If symlink exists and points to correct target, skip
-# If file/symlink exists but is different, backup and replace
+get_json_value() { run_jq -r "$2" "$1"; }
+get_json_array() { run_jq -r "$2 | .[]" "$1" 2>/dev/null; }
+json_value_exists() {
+    local value
+    value=$(run_jq -r "$2 // empty" "$1" 2>/dev/null)
+    [[ -n "$value" ]]
+}
+
+# Idempotent: skips if target already points to source, otherwise backs up and replaces.
 create_symlink() {
-    local source_path="$1"
-    local target_path="$2"
-    local backup="${3:-true}"
+    local source_path target_path backup
+    source_path=$(expand_vars "$1")
+    target_path=$(expand_vars "$2")
+    backup="${3:-true}"
 
-    # Expand variables in paths
-    source_path=$(expand_vars "$source_path")
-    target_path=$(expand_vars "$target_path")
-
-    # Check if source exists
     if [[ ! -e "$source_path" ]]; then
         log_error "Source does not exist: $source_path"
         return 1
     fi
 
-    # Ensure parent directory exists
-    local parent_dir
-    parent_dir=$(dirname "$target_path")
-    if [[ ! -d "$parent_dir" ]]; then
-        mkdir -p "$parent_dir"
+    mkdir -p "$(dirname "$target_path")"
+
+    if [[ -L "$target_path" && "$(readlink "$target_path")" == "$source_path" ]]; then
+        log_info "Symlink already exists: $target_path -> $source_path"
+        return 0
     fi
 
-    # Check if target is already a correct symlink
-    if [[ -L "$target_path" ]]; then
-        local current_target
-        current_target=$(readlink "$target_path")
-        if [[ "$current_target" == "$source_path" ]]; then
-            log_info "Symlink already exists: $target_path -> $source_path"
-            return 0
-        fi
-    fi
-
-    # If target exists (file, directory, or wrong symlink), backup and remove
-    if [[ -e "$target_path" ]] || [[ -L "$target_path" ]]; then
+    if [[ -e "$target_path" || -L "$target_path" ]]; then
         if [[ "$backup" == "true" ]]; then
             local backup_path="${target_path}.backup.$(date +%Y%m%d%H%M%S)"
             log_warning "Backing up existing: $target_path -> $backup_path"
@@ -235,63 +167,29 @@ create_symlink() {
         fi
     fi
 
-    # Create the symlink
     ln -s "$source_path" "$target_path"
     log_success "Created symlink: $target_path -> $source_path"
 }
 
-# Run post-install commands from JSON array
 run_post_install() {
-    local json_file="$1"
-    local os="$2"
-    local commands
-
+    local json_file="$1" os="$2" commands
     commands=$(run_jq -r ".os.$os.post_install[]" "$json_file" 2>/dev/null)
+    [[ -z "$commands" ]] && return 0
 
-    if [[ -n "$commands" ]]; then
-        log_info "Running post-install commands..."
-        while IFS= read -r cmd; do
-            if [[ -n "$cmd" ]]; then
-                log_info "Executing: $cmd"
-                eval "$cmd"
-            fi
-        done <<< "$commands"
-    fi
+    log_info "Running post-install commands..."
+    while IFS= read -r cmd; do
+        [[ -z "$cmd" ]] && continue
+        log_info "Executing: $cmd"
+        eval "$cmd"
+    done <<< "$commands"
 }
 
-# Get JSON value with jq
-get_json_value() {
-    local json_file="$1"
-    local query="$2"
-    run_jq -r "$query" "$json_file"
-}
-
-# Get JSON array as lines
-get_json_array() {
-    local json_file="$1"
-    local query="$2"
-    run_jq -r "$query | .[]" "$json_file" 2>/dev/null
-}
-
-# Check if JSON value exists and is not null
-json_value_exists() {
-    local json_file="$1"
-    local query="$2"
-    local value
-    value=$(run_jq -r "$query // empty" "$json_file" 2>/dev/null)
-    [[ -n "$value" ]]
-}
-
-# Create config symlinks from JSON.
-# Supports two shapes:
-#   - array form: .os.<os>.config_symlinks = [ "folder", ... ]
-#   - object form: .os.<os>.config_symlinks = { common: [...], gnome: [...], sway: [...] }
-# In object form, "common" is always installed; "gnome"/"sway" lists are filtered
-# by DE_SELECTION.
+# Supports two shapes for config_symlinks:
+#   array form:  [ "folder", ... ]
+#   object form: { common: [...], gnome: [...], sway: [...] }
+# Object form filters gnome/sway by DE_SELECTION; "common" is always included.
 create_config_symlinks() {
-    local json_file="$1"
-    local os="$2"
-    local repo_dir="$3"
+    local json_file="$1" os="$2" repo_dir="$3"
     local config_dir="${XDG_CONFIG_HOME:-$HOME/.config}"
 
     mkdir -p "$config_dir"
@@ -303,9 +201,7 @@ create_config_symlinks() {
     local folders=()
     if [[ "$sym_type" == "object" ]]; then
         for group in common gnome sway; do
-            if ! de_group_active "$group"; then
-                continue
-            fi
+            de_group_active "$group" || continue
             while IFS= read -r f; do
                 [[ -n "$f" ]] && folders+=("$f")
             done < <(get_json_array "$json_file" ".os.$os.config_symlinks.$group")
@@ -322,43 +218,21 @@ create_config_symlinks() {
     fi
 
     for folder in "${folders[@]}"; do
-        local source_path="$repo_dir/config/$folder"
-        local target_path="$config_dir/$folder"
-        create_symlink "$source_path" "$target_path"
+        create_symlink "$repo_dir/config/$folder" "$config_dir/$folder"
     done
 }
 
-# Detect whether GNOME is the active or installed desktop environment.
-# Returns 0 if GNOME is detected, 1 otherwise.
 gnome_detected() {
-    if [[ "${XDG_CURRENT_DESKTOP:-}" == *GNOME* ]]; then
-        return 0
-    fi
-    if [[ "${DESKTOP_SESSION:-}" == *gnome* ]]; then
-        return 0
-    fi
-    if command -v gnome-shell &>/dev/null; then
-        return 0
-    fi
-    return 1
+    [[ "${XDG_CURRENT_DESKTOP:-}" == *GNOME* ]] && return 0
+    [[ "${DESKTOP_SESSION:-}" == *gnome*   ]] && return 0
+    command -v gnome-shell &>/dev/null
 }
 
-# Apply GNOME dconf settings from a keyfile, when relevant.
-# Reads .os.<os>.gnome_dconf from JSON: { enabled, source, path }
 apply_gnome_dconf() {
-    local json_file="$1"
-    local os="$2"
-    local repo_dir="$3"
+    local json_file="$1" os="$2" repo_dir="$3"
 
-    if ! json_value_exists "$json_file" ".os.$os.gnome_dconf"; then
-        return 0
-    fi
-
-    local enabled
-    enabled=$(get_json_value "$json_file" ".os.$os.gnome_dconf.enabled")
-    if [[ "$enabled" != "true" ]]; then
-        return 0
-    fi
+    json_value_exists "$json_file" ".os.$os.gnome_dconf" || return 0
+    [[ "$(get_json_value "$json_file" ".os.$os.gnome_dconf.enabled")" == "true" ]] || return 0
 
     if ! de_group_active gnome; then
         log_info "DE_SELECTION=${DE_SELECTION:-?} excludes GNOME; skipping dconf settings"
@@ -394,13 +268,23 @@ apply_gnome_dconf() {
     fi
 }
 
-# Setup shell environment sourcing
-# Adds source line to .bashrc and/or .zshrc if not already present
+_ensure_rc_sources_env() {
+    local rcfile="$1" env_file="$2"
+    if grep -q "source.*shell/env.sh" "$rcfile" 2>/dev/null; then
+        log_info "Shell env already sourced in $rcfile"
+        return
+    fi
+    log_info "Adding source line to $rcfile"
+    {
+        printf '\n# Dotfiles environment\n'
+        printf '[ -f "%s" ] && source "%s"\n' "$env_file" "$env_file"
+    } >> "$rcfile"
+    log_success "Updated $rcfile"
+}
+
 setup_shell_env() {
     local config_dir="${XDG_CONFIG_HOME:-$HOME/.config}"
     local env_file="$config_dir/shell/env.sh"
-    local source_line="# Dotfiles environment"
-    local source_cmd="[ -f \"$env_file\" ] && source \"$env_file\""
 
     if [[ ! -f "$env_file" ]]; then
         log_warning "Shell env file not found: $env_file"
@@ -409,37 +293,12 @@ setup_shell_env() {
 
     log_info "Setting up shell environment sourcing..."
 
-    # Setup for bash
     local bashrc="$HOME/.bashrc"
-    if [[ -f "$bashrc" ]]; then
-        if ! grep -q "source.*shell/env.sh" "$bashrc" 2>/dev/null; then
-            log_info "Adding source line to $bashrc"
-            echo "" >> "$bashrc"
-            echo "$source_line" >> "$bashrc"
-            echo "$source_cmd" >> "$bashrc"
-            log_success "Updated $bashrc"
-        else
-            log_info "Shell env already sourced in $bashrc"
-        fi
-    fi
+    [[ -f "$bashrc" ]] && _ensure_rc_sources_env "$bashrc" "$env_file"
 
-    # Setup for zsh
     local zshrc="$HOME/.zshrc"
-    if [[ -f "$zshrc" ]] || [[ "$SHELL" == *"zsh"* ]]; then
-        # Create .zshrc if it doesn't exist and user uses zsh
-        if [[ ! -f "$zshrc" ]] && [[ "$SHELL" == *"zsh"* ]]; then
-            touch "$zshrc"
-        fi
-        if [[ -f "$zshrc" ]]; then
-            if ! grep -q "source.*shell/env.sh" "$zshrc" 2>/dev/null; then
-                log_info "Adding source line to $zshrc"
-                echo "" >> "$zshrc"
-                echo "$source_line" >> "$zshrc"
-                echo "$source_cmd" >> "$zshrc"
-                log_success "Updated $zshrc"
-            else
-                log_info "Shell env already sourced in $zshrc"
-            fi
-        fi
+    if [[ -f "$zshrc" || "$SHELL" == *"zsh"* ]]; then
+        [[ ! -f "$zshrc" ]] && touch "$zshrc"
+        _ensure_rc_sources_env "$zshrc" "$env_file"
     fi
 }
