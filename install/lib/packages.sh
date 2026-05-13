@@ -109,10 +109,14 @@ install_packages_homebrew() {
 }
 
 # Collect dnf packages for the DE-selected groups (common + gnome and/or sway).
+# Must not end the loop with a failing test under `set -e`: when the last
+# iterated group is inactive, `A && B` short-circuits to 1 and the caller's
+# `packages=$(collect_dnf_de_packages ...)` aborts the script. Use `|| continue`.
 collect_dnf_de_packages() {
     local json_file="$1" base=".os.fedora.packages.dnf"
     for group in common gnome sway; do
-        de_group_active "$group" && get_json_array "$json_file" "$base.$group"
+        de_group_active "$group" || continue
+        get_json_array "$json_file" "$base.$group"
     done
 }
 
