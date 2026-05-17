@@ -219,19 +219,48 @@ install_packages_flatpak() {
     packages=$(get_json_array "$json_file" ".os.fedora.packages.flatpak.packages")
     if [[ -z "$packages" ]]; then
         log_info "No flatpak packages configured"
-        return 0
+    else
+        while IFS= read -r app; do
+            [[ -z "$app" ]] && continue
+            if flatpak info --user "$app" &>/dev/null; then
+                log_info "Flatpak already installed: $app"
+            else
+                log_info "Installing flatpak: $app"
+                flatpak install --user -y --noninteractive flathub "$app" \
+                    || log_warning "Failed to install flatpak: $app"
+            fi
+        done <<< "$packages"
     fi
 
-    while IFS= read -r app; do
+    apply_flatpak_overrides "$json_file"
+}
+
+# Apply per-app flatpak overrides (sockets, env vars, etc).
+# Overrides are idempotent: re-running `flatpak override` with the same args
+# is a no-op, so this is safe to run on every install.
+apply_flatpak_overrides() {
+    local json_file="$1"
+    json_value_exists "$json_file" ".os.fedora.packages.flatpak.overrides" || return 0
+
+    local count
+    count=$(run_jq -r '.os.fedora.packages.flatpak.overrides | length // 0' "$json_file" 2>/dev/null)
+    [[ -z "$count" || "$count" == "null" ]] && count=0
+
+    local i app
+    for ((i = 0; i < count; i++)); do
+        app=$(get_json_value "$json_file" ".os.fedora.packages.flatpak.overrides[$i].app")
         [[ -z "$app" ]] && continue
-        if flatpak info --user "$app" &>/dev/null; then
-            log_info "Flatpak already installed: $app"
-        else
-            log_info "Installing flatpak: $app"
-            flatpak install --user -y --noninteractive flathub "$app" \
-                || log_warning "Failed to install flatpak: $app"
-        fi
-    done <<< "$packages"
+
+        local args=()
+        while IFS= read -r a; do
+            [[ -n "$a" ]] && args+=("$a")
+        done <<< "$(get_json_array "$json_file" ".os.fedora.packages.flatpak.overrides[$i].args")"
+        [[ ${#args[@]} -eq 0 ]] && continue
+
+        log_info "Applying flatpak override: $app (${args[*]})"
+        flatpak override --user "$app" "${args[@]}" \
+            || log_warning "Failed to set flatpak override for $app"
+    done
 }
 
 install_packages_npm() {

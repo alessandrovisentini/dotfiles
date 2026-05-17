@@ -268,6 +268,132 @@ apply_gnome_dconf() {
     fi
 }
 
+# Symlink a repo-local extension dir into ~/.local/share/gnome-shell/extensions.
+# Symlinking (vs copy) means dotfiles edits are picked up on next shell reload.
+install_gnome_extension_local() {
+    local uuid="$1" source_path="$2"
+    local ext_dir="$HOME/.local/share/gnome-shell/extensions/$uuid"
+
+    if [[ ! -d "$source_path" ]]; then
+        log_warning "Local extension source missing: $source_path"
+        return 1
+    fi
+
+    if [[ -L "$ext_dir" && "$(readlink "$ext_dir")" == "$source_path" ]]; then
+        log_info "Local extension already linked: $uuid"
+        return 0
+    fi
+
+    mkdir -p "$(dirname "$ext_dir")"
+    [[ -e "$ext_dir" || -L "$ext_dir" ]] && rm -rf "$ext_dir"
+    ln -s "$source_path" "$ext_dir"
+    log_success "Linked local extension: $uuid -> $source_path"
+}
+
+# Download an extension from extensions.gnome.org for the running shell version
+# and install it via `gnome-extensions install`. ext_id is the numeric e.g.o id.
+install_gnome_extension_ego() {
+    local uuid="$1" ext_id="$2"
+    local ext_dir="$HOME/.local/share/gnome-shell/extensions/$uuid"
+
+    if [[ -d "$ext_dir" ]]; then
+        log_info "EGO extension already installed: $uuid"
+        return 0
+    fi
+
+    local shell_version
+    shell_version=$(gnome-shell --version 2>/dev/null | awk '{print $3}' | cut -d. -f1)
+    if [[ -z "$shell_version" ]]; then
+        log_warning "Could not detect gnome-shell version; skipping $uuid"
+        return 1
+    fi
+
+    local info_url="https://extensions.gnome.org/extension-info/?pk=${ext_id}&shell_version=${shell_version}"
+    local info download_path
+    info=$(curl -fsSL "$info_url") || {
+        log_warning "Failed to fetch e.g.o info for $uuid (id=$ext_id)"
+        return 1
+    }
+    download_path=$(echo "$info" | run_jq -r '.download_url // empty')
+    if [[ -z "$download_path" ]]; then
+        log_warning "No download for $uuid on shell $shell_version"
+        return 1
+    fi
+
+    local tmp_zip
+    tmp_zip=$(mktemp --suffix=.zip)
+    if ! curl -fsSL "https://extensions.gnome.org${download_path}" -o "$tmp_zip"; then
+        rm -f "$tmp_zip"
+        log_warning "Failed to download $uuid"
+        return 1
+    fi
+
+    if gnome-extensions install --force "$tmp_zip" 2>/dev/null; then
+        log_success "Installed e.g.o extension: $uuid"
+    else
+        log_warning "gnome-extensions install failed for $uuid"
+        rm -f "$tmp_zip"
+        return 1
+    fi
+    rm -f "$tmp_zip"
+}
+
+enable_gnome_extension() {
+    local uuid="$1"
+    if gnome-extensions list --enabled 2>/dev/null | grep -qx "$uuid"; then
+        log_info "Extension already enabled: $uuid"
+        return 0
+    fi
+    if gnome-extensions enable "$uuid" 2>/dev/null; then
+        log_success "Enabled extension: $uuid"
+    else
+        # Newly installed extensions sometimes need a shell reload before they
+        # can be enabled; warn so the user knows to re-login if anything's off.
+        log_warning "Could not enable $uuid yet (may need shell reload)"
+    fi
+}
+
+install_gnome_extensions() {
+    local json_file="$1" os="$2" repo_dir="$3"
+
+    json_value_exists "$json_file" ".os.$os.gnome_extensions" || return 0
+    [[ "$(get_json_value "$json_file" ".os.$os.gnome_extensions.enabled")" == "true" ]] || return 0
+
+    if ! de_group_active gnome; then
+        log_info "DE_SELECTION=${DE_SELECTION:-?} excludes GNOME; skipping extensions"
+        return 0
+    fi
+
+    if ! command -v gnome-extensions &>/dev/null; then
+        log_warning "gnome-extensions CLI not available; skipping extensions"
+        return 0
+    fi
+
+    local ego_count loc_count i uuid ext_id src
+    ego_count=$(run_jq -r ".os.$os.gnome_extensions.ego | length // 0" "$json_file" 2>/dev/null)
+    [[ -z "$ego_count" || "$ego_count" == "null" ]] && ego_count=0
+    for ((i = 0; i < ego_count; i++)); do
+        uuid=$(get_json_value  "$json_file" ".os.$os.gnome_extensions.ego[$i].uuid")
+        ext_id=$(get_json_value "$json_file" ".os.$os.gnome_extensions.ego[$i].ext_id")
+        [[ -z "$uuid" || -z "$ext_id" ]] && continue
+        install_gnome_extension_ego "$uuid" "$ext_id" || true
+    done
+
+    loc_count=$(run_jq -r ".os.$os.gnome_extensions.local | length // 0" "$json_file" 2>/dev/null)
+    [[ -z "$loc_count" || "$loc_count" == "null" ]] && loc_count=0
+    for ((i = 0; i < loc_count; i++)); do
+        uuid=$(get_json_value "$json_file" ".os.$os.gnome_extensions.local[$i].uuid")
+        src=$(get_json_value  "$json_file" ".os.$os.gnome_extensions.local[$i].source")
+        [[ -z "$uuid" || -z "$src" ]] && continue
+        install_gnome_extension_local "$uuid" "$repo_dir/$src" || true
+    done
+
+    while IFS= read -r uuid; do
+        [[ -z "$uuid" ]] && continue
+        enable_gnome_extension "$uuid"
+    done <<< "$(get_json_array "$json_file" ".os.$os.gnome_extensions.enable")"
+}
+
 _ensure_rc_sources_env() {
     local rcfile="$1" env_file="$2"
     if grep -q "source.*shell/env.sh" "$rcfile" 2>/dev/null; then

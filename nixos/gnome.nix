@@ -7,6 +7,14 @@
 in {
   services.desktopManager.gnome.enable = true;
 
+  # Make nixpkgs Electron apps (Discord, VSCode, ...) and Firefox run as
+  # native Wayland clients; otherwise they go through XWayland and look
+  # blurry under fractional scaling.
+  environment.sessionVariables = {
+    NIXOS_OZONE_WL = "1";
+    MOZ_ENABLE_WAYLAND = "1";
+  };
+
   services.gnome.games.enable = false;
   services.power-profiles-daemon.enable = false; # Conflicts with autocpu-freq
   environment.gnome.excludePackages = with pkgs; [gnome-tour gnome-user-docs];
@@ -15,6 +23,9 @@ in {
 
   environment.systemPackages = with pkgs; [
     gnomeExtensions.appindicator
+    gnomeExtensions.simple-workspaces-bar
+    gnomeExtensions.disable-workspace-switcher-overlay
+    (callPackage ./extensions/move-without-follow {})
   ];
   services.udev.packages = with pkgs; [gnome-settings-daemon];
 
@@ -32,7 +43,12 @@ in {
 
       settings = {
         "org/gnome/shell" = {
-          enabled-extensions = ["appindicatorsupport@rgcjonas.gmail.com"];
+          enabled-extensions = [
+            "appindicatorsupport@rgcjonas.gmail.com"
+            "move-without-follow@local"
+            "simple-workspaces-bar@null-git"
+            "disable-workspace-switcher-overlay@cleardevice"
+          ];
         };
 
         "org/gnome/desktop/interface" = {
@@ -58,6 +74,10 @@ in {
 
         "org/gnome/mutter" = {
           dynamic-workspaces = false;
+          # scale-monitor-framebuffer: enable fractional scaling.
+          # xwayland-native-scaling: render XWayland apps at integer scale and
+          # downsample, so any remaining XWayland app stays sharp.
+          experimental-features = ["scale-monitor-framebuffer" "xwayland-native-scaling"];
         };
         "org/gnome/desktop/wm/preferences" = {
           num-workspaces = lib.gvariant.mkInt32 9;
@@ -95,15 +115,17 @@ in {
           "switch-to-workspace-8" = ["<Super>8"];
           "switch-to-workspace-9" = ["<Super>9"];
 
-          "move-to-workspace-1" = ["<Super><Shift>1"];
-          "move-to-workspace-2" = ["<Super><Shift>2"];
-          "move-to-workspace-3" = ["<Super><Shift>3"];
-          "move-to-workspace-4" = ["<Super><Shift>4"];
-          "move-to-workspace-5" = ["<Super><Shift>5"];
-          "move-to-workspace-6" = ["<Super><Shift>6"];
-          "move-to-workspace-7" = ["<Super><Shift>7"];
-          "move-to-workspace-8" = ["<Super><Shift>8"];
-          "move-to-workspace-9" = ["<Super><Shift>9"];
+          # Super+Shift+{1..9} is handled by the move-without-follow extension
+          # (sends window to workspace N without switching to it).
+          "move-to-workspace-1" = lib.gvariant.mkEmptyArray "s";
+          "move-to-workspace-2" = lib.gvariant.mkEmptyArray "s";
+          "move-to-workspace-3" = lib.gvariant.mkEmptyArray "s";
+          "move-to-workspace-4" = lib.gvariant.mkEmptyArray "s";
+          "move-to-workspace-5" = lib.gvariant.mkEmptyArray "s";
+          "move-to-workspace-6" = lib.gvariant.mkEmptyArray "s";
+          "move-to-workspace-7" = lib.gvariant.mkEmptyArray "s";
+          "move-to-workspace-8" = lib.gvariant.mkEmptyArray "s";
+          "move-to-workspace-9" = lib.gvariant.mkEmptyArray "s";
 
           "close" = ["<Super><Shift>q"];
           "maximize" = ["<Super>f"];
