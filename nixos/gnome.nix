@@ -17,7 +17,7 @@ in {
 
   services.gnome.games.enable = false;
   services.power-profiles-daemon.enable = false; # Conflicts with autocpu-freq
-  environment.gnome.excludePackages = with pkgs; [gnome-tour gnome-user-docs];
+  environment.gnome.excludePackages = with pkgs; [gnome-tour gnome-user-docs yelp epiphany];
 
   services.gnome.gnome-browser-connector.enable = true;
 
@@ -55,6 +55,14 @@ in {
           accent-color = "blue";
           enable-animations = false;
           enable-hot-corners = false;
+        };
+
+        "org/gnome/desktop/background" = {
+          picture-uri = "";
+          picture-uri-dark = "";
+          picture-options = "none";
+          primary-color = "#000000";
+          color-shading-type = "solid";
         };
 
         "org/gnome/desktop/input-sources" = {
