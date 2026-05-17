@@ -11,9 +11,15 @@ in {
   services.power-profiles-daemon.enable = false; # Conflicts with autocpu-freq
   environment.gnome.excludePackages = with pkgs; [gnome-tour gnome-user-docs];
 
+  services.gnome.gnome-browser-connector.enable = true;
+
+  environment.systemPackages = with pkgs; [
+    gnomeExtensions.appindicator
+  ];
+  services.udev.packages = with pkgs; [gnome-settings-daemon];
+
   qt = {
     enable = true;
-    platformTheme = "gnome";
     style = "adwaita-dark";
   };
 
@@ -25,6 +31,10 @@ in {
       lockAll = true;
 
       settings = {
+        "org/gnome/shell" = {
+          enabled-extensions = ["appindicatorsupport@rgcjonas.gmail.com"];
+        };
+
         "org/gnome/desktop/interface" = {
           accent-color = "blue";
           enable-animations = false;

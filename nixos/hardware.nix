@@ -19,6 +19,9 @@
     settings.General.Enable = "Source,Sink,Media,Socket";
   };
 
+  # Auto Rotate Sensor
+  hardware.sensor.iio.enable = true;
+
   # Fingerprint Scanner
   systemd.services.fprintd = {
     wantedBy = [ "multi-user.target" ];

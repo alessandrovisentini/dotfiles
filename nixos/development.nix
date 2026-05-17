@@ -7,6 +7,7 @@ in {
 
   environment.systemPackages = with pkgs; [
     nodejs
+    cargo
     docker-compose
     glow
     jq
