@@ -74,8 +74,11 @@ flowboxchild .tile {
     background: transparent;
     transition: background-color 100ms ease;
 }
-flowboxchild:selected .tile,
 flowboxchild:hover .tile { background: #4a4a4d; }
+flowboxchild:selected .tile {
+    background: #4a4a4d;
+    box-shadow: inset 0 0 0 2px #3584e4;
+}
 flowboxchild.activated .tile { background: #3584e4; }
 flowboxchild .tile label { color: #ffffff; font-size: 13px; }
 ";
@@ -115,6 +118,11 @@ fn main() {
 
     gtk::init().expect("gtk init failed");
     apply_css();
+
+    // Static (non-blinking) text caret, rofi-style.
+    if let Some(settings) = gtk::Settings::default() {
+        settings.set_gtk_cursor_blink(false);
+    }
 
     let icon_index = build_icon_index();
     let apps = collect_apps();
@@ -466,8 +474,54 @@ fn build_window(apps: Vec<App>) -> (gtk::Window, Vec<(gtk::Image, String)>) {
             }
         })));
         let flow_s = flow.clone();
-        search.connect_search_changed(move |_| flow_s.invalidate_filter());
+        let search_s = search.clone();
+        search.connect_search_changed(move |_| {
+            flow_s.invalidate_filter();
+            // Keep the Enter target pinned to the first match and visibly
+            // selected. Only pull keyboard focus into the grid when the
+            // entry isn't focused — touch typing keeps focus (and the OSK)
+            // on the entry itself.
+            if let Some(fc) = first_visible_child(&flow_s) {
+                flow_s.select_child(&fc);
+                if !search_s.has_focus() {
+                    fc.grab_focus();
+                }
+            }
+        });
     }
+
+    // Static, non-blinking caret. The entry stays unfocused (the grid
+    // owns focus), so GTK paints no caret of its own — draw one at the
+    // end of the text, rofi-style, so it's clear typing lands here.
+    search.connect_local("draw", true, |args| {
+        let widget = args[0].get::<gtk::Widget>().unwrap();
+        let cr = args[1].get::<gtk::cairo::Context>().unwrap();
+        let entry = match widget.downcast_ref::<gtk::Entry>() {
+            Some(e) => e,
+            None => return Some(false.to_value()),
+        };
+        // When focused (e.g. tapped on touch) GTK draws the real caret.
+        if entry.has_focus() {
+            return Some(false.to_value());
+        }
+        let layout = match entry.layout() {
+            Some(l) => l,
+            None => return Some(false.to_value()),
+        };
+        let (off_x, off_y) = entry.layout_offsets();
+        let idx = entry.text().as_str().len() as i32;
+        let caret_x = off_x + layout.index_to_pos(idx).x() / gtk::pango::SCALE;
+        let (_, line_h) = layout.pixel_size();
+        let caret_h = if line_h > 0 {
+            line_h
+        } else {
+            (entry.allocated_height() as f64 * 0.5) as i32
+        };
+        cr.set_source_rgb(1.0, 1.0, 1.0);
+        cr.rectangle(caret_x as f64 + 0.5, off_y as f64, 2.0, caret_h as f64);
+        let _ = cr.fill();
+        Some(false.to_value())
+    });
 
     // Activation: blue flash for 150ms, then launch + hide window.
     // The daemon stays alive for the next invocation.
@@ -503,6 +557,7 @@ fn build_window(apps: Vec<App>) -> (gtk::Window, Vec<(gtk::Image, String)>) {
     {
         let flow_k = flow.clone();
         let win_k = win.clone();
+        let search_k = search.clone();
         win.connect_key_press_event(move |_, ev| {
             let key = ev.keyval();
             if key == gdk::keys::constants::Escape {
@@ -517,15 +572,36 @@ fn build_window(apps: Vec<App>) -> (gtk::Window, Vec<(gtk::Image, String)>) {
                     flow_k.emit_by_name::<()>("child-activated", &[c]);
                     return glib::Propagation::Stop;
                 }
-                for c in flow_k.children() {
-                    if c.is_child_visible() {
-                        if let Ok(fc) = c.downcast::<gtk::FlowBoxChild>() {
-                            flow_k.emit_by_name::<()>(
-                                "child-activated",
-                                &[&fc],
-                            );
-                            return glib::Propagation::Stop;
-                        }
+                if let Some(fc) = first_visible_child(&flow_k) {
+                    flow_k.emit_by_name::<()>("child-activated", &[&fc]);
+                    return glib::Propagation::Stop;
+                }
+            }
+
+            // The grid owns focus so arrow keys navigate it natively; the
+            // search entry stays unfocused. Route typing into the filter
+            // by hand so search works from anywhere. When the entry *does*
+            // hold focus (tapped on touch), let it edit itself.
+            if search_k.has_focus() {
+                return glib::Propagation::Proceed;
+            }
+            let mods = ev.state();
+            let ctrl_alt = mods.contains(gdk::ModifierType::CONTROL_MASK)
+                || mods.contains(gdk::ModifierType::MOD1_MASK);
+            if !ctrl_alt {
+                if key == gdk::keys::constants::BackSpace {
+                    let mut t = search_k.text().to_string();
+                    if t.pop().is_some() {
+                        search_k.set_text(&t);
+                    }
+                    return glib::Propagation::Stop;
+                }
+                if let Some(ch) = key.to_unicode() {
+                    if !ch.is_control() {
+                        let mut t = search_k.text().to_string();
+                        t.push(ch);
+                        search_k.set_text(&t);
+                        return glib::Propagation::Stop;
                     }
                 }
             }
@@ -548,8 +624,36 @@ fn build_window(apps: Vec<App>) -> (gtk::Window, Vec<(gtk::Image, String)>) {
         unsafe { win.set_data("close-swipe", swipe) };
     }
 
-    search.grab_focus();
+    // Every show (incl. the daemon's SIGUSR1 re-show) comes up clean:
+    // clear the stale filter, then highlight + focus the first tile so
+    // Enter launches it and arrows step from there (not from the entry).
+    {
+        let search_m = search.clone();
+        let flow_m = flow.clone();
+        win.connect_map(move |_| {
+            search_m.set_text("");
+            flow_m.invalidate_filter();
+            if let Some(fc) = first_visible_child(&flow_m) {
+                flow_m.select_child(&fc);
+                fc.grab_focus();
+            }
+        });
+    }
+
     (win, pending_icons)
+}
+
+/// First tile still visible under the current filter (top-left in
+/// reading order) — the implicit Enter target.
+fn first_visible_child(flow: &gtk::FlowBox) -> Option<gtk::FlowBoxChild> {
+    for c in flow.children() {
+        if c.is_child_visible() {
+            if let Ok(fc) = c.downcast::<gtk::FlowBoxChild>() {
+                return Some(fc);
+            }
+        }
+    }
+    None
 }
 
 fn build_tile(app: &App) -> (gtk::FlowBoxChild, gtk::Image) {
