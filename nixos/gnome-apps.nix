@@ -30,7 +30,6 @@
     papers # document viewer
     showtime # video player
     simple-scan # scanner
-    snapshot # camera
   ];
 
   # GNOME default UI font.

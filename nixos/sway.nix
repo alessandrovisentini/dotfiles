@@ -51,7 +51,6 @@
       gnome-calculator
       gnome-contacts
       gnome-font-viewer
-      snapshot
       gnome-music
       papers
     ];
