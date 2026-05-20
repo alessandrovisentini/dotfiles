@@ -1,0 +1,131 @@
+* {
+    font-family: "DejaVuSansM Nerd Font Mono", monospace;
+    font-size: 11pt;
+}
+
+/* Single toast bubble */
+.notification-row {
+    background: transparent;
+    margin: 6px;
+}
+
+.notification {
+    background: #222226;
+    color: #ffffff;
+    border: 1px solid #5e5c64;
+    border-radius: 8px;
+    padding: 6px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+}
+
+.notification.low {
+    background: #2e2e32;
+    color: #9a9996;
+}
+
+.notification.normal {
+    background: #222226;
+    color: #ffffff;
+}
+
+.notification.critical {
+    background: #c01c28;
+    color: #ffffff;
+    border-color: #c01c28;
+}
+
+.notification-content {
+    padding: 8px 10px;
+}
+
+.summary {
+    font-weight: bold;
+    color: inherit;
+    margin-bottom: 2px;
+}
+
+.body {
+    color: inherit;
+    opacity: 0.92;
+}
+
+.image {
+    border-radius: 6px;
+    margin-right: 8px;
+}
+
+/* Close button on each toast */
+.close-button {
+    background: transparent;
+    color: inherit;
+    border: none;
+    padding: 4px;
+    margin: 0;
+    border-radius: 6px;
+}
+
+.close-button:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* Action buttons */
+.notification-action {
+    background: #303030;
+    color: #ffffff;
+    border: 1px solid #5e5c64;
+    border-radius: 6px;
+    padding: 4px 10px;
+    margin: 2px;
+}
+
+.notification-action:hover {
+    background: #404040;
+}
+
+/* Control Center (the panel that lists past notifications) */
+.control-center {
+    background: #1c1c1c;
+    color: #ffffff;
+    border: 1px solid #5e5c64;
+    border-radius: 10px;
+    padding: 8px;
+}
+
+.control-center-list {
+    background: transparent;
+}
+
+.control-center-clear-all,
+.control-center-dnd {
+    background: #303030;
+    color: #ffffff;
+    border: 1px solid #5e5c64;
+    border-radius: 6px;
+    padding: 4px 8px;
+}
+
+.control-center-clear-all:hover,
+.control-center-dnd:hover {
+    background: #404040;
+}
+
+/* Widgets in the control center body */
+.widget-title {
+    color: #3584e4;
+    font-weight: bold;
+    padding: 6px 4px 2px 4px;
+}
+
+.widget-mpris {
+    background: #262626;
+    border-radius: 8px;
+    padding: 8px;
+}
+
+.widget-volume,
+.widget-backlight {
+    background: #262626;
+    border-radius: 8px;
+    padding: 8px;
+    margin: 4px 0;
+}

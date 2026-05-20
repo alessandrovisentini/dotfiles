@@ -8,16 +8,19 @@
     "nixos": {
       "config_symlinks": [
         "alacritty",
-        "dunst",
         "git",
         "glow",
+        "hypr",
+        "hyprpanel",
         "lazygit",
         "nvim",
         "rofi",
         "sway",
         "swaylock",
+        "swaync",
         "tmux",
-        "waybar"
+        "waybar",
+        "wm-scripts"
       ],
       "nixos_symlinks": {
         "enabled": true,
@@ -77,10 +80,10 @@
         ],
         "gnome": [],
         "sway": [
-          "dunst",
           "rofi",
           "sway",
           "swaylock",
+          "swaync",
           "waybar"
         ]
       },
@@ -206,7 +209,7 @@
             "swayidle",
             "rofi-wayland",
             "waybar",
-            "dunst",
+            "SwayNotificationCenter",
             "libnotify",
             "brightnessctl",
             "network-manager-applet",

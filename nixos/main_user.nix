@@ -68,7 +68,16 @@ in {
   };
 
   # Programs
-  programs.firefox.enable = true;
+  programs.firefox = {
+    enable = true;
+    # text-input-v3 (for OSK auto-popup) is behind a Firefox pref.
+    policies.Preferences = {
+      "widget.wayland-text-input-v3.enabled" = {
+        Value = true;
+        Status = "locked";
+      };
+    };
+  };
 
   xdg.mime.enable = true;
   xdg.portal.enable = true;
@@ -144,6 +153,7 @@ in {
 
   # Home manager
   home-manager.users.${vars.mainUserName} = {
+    lib,
     pkgs,
     config,
     ...
@@ -152,12 +162,22 @@ in {
 
     home.username = vars.mainUserName;
 
-    # Dark mode for GTK and QT
     dconf = {
       enable = true;
-      settings."org/gnome/desktop/interface" = {
-        color-scheme = "prefer-dark";
-        gtk-theme = "Adwaita-dark";
+      settings = {
+        # Dark mode for GTK and QT
+        "org/gnome/desktop/interface" = {
+          color-scheme = "prefer-dark";
+          gtk-theme = "Adwaita-dark";
+        };
+        # Squeekboard panel-height multipliers; the default renders the
+        # OSK too short, so bump both (more in portrait).
+        "sm/puri/Squeekboard" = {
+          scale-in-vertical-screen-orientation =
+            lib.hm.gvariant.mkDouble 2.0;
+          scale-in-horizontal-screen-orientation =
+            lib.hm.gvariant.mkDouble 1.4;
+        };
       };
     };
 
@@ -173,5 +193,26 @@ in {
       enable = true;
       style.name = "adwaita-dark";
     };
+
+    # Squeekboard maps content_purpose to subdirs (url/, email/, …) and
+    # doesn't fall back to the root layout, so the custom layout must be
+    # deployed into each subdir to override. Number/pin keep defaults.
+    xdg.dataFile."squeekboard/keyboards/us.yaml".source =
+      ../config/squeekboard/us.yaml;
+    xdg.dataFile."squeekboard/keyboards/us_wide.yaml".source =
+      ../config/squeekboard/us_wide.yaml;
+    xdg.dataFile."squeekboard/keyboards/url/us.yaml".source =
+      ../config/squeekboard/us.yaml;
+    xdg.dataFile."squeekboard/keyboards/url/us_wide.yaml".source =
+      ../config/squeekboard/us_wide.yaml;
+    xdg.dataFile."squeekboard/keyboards/email/us.yaml".source =
+      ../config/squeekboard/us.yaml;
+    xdg.dataFile."squeekboard/keyboards/email/us_wide.yaml".source =
+      ../config/squeekboard/us_wide.yaml;
+    xdg.dataFile."squeekboard/keyboards/terminal/us.yaml".source =
+      ../config/squeekboard/us.yaml;
+    xdg.dataFile."squeekboard/keyboards/terminal/us_wide.yaml".source =
+      ../config/squeekboard/us_wide.yaml;
+
   };
 }

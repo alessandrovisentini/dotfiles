@@ -1,0 +1,24 @@
+[package]
+name = "grinch"
+version = "1.0.0"
+edition = "2021"
+description = "Tablet-friendly app grid launcher (GTK3 + gtk-layer-shell)"
+
+[[bin]]
+name = "grinch"
+path = "src/main.rs"
+
+[dependencies]
+gtk         = "0.18"
+gdk         = "0.18"
+gdk-pixbuf  = "0.18"
+glib        = "0.18"
+gio         = "0.18"
+gtk-layer-shell = { version = "0.7", features = ["v0_6"] }
+libc        = "0.2"
+
+[profile.release]
+opt-level     = 3
+lto           = "thin"
+codegen-units = 1
+strip         = true

@@ -67,3 +67,10 @@ vendor/
 
 # AI
 **/.claude/settings.local.json
+
+# Runtime-managed by HyprPanel (auto-created, empty)
+config/hyprpanel/modules.json
+
+# Python bytecode (mode-daemon.py is built by Nix, not run from the tree)
+__pycache__/
+*.pyc

@@ -1,0 +1,7890 @@
+---
+# Landscape variant of us.yaml. Squeekboard picks <layout>_wide.yaml
+# when the screen is wider than tall. Same key layout as portrait;
+# outlines are taller so the keys aren't cramped on a 3:2 panel.
+
+# Outline sizes match the bundled terminal/us_wide.yaml. squeekboard
+# fits the keyboard within a fixed panel height (~280 px on a 1920-wide
+# X12 in landscape), so raising YAML heights doesn't make the keyboard
+# taller — it makes it narrower (everything shrinks to fit). Match
+# terminal's ratios so the keyboard renders at the same size you like.
+outlines:
+    default:   { width: 54,  height: 37 }
+    altline:   { width: 81,  height: 37 }
+    wide:      { width: 108, height: 37 }
+    spaceline: { width: 216, height: 37 }
+    action:    { width: 54,  height: 37 }
+    small:     { width: 54,  height: 22 }
+    emoji_default:
+      width: 75.0
+      height: 46.25
+    emoji_nav:
+      width: 168.75
+      height: 25
+    emoji_cat:
+      width: 75.0
+      height: 21
+
+views:
+    base:
+        - "Esc Tab Ctrl Alt Super ← ↑ ↓ →"
+        - "q w e r t y u i o p"
+        - "a s d f g h j k l"
+        - "Shift_L   z x c v b n m   BackSpace"
+        - "show_numbers show_actions world space period Return"
+    upper:
+        - "Esc Tab Ctrl Alt Super ← ↑ ↓ →"
+        - "Q W E R T Y U I O P"
+        - "A S D F G H J K L"
+        - "Shift_L   Z X C V B N M   BackSpace"
+        - "show_numbers show_actions world space period Return"
+    numbers:
+        - "Esc Tab Ctrl Alt Super Home End PgUp PgDn"
+        - "1 2 3 4 5 6 7 8 9 0"
+        - "@ # $ % & - _ + ( )"
+        - "show_symbols   , \" ' colon semicolon exclam question   BackSpace"
+        - "show_letters show_actions world space period Return"
+    symbols:
+        - "Esc Tab Ctrl Alt Super Home End PgUp PgDn"
+        - "~ ` | · √ π τ ÷ × ¶"
+        - "© ® £ € ¥ ^ ° * { }"
+        - "show_numbers_from_symbols   \\ / < > = [ ]   BackSpace"
+        - "show_letters show_actions world space period Return"
+    actions:
+        - "Esc Tab Ctrl Alt Super Insert Delete PgUp PgDn"
+        - "F1 F2 F3 F4 F5 F6 F7 F8 F9 F10"
+        - "F11 F12 ← ↑ ↓ → Home End BackSpace"
+        - "show_letters world space Return"
+    emoji_p01:
+    - emoji_self_01 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - 😀 😃 😄 😁 😆 😅 🤣 😂 🙂
+    - 🙃 🫠 😉 😊 😇 🥰 😍 🤩 😘
+    - 😗 ☺ 😚 😙 🥲 😋 😛 😜 🤪
+    - emoji_back_qwerty emoji_prev_01 emoji_next_01 emoji_bksp
+    emoji_p02:
+    - emoji_self_02 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - 😝 🤑 🤗 🤭 🫢 🫣 🤫 🤔 🫡
+    - 🤐 🤨 😐 😑 😶 🫥 😶‍🌫️ 😏 😒
+    - 🙄 😬 😮‍💨 🤥 🫨 🙂‍↔️ 🙂‍↕️ 😌 😔
+    - emoji_back_qwerty emoji_prev_02 emoji_next_02 emoji_bksp
+    emoji_p03:
+    - emoji_self_03 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - 😪 🤤 😴 🫩 😷 🤒 🤕 🤢 🤮
+    - 🤧 🥵 🥶 🥴 😵 😵‍💫 🤯 🤠 🥳
+    - 🥸 😎 🤓 🧐 😕 🫤 😟 🙁 ☹
+    - emoji_back_qwerty emoji_prev_03 emoji_next_03 emoji_bksp
+    emoji_p04:
+    - emoji_self_04 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - 😮 😯 😲 😳 🥺 🥹 😦 😧 face-concerned-2
+    - 😨 😰 😥 😢 😭 😱 😖 😣 😞
+    - 😓 😩 😫 face-concerned-backwards 🥱 😤 😡 😠 🤬
+    - emoji_back_qwerty emoji_prev_04 emoji_next_04 emoji_bksp
+    emoji_p05:
+    - emoji_self_05 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - 😈 👿 💀 ☠ 💩 🤡 👹 👺 👻
+    - 👽 👾 🤖 😺 😸 😹 😻 😼 😽
+    - 🙀 😿 😾 🙈 🙉 🙊 💌 💘 💝
+    - emoji_back_qwerty emoji_prev_05 emoji_next_05 emoji_bksp
+    emoji_p06:
+    - emoji_self_06 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - 💖 💗 💓 💞 💕 💟 ❣ 💔 ❤️‍🔥
+    - ❤️‍🩹 heart-2 ❤ 🩷 🧡 💛 💚 💙 🩵
+    - 💜 🤎 🖤 🩶 🤍 heart-backwards 💋 💯 💢
+    - emoji_back_qwerty emoji_prev_06 emoji_next_06 emoji_bksp
+    emoji_p07:
+    - emoji_cat_0 emoji_self_07 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - 💥 💫 💦 💨 🕳 💬 👁️‍🗨️ 🗨 🗯
+    - 💭 💤 🖐 👌 👈 👍 🫶 ✍ 👀
+    - 👩 🙋 🧑‍💻 🧚 💃 ⛹️‍♂️ 🧘 👩‍❤️‍👨 👤
+    - emoji_back_qwerty emoji_prev_07 emoji_next_07 emoji_bksp
+    emoji_p08:
+    - emoji_cat_0 emoji_self_08 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - 👋 🤚 ✋ 🖖 🫱 🫲 🫳 🫴 🫷
+    - 🫸 🤌 🤏 ✌ 🤞 🫰 🤟 🤘 🤙
+    - 👉 👆 🖕 👇 ☝ 🫵 👎 ✊ 👊
+    - emoji_back_qwerty emoji_prev_08 emoji_next_08 emoji_bksp
+    emoji_p09:
+    - emoji_cat_0 emoji_self_09 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - 🤛 🤜 👏 🙌 👐 🤲 🤝 🙏 💅
+    - 🤳 💪 🦾 🦿 🦵 🦶 👂 🦻 👃
+    - 🧠 🫀 🫁 🦷 🦴 👁 👅 👄 🫦
+    - emoji_back_qwerty emoji_prev_09 emoji_next_09 emoji_bksp
+    emoji_p10:
+    - emoji_cat_0 emoji_self_10 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - 👶 🧒 👦 👧 🧑 👱 👨 🧔 🧔‍♂️
+    - 🧔‍♀️ 👨‍🦰 👨‍🦱 👨‍🦳 person-2 👨‍🦲 👩‍🦰 🧑‍🦰 👩‍🦱
+    - 🧑‍🦱 👩‍🦳 🧑‍🦳 👩‍🦲 🧑‍🦲 👱‍♀️ 👱‍♂️ person-backwards 🧓
+    - emoji_back_qwerty emoji_prev_10 emoji_next_10 emoji_bksp
+    emoji_p11:
+    - emoji_cat_0 emoji_self_11 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - 👴 👵 🙍 🙍‍♂️ 🙍‍♀️ 🙎 🙎‍♂️ 🙎‍♀️ 🙅
+    - 🙅‍♂️ 🙅‍♀️ 🙆 🙆‍♂️ 🙆‍♀️ 💁 person-gesture-2 💁‍♂️ 💁‍♀️
+    - 🙋‍♂️ 🙋‍♀️ 🧏 🧏‍♂️ 🧏‍♀️ 🙇 🙇‍♂️ 🙇‍♀️ 🤦
+    - emoji_back_qwerty emoji_prev_11 emoji_next_11 emoji_bksp
+    emoji_p12:
+    - emoji_cat_0 emoji_self_12 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - person-gesture-backwards 🤦‍♂️ 🤦‍♀️ 🤷 🤷‍♂️ 🤷‍♀️ 🧑‍⚕️ 👨‍⚕️ 👩‍⚕️
+    - 🧑‍🎓 👨‍🎓 👩‍🎓 🧑‍🏫 👨‍🏫 👩‍🏫 🧑‍⚖️ 👨‍⚖️ 👩‍⚖️
+    - 🧑‍🌾 person-role-2 👨‍🌾 👩‍🌾 🧑‍🍳 👨‍🍳 👩‍🍳 🧑‍🔧 👨‍🔧
+    - emoji_back_qwerty emoji_prev_12 emoji_next_12 emoji_bksp
+    emoji_p13:
+    - emoji_cat_0 emoji_self_13 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - 👩‍🔧 🧑‍🏭 👨‍🏭 👩‍🏭 🧑‍💼 person-role-backwards 👨‍💼 👩‍💼 🧑‍🔬
+    - 👨‍🔬 👩‍🔬 person-role-3 👨‍💻 👩‍💻 🧑‍🎤 👨‍🎤 👩‍🎤 🧑‍🎨
+    - 👨‍🎨 👩‍🎨 🧑‍✈️ 👨‍✈️ 👩‍✈️ person-role-2-backwards 🧑‍🚀 👨‍🚀 👩‍🚀
+    - emoji_back_qwerty emoji_prev_13 emoji_next_13 emoji_bksp
+    emoji_p14:
+    - emoji_cat_0 emoji_self_14 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - 🧑‍🚒 👨‍🚒 person-role-4 👩‍🚒 👮 👮‍♂️ 👮‍♀️ 🕵 🕵️‍♂️
+    - 🕵️‍♀️ 💂 💂‍♂️ 💂‍♀️ 🥷 👷 person-role-3-backwards 👷‍♂️ 👷‍♀️
+    - 🫅 🤴 👸 person-role-5 👳 👳‍♂️ 👳‍♀️ 👲 🧕
+    - emoji_back_qwerty emoji_prev_14 emoji_next_14 emoji_bksp
+    emoji_p15:
+    - emoji_cat_0 emoji_self_15 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - 🤵 🤵‍♂️ 🤵‍♀️ 👰 👰‍♂️ 👰‍♀️ 🤰 person-role-4-backwards 🫃
+    - 🫄 🤱 👩‍🍼 👨‍🍼 🧑‍🍼 👼 🎅 🤶 🧑‍🎄
+    - 🦸 🦸‍♂️ 🦸‍♀️ 🦹 🦹‍♂️ 🦹‍♀️ 🧙 🧙‍♂️ 🧙‍♀️
+    - emoji_back_qwerty emoji_prev_15 emoji_next_15 emoji_bksp
+    emoji_p16:
+    - emoji_cat_0 emoji_self_16 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - person-fantasy-2 🧚‍♂️ 🧚‍♀️ 🧛 🧛‍♂️ 🧛‍♀️ 🧜 🧜‍♂️ 🧜‍♀️
+    - 🧝 🧝‍♂️ 🧝‍♀️ person-fantasy-backwards 🧞 🧞‍♂️ 🧞‍♀️ 🧟 🧟‍♂️
+    - 🧟‍♀️ 🧌 💆 💆‍♂️ 💆‍♀️ 💇 💇‍♂️ 💇‍♀️ 🚶
+    - emoji_back_qwerty emoji_prev_16 emoji_next_16 emoji_bksp
+    emoji_p17:
+    - emoji_cat_0 emoji_self_17 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - 🚶‍♂️ 🚶‍♀️ 🚶‍➡️ 🚶‍♀️‍➡️ 🚶‍♂️‍➡️ 🧍 person-activity-2 🧍‍♂️ 🧍‍♀️
+    - 🧎 🧎‍♂️ 🧎‍♀️ 🧎‍➡️ 🧎‍♀️‍➡️ 🧎‍♂️‍➡️ 🧑‍🦯 🧑‍🦯‍➡️ 👨‍🦯
+    - 👨‍🦯‍➡️ person-activity-backwards 👩‍🦯 👩‍🦯‍➡️ 🧑‍🦼 🧑‍🦼‍➡️ 👨‍🦼 person-activity-3 👨‍🦼‍➡️
+    - emoji_back_qwerty emoji_prev_17 emoji_next_17 emoji_bksp
+    emoji_p18:
+    - emoji_cat_0 emoji_self_18 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - 👩‍🦼 👩‍🦼‍➡️ 🧑‍🦽 🧑‍🦽‍➡️ 👨‍🦽 👨‍🦽‍➡️ 👩‍🦽 👩‍🦽‍➡️ 🏃
+    - 🏃‍♂️ 🏃‍♀️ person-activity-2-backwards 🏃‍➡️ 🏃‍♀️‍➡️ 🏃‍♂️‍➡️ 🕺 person-activity-4 🕴
+    - 👯 👯‍♂️ 👯‍♀️ 🧖 🧖‍♂️ 🧖‍♀️ 🧗 🧗‍♂️ 🧗‍♀️
+    - emoji_back_qwerty emoji_prev_18 emoji_next_18 emoji_bksp
+    emoji_p19:
+    - emoji_cat_0 emoji_self_19 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - person-activity-3-backwards 🤺 🏇 ⛷ 🏂 🏌 🏌️‍♂️ 🏌️‍♀️ 🏄
+    - 🏄‍♂️ 🏄‍♀️ 🚣 🚣‍♂️ 🚣‍♀️ person-sport-2 🏊 🏊‍♂️ 🏊‍♀️
+    - ⛹ ⛹️‍♀️ 🏋 🏋️‍♂️ 🏋️‍♀️ 🚴 🚴‍♂️ 🚴‍♀️ person-sport-backwards
+    - emoji_back_qwerty emoji_prev_19 emoji_next_19 emoji_bksp
+    emoji_p20:
+    - emoji_cat_0 emoji_self_20 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - 🚵 🚵‍♂️ 🚵‍♀️ 🤸 🤸‍♂️ person-sport-3 🤸‍♀️ 🤼 🤼‍♂️
+    - 🤼‍♀️ 🤽 🤽‍♂️ 🤽‍♀️ 🤾 🤾‍♂️ 🤾‍♀️ 🤹 🤹‍♂️
+    - person-sport-2-backwards 🤹‍♀️ 🧘‍♂️ 🧘‍♀️ 🛀 🛌 🧑‍🤝‍🧑 👭 👫
+    - emoji_back_qwerty emoji_prev_20 emoji_next_20 emoji_bksp
+    emoji_p21:
+    - emoji_cat_0 emoji_self_21 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - 👬 💏 👩‍❤️‍💋‍👨 👨‍❤️‍💋‍👨 👩‍❤️‍💋‍👩 💑 👨‍❤️‍👨 👩‍❤️‍👩 👨‍👩‍👦
+    - family-2 👨‍👩‍👧 👨‍👩‍👧‍👦 👨‍👩‍👦‍👦 👨‍👩‍👧‍👧 👨‍👨‍👦 👨‍👨‍👧 👨‍👨‍👧‍👦 👨‍👨‍👦‍👦
+    - 👨‍👨‍👧‍👧 👩‍👩‍👦 👩‍👩‍👧 👩‍👩‍👧‍👦 family-backwards 👩‍👩‍👦‍👦 👩‍👩‍👧‍👧 👨‍👦 👨‍👦‍👦
+    - emoji_back_qwerty emoji_prev_21 emoji_next_21 emoji_bksp
+    emoji_p22:
+    - emoji_cat_0 emoji_self_22 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - 👨‍👧 family-3 👨‍👧‍👦 👨‍👧‍👧 👩‍👦 👩‍👦‍👦 👩‍👧 👩‍👧‍👦 👩‍👧‍👧
+    - family-2-backwards 🗣 👥 🫂 👪 🧑‍🧑‍🧒 🧑‍🧑‍🧒‍🧒 🧑‍🧒 🧑‍🧒‍🧒
+    - 👣 🫆 🏻 🏼 🏽 🏾 🏿 🦰 🦱
+    - emoji_back_qwerty emoji_prev_22 emoji_next_22 emoji_bksp
+    emoji_p23:
+    - emoji_cat_0 emoji_cat_1 emoji_self_23 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - 🦳 🦲 InfoBar 🐈 🐤 🐸 🦎 🐬 🦋
+    - 🌸 🌳 🐵 🐒 🦍 🦧 🐶 🐕 🦮
+    - 🐕‍🦺 🐩 🐺 🦊 🦝 🐱 animal-mammal-2 🐈‍⬛ 🦁
+    - emoji_back_qwerty emoji_prev_23 emoji_next_23 emoji_bksp
+    emoji_p24:
+    - emoji_cat_0 emoji_cat_1 emoji_self_24 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - 🐯 🐅 🐆 🐴 🫎 🫏 🐎 🦄 🦓
+    - animal-mammal-backwards 🦌 🦬 🐮 🐂 🐃 animal-mammal-3 🐄 🐷
+    - 🐖 🐗 🐽 🐏 🐑 🐐 🐪 🐫 🦙
+    - emoji_back_qwerty emoji_prev_24 emoji_next_24 emoji_bksp
+    emoji_p25:
+    - emoji_cat_0 emoji_cat_1 emoji_self_25 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - 🦒 animal-mammal-2-backwards 🐘 🦣 🦏 🦛 🐭 animal-mammal-4 🐁
+    - 🐀 🐹 🐰 🐇 🐿 🦫 🦔 🦇 🐻
+    - 🐻‍❄️ 🐨 animal-mammal-3-backwards 🐼 🦥 🦦 🦨 🦘 🦡
+    - emoji_back_qwerty emoji_prev_25 emoji_next_25 emoji_bksp
+    emoji_p26:
+    - emoji_cat_0 emoji_cat_1 emoji_self_26 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - 🐾 🦃 🐔 🐓 🐣 🐥 🐦 🐧 🕊
+    - 🦅 🦆 🦢 🦉 animal-bird-2 🦤 🪶 🦩 🦚
+    - 🦜 🪽 🐦‍⬛ 🪿 🐦‍🔥 animal-bird-backwards 🐊 🐢 🐍
+    - emoji_back_qwerty emoji_prev_26 emoji_next_26 emoji_bksp
+    emoji_p27:
+    - emoji_cat_0 emoji_cat_1 emoji_self_27 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - 🐲 🐉 🦕 🦖 🐳 🐋 🦭 🐟 🐠
+    - 🐡 🦈 🐙 🐚 🪸 🪼 🐌 🐛 🐜
+    - 🐝 🪲 🐞 🦗 🪳 🕷 🕸 🦂 🦟
+    - emoji_back_qwerty emoji_prev_27 emoji_next_27 emoji_bksp
+    emoji_p28:
+    - emoji_cat_0 emoji_cat_1 emoji_self_28 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - 🪰 🪱 🦠 💐 💮 🪷 🏵 🌹 🥀
+    - 🌺 🌻 🌼 🌷 🪻 🌱 🪴 🌲 🌴
+    - 🌵 🌾 🌿 ☘ 🍀 🍁 🍂 🍃 🪹
+    - emoji_back_qwerty emoji_prev_28 emoji_next_28 emoji_bksp
+    emoji_p29:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_self_29 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - 🪺 🍄 🪾 🍒 🥕 🥐 🍱 🦐 🍰
+    - 🍵 🥄 🍇 🍈 🍉 🍊 🍋 🍋‍🟩 🍌
+    - 🍍 🥭 🍎 🍏 🍐 🍑 food-fruit-2 🍓 🫐
+    - emoji_back_qwerty emoji_prev_29 emoji_next_29 emoji_bksp
+    emoji_p30:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_self_30 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - 🥝 🍅 🫒 🥥 food-fruit-backwards 🥑 🍆 🥔 🌽
+    - 🌶 🫑 🥒 🥬 🥦 🧄 🧅 🥜 🫘
+    - 🌰 🫚 🫛 🍄‍🟫 🫜 🍞 🥖 🫓 🥨
+    - emoji_back_qwerty emoji_prev_30 emoji_next_30 emoji_bksp
+    emoji_p31:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_self_31 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - 🥯 🥞 🧇 🧀 🍖 🍗 🥩 🥓 food-prepared-2
+    - 🍔 🍟 🍕 🌭 🥪 🌮 🌯 🫔 🥙
+    - 🧆 🥚 🍳 food-prepared-backwards 🥘 🍲 🫕 🥣 🥗
+    - emoji_back_qwerty emoji_prev_31 emoji_next_31 emoji_bksp
+    emoji_p32:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_self_32 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - 🍿 🧈 🧂 🥫 🍘 🍙 🍚 🍛 🍜
+    - 🍝 🍠 🍢 🍣 🍤 🍥 🥮 🍡 🥟
+    - 🥠 🥡 🦀 🦞 🦑 🦪 🍦 🍧 🍨
+    - emoji_back_qwerty emoji_prev_32 emoji_next_32 emoji_bksp
+    emoji_p33:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_self_33 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - 🍩 🍪 🎂 🧁 🥧 🍫 🍬 🍭 🍮
+    - 🍯 🍼 🥛 ☕ 🫖 🍶 🍾 🍷 🍸
+    - 🍹 🍺 🍻 🥂 drink-2 🥃 🫗 🥤 🧋
+    - emoji_back_qwerty emoji_prev_33 emoji_next_33 emoji_bksp
+    emoji_p34:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_self_34 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - 🧃 🧉 🧊 drink-backwards 🥢 🍽 🍴 🔪 🫙
+    - 🏺 🌍 🗻 🏡 ⛩ 🌅 🚲 ⛵ 🛫
+    - 🧳 ⏳ 🌈 🌎 🌏 🌐 🗺 🗾 🧭
+    - emoji_back_qwerty emoji_prev_34 emoji_next_34 emoji_bksp
+    emoji_p35:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_self_35 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - 🏔 ⛰ 🌋 🏕 🏖 🏜 🏝 🏞 🏟
+    - 🏛 🏗 🧱 🪨 🪵 🛖 🏘 🏚 🏠
+    - 🏢 🏣 place-building-2 🏤 🏥 🏦 🏨 🏩 🏪
+    - emoji_back_qwerty emoji_prev_35 emoji_next_35 emoji_bksp
+    emoji_p36:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_self_36 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - 🏫 🏬 🏭 🏯 🏰 💒 place-building-backwards 🗼 🗽
+    - ⛪ 🕌 🛕 🕍 🕋 ⛲ ⛺ 🌁 🌃
+    - 🏙 🌄 🌆 🌇 🌉 ♨ 🎠 🛝 🎡
+    - emoji_back_qwerty emoji_prev_36 emoji_next_36 emoji_bksp
+    emoji_p37:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_self_37 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - 🎢 💈 🎪 🚂 🚃 🚄 🚅 🚆 🚇
+    - 🚈 🚉 🚊 🚝 🚞 🚋 🚌 transport-ground-2 🚍
+    - 🚎 🚐 🚑 🚒 🚓 🚔 🚕 🚖 🚗
+    - emoji_back_qwerty emoji_prev_37 emoji_next_37 emoji_bksp
+    emoji_p38:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_self_38 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - 🚘 🚙 transport-ground-backwards 🛻 🚚 🚛 🚜 🏎 transport-ground-3
+    - 🏍 🛵 🦽 🦼 🛺 🛴 🛹 🛼 🚏
+    - 🛣 🛤 transport-ground-2-backwards 🛢 ⛽ 🛞 🚨 🚥 🚦
+    - emoji_back_qwerty emoji_prev_38 emoji_next_38 emoji_bksp
+    emoji_p39:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_self_39 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - 🛑 🚧 ⚓ 🛟 🛶 🚤 🛳 ⛴ 🛥
+    - 🚢 ✈ 🛩 🛬 🪂 💺 🚁 🚟 🚠
+    - 🚡 🛰 🚀 🛸 🛎 ⌛ ⌚ ⏰ ⏱
+    - emoji_back_qwerty emoji_prev_39 emoji_next_39 emoji_bksp
+    emoji_p40:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_self_40 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - ⏲ 🕰 🕛 🕧 🕐 🕜 🕑 🕝 time-2
+    - 🕒 🕞 🕓 🕟 🕔 🕠 🕕 🕡 🕖
+    - 🕢 🕗 🕣 time-backwards 🕘 🕤 🕙 🕥 🕚
+    - emoji_back_qwerty emoji_prev_40 emoji_next_40 emoji_bksp
+    emoji_p41:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_self_41 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - 🕦 🌑 🌒 🌓 🌔 🌕 🌖 🌗 🌘
+    - 🌙 🌚 🌛 🌜 🌡 sky-and-weather-2 ☀ 🌝 🌞
+    - 🪐 ⭐ 🌟 🌠 🌌 ☁ ⛅ ⛈ 🌤
+    - emoji_back_qwerty emoji_prev_41 emoji_next_41 emoji_bksp
+    emoji_p42:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_self_42 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - sky-and-weather-backwards 🌥 🌦 🌧 🌨 🌩 sky-and-weather-3 🌪 🌫
+    - 🌬 🌀 🌂 ☂ ☔ ⛱ ⚡ ❄ ☃
+    - sky-and-weather-2-backwards ⛄ ☄ 🔥 💧 🌊 🎆 🏅 🏐
+    - emoji_back_qwerty emoji_prev_42 emoji_next_42 emoji_bksp
+    emoji_p43:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_self_43 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - 🎴 🎨 🎃 🎄 🎇 🧨 ✨ 🎈 🎉
+    - 🎊 🎋 🎍 🎎 🎏 event-2 🎐 🎑 🧧
+    - 🎀 🎁 🎗 🎟 🎫 event-backwards 🎖 🏆 🥇
+    - emoji_back_qwerty emoji_prev_43 emoji_next_43 emoji_bksp
+    emoji_p44:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_self_44 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - 🥈 🥉 ⚽ ⚾ 🥎 🏀 🏈 🏉 🎾
+    - 🥏 🎳 🏏 🏑 🏒 sport-2 🥍 🏓 🏸
+    - 🥊 🥋 🥅 ⛳ ⛸ 🎣 🤿 🎽 🎿
+    - emoji_back_qwerty emoji_prev_44 emoji_next_44 emoji_bksp
+    emoji_p45:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_self_45 emoji_cat_6 emoji_cat_7 emoji_cat_8
+    - sport-backwards 🛷 🥌 🎯 🪀 🪁 🔫 🎱 🔮
+    - 🪄 🎮 🕹 🎰 🎲 🧩 🧸 game-2 🪅
+    - 🪩 🪆 ♠ ♥ ♦ ♣ ♟ 🃏 🀄
+    - emoji_back_qwerty emoji_prev_45 emoji_next_45 emoji_bksp
+    emoji_p46:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_self_46 emoji_cat_7 emoji_cat_8
+    - game-backwards 🎭 🖼 🧵 🪡 🧶 🪢 👗 🔊
+    - 🎶 🎻 📱 💻 📹 📚 💶 📮 📝
+    - 📊 🔐 🧰 🔭 🩺 🚪 🪪 👓 🕶
+    - emoji_back_qwerty emoji_prev_46 emoji_next_46 emoji_bksp
+    emoji_p47:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_self_47 emoji_cat_7 emoji_cat_8
+    - 🥽 🥼 🦺 👔 👕 👖 🧣 🧤 🧥
+    - 🧦 clothing-2 👘 🥻 🩱 🩲 🩳 👙 👚
+    - 🪭 👛 👜 👝 🛍 clothing-backwards 🎒 🩴 👞
+    - emoji_back_qwerty emoji_prev_47 emoji_next_47 emoji_bksp
+    emoji_p48:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_self_48 emoji_cat_7 emoji_cat_8
+    - 👟 🥾 clothing-3 🥿 👠 👡 🩰 👢 🪮
+    - 👑 👒 🎩 🎓 🧢 🪖 clothing-2-backwards ⛑ 📿
+    - 💄 💍 💎 🔇 🔈 🔉 📢 📣 📯
+    - emoji_back_qwerty emoji_prev_48 emoji_next_48 emoji_bksp
+    emoji_p49:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_self_49 emoji_cat_7 emoji_cat_8
+    - 🔔 🔕 🎼 🎵 🎙 🎚 🎛 🎤 🎧
+    - 📻 🎷 🪗 🎸 🎹 🎺 🪕 🥁 🪘
+    - 🪇 🪈 🪉 📲 ☎ 📞 📟 📠 🔋
+    - emoji_back_qwerty emoji_prev_49 emoji_next_49 emoji_bksp
+    emoji_p50:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_self_50 emoji_cat_7 emoji_cat_8
+    - 🪫 🔌 🖥 🖨 ⌨ 🖱 🖲 💽 💾
+    - 💿 📀 🧮 🎥 🎞 📽 🎬 📺 📷
+    - 📸 📼 🔍 🔎 🕯 💡 🔦 🏮 🪔
+    - emoji_back_qwerty emoji_prev_50 emoji_next_50 emoji_bksp
+    emoji_p51:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_self_51 emoji_cat_7 emoji_cat_8
+    - 📔 📕 📖 📗 📘 📙 📓 📒 📃
+    - 📜 📄 📰 🗞 📑 🔖 🏷 💰 🪙
+    - 💴 💵 💷 💸 💳 🧾 💹 ✉ 📧
+    - emoji_back_qwerty emoji_prev_51 emoji_next_51 emoji_bksp
+    emoji_p52:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_self_52 emoji_cat_7 emoji_cat_8
+    - 📨 📩 📤 📥 📦 📫 📪 📬 📭
+    - 🗳 ✏ ✒ 🖋 🖊 🖌 🖍 💼 📁
+    - 📂 🗂 📅 📆 🗒 🗓 📇 📈 📉
+    - emoji_back_qwerty emoji_prev_52 emoji_next_52 emoji_bksp
+    emoji_p53:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_self_53 emoji_cat_7 emoji_cat_8
+    - 📋 office-2 📌 📍 📎 🖇 📏 📐 ✂
+    - 🗃 🗄 🗑 office-backwards 🔒 🔓 🔏 🔑 🗝
+    - 🔨 🪓 ⛏ ⚒ 🛠 🗡 ⚔ 💣 🪃
+    - emoji_back_qwerty emoji_prev_53 emoji_next_53 emoji_bksp
+    emoji_p54:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_self_54 emoji_cat_7 emoji_cat_8
+    - 🏹 🛡 🪚 🔧 tool-2 🪛 🔩 ⚙ 🗜
+    - ⚖ 🦯 🔗 ⛓️‍💥 ⛓ 🪝 🧲 tool-backwards 🪜
+    - 🪏 ⚗ 🧪 🧫 🧬 🔬 📡 💉 🩸
+    - emoji_back_qwerty emoji_prev_54 emoji_next_54 emoji_bksp
+    emoji_p55:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_self_55 emoji_cat_7 emoji_cat_8
+    - 💊 🩹 🩼 🩻 🛗 🪞 🪟 🛏 🛋
+    - 🪑 🚽 🪠 🚿 🛁 🪤 🪒 household-2 🧴
+    - 🧷 🧹 🧺 🧻 🪣 🧼 🫧 🪥 🧽
+    - emoji_back_qwerty emoji_prev_55 emoji_next_55 emoji_bksp
+    emoji_p56:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_self_56 emoji_cat_8
+    - 🧯 🛒 household-backwards 🚬 ⚰ 🪦 ⚱ 🧿 🪬
+    - 🗿 🪧 🚻 🚫 🔝 ☯ ♋ ▶ ⚧
+    - '♾ ❓ 💱 ✔ #️⃣ 🆓 🔵 🏧 🚮'
+    - emoji_back_qwerty emoji_prev_56 emoji_next_56 emoji_bksp
+    emoji_p57:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_self_57 emoji_cat_8
+    - 🚰 ♿ 🚹 🚺 🚼 🚾 🛂 🛃 🛄
+    - 🛅 ⚠ 🚸 ⛔ 🚳 🚭 🚯 🚱 🚷
+    - 📵 🔞 ☢ ☣ ⬆ ↗ ➡ ↘ ⬇
+    - emoji_back_qwerty emoji_prev_57 emoji_next_57 emoji_bksp
+    emoji_p58:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_self_58 emoji_cat_8
+    - ↙ ⬅ ↖ ↕ ↔ ↩ ↪ ⤴ arrow-2
+    - ⤵ 🔃 🔄 🔙 🔚 🔛 🔜 arrow-backwards 🛐
+    - ⚛ 🕉 ✡ ☸ ✝ ☦ ☪ ☮ 🕎
+    - emoji_back_qwerty emoji_prev_58 emoji_next_58 emoji_bksp
+    emoji_p59:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_self_59 emoji_cat_8
+    - 🔯 🪯 ♈ ♉ ♊ ♌ ♍ ♎ ♏
+    - ♐ ♑ ♒ ♓ ⛎ 🔀 🔁 🔂 ⏩
+    - ⏭ ⏯ ◀ ⏪ ⏮ 🔼 ⏫ 🔽 av-symbol-2
+    - emoji_back_qwerty emoji_prev_59 emoji_next_59 emoji_bksp
+    emoji_p60:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_self_60 emoji_cat_8
+    - ⏬ ⏸ ⏹ ⏺ ⏏ 🎦 🔅 🔆 📶
+    - 🛜 📳 📴 av-symbol-backwards ♀ ♂ ✖ ➕ ➖
+    - ➗ 🟰 ‼ ⁉ ❔ ❕ ❗ 〰 💲
+    - emoji_back_qwerty emoji_prev_60 emoji_next_60 emoji_bksp
+    emoji_p61:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_self_61 emoji_cat_8
+    - ⚕ ♻ ⚜ 🔱 📛 🔰 ⭕ ✅ ☑
+    - ❌ ❎ ➰ other-symbol-2 ➿ 〽 ✳ ✴ ❇
+    - © ® ™ 🫟 other-symbol-backwards *️⃣ 0️⃣ 1️⃣ 2️⃣
+    - emoji_back_qwerty emoji_prev_61 emoji_next_61 emoji_bksp
+    emoji_p62:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_self_62 emoji_cat_8
+    - 3️⃣ 4️⃣ 5️⃣ 6️⃣ 7️⃣ 8️⃣ 9️⃣ 🔟 🔠
+    - 🔡 🔢 🔣 🔤 🅰 🆎 🅱 🆑 🆒
+    - ℹ 🆔 alphanum-2 Ⓜ 🆕 🆖 🅾 🆗 🅿
+    - emoji_back_qwerty emoji_prev_62 emoji_next_62 emoji_bksp
+    emoji_p63:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_self_63 emoji_cat_8
+    - 🆘 🆙 🆚 🈁 🈂 🈷 alphanum-backwards 🈶 🈯
+    - 🉐 🈹 🈚 alphanum-3 🈲 🉑 🈸 🈴 🈳
+    - ㊗ ㊙ 🈺 🈵 alphanum-2-backwards 🔴 🟠 🟡 🟢
+    - emoji_back_qwerty emoji_prev_63 emoji_next_63 emoji_bksp
+    emoji_p64:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_self_64 emoji_cat_8
+    - 🟣 🟤 ⚫ ⚪ 🟥 🟧 🟨 🟩 geometric-2
+    - 🟦 🟪 🟫 ⬛ ⬜ ◼ ◻ ◾ ◽
+    - ▪ ▫ 🔶 geometric-backwards 🔷 🔸 🔹 🔺 🔻
+    - emoji_back_qwerty emoji_prev_64 emoji_next_64 emoji_bksp
+    emoji_p65:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_self_65
+    - 💠 🔘 🔳 🔲 🏳️‍⚧️ 🇪🇺 🏴󠁧󠁢󠁥󠁮󠁧󠁿 🏁 🚩
+    - 🎌 🏴 🏳 🏳️‍🌈 🏴‍☠️ 🇦🇨 🇦🇩 🇦🇪 🇦🇫
+    - 🇦🇬 🇦🇮 🇦🇱 🇦🇲 🇦🇴 🇦🇶 🇦🇷 🇦🇸 🇦🇹
+    - emoji_back_qwerty emoji_prev_65 emoji_next_65 emoji_bksp
+    emoji_p66:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_self_66
+    - country-flag-2 🇦🇺 🇦🇼 🇦🇽 🇦🇿 🇧🇦 🇧🇧 🇧🇩 🇧🇪
+    - 🇧🇫 🇧🇬 🇧🇭 🇧🇮 country-flag-backwards 🇧🇯 🇧🇱 🇧🇲 🇧🇳
+    - 🇧🇴 country-flag-3 🇧🇶 🇧🇷 🇧🇸 🇧🇹 🇧🇻 🇧🇼 🇧🇾
+    - emoji_back_qwerty emoji_prev_66 emoji_next_66 emoji_bksp
+    emoji_p67:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_self_67
+    - 🇧🇿 🇨🇦 🇨🇨 🇨🇩 🇨🇫 country-flag-2-backwards 🇨🇬 🇨🇭 🇨🇮
+    - 🇨🇰 🇨🇱 country-flag-4 🇨🇲 🇨🇳 🇨🇴 🇨🇵 🇨🇶 🇨🇷
+    - 🇨🇺 🇨🇻 🇨🇼 🇨🇽 🇨🇾 🇨🇿 country-flag-3-backwards 🇩🇪 🇩🇬
+    - emoji_back_qwerty emoji_prev_67 emoji_next_67 emoji_bksp
+    emoji_p68:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_self_68
+    - 🇩🇯 🇩🇰 🇩🇲 country-flag-5 🇩🇴 🇩🇿 🇪🇦 🇪🇨 🇪🇪
+    - 🇪🇬 🇪🇭 🇪🇷 🇪🇸 🇪🇹 🇫🇮 country-flag-4-backwards 🇫🇯 🇫🇰
+    - 🇫🇲 🇫🇴 🇫🇷 country-flag-6 🇬🇦 🇬🇧 🇬🇩 🇬🇪 🇬🇫
+    - emoji_back_qwerty emoji_prev_68 emoji_next_68 emoji_bksp
+    emoji_p69:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_self_69
+    - 🇬🇬 🇬🇭 🇬🇮 🇬🇱 🇬🇲 🇬🇳 🇬🇵 country-flag-5-backwards 🇬🇶
+    - 🇬🇷 🇬🇸 🇬🇹 🇬🇺 country-flag-7 🇬🇼 🇬🇾 🇭🇰 🇭🇲
+    - 🇭🇳 🇭🇷 🇭🇹 🇭🇺 🇮🇨 🇮🇩 🇮🇪 🇮🇱 country-flag-6-backwards
+    - emoji_back_qwerty emoji_prev_69 emoji_next_69 emoji_bksp
+    emoji_p70:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_self_70
+    - 🇮🇲 🇮🇳 🇮🇴 🇮🇶 🇮🇷 country-flag-8 🇮🇸 🇮🇹 🇯🇪
+    - 🇯🇲 🇯🇴 🇯🇵 🇰🇪 🇰🇬 🇰🇭 🇰🇮 🇰🇲 🇰🇳
+    - country-flag-7-backwards 🇰🇵 🇰🇷 🇰🇼 🇰🇾 🇰🇿 country-flag-9 🇱🇦 🇱🇧
+    - emoji_back_qwerty emoji_prev_70 emoji_next_70 emoji_bksp
+    emoji_p71:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_self_71
+    - 🇱🇨 🇱🇮 🇱🇰 🇱🇷 🇱🇸 🇱🇹 🇱🇺 🇱🇻 🇱🇾
+    - 🇲🇦 country-flag-8-backwards 🇲🇨 🇲🇩 🇲🇪 🇲🇫 🇲🇬 country-flag-10 🇲🇭
+    - 🇲🇰 🇲🇱 🇲🇲 🇲🇳 🇲🇴 🇲🇵 🇲🇶 🇲🇷 🇲🇸
+    - emoji_back_qwerty emoji_prev_71 emoji_next_71 emoji_bksp
+    emoji_p72:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_self_72
+    - 🇲🇹 🇲🇺 country-flag-9-backwards 🇲🇻 🇲🇼 🇲🇽 🇲🇾 🇲🇿 country-flag-11
+    - 🇳🇦 🇳🇨 🇳🇪 🇳🇫 🇳🇬 🇳🇮 🇳🇱 🇳🇴 🇳🇵
+    - 🇳🇷 🇳🇺 🇳🇿 country-flag-10-backwards 🇴🇲 🇵🇦 🇵🇪 🇵🇫 🇵🇬
+    - emoji_back_qwerty emoji_prev_72 emoji_next_72 emoji_bksp
+    emoji_p73:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_self_73
+    - country-flag-12 🇵🇭 🇵🇰 🇵🇱 🇵🇲 🇵🇳 🇵🇷 🇵🇸 🇵🇹
+    - 🇵🇼 🇵🇾 🇶🇦 🇷🇪 country-flag-11-backwards 🇷🇴 🇷🇸 🇷🇺 🇷🇼
+    - 🇸🇦 country-flag-13 🇸🇧 🇸🇨 🇸🇩 🇸🇪 🇸🇬 🇸🇭 🇸🇮
+    - emoji_back_qwerty emoji_prev_73 emoji_next_73 emoji_bksp
+    emoji_p74:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_self_74
+    - 🇸🇯 🇸🇰 🇸🇱 🇸🇲 🇸🇳 country-flag-12-backwards 🇸🇴 🇸🇷 🇸🇸
+    - 🇸🇹 🇸🇻 country-flag-14 🇸🇽 🇸🇾 🇸🇿 🇹🇦 🇹🇨 🇹🇩
+    - 🇹🇫 🇹🇬 🇹🇭 🇹🇯 🇹🇰 🇹🇱 country-flag-13-backwards 🇹🇲 🇹🇳
+    - emoji_back_qwerty emoji_prev_74 emoji_next_74 emoji_bksp
+    emoji_p75:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_self_75
+    - 🇹🇴 🇹🇷 🇹🇹 country-flag-15 🇹🇻 🇹🇼 🇹🇿 🇺🇦 🇺🇬
+    - 🇺🇲 🇺🇳 🇺🇸 🇺🇾 🇺🇿 🇻🇦 🇻🇨 country-flag-14-backwards 🇻🇪
+    - 🇻🇬 🇻🇮 🇻🇳 🇻🇺 country-flag-16 🇼🇫 🇼🇸 🇽🇰 🇾🇪
+    - emoji_back_qwerty emoji_prev_75 emoji_next_75 emoji_bksp
+    emoji_p76:
+    - emoji_cat_0 emoji_cat_1 emoji_cat_2 emoji_cat_3 emoji_cat_4 emoji_cat_5 emoji_cat_6 emoji_cat_7 emoji_self_76
+    - 🇾🇹 🇿🇦 🇿🇲 🇿🇼 country-flag-15-backwards 🏴󠁧󠁢󠁳󠁣󠁴󠁿 🏴󠁧󠁢󠁷󠁬󠁳󠁿 emoji_pad emoji_pad
+    - emoji_pad emoji_pad emoji_pad emoji_pad emoji_pad emoji_pad emoji_pad emoji_pad emoji_pad
+    - emoji_pad emoji_pad emoji_pad emoji_pad emoji_pad emoji_pad emoji_pad emoji_pad emoji_pad
+    - emoji_back_qwerty emoji_prev_76 emoji_next_76 emoji_bksp
+
+buttons:
+    Shift_L:
+        action:
+            locking:
+                lock_view: "upper"
+                unlock_view: "base"
+        outline: "altline"
+        label: "⇧"
+    BackSpace:
+        outline: "altline"
+        icon: "edit-clear-symbolic"
+        action: erase
+    # World key: switches to the first page of the flat emoji layout
+    # (emoji_p01 .. emoji_p38). Each page is 9x6 = 54 emojis plus a
+    # navigation row: ⇤ABC | ‹ | page n/N | › | ⌫.
+    world:
+        action: { set_view: "emoji_p01" }
+        outline: "altline"
+        label: "🌐"
+    show_numbers:
+        action: { set_view: "numbers" }
+        outline: "wide"
+        label: "123"
+    show_letters:
+        action: { set_view: "base" }
+        outline: "wide"
+        label: "ABC"
+    show_numbers_from_symbols:
+        action: { set_view: "numbers" }
+        outline: "wide"
+        label: "123"
+    show_symbols:
+        action: { set_view: "symbols" }
+        outline: "wide"
+        label: "*/="
+    show_actions:
+        action: { set_view: "actions" }
+        outline: "wide"
+        label: ">_"
+
+    colon:     { text: ":" }
+    semicolon: { text: ";" }
+    period:    { text: "." }
+    exclam:    { text: "!" }
+    question:  { text: "?" }
+    space:
+        outline: "spaceline"
+        text: " "
+    Return:
+        outline: "wide"
+        keysym: "Return"
+        label: "↵"
+
+    Ctrl:  { modifier: "Control", outline: "small", label: "Ctrl" }
+    Alt:   { modifier: "Alt",     outline: "small", label: "Alt" }
+    Super: { modifier: "Mod4",    outline: "small", label: "Super" }
+
+    Esc:    { keysym: "Escape",    outline: "small", label: "Esc" }
+    Tab:    { keysym: "Tab",       outline: "small", label: "Tab" }
+    Home:   { keysym: "Home",      outline: "small", label: "Home" }
+    End:    { keysym: "End",       outline: "small", label: "End" }
+    Insert: { keysym: "Insert",    outline: "small", label: "Ins" }
+    Delete: { keysym: "Delete",    outline: "small", label: "Del" }
+    PgUp:   { keysym: "Page_Up",   outline: "small", label: "PgUp" }
+    PgDn:   { keysym: "Page_Down", outline: "small", label: "PgDn" }
+    "←":    { keysym: "Left",  outline: "small", label: "←" }
+    "→":    { keysym: "Right", outline: "small", label: "→" }
+    "↑":    { keysym: "Up",    outline: "small", label: "↑" }
+    "↓":    { keysym: "Down",  outline: "small", label: "↓" }
+
+    F1:  { outline: "action", keysym: "F1",  label: "F1" }
+    F2:  { outline: "action", keysym: "F2",  label: "F2" }
+    F3:  { outline: "action", keysym: "F3",  label: "F3" }
+    F4:  { outline: "action", keysym: "F4",  label: "F4" }
+    F5:  { outline: "action", keysym: "F5",  label: "F5" }
+    F6:  { outline: "action", keysym: "F6",  label: "F6" }
+    F7:  { outline: "action", keysym: "F7",  label: "F7" }
+    F8:  { outline: "action", keysym: "F8",  label: "F8" }
+    F9:  { outline: "action", keysym: "F9",  label: "F9" }
+    F10: { outline: "action", keysym: "F10", label: "F10" }
+    F11: { outline: "action", keysym: "F11", label: "F11" }
+    F12: { outline: "action", keysym: "F12", label: "F12" }
+    😀:
+      text: 😀
+      outline: emoji_default
+    😃:
+      text: 😃
+      outline: emoji_default
+    😄:
+      text: 😄
+      outline: emoji_default
+    😁:
+      text: 😁
+      outline: emoji_default
+    😆:
+      text: 😆
+      outline: emoji_default
+    😅:
+      text: 😅
+      outline: emoji_default
+    🤣:
+      text: 🤣
+      outline: emoji_default
+    😂:
+      text: 😂
+      outline: emoji_default
+    🙂:
+      text: 🙂
+      outline: emoji_default
+    🙃:
+      text: 🙃
+      outline: emoji_default
+    🫠:
+      text: 🫠
+      outline: emoji_default
+    😉:
+      text: 😉
+      outline: emoji_default
+    😊:
+      text: 😊
+      outline: emoji_default
+    😇:
+      text: 😇
+      outline: emoji_default
+    🥰:
+      text: 🥰
+      outline: emoji_default
+    😍:
+      text: 😍
+      outline: emoji_default
+    🤩:
+      text: 🤩
+      outline: emoji_default
+    😘:
+      text: 😘
+      outline: emoji_default
+    😗:
+      text: 😗
+      outline: emoji_default
+    ☺:
+      text: ☺
+      outline: emoji_default
+    😚:
+      text: 😚
+      outline: emoji_default
+    😙:
+      text: 😙
+      outline: emoji_default
+    🥲:
+      text: 🥲
+      outline: emoji_default
+    😋:
+      text: 😋
+      outline: emoji_default
+    😛:
+      text: 😛
+      outline: emoji_default
+    😜:
+      text: 😜
+      outline: emoji_default
+    🤪:
+      text: 🤪
+      outline: emoji_default
+    😝:
+      text: 😝
+      outline: emoji_default
+    🤑:
+      text: 🤑
+      outline: emoji_default
+    🤗:
+      text: 🤗
+      outline: emoji_default
+    🤭:
+      text: 🤭
+      outline: emoji_default
+    🫢:
+      text: 🫢
+      outline: emoji_default
+    🫣:
+      text: 🫣
+      outline: emoji_default
+    🤫:
+      text: 🤫
+      outline: emoji_default
+    🤔:
+      text: 🤔
+      outline: emoji_default
+    🫡:
+      text: 🫡
+      outline: emoji_default
+    🤐:
+      text: 🤐
+      outline: emoji_default
+    🤨:
+      text: 🤨
+      outline: emoji_default
+    😐:
+      text: 😐
+      outline: emoji_default
+    😑:
+      text: 😑
+      outline: emoji_default
+    😶:
+      text: 😶
+      outline: emoji_default
+    🫥:
+      text: 🫥
+      outline: emoji_default
+    😶‍🌫️:
+      text: 😶‍🌫️
+      outline: emoji_default
+    😏:
+      text: 😏
+      outline: emoji_default
+    😒:
+      text: 😒
+      outline: emoji_default
+    🙄:
+      text: 🙄
+      outline: emoji_default
+    😬:
+      text: 😬
+      outline: emoji_default
+    😮‍💨:
+      text: 😮‍💨
+      outline: emoji_default
+    🤥:
+      text: 🤥
+      outline: emoji_default
+    🫨:
+      text: 🫨
+      outline: emoji_default
+    🙂‍↔️:
+      text: 🙂‍↔️
+      outline: emoji_default
+    🙂‍↕️:
+      text: 🙂‍↕️
+      outline: emoji_default
+    😌:
+      text: 😌
+      outline: emoji_default
+    😔:
+      text: 😔
+      outline: emoji_default
+    😪:
+      text: 😪
+      outline: emoji_default
+    🤤:
+      text: 🤤
+      outline: emoji_default
+    😴:
+      text: 😴
+      outline: emoji_default
+    🫩:
+      text: 🫩
+      outline: emoji_default
+    😷:
+      text: 😷
+      outline: emoji_default
+    🤒:
+      text: 🤒
+      outline: emoji_default
+    🤕:
+      text: 🤕
+      outline: emoji_default
+    🤢:
+      text: 🤢
+      outline: emoji_default
+    🤮:
+      text: 🤮
+      outline: emoji_default
+    🤧:
+      text: 🤧
+      outline: emoji_default
+    🥵:
+      text: 🥵
+      outline: emoji_default
+    🥶:
+      text: 🥶
+      outline: emoji_default
+    🥴:
+      text: 🥴
+      outline: emoji_default
+    😵:
+      text: 😵
+      outline: emoji_default
+    😵‍💫:
+      text: 😵‍💫
+      outline: emoji_default
+    🤯:
+      text: 🤯
+      outline: emoji_default
+    🤠:
+      text: 🤠
+      outline: emoji_default
+    🥳:
+      text: 🥳
+      outline: emoji_default
+    🥸:
+      text: 🥸
+      outline: emoji_default
+    😎:
+      text: 😎
+      outline: emoji_default
+    🤓:
+      text: 🤓
+      outline: emoji_default
+    🧐:
+      text: 🧐
+      outline: emoji_default
+    😕:
+      text: 😕
+      outline: emoji_default
+    🫤:
+      text: 🫤
+      outline: emoji_default
+    😟:
+      text: 😟
+      outline: emoji_default
+    🙁:
+      text: 🙁
+      outline: emoji_default
+    ☹:
+      text: ☹
+      outline: emoji_default
+    😮:
+      text: 😮
+      outline: emoji_default
+    😯:
+      text: 😯
+      outline: emoji_default
+    😲:
+      text: 😲
+      outline: emoji_default
+    😳:
+      text: 😳
+      outline: emoji_default
+    🥺:
+      text: 🥺
+      outline: emoji_default
+    🥹:
+      text: 🥹
+      outline: emoji_default
+    😦:
+      text: 😦
+      outline: emoji_default
+    😧:
+      text: 😧
+      outline: emoji_default
+    face-concerned-2:
+      text: face-concerned-2
+      outline: emoji_default
+    😨:
+      text: 😨
+      outline: emoji_default
+    😰:
+      text: 😰
+      outline: emoji_default
+    😥:
+      text: 😥
+      outline: emoji_default
+    😢:
+      text: 😢
+      outline: emoji_default
+    😭:
+      text: 😭
+      outline: emoji_default
+    😱:
+      text: 😱
+      outline: emoji_default
+    😖:
+      text: 😖
+      outline: emoji_default
+    😣:
+      text: 😣
+      outline: emoji_default
+    😞:
+      text: 😞
+      outline: emoji_default
+    😓:
+      text: 😓
+      outline: emoji_default
+    😩:
+      text: 😩
+      outline: emoji_default
+    😫:
+      text: 😫
+      outline: emoji_default
+    face-concerned-backwards:
+      text: face-concerned-backwards
+      outline: emoji_default
+    🥱:
+      text: 🥱
+      outline: emoji_default
+    😤:
+      text: 😤
+      outline: emoji_default
+    😡:
+      text: 😡
+      outline: emoji_default
+    😠:
+      text: 😠
+      outline: emoji_default
+    🤬:
+      text: 🤬
+      outline: emoji_default
+    😈:
+      text: 😈
+      outline: emoji_default
+    👿:
+      text: 👿
+      outline: emoji_default
+    💀:
+      text: 💀
+      outline: emoji_default
+    ☠:
+      text: ☠
+      outline: emoji_default
+    💩:
+      text: 💩
+      outline: emoji_default
+    🤡:
+      text: 🤡
+      outline: emoji_default
+    👹:
+      text: 👹
+      outline: emoji_default
+    👺:
+      text: 👺
+      outline: emoji_default
+    👻:
+      text: 👻
+      outline: emoji_default
+    👽:
+      text: 👽
+      outline: emoji_default
+    👾:
+      text: 👾
+      outline: emoji_default
+    🤖:
+      text: 🤖
+      outline: emoji_default
+    😺:
+      text: 😺
+      outline: emoji_default
+    😸:
+      text: 😸
+      outline: emoji_default
+    😹:
+      text: 😹
+      outline: emoji_default
+    😻:
+      text: 😻
+      outline: emoji_default
+    😼:
+      text: 😼
+      outline: emoji_default
+    😽:
+      text: 😽
+      outline: emoji_default
+    🙀:
+      text: 🙀
+      outline: emoji_default
+    😿:
+      text: 😿
+      outline: emoji_default
+    😾:
+      text: 😾
+      outline: emoji_default
+    🙈:
+      text: 🙈
+      outline: emoji_default
+    🙉:
+      text: 🙉
+      outline: emoji_default
+    🙊:
+      text: 🙊
+      outline: emoji_default
+    💌:
+      text: 💌
+      outline: emoji_default
+    💘:
+      text: 💘
+      outline: emoji_default
+    💝:
+      text: 💝
+      outline: emoji_default
+    💖:
+      text: 💖
+      outline: emoji_default
+    💗:
+      text: 💗
+      outline: emoji_default
+    💓:
+      text: 💓
+      outline: emoji_default
+    💞:
+      text: 💞
+      outline: emoji_default
+    💕:
+      text: 💕
+      outline: emoji_default
+    💟:
+      text: 💟
+      outline: emoji_default
+    ❣:
+      text: ❣
+      outline: emoji_default
+    💔:
+      text: 💔
+      outline: emoji_default
+    ❤️‍🔥:
+      text: ❤️‍🔥
+      outline: emoji_default
+    ❤️‍🩹:
+      text: ❤️‍🩹
+      outline: emoji_default
+    heart-2:
+      text: heart-2
+      outline: emoji_default
+    ❤:
+      text: ❤
+      outline: emoji_default
+    🩷:
+      text: 🩷
+      outline: emoji_default
+    🧡:
+      text: 🧡
+      outline: emoji_default
+    💛:
+      text: 💛
+      outline: emoji_default
+    💚:
+      text: 💚
+      outline: emoji_default
+    💙:
+      text: 💙
+      outline: emoji_default
+    🩵:
+      text: 🩵
+      outline: emoji_default
+    💜:
+      text: 💜
+      outline: emoji_default
+    🤎:
+      text: 🤎
+      outline: emoji_default
+    🖤:
+      text: 🖤
+      outline: emoji_default
+    🩶:
+      text: 🩶
+      outline: emoji_default
+    🤍:
+      text: 🤍
+      outline: emoji_default
+    heart-backwards:
+      text: heart-backwards
+      outline: emoji_default
+    💋:
+      text: 💋
+      outline: emoji_default
+    💯:
+      text: 💯
+      outline: emoji_default
+    💢:
+      text: 💢
+      outline: emoji_default
+    💥:
+      text: 💥
+      outline: emoji_default
+    💫:
+      text: 💫
+      outline: emoji_default
+    💦:
+      text: 💦
+      outline: emoji_default
+    💨:
+      text: 💨
+      outline: emoji_default
+    🕳:
+      text: 🕳
+      outline: emoji_default
+    💬:
+      text: 💬
+      outline: emoji_default
+    👁️‍🗨️:
+      text: 👁️‍🗨️
+      outline: emoji_default
+    🗨:
+      text: 🗨
+      outline: emoji_default
+    🗯:
+      text: 🗯
+      outline: emoji_default
+    💭:
+      text: 💭
+      outline: emoji_default
+    💤:
+      text: 💤
+      outline: emoji_default
+    🖐:
+      text: 🖐
+      outline: emoji_default
+    👌:
+      text: 👌
+      outline: emoji_default
+    👈:
+      text: 👈
+      outline: emoji_default
+    👍:
+      text: 👍
+      outline: emoji_default
+    🫶:
+      text: 🫶
+      outline: emoji_default
+    ✍:
+      text: ✍
+      outline: emoji_default
+    👀:
+      text: 👀
+      outline: emoji_default
+    👩:
+      text: 👩
+      outline: emoji_default
+    🙋:
+      text: 🙋
+      outline: emoji_default
+    🧑‍💻:
+      text: 🧑‍💻
+      outline: emoji_default
+    🧚:
+      text: 🧚
+      outline: emoji_default
+    💃:
+      text: 💃
+      outline: emoji_default
+    ⛹️‍♂️:
+      text: ⛹️‍♂️
+      outline: emoji_default
+    🧘:
+      text: 🧘
+      outline: emoji_default
+    👩‍❤️‍👨:
+      text: 👩‍❤️‍👨
+      outline: emoji_default
+    👤:
+      text: 👤
+      outline: emoji_default
+    👋:
+      text: 👋
+      outline: emoji_default
+    🤚:
+      text: 🤚
+      outline: emoji_default
+    ✋:
+      text: ✋
+      outline: emoji_default
+    🖖:
+      text: 🖖
+      outline: emoji_default
+    🫱:
+      text: 🫱
+      outline: emoji_default
+    🫲:
+      text: 🫲
+      outline: emoji_default
+    🫳:
+      text: 🫳
+      outline: emoji_default
+    🫴:
+      text: 🫴
+      outline: emoji_default
+    🫷:
+      text: 🫷
+      outline: emoji_default
+    🫸:
+      text: 🫸
+      outline: emoji_default
+    🤌:
+      text: 🤌
+      outline: emoji_default
+    🤏:
+      text: 🤏
+      outline: emoji_default
+    ✌:
+      text: ✌
+      outline: emoji_default
+    🤞:
+      text: 🤞
+      outline: emoji_default
+    🫰:
+      text: 🫰
+      outline: emoji_default
+    🤟:
+      text: 🤟
+      outline: emoji_default
+    🤘:
+      text: 🤘
+      outline: emoji_default
+    🤙:
+      text: 🤙
+      outline: emoji_default
+    👉:
+      text: 👉
+      outline: emoji_default
+    👆:
+      text: 👆
+      outline: emoji_default
+    🖕:
+      text: 🖕
+      outline: emoji_default
+    👇:
+      text: 👇
+      outline: emoji_default
+    ☝:
+      text: ☝
+      outline: emoji_default
+    🫵:
+      text: 🫵
+      outline: emoji_default
+    👎:
+      text: 👎
+      outline: emoji_default
+    ✊:
+      text: ✊
+      outline: emoji_default
+    👊:
+      text: 👊
+      outline: emoji_default
+    🤛:
+      text: 🤛
+      outline: emoji_default
+    🤜:
+      text: 🤜
+      outline: emoji_default
+    👏:
+      text: 👏
+      outline: emoji_default
+    🙌:
+      text: 🙌
+      outline: emoji_default
+    👐:
+      text: 👐
+      outline: emoji_default
+    🤲:
+      text: 🤲
+      outline: emoji_default
+    🤝:
+      text: 🤝
+      outline: emoji_default
+    🙏:
+      text: 🙏
+      outline: emoji_default
+    💅:
+      text: 💅
+      outline: emoji_default
+    🤳:
+      text: 🤳
+      outline: emoji_default
+    💪:
+      text: 💪
+      outline: emoji_default
+    🦾:
+      text: 🦾
+      outline: emoji_default
+    🦿:
+      text: 🦿
+      outline: emoji_default
+    🦵:
+      text: 🦵
+      outline: emoji_default
+    🦶:
+      text: 🦶
+      outline: emoji_default
+    👂:
+      text: 👂
+      outline: emoji_default
+    🦻:
+      text: 🦻
+      outline: emoji_default
+    👃:
+      text: 👃
+      outline: emoji_default
+    🧠:
+      text: 🧠
+      outline: emoji_default
+    🫀:
+      text: 🫀
+      outline: emoji_default
+    🫁:
+      text: 🫁
+      outline: emoji_default
+    🦷:
+      text: 🦷
+      outline: emoji_default
+    🦴:
+      text: 🦴
+      outline: emoji_default
+    👁:
+      text: 👁
+      outline: emoji_default
+    👅:
+      text: 👅
+      outline: emoji_default
+    👄:
+      text: 👄
+      outline: emoji_default
+    🫦:
+      text: 🫦
+      outline: emoji_default
+    👶:
+      text: 👶
+      outline: emoji_default
+    🧒:
+      text: 🧒
+      outline: emoji_default
+    👦:
+      text: 👦
+      outline: emoji_default
+    👧:
+      text: 👧
+      outline: emoji_default
+    🧑:
+      text: 🧑
+      outline: emoji_default
+    👱:
+      text: 👱
+      outline: emoji_default
+    👨:
+      text: 👨
+      outline: emoji_default
+    🧔:
+      text: 🧔
+      outline: emoji_default
+    🧔‍♂️:
+      text: 🧔‍♂️
+      outline: emoji_default
+    🧔‍♀️:
+      text: 🧔‍♀️
+      outline: emoji_default
+    👨‍🦰:
+      text: 👨‍🦰
+      outline: emoji_default
+    👨‍🦱:
+      text: 👨‍🦱
+      outline: emoji_default
+    👨‍🦳:
+      text: 👨‍🦳
+      outline: emoji_default
+    person-2:
+      text: person-2
+      outline: emoji_default
+    👨‍🦲:
+      text: 👨‍🦲
+      outline: emoji_default
+    👩‍🦰:
+      text: 👩‍🦰
+      outline: emoji_default
+    🧑‍🦰:
+      text: 🧑‍🦰
+      outline: emoji_default
+    👩‍🦱:
+      text: 👩‍🦱
+      outline: emoji_default
+    🧑‍🦱:
+      text: 🧑‍🦱
+      outline: emoji_default
+    👩‍🦳:
+      text: 👩‍🦳
+      outline: emoji_default
+    🧑‍🦳:
+      text: 🧑‍🦳
+      outline: emoji_default
+    👩‍🦲:
+      text: 👩‍🦲
+      outline: emoji_default
+    🧑‍🦲:
+      text: 🧑‍🦲
+      outline: emoji_default
+    👱‍♀️:
+      text: 👱‍♀️
+      outline: emoji_default
+    👱‍♂️:
+      text: 👱‍♂️
+      outline: emoji_default
+    person-backwards:
+      text: person-backwards
+      outline: emoji_default
+    🧓:
+      text: 🧓
+      outline: emoji_default
+    👴:
+      text: 👴
+      outline: emoji_default
+    👵:
+      text: 👵
+      outline: emoji_default
+    🙍:
+      text: 🙍
+      outline: emoji_default
+    🙍‍♂️:
+      text: 🙍‍♂️
+      outline: emoji_default
+    🙍‍♀️:
+      text: 🙍‍♀️
+      outline: emoji_default
+    🙎:
+      text: 🙎
+      outline: emoji_default
+    🙎‍♂️:
+      text: 🙎‍♂️
+      outline: emoji_default
+    🙎‍♀️:
+      text: 🙎‍♀️
+      outline: emoji_default
+    🙅:
+      text: 🙅
+      outline: emoji_default
+    🙅‍♂️:
+      text: 🙅‍♂️
+      outline: emoji_default
+    🙅‍♀️:
+      text: 🙅‍♀️
+      outline: emoji_default
+    🙆:
+      text: 🙆
+      outline: emoji_default
+    🙆‍♂️:
+      text: 🙆‍♂️
+      outline: emoji_default
+    🙆‍♀️:
+      text: 🙆‍♀️
+      outline: emoji_default
+    💁:
+      text: 💁
+      outline: emoji_default
+    person-gesture-2:
+      text: person-gesture-2
+      outline: emoji_default
+    💁‍♂️:
+      text: 💁‍♂️
+      outline: emoji_default
+    💁‍♀️:
+      text: 💁‍♀️
+      outline: emoji_default
+    🙋‍♂️:
+      text: 🙋‍♂️
+      outline: emoji_default
+    🙋‍♀️:
+      text: 🙋‍♀️
+      outline: emoji_default
+    🧏:
+      text: 🧏
+      outline: emoji_default
+    🧏‍♂️:
+      text: 🧏‍♂️
+      outline: emoji_default
+    🧏‍♀️:
+      text: 🧏‍♀️
+      outline: emoji_default
+    🙇:
+      text: 🙇
+      outline: emoji_default
+    🙇‍♂️:
+      text: 🙇‍♂️
+      outline: emoji_default
+    🙇‍♀️:
+      text: 🙇‍♀️
+      outline: emoji_default
+    🤦:
+      text: 🤦
+      outline: emoji_default
+    person-gesture-backwards:
+      text: person-gesture-backwards
+      outline: emoji_default
+    🤦‍♂️:
+      text: 🤦‍♂️
+      outline: emoji_default
+    🤦‍♀️:
+      text: 🤦‍♀️
+      outline: emoji_default
+    🤷:
+      text: 🤷
+      outline: emoji_default
+    🤷‍♂️:
+      text: 🤷‍♂️
+      outline: emoji_default
+    🤷‍♀️:
+      text: 🤷‍♀️
+      outline: emoji_default
+    🧑‍⚕️:
+      text: 🧑‍⚕️
+      outline: emoji_default
+    👨‍⚕️:
+      text: 👨‍⚕️
+      outline: emoji_default
+    👩‍⚕️:
+      text: 👩‍⚕️
+      outline: emoji_default
+    🧑‍🎓:
+      text: 🧑‍🎓
+      outline: emoji_default
+    👨‍🎓:
+      text: 👨‍🎓
+      outline: emoji_default
+    👩‍🎓:
+      text: 👩‍🎓
+      outline: emoji_default
+    🧑‍🏫:
+      text: 🧑‍🏫
+      outline: emoji_default
+    👨‍🏫:
+      text: 👨‍🏫
+      outline: emoji_default
+    👩‍🏫:
+      text: 👩‍🏫
+      outline: emoji_default
+    🧑‍⚖️:
+      text: 🧑‍⚖️
+      outline: emoji_default
+    👨‍⚖️:
+      text: 👨‍⚖️
+      outline: emoji_default
+    👩‍⚖️:
+      text: 👩‍⚖️
+      outline: emoji_default
+    🧑‍🌾:
+      text: 🧑‍🌾
+      outline: emoji_default
+    person-role-2:
+      text: person-role-2
+      outline: emoji_default
+    👨‍🌾:
+      text: 👨‍🌾
+      outline: emoji_default
+    👩‍🌾:
+      text: 👩‍🌾
+      outline: emoji_default
+    🧑‍🍳:
+      text: 🧑‍🍳
+      outline: emoji_default
+    👨‍🍳:
+      text: 👨‍🍳
+      outline: emoji_default
+    👩‍🍳:
+      text: 👩‍🍳
+      outline: emoji_default
+    🧑‍🔧:
+      text: 🧑‍🔧
+      outline: emoji_default
+    👨‍🔧:
+      text: 👨‍🔧
+      outline: emoji_default
+    👩‍🔧:
+      text: 👩‍🔧
+      outline: emoji_default
+    🧑‍🏭:
+      text: 🧑‍🏭
+      outline: emoji_default
+    👨‍🏭:
+      text: 👨‍🏭
+      outline: emoji_default
+    👩‍🏭:
+      text: 👩‍🏭
+      outline: emoji_default
+    🧑‍💼:
+      text: 🧑‍💼
+      outline: emoji_default
+    person-role-backwards:
+      text: person-role-backwards
+      outline: emoji_default
+    👨‍💼:
+      text: 👨‍💼
+      outline: emoji_default
+    👩‍💼:
+      text: 👩‍💼
+      outline: emoji_default
+    🧑‍🔬:
+      text: 🧑‍🔬
+      outline: emoji_default
+    👨‍🔬:
+      text: 👨‍🔬
+      outline: emoji_default
+    👩‍🔬:
+      text: 👩‍🔬
+      outline: emoji_default
+    person-role-3:
+      text: person-role-3
+      outline: emoji_default
+    👨‍💻:
+      text: 👨‍💻
+      outline: emoji_default
+    👩‍💻:
+      text: 👩‍💻
+      outline: emoji_default
+    🧑‍🎤:
+      text: 🧑‍🎤
+      outline: emoji_default
+    👨‍🎤:
+      text: 👨‍🎤
+      outline: emoji_default
+    👩‍🎤:
+      text: 👩‍🎤
+      outline: emoji_default
+    🧑‍🎨:
+      text: 🧑‍🎨
+      outline: emoji_default
+    👨‍🎨:
+      text: 👨‍🎨
+      outline: emoji_default
+    👩‍🎨:
+      text: 👩‍🎨
+      outline: emoji_default
+    🧑‍✈️:
+      text: 🧑‍✈️
+      outline: emoji_default
+    👨‍✈️:
+      text: 👨‍✈️
+      outline: emoji_default
+    👩‍✈️:
+      text: 👩‍✈️
+      outline: emoji_default
+    person-role-2-backwards:
+      text: person-role-2-backwards
+      outline: emoji_default
+    🧑‍🚀:
+      text: 🧑‍🚀
+      outline: emoji_default
+    👨‍🚀:
+      text: 👨‍🚀
+      outline: emoji_default
+    👩‍🚀:
+      text: 👩‍🚀
+      outline: emoji_default
+    🧑‍🚒:
+      text: 🧑‍🚒
+      outline: emoji_default
+    👨‍🚒:
+      text: 👨‍🚒
+      outline: emoji_default
+    person-role-4:
+      text: person-role-4
+      outline: emoji_default
+    👩‍🚒:
+      text: 👩‍🚒
+      outline: emoji_default
+    👮:
+      text: 👮
+      outline: emoji_default
+    👮‍♂️:
+      text: 👮‍♂️
+      outline: emoji_default
+    👮‍♀️:
+      text: 👮‍♀️
+      outline: emoji_default
+    🕵:
+      text: 🕵
+      outline: emoji_default
+    🕵️‍♂️:
+      text: 🕵️‍♂️
+      outline: emoji_default
+    🕵️‍♀️:
+      text: 🕵️‍♀️
+      outline: emoji_default
+    💂:
+      text: 💂
+      outline: emoji_default
+    💂‍♂️:
+      text: 💂‍♂️
+      outline: emoji_default
+    💂‍♀️:
+      text: 💂‍♀️
+      outline: emoji_default
+    🥷:
+      text: 🥷
+      outline: emoji_default
+    👷:
+      text: 👷
+      outline: emoji_default
+    person-role-3-backwards:
+      text: person-role-3-backwards
+      outline: emoji_default
+    👷‍♂️:
+      text: 👷‍♂️
+      outline: emoji_default
+    👷‍♀️:
+      text: 👷‍♀️
+      outline: emoji_default
+    🫅:
+      text: 🫅
+      outline: emoji_default
+    🤴:
+      text: 🤴
+      outline: emoji_default
+    👸:
+      text: 👸
+      outline: emoji_default
+    person-role-5:
+      text: person-role-5
+      outline: emoji_default
+    👳:
+      text: 👳
+      outline: emoji_default
+    👳‍♂️:
+      text: 👳‍♂️
+      outline: emoji_default
+    👳‍♀️:
+      text: 👳‍♀️
+      outline: emoji_default
+    👲:
+      text: 👲
+      outline: emoji_default
+    🧕:
+      text: 🧕
+      outline: emoji_default
+    🤵:
+      text: 🤵
+      outline: emoji_default
+    🤵‍♂️:
+      text: 🤵‍♂️
+      outline: emoji_default
+    🤵‍♀️:
+      text: 🤵‍♀️
+      outline: emoji_default
+    👰:
+      text: 👰
+      outline: emoji_default
+    👰‍♂️:
+      text: 👰‍♂️
+      outline: emoji_default
+    👰‍♀️:
+      text: 👰‍♀️
+      outline: emoji_default
+    🤰:
+      text: 🤰
+      outline: emoji_default
+    person-role-4-backwards:
+      text: person-role-4-backwards
+      outline: emoji_default
+    🫃:
+      text: 🫃
+      outline: emoji_default
+    🫄:
+      text: 🫄
+      outline: emoji_default
+    🤱:
+      text: 🤱
+      outline: emoji_default
+    👩‍🍼:
+      text: 👩‍🍼
+      outline: emoji_default
+    👨‍🍼:
+      text: 👨‍🍼
+      outline: emoji_default
+    🧑‍🍼:
+      text: 🧑‍🍼
+      outline: emoji_default
+    👼:
+      text: 👼
+      outline: emoji_default
+    🎅:
+      text: 🎅
+      outline: emoji_default
+    🤶:
+      text: 🤶
+      outline: emoji_default
+    🧑‍🎄:
+      text: 🧑‍🎄
+      outline: emoji_default
+    🦸:
+      text: 🦸
+      outline: emoji_default
+    🦸‍♂️:
+      text: 🦸‍♂️
+      outline: emoji_default
+    🦸‍♀️:
+      text: 🦸‍♀️
+      outline: emoji_default
+    🦹:
+      text: 🦹
+      outline: emoji_default
+    🦹‍♂️:
+      text: 🦹‍♂️
+      outline: emoji_default
+    🦹‍♀️:
+      text: 🦹‍♀️
+      outline: emoji_default
+    🧙:
+      text: 🧙
+      outline: emoji_default
+    🧙‍♂️:
+      text: 🧙‍♂️
+      outline: emoji_default
+    🧙‍♀️:
+      text: 🧙‍♀️
+      outline: emoji_default
+    person-fantasy-2:
+      text: person-fantasy-2
+      outline: emoji_default
+    🧚‍♂️:
+      text: 🧚‍♂️
+      outline: emoji_default
+    🧚‍♀️:
+      text: 🧚‍♀️
+      outline: emoji_default
+    🧛:
+      text: 🧛
+      outline: emoji_default
+    🧛‍♂️:
+      text: 🧛‍♂️
+      outline: emoji_default
+    🧛‍♀️:
+      text: 🧛‍♀️
+      outline: emoji_default
+    🧜:
+      text: 🧜
+      outline: emoji_default
+    🧜‍♂️:
+      text: 🧜‍♂️
+      outline: emoji_default
+    🧜‍♀️:
+      text: 🧜‍♀️
+      outline: emoji_default
+    🧝:
+      text: 🧝
+      outline: emoji_default
+    🧝‍♂️:
+      text: 🧝‍♂️
+      outline: emoji_default
+    🧝‍♀️:
+      text: 🧝‍♀️
+      outline: emoji_default
+    person-fantasy-backwards:
+      text: person-fantasy-backwards
+      outline: emoji_default
+    🧞:
+      text: 🧞
+      outline: emoji_default
+    🧞‍♂️:
+      text: 🧞‍♂️
+      outline: emoji_default
+    🧞‍♀️:
+      text: 🧞‍♀️
+      outline: emoji_default
+    🧟:
+      text: 🧟
+      outline: emoji_default
+    🧟‍♂️:
+      text: 🧟‍♂️
+      outline: emoji_default
+    🧟‍♀️:
+      text: 🧟‍♀️
+      outline: emoji_default
+    🧌:
+      text: 🧌
+      outline: emoji_default
+    💆:
+      text: 💆
+      outline: emoji_default
+    💆‍♂️:
+      text: 💆‍♂️
+      outline: emoji_default
+    💆‍♀️:
+      text: 💆‍♀️
+      outline: emoji_default
+    💇:
+      text: 💇
+      outline: emoji_default
+    💇‍♂️:
+      text: 💇‍♂️
+      outline: emoji_default
+    💇‍♀️:
+      text: 💇‍♀️
+      outline: emoji_default
+    🚶:
+      text: 🚶
+      outline: emoji_default
+    🚶‍♂️:
+      text: 🚶‍♂️
+      outline: emoji_default
+    🚶‍♀️:
+      text: 🚶‍♀️
+      outline: emoji_default
+    🚶‍➡️:
+      text: 🚶‍➡️
+      outline: emoji_default
+    🚶‍♀️‍➡️:
+      text: 🚶‍♀️‍➡️
+      outline: emoji_default
+    🚶‍♂️‍➡️:
+      text: 🚶‍♂️‍➡️
+      outline: emoji_default
+    🧍:
+      text: 🧍
+      outline: emoji_default
+    person-activity-2:
+      text: person-activity-2
+      outline: emoji_default
+    🧍‍♂️:
+      text: 🧍‍♂️
+      outline: emoji_default
+    🧍‍♀️:
+      text: 🧍‍♀️
+      outline: emoji_default
+    🧎:
+      text: 🧎
+      outline: emoji_default
+    🧎‍♂️:
+      text: 🧎‍♂️
+      outline: emoji_default
+    🧎‍♀️:
+      text: 🧎‍♀️
+      outline: emoji_default
+    🧎‍➡️:
+      text: 🧎‍➡️
+      outline: emoji_default
+    🧎‍♀️‍➡️:
+      text: 🧎‍♀️‍➡️
+      outline: emoji_default
+    🧎‍♂️‍➡️:
+      text: 🧎‍♂️‍➡️
+      outline: emoji_default
+    🧑‍🦯:
+      text: 🧑‍🦯
+      outline: emoji_default
+    🧑‍🦯‍➡️:
+      text: 🧑‍🦯‍➡️
+      outline: emoji_default
+    👨‍🦯:
+      text: 👨‍🦯
+      outline: emoji_default
+    👨‍🦯‍➡️:
+      text: 👨‍🦯‍➡️
+      outline: emoji_default
+    person-activity-backwards:
+      text: person-activity-backwards
+      outline: emoji_default
+    👩‍🦯:
+      text: 👩‍🦯
+      outline: emoji_default
+    👩‍🦯‍➡️:
+      text: 👩‍🦯‍➡️
+      outline: emoji_default
+    🧑‍🦼:
+      text: 🧑‍🦼
+      outline: emoji_default
+    🧑‍🦼‍➡️:
+      text: 🧑‍🦼‍➡️
+      outline: emoji_default
+    👨‍🦼:
+      text: 👨‍🦼
+      outline: emoji_default
+    person-activity-3:
+      text: person-activity-3
+      outline: emoji_default
+    👨‍🦼‍➡️:
+      text: 👨‍🦼‍➡️
+      outline: emoji_default
+    👩‍🦼:
+      text: 👩‍🦼
+      outline: emoji_default
+    👩‍🦼‍➡️:
+      text: 👩‍🦼‍➡️
+      outline: emoji_default
+    🧑‍🦽:
+      text: 🧑‍🦽
+      outline: emoji_default
+    🧑‍🦽‍➡️:
+      text: 🧑‍🦽‍➡️
+      outline: emoji_default
+    👨‍🦽:
+      text: 👨‍🦽
+      outline: emoji_default
+    👨‍🦽‍➡️:
+      text: 👨‍🦽‍➡️
+      outline: emoji_default
+    👩‍🦽:
+      text: 👩‍🦽
+      outline: emoji_default
+    👩‍🦽‍➡️:
+      text: 👩‍🦽‍➡️
+      outline: emoji_default
+    🏃:
+      text: 🏃
+      outline: emoji_default
+    🏃‍♂️:
+      text: 🏃‍♂️
+      outline: emoji_default
+    🏃‍♀️:
+      text: 🏃‍♀️
+      outline: emoji_default
+    person-activity-2-backwards:
+      text: person-activity-2-backwards
+      outline: emoji_default
+    🏃‍➡️:
+      text: 🏃‍➡️
+      outline: emoji_default
+    🏃‍♀️‍➡️:
+      text: 🏃‍♀️‍➡️
+      outline: emoji_default
+    🏃‍♂️‍➡️:
+      text: 🏃‍♂️‍➡️
+      outline: emoji_default
+    🕺:
+      text: 🕺
+      outline: emoji_default
+    person-activity-4:
+      text: person-activity-4
+      outline: emoji_default
+    🕴:
+      text: 🕴
+      outline: emoji_default
+    👯:
+      text: 👯
+      outline: emoji_default
+    👯‍♂️:
+      text: 👯‍♂️
+      outline: emoji_default
+    👯‍♀️:
+      text: 👯‍♀️
+      outline: emoji_default
+    🧖:
+      text: 🧖
+      outline: emoji_default
+    🧖‍♂️:
+      text: 🧖‍♂️
+      outline: emoji_default
+    🧖‍♀️:
+      text: 🧖‍♀️
+      outline: emoji_default
+    🧗:
+      text: 🧗
+      outline: emoji_default
+    🧗‍♂️:
+      text: 🧗‍♂️
+      outline: emoji_default
+    🧗‍♀️:
+      text: 🧗‍♀️
+      outline: emoji_default
+    person-activity-3-backwards:
+      text: person-activity-3-backwards
+      outline: emoji_default
+    🤺:
+      text: 🤺
+      outline: emoji_default
+    🏇:
+      text: 🏇
+      outline: emoji_default
+    ⛷:
+      text: ⛷
+      outline: emoji_default
+    🏂:
+      text: 🏂
+      outline: emoji_default
+    🏌:
+      text: 🏌
+      outline: emoji_default
+    🏌️‍♂️:
+      text: 🏌️‍♂️
+      outline: emoji_default
+    🏌️‍♀️:
+      text: 🏌️‍♀️
+      outline: emoji_default
+    🏄:
+      text: 🏄
+      outline: emoji_default
+    🏄‍♂️:
+      text: 🏄‍♂️
+      outline: emoji_default
+    🏄‍♀️:
+      text: 🏄‍♀️
+      outline: emoji_default
+    🚣:
+      text: 🚣
+      outline: emoji_default
+    🚣‍♂️:
+      text: 🚣‍♂️
+      outline: emoji_default
+    🚣‍♀️:
+      text: 🚣‍♀️
+      outline: emoji_default
+    person-sport-2:
+      text: person-sport-2
+      outline: emoji_default
+    🏊:
+      text: 🏊
+      outline: emoji_default
+    🏊‍♂️:
+      text: 🏊‍♂️
+      outline: emoji_default
+    🏊‍♀️:
+      text: 🏊‍♀️
+      outline: emoji_default
+    ⛹:
+      text: ⛹
+      outline: emoji_default
+    ⛹️‍♀️:
+      text: ⛹️‍♀️
+      outline: emoji_default
+    🏋:
+      text: 🏋
+      outline: emoji_default
+    🏋️‍♂️:
+      text: 🏋️‍♂️
+      outline: emoji_default
+    🏋️‍♀️:
+      text: 🏋️‍♀️
+      outline: emoji_default
+    🚴:
+      text: 🚴
+      outline: emoji_default
+    🚴‍♂️:
+      text: 🚴‍♂️
+      outline: emoji_default
+    🚴‍♀️:
+      text: 🚴‍♀️
+      outline: emoji_default
+    person-sport-backwards:
+      text: person-sport-backwards
+      outline: emoji_default
+    🚵:
+      text: 🚵
+      outline: emoji_default
+    🚵‍♂️:
+      text: 🚵‍♂️
+      outline: emoji_default
+    🚵‍♀️:
+      text: 🚵‍♀️
+      outline: emoji_default
+    🤸:
+      text: 🤸
+      outline: emoji_default
+    🤸‍♂️:
+      text: 🤸‍♂️
+      outline: emoji_default
+    person-sport-3:
+      text: person-sport-3
+      outline: emoji_default
+    🤸‍♀️:
+      text: 🤸‍♀️
+      outline: emoji_default
+    🤼:
+      text: 🤼
+      outline: emoji_default
+    🤼‍♂️:
+      text: 🤼‍♂️
+      outline: emoji_default
+    🤼‍♀️:
+      text: 🤼‍♀️
+      outline: emoji_default
+    🤽:
+      text: 🤽
+      outline: emoji_default
+    🤽‍♂️:
+      text: 🤽‍♂️
+      outline: emoji_default
+    🤽‍♀️:
+      text: 🤽‍♀️
+      outline: emoji_default
+    🤾:
+      text: 🤾
+      outline: emoji_default
+    🤾‍♂️:
+      text: 🤾‍♂️
+      outline: emoji_default
+    🤾‍♀️:
+      text: 🤾‍♀️
+      outline: emoji_default
+    🤹:
+      text: 🤹
+      outline: emoji_default
+    🤹‍♂️:
+      text: 🤹‍♂️
+      outline: emoji_default
+    person-sport-2-backwards:
+      text: person-sport-2-backwards
+      outline: emoji_default
+    🤹‍♀️:
+      text: 🤹‍♀️
+      outline: emoji_default
+    🧘‍♂️:
+      text: 🧘‍♂️
+      outline: emoji_default
+    🧘‍♀️:
+      text: 🧘‍♀️
+      outline: emoji_default
+    🛀:
+      text: 🛀
+      outline: emoji_default
+    🛌:
+      text: 🛌
+      outline: emoji_default
+    🧑‍🤝‍🧑:
+      text: 🧑‍🤝‍🧑
+      outline: emoji_default
+    👭:
+      text: 👭
+      outline: emoji_default
+    👫:
+      text: 👫
+      outline: emoji_default
+    👬:
+      text: 👬
+      outline: emoji_default
+    💏:
+      text: 💏
+      outline: emoji_default
+    👩‍❤️‍💋‍👨:
+      text: 👩‍❤️‍💋‍👨
+      outline: emoji_default
+    👨‍❤️‍💋‍👨:
+      text: 👨‍❤️‍💋‍👨
+      outline: emoji_default
+    👩‍❤️‍💋‍👩:
+      text: 👩‍❤️‍💋‍👩
+      outline: emoji_default
+    💑:
+      text: 💑
+      outline: emoji_default
+    👨‍❤️‍👨:
+      text: 👨‍❤️‍👨
+      outline: emoji_default
+    👩‍❤️‍👩:
+      text: 👩‍❤️‍👩
+      outline: emoji_default
+    👨‍👩‍👦:
+      text: 👨‍👩‍👦
+      outline: emoji_default
+    family-2:
+      text: family-2
+      outline: emoji_default
+    👨‍👩‍👧:
+      text: 👨‍👩‍👧
+      outline: emoji_default
+    👨‍👩‍👧‍👦:
+      text: 👨‍👩‍👧‍👦
+      outline: emoji_default
+    👨‍👩‍👦‍👦:
+      text: 👨‍👩‍👦‍👦
+      outline: emoji_default
+    👨‍👩‍👧‍👧:
+      text: 👨‍👩‍👧‍👧
+      outline: emoji_default
+    👨‍👨‍👦:
+      text: 👨‍👨‍👦
+      outline: emoji_default
+    👨‍👨‍👧:
+      text: 👨‍👨‍👧
+      outline: emoji_default
+    👨‍👨‍👧‍👦:
+      text: 👨‍👨‍👧‍👦
+      outline: emoji_default
+    👨‍👨‍👦‍👦:
+      text: 👨‍👨‍👦‍👦
+      outline: emoji_default
+    👨‍👨‍👧‍👧:
+      text: 👨‍👨‍👧‍👧
+      outline: emoji_default
+    👩‍👩‍👦:
+      text: 👩‍👩‍👦
+      outline: emoji_default
+    👩‍👩‍👧:
+      text: 👩‍👩‍👧
+      outline: emoji_default
+    👩‍👩‍👧‍👦:
+      text: 👩‍👩‍👧‍👦
+      outline: emoji_default
+    family-backwards:
+      text: family-backwards
+      outline: emoji_default
+    👩‍👩‍👦‍👦:
+      text: 👩‍👩‍👦‍👦
+      outline: emoji_default
+    👩‍👩‍👧‍👧:
+      text: 👩‍👩‍👧‍👧
+      outline: emoji_default
+    👨‍👦:
+      text: 👨‍👦
+      outline: emoji_default
+    👨‍👦‍👦:
+      text: 👨‍👦‍👦
+      outline: emoji_default
+    👨‍👧:
+      text: 👨‍👧
+      outline: emoji_default
+    family-3:
+      text: family-3
+      outline: emoji_default
+    👨‍👧‍👦:
+      text: 👨‍👧‍👦
+      outline: emoji_default
+    👨‍👧‍👧:
+      text: 👨‍👧‍👧
+      outline: emoji_default
+    👩‍👦:
+      text: 👩‍👦
+      outline: emoji_default
+    👩‍👦‍👦:
+      text: 👩‍👦‍👦
+      outline: emoji_default
+    👩‍👧:
+      text: 👩‍👧
+      outline: emoji_default
+    👩‍👧‍👦:
+      text: 👩‍👧‍👦
+      outline: emoji_default
+    👩‍👧‍👧:
+      text: 👩‍👧‍👧
+      outline: emoji_default
+    family-2-backwards:
+      text: family-2-backwards
+      outline: emoji_default
+    🗣:
+      text: 🗣
+      outline: emoji_default
+    👥:
+      text: 👥
+      outline: emoji_default
+    🫂:
+      text: 🫂
+      outline: emoji_default
+    👪:
+      text: 👪
+      outline: emoji_default
+    🧑‍🧑‍🧒:
+      text: 🧑‍🧑‍🧒
+      outline: emoji_default
+    🧑‍🧑‍🧒‍🧒:
+      text: 🧑‍🧑‍🧒‍🧒
+      outline: emoji_default
+    🧑‍🧒:
+      text: 🧑‍🧒
+      outline: emoji_default
+    🧑‍🧒‍🧒:
+      text: 🧑‍🧒‍🧒
+      outline: emoji_default
+    👣:
+      text: 👣
+      outline: emoji_default
+    🫆:
+      text: 🫆
+      outline: emoji_default
+    🏻:
+      text: 🏻
+      outline: emoji_default
+    🏼:
+      text: 🏼
+      outline: emoji_default
+    🏽:
+      text: 🏽
+      outline: emoji_default
+    🏾:
+      text: 🏾
+      outline: emoji_default
+    🏿:
+      text: 🏿
+      outline: emoji_default
+    🦰:
+      text: 🦰
+      outline: emoji_default
+    🦱:
+      text: 🦱
+      outline: emoji_default
+    🦳:
+      text: 🦳
+      outline: emoji_default
+    🦲:
+      text: 🦲
+      outline: emoji_default
+    InfoBar:
+      text: InfoBar
+      outline: emoji_default
+    🐈:
+      text: 🐈
+      outline: emoji_default
+    🐤:
+      text: 🐤
+      outline: emoji_default
+    🐸:
+      text: 🐸
+      outline: emoji_default
+    🦎:
+      text: 🦎
+      outline: emoji_default
+    🐬:
+      text: 🐬
+      outline: emoji_default
+    🦋:
+      text: 🦋
+      outline: emoji_default
+    🌸:
+      text: 🌸
+      outline: emoji_default
+    🌳:
+      text: 🌳
+      outline: emoji_default
+    🐵:
+      text: 🐵
+      outline: emoji_default
+    🐒:
+      text: 🐒
+      outline: emoji_default
+    🦍:
+      text: 🦍
+      outline: emoji_default
+    🦧:
+      text: 🦧
+      outline: emoji_default
+    🐶:
+      text: 🐶
+      outline: emoji_default
+    🐕:
+      text: 🐕
+      outline: emoji_default
+    🦮:
+      text: 🦮
+      outline: emoji_default
+    🐕‍🦺:
+      text: 🐕‍🦺
+      outline: emoji_default
+    🐩:
+      text: 🐩
+      outline: emoji_default
+    🐺:
+      text: 🐺
+      outline: emoji_default
+    🦊:
+      text: 🦊
+      outline: emoji_default
+    🦝:
+      text: 🦝
+      outline: emoji_default
+    🐱:
+      text: 🐱
+      outline: emoji_default
+    animal-mammal-2:
+      text: animal-mammal-2
+      outline: emoji_default
+    🐈‍⬛:
+      text: 🐈‍⬛
+      outline: emoji_default
+    🦁:
+      text: 🦁
+      outline: emoji_default
+    🐯:
+      text: 🐯
+      outline: emoji_default
+    🐅:
+      text: 🐅
+      outline: emoji_default
+    🐆:
+      text: 🐆
+      outline: emoji_default
+    🐴:
+      text: 🐴
+      outline: emoji_default
+    🫎:
+      text: 🫎
+      outline: emoji_default
+    🫏:
+      text: 🫏
+      outline: emoji_default
+    🐎:
+      text: 🐎
+      outline: emoji_default
+    🦄:
+      text: 🦄
+      outline: emoji_default
+    🦓:
+      text: 🦓
+      outline: emoji_default
+    animal-mammal-backwards:
+      text: animal-mammal-backwards
+      outline: emoji_default
+    🦌:
+      text: 🦌
+      outline: emoji_default
+    🦬:
+      text: 🦬
+      outline: emoji_default
+    🐮:
+      text: 🐮
+      outline: emoji_default
+    🐂:
+      text: 🐂
+      outline: emoji_default
+    🐃:
+      text: 🐃
+      outline: emoji_default
+    animal-mammal-3:
+      text: animal-mammal-3
+      outline: emoji_default
+    🐄:
+      text: 🐄
+      outline: emoji_default
+    🐷:
+      text: 🐷
+      outline: emoji_default
+    🐖:
+      text: 🐖
+      outline: emoji_default
+    🐗:
+      text: 🐗
+      outline: emoji_default
+    🐽:
+      text: 🐽
+      outline: emoji_default
+    🐏:
+      text: 🐏
+      outline: emoji_default
+    🐑:
+      text: 🐑
+      outline: emoji_default
+    🐐:
+      text: 🐐
+      outline: emoji_default
+    🐪:
+      text: 🐪
+      outline: emoji_default
+    🐫:
+      text: 🐫
+      outline: emoji_default
+    🦙:
+      text: 🦙
+      outline: emoji_default
+    🦒:
+      text: 🦒
+      outline: emoji_default
+    animal-mammal-2-backwards:
+      text: animal-mammal-2-backwards
+      outline: emoji_default
+    🐘:
+      text: 🐘
+      outline: emoji_default
+    🦣:
+      text: 🦣
+      outline: emoji_default
+    🦏:
+      text: 🦏
+      outline: emoji_default
+    🦛:
+      text: 🦛
+      outline: emoji_default
+    🐭:
+      text: 🐭
+      outline: emoji_default
+    animal-mammal-4:
+      text: animal-mammal-4
+      outline: emoji_default
+    🐁:
+      text: 🐁
+      outline: emoji_default
+    🐀:
+      text: 🐀
+      outline: emoji_default
+    🐹:
+      text: 🐹
+      outline: emoji_default
+    🐰:
+      text: 🐰
+      outline: emoji_default
+    🐇:
+      text: 🐇
+      outline: emoji_default
+    🐿:
+      text: 🐿
+      outline: emoji_default
+    🦫:
+      text: 🦫
+      outline: emoji_default
+    🦔:
+      text: 🦔
+      outline: emoji_default
+    🦇:
+      text: 🦇
+      outline: emoji_default
+    🐻:
+      text: 🐻
+      outline: emoji_default
+    🐻‍❄️:
+      text: 🐻‍❄️
+      outline: emoji_default
+    🐨:
+      text: 🐨
+      outline: emoji_default
+    animal-mammal-3-backwards:
+      text: animal-mammal-3-backwards
+      outline: emoji_default
+    🐼:
+      text: 🐼
+      outline: emoji_default
+    🦥:
+      text: 🦥
+      outline: emoji_default
+    🦦:
+      text: 🦦
+      outline: emoji_default
+    🦨:
+      text: 🦨
+      outline: emoji_default
+    🦘:
+      text: 🦘
+      outline: emoji_default
+    🦡:
+      text: 🦡
+      outline: emoji_default
+    🐾:
+      text: 🐾
+      outline: emoji_default
+    🦃:
+      text: 🦃
+      outline: emoji_default
+    🐔:
+      text: 🐔
+      outline: emoji_default
+    🐓:
+      text: 🐓
+      outline: emoji_default
+    🐣:
+      text: 🐣
+      outline: emoji_default
+    🐥:
+      text: 🐥
+      outline: emoji_default
+    🐦:
+      text: 🐦
+      outline: emoji_default
+    🐧:
+      text: 🐧
+      outline: emoji_default
+    🕊:
+      text: 🕊
+      outline: emoji_default
+    🦅:
+      text: 🦅
+      outline: emoji_default
+    🦆:
+      text: 🦆
+      outline: emoji_default
+    🦢:
+      text: 🦢
+      outline: emoji_default
+    🦉:
+      text: 🦉
+      outline: emoji_default
+    animal-bird-2:
+      text: animal-bird-2
+      outline: emoji_default
+    🦤:
+      text: 🦤
+      outline: emoji_default
+    🪶:
+      text: 🪶
+      outline: emoji_default
+    🦩:
+      text: 🦩
+      outline: emoji_default
+    🦚:
+      text: 🦚
+      outline: emoji_default
+    🦜:
+      text: 🦜
+      outline: emoji_default
+    🪽:
+      text: 🪽
+      outline: emoji_default
+    🐦‍⬛:
+      text: 🐦‍⬛
+      outline: emoji_default
+    🪿:
+      text: 🪿
+      outline: emoji_default
+    🐦‍🔥:
+      text: 🐦‍🔥
+      outline: emoji_default
+    animal-bird-backwards:
+      text: animal-bird-backwards
+      outline: emoji_default
+    🐊:
+      text: 🐊
+      outline: emoji_default
+    🐢:
+      text: 🐢
+      outline: emoji_default
+    🐍:
+      text: 🐍
+      outline: emoji_default
+    🐲:
+      text: 🐲
+      outline: emoji_default
+    🐉:
+      text: 🐉
+      outline: emoji_default
+    🦕:
+      text: 🦕
+      outline: emoji_default
+    🦖:
+      text: 🦖
+      outline: emoji_default
+    🐳:
+      text: 🐳
+      outline: emoji_default
+    🐋:
+      text: 🐋
+      outline: emoji_default
+    🦭:
+      text: 🦭
+      outline: emoji_default
+    🐟:
+      text: 🐟
+      outline: emoji_default
+    🐠:
+      text: 🐠
+      outline: emoji_default
+    🐡:
+      text: 🐡
+      outline: emoji_default
+    🦈:
+      text: 🦈
+      outline: emoji_default
+    🐙:
+      text: 🐙
+      outline: emoji_default
+    🐚:
+      text: 🐚
+      outline: emoji_default
+    🪸:
+      text: 🪸
+      outline: emoji_default
+    🪼:
+      text: 🪼
+      outline: emoji_default
+    🐌:
+      text: 🐌
+      outline: emoji_default
+    🐛:
+      text: 🐛
+      outline: emoji_default
+    🐜:
+      text: 🐜
+      outline: emoji_default
+    🐝:
+      text: 🐝
+      outline: emoji_default
+    🪲:
+      text: 🪲
+      outline: emoji_default
+    🐞:
+      text: 🐞
+      outline: emoji_default
+    🦗:
+      text: 🦗
+      outline: emoji_default
+    🪳:
+      text: 🪳
+      outline: emoji_default
+    🕷:
+      text: 🕷
+      outline: emoji_default
+    🕸:
+      text: 🕸
+      outline: emoji_default
+    🦂:
+      text: 🦂
+      outline: emoji_default
+    🦟:
+      text: 🦟
+      outline: emoji_default
+    🪰:
+      text: 🪰
+      outline: emoji_default
+    🪱:
+      text: 🪱
+      outline: emoji_default
+    🦠:
+      text: 🦠
+      outline: emoji_default
+    💐:
+      text: 💐
+      outline: emoji_default
+    💮:
+      text: 💮
+      outline: emoji_default
+    🪷:
+      text: 🪷
+      outline: emoji_default
+    🏵:
+      text: 🏵
+      outline: emoji_default
+    🌹:
+      text: 🌹
+      outline: emoji_default
+    🥀:
+      text: 🥀
+      outline: emoji_default
+    🌺:
+      text: 🌺
+      outline: emoji_default
+    🌻:
+      text: 🌻
+      outline: emoji_default
+    🌼:
+      text: 🌼
+      outline: emoji_default
+    🌷:
+      text: 🌷
+      outline: emoji_default
+    🪻:
+      text: 🪻
+      outline: emoji_default
+    🌱:
+      text: 🌱
+      outline: emoji_default
+    🪴:
+      text: 🪴
+      outline: emoji_default
+    🌲:
+      text: 🌲
+      outline: emoji_default
+    🌴:
+      text: 🌴
+      outline: emoji_default
+    🌵:
+      text: 🌵
+      outline: emoji_default
+    🌾:
+      text: 🌾
+      outline: emoji_default
+    🌿:
+      text: 🌿
+      outline: emoji_default
+    ☘:
+      text: ☘
+      outline: emoji_default
+    🍀:
+      text: 🍀
+      outline: emoji_default
+    🍁:
+      text: 🍁
+      outline: emoji_default
+    🍂:
+      text: 🍂
+      outline: emoji_default
+    🍃:
+      text: 🍃
+      outline: emoji_default
+    🪹:
+      text: 🪹
+      outline: emoji_default
+    🪺:
+      text: 🪺
+      outline: emoji_default
+    🍄:
+      text: 🍄
+      outline: emoji_default
+    🪾:
+      text: 🪾
+      outline: emoji_default
+    🍒:
+      text: 🍒
+      outline: emoji_default
+    🥕:
+      text: 🥕
+      outline: emoji_default
+    🥐:
+      text: 🥐
+      outline: emoji_default
+    🍱:
+      text: 🍱
+      outline: emoji_default
+    🦐:
+      text: 🦐
+      outline: emoji_default
+    🍰:
+      text: 🍰
+      outline: emoji_default
+    🍵:
+      text: 🍵
+      outline: emoji_default
+    🥄:
+      text: 🥄
+      outline: emoji_default
+    🍇:
+      text: 🍇
+      outline: emoji_default
+    🍈:
+      text: 🍈
+      outline: emoji_default
+    🍉:
+      text: 🍉
+      outline: emoji_default
+    🍊:
+      text: 🍊
+      outline: emoji_default
+    🍋:
+      text: 🍋
+      outline: emoji_default
+    🍋‍🟩:
+      text: 🍋‍🟩
+      outline: emoji_default
+    🍌:
+      text: 🍌
+      outline: emoji_default
+    🍍:
+      text: 🍍
+      outline: emoji_default
+    🥭:
+      text: 🥭
+      outline: emoji_default
+    🍎:
+      text: 🍎
+      outline: emoji_default
+    🍏:
+      text: 🍏
+      outline: emoji_default
+    🍐:
+      text: 🍐
+      outline: emoji_default
+    🍑:
+      text: 🍑
+      outline: emoji_default
+    food-fruit-2:
+      text: food-fruit-2
+      outline: emoji_default
+    🍓:
+      text: 🍓
+      outline: emoji_default
+    🫐:
+      text: 🫐
+      outline: emoji_default
+    🥝:
+      text: 🥝
+      outline: emoji_default
+    🍅:
+      text: 🍅
+      outline: emoji_default
+    🫒:
+      text: 🫒
+      outline: emoji_default
+    🥥:
+      text: 🥥
+      outline: emoji_default
+    food-fruit-backwards:
+      text: food-fruit-backwards
+      outline: emoji_default
+    🥑:
+      text: 🥑
+      outline: emoji_default
+    🍆:
+      text: 🍆
+      outline: emoji_default
+    🥔:
+      text: 🥔
+      outline: emoji_default
+    🌽:
+      text: 🌽
+      outline: emoji_default
+    🌶:
+      text: 🌶
+      outline: emoji_default
+    🫑:
+      text: 🫑
+      outline: emoji_default
+    🥒:
+      text: 🥒
+      outline: emoji_default
+    🥬:
+      text: 🥬
+      outline: emoji_default
+    🥦:
+      text: 🥦
+      outline: emoji_default
+    🧄:
+      text: 🧄
+      outline: emoji_default
+    🧅:
+      text: 🧅
+      outline: emoji_default
+    🥜:
+      text: 🥜
+      outline: emoji_default
+    🫘:
+      text: 🫘
+      outline: emoji_default
+    🌰:
+      text: 🌰
+      outline: emoji_default
+    🫚:
+      text: 🫚
+      outline: emoji_default
+    🫛:
+      text: 🫛
+      outline: emoji_default
+    🍄‍🟫:
+      text: 🍄‍🟫
+      outline: emoji_default
+    🫜:
+      text: 🫜
+      outline: emoji_default
+    🍞:
+      text: 🍞
+      outline: emoji_default
+    🥖:
+      text: 🥖
+      outline: emoji_default
+    🫓:
+      text: 🫓
+      outline: emoji_default
+    🥨:
+      text: 🥨
+      outline: emoji_default
+    🥯:
+      text: 🥯
+      outline: emoji_default
+    🥞:
+      text: 🥞
+      outline: emoji_default
+    🧇:
+      text: 🧇
+      outline: emoji_default
+    🧀:
+      text: 🧀
+      outline: emoji_default
+    🍖:
+      text: 🍖
+      outline: emoji_default
+    🍗:
+      text: 🍗
+      outline: emoji_default
+    🥩:
+      text: 🥩
+      outline: emoji_default
+    🥓:
+      text: 🥓
+      outline: emoji_default
+    food-prepared-2:
+      text: food-prepared-2
+      outline: emoji_default
+    🍔:
+      text: 🍔
+      outline: emoji_default
+    🍟:
+      text: 🍟
+      outline: emoji_default
+    🍕:
+      text: 🍕
+      outline: emoji_default
+    🌭:
+      text: 🌭
+      outline: emoji_default
+    🥪:
+      text: 🥪
+      outline: emoji_default
+    🌮:
+      text: 🌮
+      outline: emoji_default
+    🌯:
+      text: 🌯
+      outline: emoji_default
+    🫔:
+      text: 🫔
+      outline: emoji_default
+    🥙:
+      text: 🥙
+      outline: emoji_default
+    🧆:
+      text: 🧆
+      outline: emoji_default
+    🥚:
+      text: 🥚
+      outline: emoji_default
+    🍳:
+      text: 🍳
+      outline: emoji_default
+    food-prepared-backwards:
+      text: food-prepared-backwards
+      outline: emoji_default
+    🥘:
+      text: 🥘
+      outline: emoji_default
+    🍲:
+      text: 🍲
+      outline: emoji_default
+    🫕:
+      text: 🫕
+      outline: emoji_default
+    🥣:
+      text: 🥣
+      outline: emoji_default
+    🥗:
+      text: 🥗
+      outline: emoji_default
+    🍿:
+      text: 🍿
+      outline: emoji_default
+    🧈:
+      text: 🧈
+      outline: emoji_default
+    🧂:
+      text: 🧂
+      outline: emoji_default
+    🥫:
+      text: 🥫
+      outline: emoji_default
+    🍘:
+      text: 🍘
+      outline: emoji_default
+    🍙:
+      text: 🍙
+      outline: emoji_default
+    🍚:
+      text: 🍚
+      outline: emoji_default
+    🍛:
+      text: 🍛
+      outline: emoji_default
+    🍜:
+      text: 🍜
+      outline: emoji_default
+    🍝:
+      text: 🍝
+      outline: emoji_default
+    🍠:
+      text: 🍠
+      outline: emoji_default
+    🍢:
+      text: 🍢
+      outline: emoji_default
+    🍣:
+      text: 🍣
+      outline: emoji_default
+    🍤:
+      text: 🍤
+      outline: emoji_default
+    🍥:
+      text: 🍥
+      outline: emoji_default
+    🥮:
+      text: 🥮
+      outline: emoji_default
+    🍡:
+      text: 🍡
+      outline: emoji_default
+    🥟:
+      text: 🥟
+      outline: emoji_default
+    🥠:
+      text: 🥠
+      outline: emoji_default
+    🥡:
+      text: 🥡
+      outline: emoji_default
+    🦀:
+      text: 🦀
+      outline: emoji_default
+    🦞:
+      text: 🦞
+      outline: emoji_default
+    🦑:
+      text: 🦑
+      outline: emoji_default
+    🦪:
+      text: 🦪
+      outline: emoji_default
+    🍦:
+      text: 🍦
+      outline: emoji_default
+    🍧:
+      text: 🍧
+      outline: emoji_default
+    🍨:
+      text: 🍨
+      outline: emoji_default
+    🍩:
+      text: 🍩
+      outline: emoji_default
+    🍪:
+      text: 🍪
+      outline: emoji_default
+    🎂:
+      text: 🎂
+      outline: emoji_default
+    🧁:
+      text: 🧁
+      outline: emoji_default
+    🥧:
+      text: 🥧
+      outline: emoji_default
+    🍫:
+      text: 🍫
+      outline: emoji_default
+    🍬:
+      text: 🍬
+      outline: emoji_default
+    🍭:
+      text: 🍭
+      outline: emoji_default
+    🍮:
+      text: 🍮
+      outline: emoji_default
+    🍯:
+      text: 🍯
+      outline: emoji_default
+    🍼:
+      text: 🍼
+      outline: emoji_default
+    🥛:
+      text: 🥛
+      outline: emoji_default
+    ☕:
+      text: ☕
+      outline: emoji_default
+    🫖:
+      text: 🫖
+      outline: emoji_default
+    🍶:
+      text: 🍶
+      outline: emoji_default
+    🍾:
+      text: 🍾
+      outline: emoji_default
+    🍷:
+      text: 🍷
+      outline: emoji_default
+    🍸:
+      text: 🍸
+      outline: emoji_default
+    🍹:
+      text: 🍹
+      outline: emoji_default
+    🍺:
+      text: 🍺
+      outline: emoji_default
+    🍻:
+      text: 🍻
+      outline: emoji_default
+    🥂:
+      text: 🥂
+      outline: emoji_default
+    drink-2:
+      text: drink-2
+      outline: emoji_default
+    🥃:
+      text: 🥃
+      outline: emoji_default
+    🫗:
+      text: 🫗
+      outline: emoji_default
+    🥤:
+      text: 🥤
+      outline: emoji_default
+    🧋:
+      text: 🧋
+      outline: emoji_default
+    🧃:
+      text: 🧃
+      outline: emoji_default
+    🧉:
+      text: 🧉
+      outline: emoji_default
+    🧊:
+      text: 🧊
+      outline: emoji_default
+    drink-backwards:
+      text: drink-backwards
+      outline: emoji_default
+    🥢:
+      text: 🥢
+      outline: emoji_default
+    🍽:
+      text: 🍽
+      outline: emoji_default
+    🍴:
+      text: 🍴
+      outline: emoji_default
+    🔪:
+      text: 🔪
+      outline: emoji_default
+    🫙:
+      text: 🫙
+      outline: emoji_default
+    🏺:
+      text: 🏺
+      outline: emoji_default
+    🌍:
+      text: 🌍
+      outline: emoji_default
+    🗻:
+      text: 🗻
+      outline: emoji_default
+    🏡:
+      text: 🏡
+      outline: emoji_default
+    ⛩:
+      text: ⛩
+      outline: emoji_default
+    🌅:
+      text: 🌅
+      outline: emoji_default
+    🚲:
+      text: 🚲
+      outline: emoji_default
+    ⛵:
+      text: ⛵
+      outline: emoji_default
+    🛫:
+      text: 🛫
+      outline: emoji_default
+    🧳:
+      text: 🧳
+      outline: emoji_default
+    ⏳:
+      text: ⏳
+      outline: emoji_default
+    🌈:
+      text: 🌈
+      outline: emoji_default
+    🌎:
+      text: 🌎
+      outline: emoji_default
+    🌏:
+      text: 🌏
+      outline: emoji_default
+    🌐:
+      text: 🌐
+      outline: emoji_default
+    🗺:
+      text: 🗺
+      outline: emoji_default
+    🗾:
+      text: 🗾
+      outline: emoji_default
+    🧭:
+      text: 🧭
+      outline: emoji_default
+    🏔:
+      text: 🏔
+      outline: emoji_default
+    ⛰:
+      text: ⛰
+      outline: emoji_default
+    🌋:
+      text: 🌋
+      outline: emoji_default
+    🏕:
+      text: 🏕
+      outline: emoji_default
+    🏖:
+      text: 🏖
+      outline: emoji_default
+    🏜:
+      text: 🏜
+      outline: emoji_default
+    🏝:
+      text: 🏝
+      outline: emoji_default
+    🏞:
+      text: 🏞
+      outline: emoji_default
+    🏟:
+      text: 🏟
+      outline: emoji_default
+    🏛:
+      text: 🏛
+      outline: emoji_default
+    🏗:
+      text: 🏗
+      outline: emoji_default
+    🧱:
+      text: 🧱
+      outline: emoji_default
+    🪨:
+      text: 🪨
+      outline: emoji_default
+    🪵:
+      text: 🪵
+      outline: emoji_default
+    🛖:
+      text: 🛖
+      outline: emoji_default
+    🏘:
+      text: 🏘
+      outline: emoji_default
+    🏚:
+      text: 🏚
+      outline: emoji_default
+    🏠:
+      text: 🏠
+      outline: emoji_default
+    🏢:
+      text: 🏢
+      outline: emoji_default
+    🏣:
+      text: 🏣
+      outline: emoji_default
+    place-building-2:
+      text: place-building-2
+      outline: emoji_default
+    🏤:
+      text: 🏤
+      outline: emoji_default
+    🏥:
+      text: 🏥
+      outline: emoji_default
+    🏦:
+      text: 🏦
+      outline: emoji_default
+    🏨:
+      text: 🏨
+      outline: emoji_default
+    🏩:
+      text: 🏩
+      outline: emoji_default
+    🏪:
+      text: 🏪
+      outline: emoji_default
+    🏫:
+      text: 🏫
+      outline: emoji_default
+    🏬:
+      text: 🏬
+      outline: emoji_default
+    🏭:
+      text: 🏭
+      outline: emoji_default
+    🏯:
+      text: 🏯
+      outline: emoji_default
+    🏰:
+      text: 🏰
+      outline: emoji_default
+    💒:
+      text: 💒
+      outline: emoji_default
+    place-building-backwards:
+      text: place-building-backwards
+      outline: emoji_default
+    🗼:
+      text: 🗼
+      outline: emoji_default
+    🗽:
+      text: 🗽
+      outline: emoji_default
+    ⛪:
+      text: ⛪
+      outline: emoji_default
+    🕌:
+      text: 🕌
+      outline: emoji_default
+    🛕:
+      text: 🛕
+      outline: emoji_default
+    🕍:
+      text: 🕍
+      outline: emoji_default
+    🕋:
+      text: 🕋
+      outline: emoji_default
+    ⛲:
+      text: ⛲
+      outline: emoji_default
+    ⛺:
+      text: ⛺
+      outline: emoji_default
+    🌁:
+      text: 🌁
+      outline: emoji_default
+    🌃:
+      text: 🌃
+      outline: emoji_default
+    🏙:
+      text: 🏙
+      outline: emoji_default
+    🌄:
+      text: 🌄
+      outline: emoji_default
+    🌆:
+      text: 🌆
+      outline: emoji_default
+    🌇:
+      text: 🌇
+      outline: emoji_default
+    🌉:
+      text: 🌉
+      outline: emoji_default
+    ♨:
+      text: ♨
+      outline: emoji_default
+    🎠:
+      text: 🎠
+      outline: emoji_default
+    🛝:
+      text: 🛝
+      outline: emoji_default
+    🎡:
+      text: 🎡
+      outline: emoji_default
+    🎢:
+      text: 🎢
+      outline: emoji_default
+    💈:
+      text: 💈
+      outline: emoji_default
+    🎪:
+      text: 🎪
+      outline: emoji_default
+    🚂:
+      text: 🚂
+      outline: emoji_default
+    🚃:
+      text: 🚃
+      outline: emoji_default
+    🚄:
+      text: 🚄
+      outline: emoji_default
+    🚅:
+      text: 🚅
+      outline: emoji_default
+    🚆:
+      text: 🚆
+      outline: emoji_default
+    🚇:
+      text: 🚇
+      outline: emoji_default
+    🚈:
+      text: 🚈
+      outline: emoji_default
+    🚉:
+      text: 🚉
+      outline: emoji_default
+    🚊:
+      text: 🚊
+      outline: emoji_default
+    🚝:
+      text: 🚝
+      outline: emoji_default
+    🚞:
+      text: 🚞
+      outline: emoji_default
+    🚋:
+      text: 🚋
+      outline: emoji_default
+    🚌:
+      text: 🚌
+      outline: emoji_default
+    transport-ground-2:
+      text: transport-ground-2
+      outline: emoji_default
+    🚍:
+      text: 🚍
+      outline: emoji_default
+    🚎:
+      text: 🚎
+      outline: emoji_default
+    🚐:
+      text: 🚐
+      outline: emoji_default
+    🚑:
+      text: 🚑
+      outline: emoji_default
+    🚒:
+      text: 🚒
+      outline: emoji_default
+    🚓:
+      text: 🚓
+      outline: emoji_default
+    🚔:
+      text: 🚔
+      outline: emoji_default
+    🚕:
+      text: 🚕
+      outline: emoji_default
+    🚖:
+      text: 🚖
+      outline: emoji_default
+    🚗:
+      text: 🚗
+      outline: emoji_default
+    🚘:
+      text: 🚘
+      outline: emoji_default
+    🚙:
+      text: 🚙
+      outline: emoji_default
+    transport-ground-backwards:
+      text: transport-ground-backwards
+      outline: emoji_default
+    🛻:
+      text: 🛻
+      outline: emoji_default
+    🚚:
+      text: 🚚
+      outline: emoji_default
+    🚛:
+      text: 🚛
+      outline: emoji_default
+    🚜:
+      text: 🚜
+      outline: emoji_default
+    🏎:
+      text: 🏎
+      outline: emoji_default
+    transport-ground-3:
+      text: transport-ground-3
+      outline: emoji_default
+    🏍:
+      text: 🏍
+      outline: emoji_default
+    🛵:
+      text: 🛵
+      outline: emoji_default
+    🦽:
+      text: 🦽
+      outline: emoji_default
+    🦼:
+      text: 🦼
+      outline: emoji_default
+    🛺:
+      text: 🛺
+      outline: emoji_default
+    🛴:
+      text: 🛴
+      outline: emoji_default
+    🛹:
+      text: 🛹
+      outline: emoji_default
+    🛼:
+      text: 🛼
+      outline: emoji_default
+    🚏:
+      text: 🚏
+      outline: emoji_default
+    🛣:
+      text: 🛣
+      outline: emoji_default
+    🛤:
+      text: 🛤
+      outline: emoji_default
+    transport-ground-2-backwards:
+      text: transport-ground-2-backwards
+      outline: emoji_default
+    🛢:
+      text: 🛢
+      outline: emoji_default
+    ⛽:
+      text: ⛽
+      outline: emoji_default
+    🛞:
+      text: 🛞
+      outline: emoji_default
+    🚨:
+      text: 🚨
+      outline: emoji_default
+    🚥:
+      text: 🚥
+      outline: emoji_default
+    🚦:
+      text: 🚦
+      outline: emoji_default
+    🛑:
+      text: 🛑
+      outline: emoji_default
+    🚧:
+      text: 🚧
+      outline: emoji_default
+    ⚓:
+      text: ⚓
+      outline: emoji_default
+    🛟:
+      text: 🛟
+      outline: emoji_default
+    🛶:
+      text: 🛶
+      outline: emoji_default
+    🚤:
+      text: 🚤
+      outline: emoji_default
+    🛳:
+      text: 🛳
+      outline: emoji_default
+    ⛴:
+      text: ⛴
+      outline: emoji_default
+    🛥:
+      text: 🛥
+      outline: emoji_default
+    🚢:
+      text: 🚢
+      outline: emoji_default
+    ✈:
+      text: ✈
+      outline: emoji_default
+    🛩:
+      text: 🛩
+      outline: emoji_default
+    🛬:
+      text: 🛬
+      outline: emoji_default
+    🪂:
+      text: 🪂
+      outline: emoji_default
+    💺:
+      text: 💺
+      outline: emoji_default
+    🚁:
+      text: 🚁
+      outline: emoji_default
+    🚟:
+      text: 🚟
+      outline: emoji_default
+    🚠:
+      text: 🚠
+      outline: emoji_default
+    🚡:
+      text: 🚡
+      outline: emoji_default
+    🛰:
+      text: 🛰
+      outline: emoji_default
+    🚀:
+      text: 🚀
+      outline: emoji_default
+    🛸:
+      text: 🛸
+      outline: emoji_default
+    🛎:
+      text: 🛎
+      outline: emoji_default
+    ⌛:
+      text: ⌛
+      outline: emoji_default
+    ⌚:
+      text: ⌚
+      outline: emoji_default
+    ⏰:
+      text: ⏰
+      outline: emoji_default
+    ⏱:
+      text: ⏱
+      outline: emoji_default
+    ⏲:
+      text: ⏲
+      outline: emoji_default
+    🕰:
+      text: 🕰
+      outline: emoji_default
+    🕛:
+      text: 🕛
+      outline: emoji_default
+    🕧:
+      text: 🕧
+      outline: emoji_default
+    🕐:
+      text: 🕐
+      outline: emoji_default
+    🕜:
+      text: 🕜
+      outline: emoji_default
+    🕑:
+      text: 🕑
+      outline: emoji_default
+    🕝:
+      text: 🕝
+      outline: emoji_default
+    time-2:
+      text: time-2
+      outline: emoji_default
+    🕒:
+      text: 🕒
+      outline: emoji_default
+    🕞:
+      text: 🕞
+      outline: emoji_default
+    🕓:
+      text: 🕓
+      outline: emoji_default
+    🕟:
+      text: 🕟
+      outline: emoji_default
+    🕔:
+      text: 🕔
+      outline: emoji_default
+    🕠:
+      text: 🕠
+      outline: emoji_default
+    🕕:
+      text: 🕕
+      outline: emoji_default
+    🕡:
+      text: 🕡
+      outline: emoji_default
+    🕖:
+      text: 🕖
+      outline: emoji_default
+    🕢:
+      text: 🕢
+      outline: emoji_default
+    🕗:
+      text: 🕗
+      outline: emoji_default
+    🕣:
+      text: 🕣
+      outline: emoji_default
+    time-backwards:
+      text: time-backwards
+      outline: emoji_default
+    🕘:
+      text: 🕘
+      outline: emoji_default
+    🕤:
+      text: 🕤
+      outline: emoji_default
+    🕙:
+      text: 🕙
+      outline: emoji_default
+    🕥:
+      text: 🕥
+      outline: emoji_default
+    🕚:
+      text: 🕚
+      outline: emoji_default
+    🕦:
+      text: 🕦
+      outline: emoji_default
+    🌑:
+      text: 🌑
+      outline: emoji_default
+    🌒:
+      text: 🌒
+      outline: emoji_default
+    🌓:
+      text: 🌓
+      outline: emoji_default
+    🌔:
+      text: 🌔
+      outline: emoji_default
+    🌕:
+      text: 🌕
+      outline: emoji_default
+    🌖:
+      text: 🌖
+      outline: emoji_default
+    🌗:
+      text: 🌗
+      outline: emoji_default
+    🌘:
+      text: 🌘
+      outline: emoji_default
+    🌙:
+      text: 🌙
+      outline: emoji_default
+    🌚:
+      text: 🌚
+      outline: emoji_default
+    🌛:
+      text: 🌛
+      outline: emoji_default
+    🌜:
+      text: 🌜
+      outline: emoji_default
+    🌡:
+      text: 🌡
+      outline: emoji_default
+    sky-and-weather-2:
+      text: sky-and-weather-2
+      outline: emoji_default
+    ☀:
+      text: ☀
+      outline: emoji_default
+    🌝:
+      text: 🌝
+      outline: emoji_default
+    🌞:
+      text: 🌞
+      outline: emoji_default
+    🪐:
+      text: 🪐
+      outline: emoji_default
+    ⭐:
+      text: ⭐
+      outline: emoji_default
+    🌟:
+      text: 🌟
+      outline: emoji_default
+    🌠:
+      text: 🌠
+      outline: emoji_default
+    🌌:
+      text: 🌌
+      outline: emoji_default
+    ☁:
+      text: ☁
+      outline: emoji_default
+    ⛅:
+      text: ⛅
+      outline: emoji_default
+    ⛈:
+      text: ⛈
+      outline: emoji_default
+    🌤:
+      text: 🌤
+      outline: emoji_default
+    sky-and-weather-backwards:
+      text: sky-and-weather-backwards
+      outline: emoji_default
+    🌥:
+      text: 🌥
+      outline: emoji_default
+    🌦:
+      text: 🌦
+      outline: emoji_default
+    🌧:
+      text: 🌧
+      outline: emoji_default
+    🌨:
+      text: 🌨
+      outline: emoji_default
+    🌩:
+      text: 🌩
+      outline: emoji_default
+    sky-and-weather-3:
+      text: sky-and-weather-3
+      outline: emoji_default
+    🌪:
+      text: 🌪
+      outline: emoji_default
+    🌫:
+      text: 🌫
+      outline: emoji_default
+    🌬:
+      text: 🌬
+      outline: emoji_default
+    🌀:
+      text: 🌀
+      outline: emoji_default
+    🌂:
+      text: 🌂
+      outline: emoji_default
+    ☂:
+      text: ☂
+      outline: emoji_default
+    ☔:
+      text: ☔
+      outline: emoji_default
+    ⛱:
+      text: ⛱
+      outline: emoji_default
+    ⚡:
+      text: ⚡
+      outline: emoji_default
+    ❄:
+      text: ❄
+      outline: emoji_default
+    ☃:
+      text: ☃
+      outline: emoji_default
+    sky-and-weather-2-backwards:
+      text: sky-and-weather-2-backwards
+      outline: emoji_default
+    ⛄:
+      text: ⛄
+      outline: emoji_default
+    ☄:
+      text: ☄
+      outline: emoji_default
+    🔥:
+      text: 🔥
+      outline: emoji_default
+    💧:
+      text: 💧
+      outline: emoji_default
+    🌊:
+      text: 🌊
+      outline: emoji_default
+    🎆:
+      text: 🎆
+      outline: emoji_default
+    🏅:
+      text: 🏅
+      outline: emoji_default
+    🏐:
+      text: 🏐
+      outline: emoji_default
+    🎴:
+      text: 🎴
+      outline: emoji_default
+    🎨:
+      text: 🎨
+      outline: emoji_default
+    🎃:
+      text: 🎃
+      outline: emoji_default
+    🎄:
+      text: 🎄
+      outline: emoji_default
+    🎇:
+      text: 🎇
+      outline: emoji_default
+    🧨:
+      text: 🧨
+      outline: emoji_default
+    ✨:
+      text: ✨
+      outline: emoji_default
+    🎈:
+      text: 🎈
+      outline: emoji_default
+    🎉:
+      text: 🎉
+      outline: emoji_default
+    🎊:
+      text: 🎊
+      outline: emoji_default
+    🎋:
+      text: 🎋
+      outline: emoji_default
+    🎍:
+      text: 🎍
+      outline: emoji_default
+    🎎:
+      text: 🎎
+      outline: emoji_default
+    🎏:
+      text: 🎏
+      outline: emoji_default
+    event-2:
+      text: event-2
+      outline: emoji_default
+    🎐:
+      text: 🎐
+      outline: emoji_default
+    🎑:
+      text: 🎑
+      outline: emoji_default
+    🧧:
+      text: 🧧
+      outline: emoji_default
+    🎀:
+      text: 🎀
+      outline: emoji_default
+    🎁:
+      text: 🎁
+      outline: emoji_default
+    🎗:
+      text: 🎗
+      outline: emoji_default
+    🎟:
+      text: 🎟
+      outline: emoji_default
+    🎫:
+      text: 🎫
+      outline: emoji_default
+    event-backwards:
+      text: event-backwards
+      outline: emoji_default
+    🎖:
+      text: 🎖
+      outline: emoji_default
+    🏆:
+      text: 🏆
+      outline: emoji_default
+    🥇:
+      text: 🥇
+      outline: emoji_default
+    🥈:
+      text: 🥈
+      outline: emoji_default
+    🥉:
+      text: 🥉
+      outline: emoji_default
+    ⚽:
+      text: ⚽
+      outline: emoji_default
+    ⚾:
+      text: ⚾
+      outline: emoji_default
+    🥎:
+      text: 🥎
+      outline: emoji_default
+    🏀:
+      text: 🏀
+      outline: emoji_default
+    🏈:
+      text: 🏈
+      outline: emoji_default
+    🏉:
+      text: 🏉
+      outline: emoji_default
+    🎾:
+      text: 🎾
+      outline: emoji_default
+    🥏:
+      text: 🥏
+      outline: emoji_default
+    🎳:
+      text: 🎳
+      outline: emoji_default
+    🏏:
+      text: 🏏
+      outline: emoji_default
+    🏑:
+      text: 🏑
+      outline: emoji_default
+    🏒:
+      text: 🏒
+      outline: emoji_default
+    sport-2:
+      text: sport-2
+      outline: emoji_default
+    🥍:
+      text: 🥍
+      outline: emoji_default
+    🏓:
+      text: 🏓
+      outline: emoji_default
+    🏸:
+      text: 🏸
+      outline: emoji_default
+    🥊:
+      text: 🥊
+      outline: emoji_default
+    🥋:
+      text: 🥋
+      outline: emoji_default
+    🥅:
+      text: 🥅
+      outline: emoji_default
+    ⛳:
+      text: ⛳
+      outline: emoji_default
+    ⛸:
+      text: ⛸
+      outline: emoji_default
+    🎣:
+      text: 🎣
+      outline: emoji_default
+    🤿:
+      text: 🤿
+      outline: emoji_default
+    🎽:
+      text: 🎽
+      outline: emoji_default
+    🎿:
+      text: 🎿
+      outline: emoji_default
+    sport-backwards:
+      text: sport-backwards
+      outline: emoji_default
+    🛷:
+      text: 🛷
+      outline: emoji_default
+    🥌:
+      text: 🥌
+      outline: emoji_default
+    🎯:
+      text: 🎯
+      outline: emoji_default
+    🪀:
+      text: 🪀
+      outline: emoji_default
+    🪁:
+      text: 🪁
+      outline: emoji_default
+    🔫:
+      text: 🔫
+      outline: emoji_default
+    🎱:
+      text: 🎱
+      outline: emoji_default
+    🔮:
+      text: 🔮
+      outline: emoji_default
+    🪄:
+      text: 🪄
+      outline: emoji_default
+    🎮:
+      text: 🎮
+      outline: emoji_default
+    🕹:
+      text: 🕹
+      outline: emoji_default
+    🎰:
+      text: 🎰
+      outline: emoji_default
+    🎲:
+      text: 🎲
+      outline: emoji_default
+    🧩:
+      text: 🧩
+      outline: emoji_default
+    🧸:
+      text: 🧸
+      outline: emoji_default
+    game-2:
+      text: game-2
+      outline: emoji_default
+    🪅:
+      text: 🪅
+      outline: emoji_default
+    🪩:
+      text: 🪩
+      outline: emoji_default
+    🪆:
+      text: 🪆
+      outline: emoji_default
+    ♠:
+      text: ♠
+      outline: emoji_default
+    ♥:
+      text: ♥
+      outline: emoji_default
+    ♦:
+      text: ♦
+      outline: emoji_default
+    ♣:
+      text: ♣
+      outline: emoji_default
+    ♟:
+      text: ♟
+      outline: emoji_default
+    🃏:
+      text: 🃏
+      outline: emoji_default
+    🀄:
+      text: 🀄
+      outline: emoji_default
+    game-backwards:
+      text: game-backwards
+      outline: emoji_default
+    🎭:
+      text: 🎭
+      outline: emoji_default
+    🖼:
+      text: 🖼
+      outline: emoji_default
+    🧵:
+      text: 🧵
+      outline: emoji_default
+    🪡:
+      text: 🪡
+      outline: emoji_default
+    🧶:
+      text: 🧶
+      outline: emoji_default
+    🪢:
+      text: 🪢
+      outline: emoji_default
+    👗:
+      text: 👗
+      outline: emoji_default
+    🔊:
+      text: 🔊
+      outline: emoji_default
+    🎶:
+      text: 🎶
+      outline: emoji_default
+    🎻:
+      text: 🎻
+      outline: emoji_default
+    📱:
+      text: 📱
+      outline: emoji_default
+    💻:
+      text: 💻
+      outline: emoji_default
+    📹:
+      text: 📹
+      outline: emoji_default
+    📚:
+      text: 📚
+      outline: emoji_default
+    💶:
+      text: 💶
+      outline: emoji_default
+    📮:
+      text: 📮
+      outline: emoji_default
+    📝:
+      text: 📝
+      outline: emoji_default
+    📊:
+      text: 📊
+      outline: emoji_default
+    🔐:
+      text: 🔐
+      outline: emoji_default
+    🧰:
+      text: 🧰
+      outline: emoji_default
+    🔭:
+      text: 🔭
+      outline: emoji_default
+    🩺:
+      text: 🩺
+      outline: emoji_default
+    🚪:
+      text: 🚪
+      outline: emoji_default
+    🪪:
+      text: 🪪
+      outline: emoji_default
+    👓:
+      text: 👓
+      outline: emoji_default
+    🕶:
+      text: 🕶
+      outline: emoji_default
+    🥽:
+      text: 🥽
+      outline: emoji_default
+    🥼:
+      text: 🥼
+      outline: emoji_default
+    🦺:
+      text: 🦺
+      outline: emoji_default
+    👔:
+      text: 👔
+      outline: emoji_default
+    👕:
+      text: 👕
+      outline: emoji_default
+    👖:
+      text: 👖
+      outline: emoji_default
+    🧣:
+      text: 🧣
+      outline: emoji_default
+    🧤:
+      text: 🧤
+      outline: emoji_default
+    🧥:
+      text: 🧥
+      outline: emoji_default
+    🧦:
+      text: 🧦
+      outline: emoji_default
+    clothing-2:
+      text: clothing-2
+      outline: emoji_default
+    👘:
+      text: 👘
+      outline: emoji_default
+    🥻:
+      text: 🥻
+      outline: emoji_default
+    🩱:
+      text: 🩱
+      outline: emoji_default
+    🩲:
+      text: 🩲
+      outline: emoji_default
+    🩳:
+      text: 🩳
+      outline: emoji_default
+    👙:
+      text: 👙
+      outline: emoji_default
+    👚:
+      text: 👚
+      outline: emoji_default
+    🪭:
+      text: 🪭
+      outline: emoji_default
+    👛:
+      text: 👛
+      outline: emoji_default
+    👜:
+      text: 👜
+      outline: emoji_default
+    👝:
+      text: 👝
+      outline: emoji_default
+    🛍:
+      text: 🛍
+      outline: emoji_default
+    clothing-backwards:
+      text: clothing-backwards
+      outline: emoji_default
+    🎒:
+      text: 🎒
+      outline: emoji_default
+    🩴:
+      text: 🩴
+      outline: emoji_default
+    👞:
+      text: 👞
+      outline: emoji_default
+    👟:
+      text: 👟
+      outline: emoji_default
+    🥾:
+      text: 🥾
+      outline: emoji_default
+    clothing-3:
+      text: clothing-3
+      outline: emoji_default
+    🥿:
+      text: 🥿
+      outline: emoji_default
+    👠:
+      text: 👠
+      outline: emoji_default
+    👡:
+      text: 👡
+      outline: emoji_default
+    🩰:
+      text: 🩰
+      outline: emoji_default
+    👢:
+      text: 👢
+      outline: emoji_default
+    🪮:
+      text: 🪮
+      outline: emoji_default
+    👑:
+      text: 👑
+      outline: emoji_default
+    👒:
+      text: 👒
+      outline: emoji_default
+    🎩:
+      text: 🎩
+      outline: emoji_default
+    🎓:
+      text: 🎓
+      outline: emoji_default
+    🧢:
+      text: 🧢
+      outline: emoji_default
+    🪖:
+      text: 🪖
+      outline: emoji_default
+    clothing-2-backwards:
+      text: clothing-2-backwards
+      outline: emoji_default
+    ⛑:
+      text: ⛑
+      outline: emoji_default
+    📿:
+      text: 📿
+      outline: emoji_default
+    💄:
+      text: 💄
+      outline: emoji_default
+    💍:
+      text: 💍
+      outline: emoji_default
+    💎:
+      text: 💎
+      outline: emoji_default
+    🔇:
+      text: 🔇
+      outline: emoji_default
+    🔈:
+      text: 🔈
+      outline: emoji_default
+    🔉:
+      text: 🔉
+      outline: emoji_default
+    📢:
+      text: 📢
+      outline: emoji_default
+    📣:
+      text: 📣
+      outline: emoji_default
+    📯:
+      text: 📯
+      outline: emoji_default
+    🔔:
+      text: 🔔
+      outline: emoji_default
+    🔕:
+      text: 🔕
+      outline: emoji_default
+    🎼:
+      text: 🎼
+      outline: emoji_default
+    🎵:
+      text: 🎵
+      outline: emoji_default
+    🎙:
+      text: 🎙
+      outline: emoji_default
+    🎚:
+      text: 🎚
+      outline: emoji_default
+    🎛:
+      text: 🎛
+      outline: emoji_default
+    🎤:
+      text: 🎤
+      outline: emoji_default
+    🎧:
+      text: 🎧
+      outline: emoji_default
+    📻:
+      text: 📻
+      outline: emoji_default
+    🎷:
+      text: 🎷
+      outline: emoji_default
+    🪗:
+      text: 🪗
+      outline: emoji_default
+    🎸:
+      text: 🎸
+      outline: emoji_default
+    🎹:
+      text: 🎹
+      outline: emoji_default
+    🎺:
+      text: 🎺
+      outline: emoji_default
+    🪕:
+      text: 🪕
+      outline: emoji_default
+    🥁:
+      text: 🥁
+      outline: emoji_default
+    🪘:
+      text: 🪘
+      outline: emoji_default
+    🪇:
+      text: 🪇
+      outline: emoji_default
+    🪈:
+      text: 🪈
+      outline: emoji_default
+    🪉:
+      text: 🪉
+      outline: emoji_default
+    📲:
+      text: 📲
+      outline: emoji_default
+    ☎:
+      text: ☎
+      outline: emoji_default
+    📞:
+      text: 📞
+      outline: emoji_default
+    📟:
+      text: 📟
+      outline: emoji_default
+    📠:
+      text: 📠
+      outline: emoji_default
+    🔋:
+      text: 🔋
+      outline: emoji_default
+    🪫:
+      text: 🪫
+      outline: emoji_default
+    🔌:
+      text: 🔌
+      outline: emoji_default
+    🖥:
+      text: 🖥
+      outline: emoji_default
+    🖨:
+      text: 🖨
+      outline: emoji_default
+    ⌨:
+      text: ⌨
+      outline: emoji_default
+    🖱:
+      text: 🖱
+      outline: emoji_default
+    🖲:
+      text: 🖲
+      outline: emoji_default
+    💽:
+      text: 💽
+      outline: emoji_default
+    💾:
+      text: 💾
+      outline: emoji_default
+    💿:
+      text: 💿
+      outline: emoji_default
+    📀:
+      text: 📀
+      outline: emoji_default
+    🧮:
+      text: 🧮
+      outline: emoji_default
+    🎥:
+      text: 🎥
+      outline: emoji_default
+    🎞:
+      text: 🎞
+      outline: emoji_default
+    📽:
+      text: 📽
+      outline: emoji_default
+    🎬:
+      text: 🎬
+      outline: emoji_default
+    📺:
+      text: 📺
+      outline: emoji_default
+    📷:
+      text: 📷
+      outline: emoji_default
+    📸:
+      text: 📸
+      outline: emoji_default
+    📼:
+      text: 📼
+      outline: emoji_default
+    🔍:
+      text: 🔍
+      outline: emoji_default
+    🔎:
+      text: 🔎
+      outline: emoji_default
+    🕯:
+      text: 🕯
+      outline: emoji_default
+    💡:
+      text: 💡
+      outline: emoji_default
+    🔦:
+      text: 🔦
+      outline: emoji_default
+    🏮:
+      text: 🏮
+      outline: emoji_default
+    🪔:
+      text: 🪔
+      outline: emoji_default
+    📔:
+      text: 📔
+      outline: emoji_default
+    📕:
+      text: 📕
+      outline: emoji_default
+    📖:
+      text: 📖
+      outline: emoji_default
+    📗:
+      text: 📗
+      outline: emoji_default
+    📘:
+      text: 📘
+      outline: emoji_default
+    📙:
+      text: 📙
+      outline: emoji_default
+    📓:
+      text: 📓
+      outline: emoji_default
+    📒:
+      text: 📒
+      outline: emoji_default
+    📃:
+      text: 📃
+      outline: emoji_default
+    📜:
+      text: 📜
+      outline: emoji_default
+    📄:
+      text: 📄
+      outline: emoji_default
+    📰:
+      text: 📰
+      outline: emoji_default
+    🗞:
+      text: 🗞
+      outline: emoji_default
+    📑:
+      text: 📑
+      outline: emoji_default
+    🔖:
+      text: 🔖
+      outline: emoji_default
+    🏷:
+      text: 🏷
+      outline: emoji_default
+    💰:
+      text: 💰
+      outline: emoji_default
+    🪙:
+      text: 🪙
+      outline: emoji_default
+    💴:
+      text: 💴
+      outline: emoji_default
+    💵:
+      text: 💵
+      outline: emoji_default
+    💷:
+      text: 💷
+      outline: emoji_default
+    💸:
+      text: 💸
+      outline: emoji_default
+    💳:
+      text: 💳
+      outline: emoji_default
+    🧾:
+      text: 🧾
+      outline: emoji_default
+    💹:
+      text: 💹
+      outline: emoji_default
+    ✉:
+      text: ✉
+      outline: emoji_default
+    📧:
+      text: 📧
+      outline: emoji_default
+    📨:
+      text: 📨
+      outline: emoji_default
+    📩:
+      text: 📩
+      outline: emoji_default
+    📤:
+      text: 📤
+      outline: emoji_default
+    📥:
+      text: 📥
+      outline: emoji_default
+    📦:
+      text: 📦
+      outline: emoji_default
+    📫:
+      text: 📫
+      outline: emoji_default
+    📪:
+      text: 📪
+      outline: emoji_default
+    📬:
+      text: 📬
+      outline: emoji_default
+    📭:
+      text: 📭
+      outline: emoji_default
+    🗳:
+      text: 🗳
+      outline: emoji_default
+    ✏:
+      text: ✏
+      outline: emoji_default
+    ✒:
+      text: ✒
+      outline: emoji_default
+    🖋:
+      text: 🖋
+      outline: emoji_default
+    🖊:
+      text: 🖊
+      outline: emoji_default
+    🖌:
+      text: 🖌
+      outline: emoji_default
+    🖍:
+      text: 🖍
+      outline: emoji_default
+    💼:
+      text: 💼
+      outline: emoji_default
+    📁:
+      text: 📁
+      outline: emoji_default
+    📂:
+      text: 📂
+      outline: emoji_default
+    🗂:
+      text: 🗂
+      outline: emoji_default
+    📅:
+      text: 📅
+      outline: emoji_default
+    📆:
+      text: 📆
+      outline: emoji_default
+    🗒:
+      text: 🗒
+      outline: emoji_default
+    🗓:
+      text: 🗓
+      outline: emoji_default
+    📇:
+      text: 📇
+      outline: emoji_default
+    📈:
+      text: 📈
+      outline: emoji_default
+    📉:
+      text: 📉
+      outline: emoji_default
+    📋:
+      text: 📋
+      outline: emoji_default
+    office-2:
+      text: office-2
+      outline: emoji_default
+    📌:
+      text: 📌
+      outline: emoji_default
+    📍:
+      text: 📍
+      outline: emoji_default
+    📎:
+      text: 📎
+      outline: emoji_default
+    🖇:
+      text: 🖇
+      outline: emoji_default
+    📏:
+      text: 📏
+      outline: emoji_default
+    📐:
+      text: 📐
+      outline: emoji_default
+    ✂:
+      text: ✂
+      outline: emoji_default
+    🗃:
+      text: 🗃
+      outline: emoji_default
+    🗄:
+      text: 🗄
+      outline: emoji_default
+    🗑:
+      text: 🗑
+      outline: emoji_default
+    office-backwards:
+      text: office-backwards
+      outline: emoji_default
+    🔒:
+      text: 🔒
+      outline: emoji_default
+    🔓:
+      text: 🔓
+      outline: emoji_default
+    🔏:
+      text: 🔏
+      outline: emoji_default
+    🔑:
+      text: 🔑
+      outline: emoji_default
+    🗝:
+      text: 🗝
+      outline: emoji_default
+    🔨:
+      text: 🔨
+      outline: emoji_default
+    🪓:
+      text: 🪓
+      outline: emoji_default
+    ⛏:
+      text: ⛏
+      outline: emoji_default
+    ⚒:
+      text: ⚒
+      outline: emoji_default
+    🛠:
+      text: 🛠
+      outline: emoji_default
+    🗡:
+      text: 🗡
+      outline: emoji_default
+    ⚔:
+      text: ⚔
+      outline: emoji_default
+    💣:
+      text: 💣
+      outline: emoji_default
+    🪃:
+      text: 🪃
+      outline: emoji_default
+    🏹:
+      text: 🏹
+      outline: emoji_default
+    🛡:
+      text: 🛡
+      outline: emoji_default
+    🪚:
+      text: 🪚
+      outline: emoji_default
+    🔧:
+      text: 🔧
+      outline: emoji_default
+    tool-2:
+      text: tool-2
+      outline: emoji_default
+    🪛:
+      text: 🪛
+      outline: emoji_default
+    🔩:
+      text: 🔩
+      outline: emoji_default
+    ⚙:
+      text: ⚙
+      outline: emoji_default
+    🗜:
+      text: 🗜
+      outline: emoji_default
+    ⚖:
+      text: ⚖
+      outline: emoji_default
+    🦯:
+      text: 🦯
+      outline: emoji_default
+    🔗:
+      text: 🔗
+      outline: emoji_default
+    ⛓️‍💥:
+      text: ⛓️‍💥
+      outline: emoji_default
+    ⛓:
+      text: ⛓
+      outline: emoji_default
+    🪝:
+      text: 🪝
+      outline: emoji_default
+    🧲:
+      text: 🧲
+      outline: emoji_default
+    tool-backwards:
+      text: tool-backwards
+      outline: emoji_default
+    🪜:
+      text: 🪜
+      outline: emoji_default
+    🪏:
+      text: 🪏
+      outline: emoji_default
+    ⚗:
+      text: ⚗
+      outline: emoji_default
+    🧪:
+      text: 🧪
+      outline: emoji_default
+    🧫:
+      text: 🧫
+      outline: emoji_default
+    🧬:
+      text: 🧬
+      outline: emoji_default
+    🔬:
+      text: 🔬
+      outline: emoji_default
+    📡:
+      text: 📡
+      outline: emoji_default
+    💉:
+      text: 💉
+      outline: emoji_default
+    🩸:
+      text: 🩸
+      outline: emoji_default
+    💊:
+      text: 💊
+      outline: emoji_default
+    🩹:
+      text: 🩹
+      outline: emoji_default
+    🩼:
+      text: 🩼
+      outline: emoji_default
+    🩻:
+      text: 🩻
+      outline: emoji_default
+    🛗:
+      text: 🛗
+      outline: emoji_default
+    🪞:
+      text: 🪞
+      outline: emoji_default
+    🪟:
+      text: 🪟
+      outline: emoji_default
+    🛏:
+      text: 🛏
+      outline: emoji_default
+    🛋:
+      text: 🛋
+      outline: emoji_default
+    🪑:
+      text: 🪑
+      outline: emoji_default
+    🚽:
+      text: 🚽
+      outline: emoji_default
+    🪠:
+      text: 🪠
+      outline: emoji_default
+    🚿:
+      text: 🚿
+      outline: emoji_default
+    🛁:
+      text: 🛁
+      outline: emoji_default
+    🪤:
+      text: 🪤
+      outline: emoji_default
+    🪒:
+      text: 🪒
+      outline: emoji_default
+    household-2:
+      text: household-2
+      outline: emoji_default
+    🧴:
+      text: 🧴
+      outline: emoji_default
+    🧷:
+      text: 🧷
+      outline: emoji_default
+    🧹:
+      text: 🧹
+      outline: emoji_default
+    🧺:
+      text: 🧺
+      outline: emoji_default
+    🧻:
+      text: 🧻
+      outline: emoji_default
+    🪣:
+      text: 🪣
+      outline: emoji_default
+    🧼:
+      text: 🧼
+      outline: emoji_default
+    🫧:
+      text: 🫧
+      outline: emoji_default
+    🪥:
+      text: 🪥
+      outline: emoji_default
+    🧽:
+      text: 🧽
+      outline: emoji_default
+    🧯:
+      text: 🧯
+      outline: emoji_default
+    🛒:
+      text: 🛒
+      outline: emoji_default
+    household-backwards:
+      text: household-backwards
+      outline: emoji_default
+    🚬:
+      text: 🚬
+      outline: emoji_default
+    ⚰:
+      text: ⚰
+      outline: emoji_default
+    🪦:
+      text: 🪦
+      outline: emoji_default
+    ⚱:
+      text: ⚱
+      outline: emoji_default
+    🧿:
+      text: 🧿
+      outline: emoji_default
+    🪬:
+      text: 🪬
+      outline: emoji_default
+    🗿:
+      text: 🗿
+      outline: emoji_default
+    🪧:
+      text: 🪧
+      outline: emoji_default
+    🚻:
+      text: 🚻
+      outline: emoji_default
+    🚫:
+      text: 🚫
+      outline: emoji_default
+    🔝:
+      text: 🔝
+      outline: emoji_default
+    ☯:
+      text: ☯
+      outline: emoji_default
+    ♋:
+      text: ♋
+      outline: emoji_default
+    ▶:
+      text: ▶
+      outline: emoji_default
+    ⚧:
+      text: ⚧
+      outline: emoji_default
+    ♾:
+      text: ♾
+      outline: emoji_default
+    ❓:
+      text: ❓
+      outline: emoji_default
+    💱:
+      text: 💱
+      outline: emoji_default
+    ✔:
+      text: ✔
+      outline: emoji_default
+    '#️⃣':
+      text: '#️⃣'
+      outline: emoji_default
+    🆓:
+      text: 🆓
+      outline: emoji_default
+    🔵:
+      text: 🔵
+      outline: emoji_default
+    🏧:
+      text: 🏧
+      outline: emoji_default
+    🚮:
+      text: 🚮
+      outline: emoji_default
+    🚰:
+      text: 🚰
+      outline: emoji_default
+    ♿:
+      text: ♿
+      outline: emoji_default
+    🚹:
+      text: 🚹
+      outline: emoji_default
+    🚺:
+      text: 🚺
+      outline: emoji_default
+    🚼:
+      text: 🚼
+      outline: emoji_default
+    🚾:
+      text: 🚾
+      outline: emoji_default
+    🛂:
+      text: 🛂
+      outline: emoji_default
+    🛃:
+      text: 🛃
+      outline: emoji_default
+    🛄:
+      text: 🛄
+      outline: emoji_default
+    🛅:
+      text: 🛅
+      outline: emoji_default
+    ⚠:
+      text: ⚠
+      outline: emoji_default
+    🚸:
+      text: 🚸
+      outline: emoji_default
+    ⛔:
+      text: ⛔
+      outline: emoji_default
+    🚳:
+      text: 🚳
+      outline: emoji_default
+    🚭:
+      text: 🚭
+      outline: emoji_default
+    🚯:
+      text: 🚯
+      outline: emoji_default
+    🚱:
+      text: 🚱
+      outline: emoji_default
+    🚷:
+      text: 🚷
+      outline: emoji_default
+    📵:
+      text: 📵
+      outline: emoji_default
+    🔞:
+      text: 🔞
+      outline: emoji_default
+    ☢:
+      text: ☢
+      outline: emoji_default
+    ☣:
+      text: ☣
+      outline: emoji_default
+    ⬆:
+      text: ⬆
+      outline: emoji_default
+    ↗:
+      text: ↗
+      outline: emoji_default
+    ➡:
+      text: ➡
+      outline: emoji_default
+    ↘:
+      text: ↘
+      outline: emoji_default
+    ⬇:
+      text: ⬇
+      outline: emoji_default
+    ↙:
+      text: ↙
+      outline: emoji_default
+    ⬅:
+      text: ⬅
+      outline: emoji_default
+    ↖:
+      text: ↖
+      outline: emoji_default
+    ↕:
+      text: ↕
+      outline: emoji_default
+    ↔:
+      text: ↔
+      outline: emoji_default
+    ↩:
+      text: ↩
+      outline: emoji_default
+    ↪:
+      text: ↪
+      outline: emoji_default
+    ⤴:
+      text: ⤴
+      outline: emoji_default
+    arrow-2:
+      text: arrow-2
+      outline: emoji_default
+    ⤵:
+      text: ⤵
+      outline: emoji_default
+    🔃:
+      text: 🔃
+      outline: emoji_default
+    🔄:
+      text: 🔄
+      outline: emoji_default
+    🔙:
+      text: 🔙
+      outline: emoji_default
+    🔚:
+      text: 🔚
+      outline: emoji_default
+    🔛:
+      text: 🔛
+      outline: emoji_default
+    🔜:
+      text: 🔜
+      outline: emoji_default
+    arrow-backwards:
+      text: arrow-backwards
+      outline: emoji_default
+    🛐:
+      text: 🛐
+      outline: emoji_default
+    ⚛:
+      text: ⚛
+      outline: emoji_default
+    🕉:
+      text: 🕉
+      outline: emoji_default
+    ✡:
+      text: ✡
+      outline: emoji_default
+    ☸:
+      text: ☸
+      outline: emoji_default
+    ✝:
+      text: ✝
+      outline: emoji_default
+    ☦:
+      text: ☦
+      outline: emoji_default
+    ☪:
+      text: ☪
+      outline: emoji_default
+    ☮:
+      text: ☮
+      outline: emoji_default
+    🕎:
+      text: 🕎
+      outline: emoji_default
+    🔯:
+      text: 🔯
+      outline: emoji_default
+    🪯:
+      text: 🪯
+      outline: emoji_default
+    ♈:
+      text: ♈
+      outline: emoji_default
+    ♉:
+      text: ♉
+      outline: emoji_default
+    ♊:
+      text: ♊
+      outline: emoji_default
+    ♌:
+      text: ♌
+      outline: emoji_default
+    ♍:
+      text: ♍
+      outline: emoji_default
+    ♎:
+      text: ♎
+      outline: emoji_default
+    ♏:
+      text: ♏
+      outline: emoji_default
+    ♐:
+      text: ♐
+      outline: emoji_default
+    ♑:
+      text: ♑
+      outline: emoji_default
+    ♒:
+      text: ♒
+      outline: emoji_default
+    ♓:
+      text: ♓
+      outline: emoji_default
+    ⛎:
+      text: ⛎
+      outline: emoji_default
+    🔀:
+      text: 🔀
+      outline: emoji_default
+    🔁:
+      text: 🔁
+      outline: emoji_default
+    🔂:
+      text: 🔂
+      outline: emoji_default
+    ⏩:
+      text: ⏩
+      outline: emoji_default
+    ⏭:
+      text: ⏭
+      outline: emoji_default
+    ⏯:
+      text: ⏯
+      outline: emoji_default
+    ◀:
+      text: ◀
+      outline: emoji_default
+    ⏪:
+      text: ⏪
+      outline: emoji_default
+    ⏮:
+      text: ⏮
+      outline: emoji_default
+    🔼:
+      text: 🔼
+      outline: emoji_default
+    ⏫:
+      text: ⏫
+      outline: emoji_default
+    🔽:
+      text: 🔽
+      outline: emoji_default
+    av-symbol-2:
+      text: av-symbol-2
+      outline: emoji_default
+    ⏬:
+      text: ⏬
+      outline: emoji_default
+    ⏸:
+      text: ⏸
+      outline: emoji_default
+    ⏹:
+      text: ⏹
+      outline: emoji_default
+    ⏺:
+      text: ⏺
+      outline: emoji_default
+    ⏏:
+      text: ⏏
+      outline: emoji_default
+    🎦:
+      text: 🎦
+      outline: emoji_default
+    🔅:
+      text: 🔅
+      outline: emoji_default
+    🔆:
+      text: 🔆
+      outline: emoji_default
+    📶:
+      text: 📶
+      outline: emoji_default
+    🛜:
+      text: 🛜
+      outline: emoji_default
+    📳:
+      text: 📳
+      outline: emoji_default
+    📴:
+      text: 📴
+      outline: emoji_default
+    av-symbol-backwards:
+      text: av-symbol-backwards
+      outline: emoji_default
+    ♀:
+      text: ♀
+      outline: emoji_default
+    ♂:
+      text: ♂
+      outline: emoji_default
+    ✖:
+      text: ✖
+      outline: emoji_default
+    ➕:
+      text: ➕
+      outline: emoji_default
+    ➖:
+      text: ➖
+      outline: emoji_default
+    ➗:
+      text: ➗
+      outline: emoji_default
+    🟰:
+      text: 🟰
+      outline: emoji_default
+    ‼:
+      text: ‼
+      outline: emoji_default
+    ⁉:
+      text: ⁉
+      outline: emoji_default
+    ❔:
+      text: ❔
+      outline: emoji_default
+    ❕:
+      text: ❕
+      outline: emoji_default
+    ❗:
+      text: ❗
+      outline: emoji_default
+    〰:
+      text: 〰
+      outline: emoji_default
+    💲:
+      text: 💲
+      outline: emoji_default
+    ⚕:
+      text: ⚕
+      outline: emoji_default
+    ♻:
+      text: ♻
+      outline: emoji_default
+    ⚜:
+      text: ⚜
+      outline: emoji_default
+    🔱:
+      text: 🔱
+      outline: emoji_default
+    📛:
+      text: 📛
+      outline: emoji_default
+    🔰:
+      text: 🔰
+      outline: emoji_default
+    ⭕:
+      text: ⭕
+      outline: emoji_default
+    ✅:
+      text: ✅
+      outline: emoji_default
+    ☑:
+      text: ☑
+      outline: emoji_default
+    ❌:
+      text: ❌
+      outline: emoji_default
+    ❎:
+      text: ❎
+      outline: emoji_default
+    ➰:
+      text: ➰
+      outline: emoji_default
+    other-symbol-2:
+      text: other-symbol-2
+      outline: emoji_default
+    ➿:
+      text: ➿
+      outline: emoji_default
+    〽:
+      text: 〽
+      outline: emoji_default
+    ✳:
+      text: ✳
+      outline: emoji_default
+    ✴:
+      text: ✴
+      outline: emoji_default
+    ❇:
+      text: ❇
+      outline: emoji_default
+    ©:
+      text: ©
+      outline: emoji_default
+    ®:
+      text: ®
+      outline: emoji_default
+    ™:
+      text: ™
+      outline: emoji_default
+    🫟:
+      text: 🫟
+      outline: emoji_default
+    other-symbol-backwards:
+      text: other-symbol-backwards
+      outline: emoji_default
+    '*️⃣':
+      text: '*️⃣'
+      outline: emoji_default
+    0️⃣:
+      text: 0️⃣
+      outline: emoji_default
+    1️⃣:
+      text: 1️⃣
+      outline: emoji_default
+    2️⃣:
+      text: 2️⃣
+      outline: emoji_default
+    3️⃣:
+      text: 3️⃣
+      outline: emoji_default
+    4️⃣:
+      text: 4️⃣
+      outline: emoji_default
+    5️⃣:
+      text: 5️⃣
+      outline: emoji_default
+    6️⃣:
+      text: 6️⃣
+      outline: emoji_default
+    7️⃣:
+      text: 7️⃣
+      outline: emoji_default
+    8️⃣:
+      text: 8️⃣
+      outline: emoji_default
+    9️⃣:
+      text: 9️⃣
+      outline: emoji_default
+    🔟:
+      text: 🔟
+      outline: emoji_default
+    🔠:
+      text: 🔠
+      outline: emoji_default
+    🔡:
+      text: 🔡
+      outline: emoji_default
+    🔢:
+      text: 🔢
+      outline: emoji_default
+    🔣:
+      text: 🔣
+      outline: emoji_default
+    🔤:
+      text: 🔤
+      outline: emoji_default
+    🅰:
+      text: 🅰
+      outline: emoji_default
+    🆎:
+      text: 🆎
+      outline: emoji_default
+    🅱:
+      text: 🅱
+      outline: emoji_default
+    🆑:
+      text: 🆑
+      outline: emoji_default
+    🆒:
+      text: 🆒
+      outline: emoji_default
+    ℹ:
+      text: ℹ
+      outline: emoji_default
+    🆔:
+      text: 🆔
+      outline: emoji_default
+    alphanum-2:
+      text: alphanum-2
+      outline: emoji_default
+    Ⓜ:
+      text: Ⓜ
+      outline: emoji_default
+    🆕:
+      text: 🆕
+      outline: emoji_default
+    🆖:
+      text: 🆖
+      outline: emoji_default
+    🅾:
+      text: 🅾
+      outline: emoji_default
+    🆗:
+      text: 🆗
+      outline: emoji_default
+    🅿:
+      text: 🅿
+      outline: emoji_default
+    🆘:
+      text: 🆘
+      outline: emoji_default
+    🆙:
+      text: 🆙
+      outline: emoji_default
+    🆚:
+      text: 🆚
+      outline: emoji_default
+    🈁:
+      text: 🈁
+      outline: emoji_default
+    🈂:
+      text: 🈂
+      outline: emoji_default
+    🈷:
+      text: 🈷
+      outline: emoji_default
+    alphanum-backwards:
+      text: alphanum-backwards
+      outline: emoji_default
+    🈶:
+      text: 🈶
+      outline: emoji_default
+    🈯:
+      text: 🈯
+      outline: emoji_default
+    🉐:
+      text: 🉐
+      outline: emoji_default
+    🈹:
+      text: 🈹
+      outline: emoji_default
+    🈚:
+      text: 🈚
+      outline: emoji_default
+    alphanum-3:
+      text: alphanum-3
+      outline: emoji_default
+    🈲:
+      text: 🈲
+      outline: emoji_default
+    🉑:
+      text: 🉑
+      outline: emoji_default
+    🈸:
+      text: 🈸
+      outline: emoji_default
+    🈴:
+      text: 🈴
+      outline: emoji_default
+    🈳:
+      text: 🈳
+      outline: emoji_default
+    ㊗:
+      text: ㊗
+      outline: emoji_default
+    ㊙:
+      text: ㊙
+      outline: emoji_default
+    🈺:
+      text: 🈺
+      outline: emoji_default
+    🈵:
+      text: 🈵
+      outline: emoji_default
+    alphanum-2-backwards:
+      text: alphanum-2-backwards
+      outline: emoji_default
+    🔴:
+      text: 🔴
+      outline: emoji_default
+    🟠:
+      text: 🟠
+      outline: emoji_default
+    🟡:
+      text: 🟡
+      outline: emoji_default
+    🟢:
+      text: 🟢
+      outline: emoji_default
+    🟣:
+      text: 🟣
+      outline: emoji_default
+    🟤:
+      text: 🟤
+      outline: emoji_default
+    ⚫:
+      text: ⚫
+      outline: emoji_default
+    ⚪:
+      text: ⚪
+      outline: emoji_default
+    🟥:
+      text: 🟥
+      outline: emoji_default
+    🟧:
+      text: 🟧
+      outline: emoji_default
+    🟨:
+      text: 🟨
+      outline: emoji_default
+    🟩:
+      text: 🟩
+      outline: emoji_default
+    geometric-2:
+      text: geometric-2
+      outline: emoji_default
+    🟦:
+      text: 🟦
+      outline: emoji_default
+    🟪:
+      text: 🟪
+      outline: emoji_default
+    🟫:
+      text: 🟫
+      outline: emoji_default
+    ⬛:
+      text: ⬛
+      outline: emoji_default
+    ⬜:
+      text: ⬜
+      outline: emoji_default
+    ◼:
+      text: ◼
+      outline: emoji_default
+    ◻:
+      text: ◻
+      outline: emoji_default
+    ◾:
+      text: ◾
+      outline: emoji_default
+    ◽:
+      text: ◽
+      outline: emoji_default
+    ▪:
+      text: ▪
+      outline: emoji_default
+    ▫:
+      text: ▫
+      outline: emoji_default
+    🔶:
+      text: 🔶
+      outline: emoji_default
+    geometric-backwards:
+      text: geometric-backwards
+      outline: emoji_default
+    🔷:
+      text: 🔷
+      outline: emoji_default
+    🔸:
+      text: 🔸
+      outline: emoji_default
+    🔹:
+      text: 🔹
+      outline: emoji_default
+    🔺:
+      text: 🔺
+      outline: emoji_default
+    🔻:
+      text: 🔻
+      outline: emoji_default
+    💠:
+      text: 💠
+      outline: emoji_default
+    🔘:
+      text: 🔘
+      outline: emoji_default
+    🔳:
+      text: 🔳
+      outline: emoji_default
+    🔲:
+      text: 🔲
+      outline: emoji_default
+    🏳️‍⚧️:
+      text: 🏳️‍⚧️
+      outline: emoji_default
+    🇪🇺:
+      text: 🇪🇺
+      outline: emoji_default
+    🏴󠁧󠁢󠁥󠁮󠁧󠁿:
+      text: 🏴󠁧󠁢󠁥󠁮󠁧󠁿
+      outline: emoji_default
+    🏁:
+      text: 🏁
+      outline: emoji_default
+    🚩:
+      text: 🚩
+      outline: emoji_default
+    🎌:
+      text: 🎌
+      outline: emoji_default
+    🏴:
+      text: 🏴
+      outline: emoji_default
+    🏳:
+      text: 🏳
+      outline: emoji_default
+    🏳️‍🌈:
+      text: 🏳️‍🌈
+      outline: emoji_default
+    🏴‍☠️:
+      text: 🏴‍☠️
+      outline: emoji_default
+    🇦🇨:
+      text: 🇦🇨
+      outline: emoji_default
+    🇦🇩:
+      text: 🇦🇩
+      outline: emoji_default
+    🇦🇪:
+      text: 🇦🇪
+      outline: emoji_default
+    🇦🇫:
+      text: 🇦🇫
+      outline: emoji_default
+    🇦🇬:
+      text: 🇦🇬
+      outline: emoji_default
+    🇦🇮:
+      text: 🇦🇮
+      outline: emoji_default
+    🇦🇱:
+      text: 🇦🇱
+      outline: emoji_default
+    🇦🇲:
+      text: 🇦🇲
+      outline: emoji_default
+    🇦🇴:
+      text: 🇦🇴
+      outline: emoji_default
+    🇦🇶:
+      text: 🇦🇶
+      outline: emoji_default
+    🇦🇷:
+      text: 🇦🇷
+      outline: emoji_default
+    🇦🇸:
+      text: 🇦🇸
+      outline: emoji_default
+    🇦🇹:
+      text: 🇦🇹
+      outline: emoji_default
+    country-flag-2:
+      text: country-flag-2
+      outline: emoji_default
+    🇦🇺:
+      text: 🇦🇺
+      outline: emoji_default
+    🇦🇼:
+      text: 🇦🇼
+      outline: emoji_default
+    🇦🇽:
+      text: 🇦🇽
+      outline: emoji_default
+    🇦🇿:
+      text: 🇦🇿
+      outline: emoji_default
+    🇧🇦:
+      text: 🇧🇦
+      outline: emoji_default
+    🇧🇧:
+      text: 🇧🇧
+      outline: emoji_default
+    🇧🇩:
+      text: 🇧🇩
+      outline: emoji_default
+    🇧🇪:
+      text: 🇧🇪
+      outline: emoji_default
+    🇧🇫:
+      text: 🇧🇫
+      outline: emoji_default
+    🇧🇬:
+      text: 🇧🇬
+      outline: emoji_default
+    🇧🇭:
+      text: 🇧🇭
+      outline: emoji_default
+    🇧🇮:
+      text: 🇧🇮
+      outline: emoji_default
+    country-flag-backwards:
+      text: country-flag-backwards
+      outline: emoji_default
+    🇧🇯:
+      text: 🇧🇯
+      outline: emoji_default
+    🇧🇱:
+      text: 🇧🇱
+      outline: emoji_default
+    🇧🇲:
+      text: 🇧🇲
+      outline: emoji_default
+    🇧🇳:
+      text: 🇧🇳
+      outline: emoji_default
+    🇧🇴:
+      text: 🇧🇴
+      outline: emoji_default
+    country-flag-3:
+      text: country-flag-3
+      outline: emoji_default
+    🇧🇶:
+      text: 🇧🇶
+      outline: emoji_default
+    🇧🇷:
+      text: 🇧🇷
+      outline: emoji_default
+    🇧🇸:
+      text: 🇧🇸
+      outline: emoji_default
+    🇧🇹:
+      text: 🇧🇹
+      outline: emoji_default
+    🇧🇻:
+      text: 🇧🇻
+      outline: emoji_default
+    🇧🇼:
+      text: 🇧🇼
+      outline: emoji_default
+    🇧🇾:
+      text: 🇧🇾
+      outline: emoji_default
+    🇧🇿:
+      text: 🇧🇿
+      outline: emoji_default
+    🇨🇦:
+      text: 🇨🇦
+      outline: emoji_default
+    🇨🇨:
+      text: 🇨🇨
+      outline: emoji_default
+    🇨🇩:
+      text: 🇨🇩
+      outline: emoji_default
+    🇨🇫:
+      text: 🇨🇫
+      outline: emoji_default
+    country-flag-2-backwards:
+      text: country-flag-2-backwards
+      outline: emoji_default
+    🇨🇬:
+      text: 🇨🇬
+      outline: emoji_default
+    🇨🇭:
+      text: 🇨🇭
+      outline: emoji_default
+    🇨🇮:
+      text: 🇨🇮
+      outline: emoji_default
+    🇨🇰:
+      text: 🇨🇰
+      outline: emoji_default
+    🇨🇱:
+      text: 🇨🇱
+      outline: emoji_default
+    country-flag-4:
+      text: country-flag-4
+      outline: emoji_default
+    🇨🇲:
+      text: 🇨🇲
+      outline: emoji_default
+    🇨🇳:
+      text: 🇨🇳
+      outline: emoji_default
+    🇨🇴:
+      text: 🇨🇴
+      outline: emoji_default
+    🇨🇵:
+      text: 🇨🇵
+      outline: emoji_default
+    🇨🇶:
+      text: 🇨🇶
+      outline: emoji_default
+    🇨🇷:
+      text: 🇨🇷
+      outline: emoji_default
+    🇨🇺:
+      text: 🇨🇺
+      outline: emoji_default
+    🇨🇻:
+      text: 🇨🇻
+      outline: emoji_default
+    🇨🇼:
+      text: 🇨🇼
+      outline: emoji_default
+    🇨🇽:
+      text: 🇨🇽
+      outline: emoji_default
+    🇨🇾:
+      text: 🇨🇾
+      outline: emoji_default
+    🇨🇿:
+      text: 🇨🇿
+      outline: emoji_default
+    country-flag-3-backwards:
+      text: country-flag-3-backwards
+      outline: emoji_default
+    🇩🇪:
+      text: 🇩🇪
+      outline: emoji_default
+    🇩🇬:
+      text: 🇩🇬
+      outline: emoji_default
+    🇩🇯:
+      text: 🇩🇯
+      outline: emoji_default
+    🇩🇰:
+      text: 🇩🇰
+      outline: emoji_default
+    🇩🇲:
+      text: 🇩🇲
+      outline: emoji_default
+    country-flag-5:
+      text: country-flag-5
+      outline: emoji_default
+    🇩🇴:
+      text: 🇩🇴
+      outline: emoji_default
+    🇩🇿:
+      text: 🇩🇿
+      outline: emoji_default
+    🇪🇦:
+      text: 🇪🇦
+      outline: emoji_default
+    🇪🇨:
+      text: 🇪🇨
+      outline: emoji_default
+    🇪🇪:
+      text: 🇪🇪
+      outline: emoji_default
+    🇪🇬:
+      text: 🇪🇬
+      outline: emoji_default
+    🇪🇭:
+      text: 🇪🇭
+      outline: emoji_default
+    🇪🇷:
+      text: 🇪🇷
+      outline: emoji_default
+    🇪🇸:
+      text: 🇪🇸
+      outline: emoji_default
+    🇪🇹:
+      text: 🇪🇹
+      outline: emoji_default
+    🇫🇮:
+      text: 🇫🇮
+      outline: emoji_default
+    country-flag-4-backwards:
+      text: country-flag-4-backwards
+      outline: emoji_default
+    🇫🇯:
+      text: 🇫🇯
+      outline: emoji_default
+    🇫🇰:
+      text: 🇫🇰
+      outline: emoji_default
+    🇫🇲:
+      text: 🇫🇲
+      outline: emoji_default
+    🇫🇴:
+      text: 🇫🇴
+      outline: emoji_default
+    🇫🇷:
+      text: 🇫🇷
+      outline: emoji_default
+    country-flag-6:
+      text: country-flag-6
+      outline: emoji_default
+    🇬🇦:
+      text: 🇬🇦
+      outline: emoji_default
+    🇬🇧:
+      text: 🇬🇧
+      outline: emoji_default
+    🇬🇩:
+      text: 🇬🇩
+      outline: emoji_default
+    🇬🇪:
+      text: 🇬🇪
+      outline: emoji_default
+    🇬🇫:
+      text: 🇬🇫
+      outline: emoji_default
+    🇬🇬:
+      text: 🇬🇬
+      outline: emoji_default
+    🇬🇭:
+      text: 🇬🇭
+      outline: emoji_default
+    🇬🇮:
+      text: 🇬🇮
+      outline: emoji_default
+    🇬🇱:
+      text: 🇬🇱
+      outline: emoji_default
+    🇬🇲:
+      text: 🇬🇲
+      outline: emoji_default
+    🇬🇳:
+      text: 🇬🇳
+      outline: emoji_default
+    🇬🇵:
+      text: 🇬🇵
+      outline: emoji_default
+    country-flag-5-backwards:
+      text: country-flag-5-backwards
+      outline: emoji_default
+    🇬🇶:
+      text: 🇬🇶
+      outline: emoji_default
+    🇬🇷:
+      text: 🇬🇷
+      outline: emoji_default
+    🇬🇸:
+      text: 🇬🇸
+      outline: emoji_default
+    🇬🇹:
+      text: 🇬🇹
+      outline: emoji_default
+    🇬🇺:
+      text: 🇬🇺
+      outline: emoji_default
+    country-flag-7:
+      text: country-flag-7
+      outline: emoji_default
+    🇬🇼:
+      text: 🇬🇼
+      outline: emoji_default
+    🇬🇾:
+      text: 🇬🇾
+      outline: emoji_default
+    🇭🇰:
+      text: 🇭🇰
+      outline: emoji_default
+    🇭🇲:
+      text: 🇭🇲
+      outline: emoji_default
+    🇭🇳:
+      text: 🇭🇳
+      outline: emoji_default
+    🇭🇷:
+      text: 🇭🇷
+      outline: emoji_default
+    🇭🇹:
+      text: 🇭🇹
+      outline: emoji_default
+    🇭🇺:
+      text: 🇭🇺
+      outline: emoji_default
+    🇮🇨:
+      text: 🇮🇨
+      outline: emoji_default
+    🇮🇩:
+      text: 🇮🇩
+      outline: emoji_default
+    🇮🇪:
+      text: 🇮🇪
+      outline: emoji_default
+    🇮🇱:
+      text: 🇮🇱
+      outline: emoji_default
+    country-flag-6-backwards:
+      text: country-flag-6-backwards
+      outline: emoji_default
+    🇮🇲:
+      text: 🇮🇲
+      outline: emoji_default
+    🇮🇳:
+      text: 🇮🇳
+      outline: emoji_default
+    🇮🇴:
+      text: 🇮🇴
+      outline: emoji_default
+    🇮🇶:
+      text: 🇮🇶
+      outline: emoji_default
+    🇮🇷:
+      text: 🇮🇷
+      outline: emoji_default
+    country-flag-8:
+      text: country-flag-8
+      outline: emoji_default
+    🇮🇸:
+      text: 🇮🇸
+      outline: emoji_default
+    🇮🇹:
+      text: 🇮🇹
+      outline: emoji_default
+    🇯🇪:
+      text: 🇯🇪
+      outline: emoji_default
+    🇯🇲:
+      text: 🇯🇲
+      outline: emoji_default
+    🇯🇴:
+      text: 🇯🇴
+      outline: emoji_default
+    🇯🇵:
+      text: 🇯🇵
+      outline: emoji_default
+    🇰🇪:
+      text: 🇰🇪
+      outline: emoji_default
+    🇰🇬:
+      text: 🇰🇬
+      outline: emoji_default
+    🇰🇭:
+      text: 🇰🇭
+      outline: emoji_default
+    🇰🇮:
+      text: 🇰🇮
+      outline: emoji_default
+    🇰🇲:
+      text: 🇰🇲
+      outline: emoji_default
+    🇰🇳:
+      text: 🇰🇳
+      outline: emoji_default
+    country-flag-7-backwards:
+      text: country-flag-7-backwards
+      outline: emoji_default
+    🇰🇵:
+      text: 🇰🇵
+      outline: emoji_default
+    🇰🇷:
+      text: 🇰🇷
+      outline: emoji_default
+    🇰🇼:
+      text: 🇰🇼
+      outline: emoji_default
+    🇰🇾:
+      text: 🇰🇾
+      outline: emoji_default
+    🇰🇿:
+      text: 🇰🇿
+      outline: emoji_default
+    country-flag-9:
+      text: country-flag-9
+      outline: emoji_default
+    🇱🇦:
+      text: 🇱🇦
+      outline: emoji_default
+    🇱🇧:
+      text: 🇱🇧
+      outline: emoji_default
+    🇱🇨:
+      text: 🇱🇨
+      outline: emoji_default
+    🇱🇮:
+      text: 🇱🇮
+      outline: emoji_default
+    🇱🇰:
+      text: 🇱🇰
+      outline: emoji_default
+    🇱🇷:
+      text: 🇱🇷
+      outline: emoji_default
+    🇱🇸:
+      text: 🇱🇸
+      outline: emoji_default
+    🇱🇹:
+      text: 🇱🇹
+      outline: emoji_default
+    🇱🇺:
+      text: 🇱🇺
+      outline: emoji_default
+    🇱🇻:
+      text: 🇱🇻
+      outline: emoji_default
+    🇱🇾:
+      text: 🇱🇾
+      outline: emoji_default
+    🇲🇦:
+      text: 🇲🇦
+      outline: emoji_default
+    country-flag-8-backwards:
+      text: country-flag-8-backwards
+      outline: emoji_default
+    🇲🇨:
+      text: 🇲🇨
+      outline: emoji_default
+    🇲🇩:
+      text: 🇲🇩
+      outline: emoji_default
+    🇲🇪:
+      text: 🇲🇪
+      outline: emoji_default
+    🇲🇫:
+      text: 🇲🇫
+      outline: emoji_default
+    🇲🇬:
+      text: 🇲🇬
+      outline: emoji_default
+    country-flag-10:
+      text: country-flag-10
+      outline: emoji_default
+    🇲🇭:
+      text: 🇲🇭
+      outline: emoji_default
+    🇲🇰:
+      text: 🇲🇰
+      outline: emoji_default
+    🇲🇱:
+      text: 🇲🇱
+      outline: emoji_default
+    🇲🇲:
+      text: 🇲🇲
+      outline: emoji_default
+    🇲🇳:
+      text: 🇲🇳
+      outline: emoji_default
+    🇲🇴:
+      text: 🇲🇴
+      outline: emoji_default
+    🇲🇵:
+      text: 🇲🇵
+      outline: emoji_default
+    🇲🇶:
+      text: 🇲🇶
+      outline: emoji_default
+    🇲🇷:
+      text: 🇲🇷
+      outline: emoji_default
+    🇲🇸:
+      text: 🇲🇸
+      outline: emoji_default
+    🇲🇹:
+      text: 🇲🇹
+      outline: emoji_default
+    🇲🇺:
+      text: 🇲🇺
+      outline: emoji_default
+    country-flag-9-backwards:
+      text: country-flag-9-backwards
+      outline: emoji_default
+    🇲🇻:
+      text: 🇲🇻
+      outline: emoji_default
+    🇲🇼:
+      text: 🇲🇼
+      outline: emoji_default
+    🇲🇽:
+      text: 🇲🇽
+      outline: emoji_default
+    🇲🇾:
+      text: 🇲🇾
+      outline: emoji_default
+    🇲🇿:
+      text: 🇲🇿
+      outline: emoji_default
+    country-flag-11:
+      text: country-flag-11
+      outline: emoji_default
+    🇳🇦:
+      text: 🇳🇦
+      outline: emoji_default
+    🇳🇨:
+      text: 🇳🇨
+      outline: emoji_default
+    🇳🇪:
+      text: 🇳🇪
+      outline: emoji_default
+    🇳🇫:
+      text: 🇳🇫
+      outline: emoji_default
+    🇳🇬:
+      text: 🇳🇬
+      outline: emoji_default
+    🇳🇮:
+      text: 🇳🇮
+      outline: emoji_default
+    🇳🇱:
+      text: 🇳🇱
+      outline: emoji_default
+    🇳🇴:
+      text: 🇳🇴
+      outline: emoji_default
+    🇳🇵:
+      text: 🇳🇵
+      outline: emoji_default
+    🇳🇷:
+      text: 🇳🇷
+      outline: emoji_default
+    🇳🇺:
+      text: 🇳🇺
+      outline: emoji_default
+    🇳🇿:
+      text: 🇳🇿
+      outline: emoji_default
+    country-flag-10-backwards:
+      text: country-flag-10-backwards
+      outline: emoji_default
+    🇴🇲:
+      text: 🇴🇲
+      outline: emoji_default
+    🇵🇦:
+      text: 🇵🇦
+      outline: emoji_default
+    🇵🇪:
+      text: 🇵🇪
+      outline: emoji_default
+    🇵🇫:
+      text: 🇵🇫
+      outline: emoji_default
+    🇵🇬:
+      text: 🇵🇬
+      outline: emoji_default
+    country-flag-12:
+      text: country-flag-12
+      outline: emoji_default
+    🇵🇭:
+      text: 🇵🇭
+      outline: emoji_default
+    🇵🇰:
+      text: 🇵🇰
+      outline: emoji_default
+    🇵🇱:
+      text: 🇵🇱
+      outline: emoji_default
+    🇵🇲:
+      text: 🇵🇲
+      outline: emoji_default
+    🇵🇳:
+      text: 🇵🇳
+      outline: emoji_default
+    🇵🇷:
+      text: 🇵🇷
+      outline: emoji_default
+    🇵🇸:
+      text: 🇵🇸
+      outline: emoji_default
+    🇵🇹:
+      text: 🇵🇹
+      outline: emoji_default
+    🇵🇼:
+      text: 🇵🇼
+      outline: emoji_default
+    🇵🇾:
+      text: 🇵🇾
+      outline: emoji_default
+    🇶🇦:
+      text: 🇶🇦
+      outline: emoji_default
+    🇷🇪:
+      text: 🇷🇪
+      outline: emoji_default
+    country-flag-11-backwards:
+      text: country-flag-11-backwards
+      outline: emoji_default
+    🇷🇴:
+      text: 🇷🇴
+      outline: emoji_default
+    🇷🇸:
+      text: 🇷🇸
+      outline: emoji_default
+    🇷🇺:
+      text: 🇷🇺
+      outline: emoji_default
+    🇷🇼:
+      text: 🇷🇼
+      outline: emoji_default
+    🇸🇦:
+      text: 🇸🇦
+      outline: emoji_default
+    country-flag-13:
+      text: country-flag-13
+      outline: emoji_default
+    🇸🇧:
+      text: 🇸🇧
+      outline: emoji_default
+    🇸🇨:
+      text: 🇸🇨
+      outline: emoji_default
+    🇸🇩:
+      text: 🇸🇩
+      outline: emoji_default
+    🇸🇪:
+      text: 🇸🇪
+      outline: emoji_default
+    🇸🇬:
+      text: 🇸🇬
+      outline: emoji_default
+    🇸🇭:
+      text: 🇸🇭
+      outline: emoji_default
+    🇸🇮:
+      text: 🇸🇮
+      outline: emoji_default
+    🇸🇯:
+      text: 🇸🇯
+      outline: emoji_default
+    🇸🇰:
+      text: 🇸🇰
+      outline: emoji_default
+    🇸🇱:
+      text: 🇸🇱
+      outline: emoji_default
+    🇸🇲:
+      text: 🇸🇲
+      outline: emoji_default
+    🇸🇳:
+      text: 🇸🇳
+      outline: emoji_default
+    country-flag-12-backwards:
+      text: country-flag-12-backwards
+      outline: emoji_default
+    🇸🇴:
+      text: 🇸🇴
+      outline: emoji_default
+    🇸🇷:
+      text: 🇸🇷
+      outline: emoji_default
+    🇸🇸:
+      text: 🇸🇸
+      outline: emoji_default
+    🇸🇹:
+      text: 🇸🇹
+      outline: emoji_default
+    🇸🇻:
+      text: 🇸🇻
+      outline: emoji_default
+    country-flag-14:
+      text: country-flag-14
+      outline: emoji_default
+    🇸🇽:
+      text: 🇸🇽
+      outline: emoji_default
+    🇸🇾:
+      text: 🇸🇾
+      outline: emoji_default
+    🇸🇿:
+      text: 🇸🇿
+      outline: emoji_default
+    🇹🇦:
+      text: 🇹🇦
+      outline: emoji_default
+    🇹🇨:
+      text: 🇹🇨
+      outline: emoji_default
+    🇹🇩:
+      text: 🇹🇩
+      outline: emoji_default
+    🇹🇫:
+      text: 🇹🇫
+      outline: emoji_default
+    🇹🇬:
+      text: 🇹🇬
+      outline: emoji_default
+    🇹🇭:
+      text: 🇹🇭
+      outline: emoji_default
+    🇹🇯:
+      text: 🇹🇯
+      outline: emoji_default
+    🇹🇰:
+      text: 🇹🇰
+      outline: emoji_default
+    🇹🇱:
+      text: 🇹🇱
+      outline: emoji_default
+    country-flag-13-backwards:
+      text: country-flag-13-backwards
+      outline: emoji_default
+    🇹🇲:
+      text: 🇹🇲
+      outline: emoji_default
+    🇹🇳:
+      text: 🇹🇳
+      outline: emoji_default
+    🇹🇴:
+      text: 🇹🇴
+      outline: emoji_default
+    🇹🇷:
+      text: 🇹🇷
+      outline: emoji_default
+    🇹🇹:
+      text: 🇹🇹
+      outline: emoji_default
+    country-flag-15:
+      text: country-flag-15
+      outline: emoji_default
+    🇹🇻:
+      text: 🇹🇻
+      outline: emoji_default
+    🇹🇼:
+      text: 🇹🇼
+      outline: emoji_default
+    🇹🇿:
+      text: 🇹🇿
+      outline: emoji_default
+    🇺🇦:
+      text: 🇺🇦
+      outline: emoji_default
+    🇺🇬:
+      text: 🇺🇬
+      outline: emoji_default
+    🇺🇲:
+      text: 🇺🇲
+      outline: emoji_default
+    🇺🇳:
+      text: 🇺🇳
+      outline: emoji_default
+    🇺🇸:
+      text: 🇺🇸
+      outline: emoji_default
+    🇺🇾:
+      text: 🇺🇾
+      outline: emoji_default
+    🇺🇿:
+      text: 🇺🇿
+      outline: emoji_default
+    🇻🇦:
+      text: 🇻🇦
+      outline: emoji_default
+    🇻🇨:
+      text: 🇻🇨
+      outline: emoji_default
+    country-flag-14-backwards:
+      text: country-flag-14-backwards
+      outline: emoji_default
+    🇻🇪:
+      text: 🇻🇪
+      outline: emoji_default
+    🇻🇬:
+      text: 🇻🇬
+      outline: emoji_default
+    🇻🇮:
+      text: 🇻🇮
+      outline: emoji_default
+    🇻🇳:
+      text: 🇻🇳
+      outline: emoji_default
+    🇻🇺:
+      text: 🇻🇺
+      outline: emoji_default
+    country-flag-16:
+      text: country-flag-16
+      outline: emoji_default
+    🇼🇫:
+      text: 🇼🇫
+      outline: emoji_default
+    🇼🇸:
+      text: 🇼🇸
+      outline: emoji_default
+    🇽🇰:
+      text: 🇽🇰
+      outline: emoji_default
+    🇾🇪:
+      text: 🇾🇪
+      outline: emoji_default
+    🇾🇹:
+      text: 🇾🇹
+      outline: emoji_default
+    🇿🇦:
+      text: 🇿🇦
+      outline: emoji_default
+    🇿🇲:
+      text: 🇿🇲
+      outline: emoji_default
+    🇿🇼:
+      text: 🇿🇼
+      outline: emoji_default
+    country-flag-15-backwards:
+      text: country-flag-15-backwards
+      outline: emoji_default
+    🏴󠁧󠁢󠁳󠁣󠁴󠁿:
+      text: 🏴󠁧󠁢󠁳󠁣󠁴󠁿
+      outline: emoji_default
+    🏴󠁧󠁢󠁷󠁬󠁳󠁿:
+      text: 🏴󠁧󠁢󠁷󠁬󠁳󠁿
+      outline: emoji_default
+    emoji_back_qwerty:
+      outline: emoji_nav
+      label: ⇤ ABC
+      action:
+        set_view: base
+    emoji_bksp:
+      outline: emoji_nav
+      icon: edit-clear-symbolic
+      keysym: BackSpace
+    emoji_cat_0:
+      outline: emoji_cat
+      icon: emoji-people-symbolic
+      action:
+        set_view: emoji_p01
+    emoji_cat_1:
+      outline: emoji_cat
+      icon: emoji-body-symbolic
+      action:
+        set_view: emoji_p07
+    emoji_cat_2:
+      outline: emoji_cat
+      icon: emoji-nature-symbolic
+      action:
+        set_view: emoji_p23
+    emoji_cat_3:
+      outline: emoji_cat
+      icon: emoji-food-symbolic
+      action:
+        set_view: emoji_p29
+    emoji_cat_4:
+      outline: emoji_cat
+      icon: emoji-travel-symbolic
+      action:
+        set_view: emoji_p34
+    emoji_cat_5:
+      outline: emoji_cat
+      icon: emoji-activities-symbolic
+      action:
+        set_view: emoji_p42
+    emoji_cat_6:
+      outline: emoji_cat
+      icon: emoji-objects-symbolic
+      action:
+        set_view: emoji_p46
+    emoji_cat_7:
+      outline: emoji_cat
+      icon: emoji-symbols-symbolic
+      action:
+        set_view: emoji_p56
+    emoji_cat_8:
+      outline: emoji_cat
+      icon: emoji-flags-symbolic
+      action:
+        set_view: emoji_p65
+    emoji_pad:
+      outline: emoji_default
+      text: ''
+      label: ''
+    emoji_self_01:
+      outline: emoji_cat
+      icon: emoji-people-symbolic
+      action:
+        set_view: emoji_p01
+    emoji_self_02:
+      outline: emoji_cat
+      icon: emoji-people-symbolic
+      action:
+        set_view: emoji_p02
+    emoji_self_03:
+      outline: emoji_cat
+      icon: emoji-people-symbolic
+      action:
+        set_view: emoji_p03
+    emoji_self_04:
+      outline: emoji_cat
+      icon: emoji-people-symbolic
+      action:
+        set_view: emoji_p04
+    emoji_self_05:
+      outline: emoji_cat
+      icon: emoji-people-symbolic
+      action:
+        set_view: emoji_p05
+    emoji_self_06:
+      outline: emoji_cat
+      icon: emoji-people-symbolic
+      action:
+        set_view: emoji_p06
+    emoji_self_07:
+      outline: emoji_cat
+      icon: emoji-body-symbolic
+      action:
+        set_view: emoji_p07
+    emoji_self_08:
+      outline: emoji_cat
+      icon: emoji-body-symbolic
+      action:
+        set_view: emoji_p08
+    emoji_self_09:
+      outline: emoji_cat
+      icon: emoji-body-symbolic
+      action:
+        set_view: emoji_p09
+    emoji_self_10:
+      outline: emoji_cat
+      icon: emoji-body-symbolic
+      action:
+        set_view: emoji_p10
+    emoji_self_11:
+      outline: emoji_cat
+      icon: emoji-body-symbolic
+      action:
+        set_view: emoji_p11
+    emoji_self_12:
+      outline: emoji_cat
+      icon: emoji-body-symbolic
+      action:
+        set_view: emoji_p12
+    emoji_self_13:
+      outline: emoji_cat
+      icon: emoji-body-symbolic
+      action:
+        set_view: emoji_p13
+    emoji_self_14:
+      outline: emoji_cat
+      icon: emoji-body-symbolic
+      action:
+        set_view: emoji_p14
+    emoji_self_15:
+      outline: emoji_cat
+      icon: emoji-body-symbolic
+      action:
+        set_view: emoji_p15
+    emoji_self_16:
+      outline: emoji_cat
+      icon: emoji-body-symbolic
+      action:
+        set_view: emoji_p16
+    emoji_self_17:
+      outline: emoji_cat
+      icon: emoji-body-symbolic
+      action:
+        set_view: emoji_p17
+    emoji_self_18:
+      outline: emoji_cat
+      icon: emoji-body-symbolic
+      action:
+        set_view: emoji_p18
+    emoji_self_19:
+      outline: emoji_cat
+      icon: emoji-body-symbolic
+      action:
+        set_view: emoji_p19
+    emoji_self_20:
+      outline: emoji_cat
+      icon: emoji-body-symbolic
+      action:
+        set_view: emoji_p20
+    emoji_self_21:
+      outline: emoji_cat
+      icon: emoji-body-symbolic
+      action:
+        set_view: emoji_p21
+    emoji_self_22:
+      outline: emoji_cat
+      icon: emoji-body-symbolic
+      action:
+        set_view: emoji_p22
+    emoji_self_23:
+      outline: emoji_cat
+      icon: emoji-nature-symbolic
+      action:
+        set_view: emoji_p23
+    emoji_self_24:
+      outline: emoji_cat
+      icon: emoji-nature-symbolic
+      action:
+        set_view: emoji_p24
+    emoji_self_25:
+      outline: emoji_cat
+      icon: emoji-nature-symbolic
+      action:
+        set_view: emoji_p25
+    emoji_self_26:
+      outline: emoji_cat
+      icon: emoji-nature-symbolic
+      action:
+        set_view: emoji_p26
+    emoji_self_27:
+      outline: emoji_cat
+      icon: emoji-nature-symbolic
+      action:
+        set_view: emoji_p27
+    emoji_self_28:
+      outline: emoji_cat
+      icon: emoji-nature-symbolic
+      action:
+        set_view: emoji_p28
+    emoji_self_29:
+      outline: emoji_cat
+      icon: emoji-food-symbolic
+      action:
+        set_view: emoji_p29
+    emoji_self_30:
+      outline: emoji_cat
+      icon: emoji-food-symbolic
+      action:
+        set_view: emoji_p30
+    emoji_self_31:
+      outline: emoji_cat
+      icon: emoji-food-symbolic
+      action:
+        set_view: emoji_p31
+    emoji_self_32:
+      outline: emoji_cat
+      icon: emoji-food-symbolic
+      action:
+        set_view: emoji_p32
+    emoji_self_33:
+      outline: emoji_cat
+      icon: emoji-food-symbolic
+      action:
+        set_view: emoji_p33
+    emoji_self_34:
+      outline: emoji_cat
+      icon: emoji-travel-symbolic
+      action:
+        set_view: emoji_p34
+    emoji_self_35:
+      outline: emoji_cat
+      icon: emoji-travel-symbolic
+      action:
+        set_view: emoji_p35
+    emoji_self_36:
+      outline: emoji_cat
+      icon: emoji-travel-symbolic
+      action:
+        set_view: emoji_p36
+    emoji_self_37:
+      outline: emoji_cat
+      icon: emoji-travel-symbolic
+      action:
+        set_view: emoji_p37
+    emoji_self_38:
+      outline: emoji_cat
+      icon: emoji-travel-symbolic
+      action:
+        set_view: emoji_p38
+    emoji_self_39:
+      outline: emoji_cat
+      icon: emoji-travel-symbolic
+      action:
+        set_view: emoji_p39
+    emoji_self_40:
+      outline: emoji_cat
+      icon: emoji-travel-symbolic
+      action:
+        set_view: emoji_p40
+    emoji_self_41:
+      outline: emoji_cat
+      icon: emoji-travel-symbolic
+      action:
+        set_view: emoji_p41
+    emoji_self_42:
+      outline: emoji_cat
+      icon: emoji-activities-symbolic
+      action:
+        set_view: emoji_p42
+    emoji_self_43:
+      outline: emoji_cat
+      icon: emoji-activities-symbolic
+      action:
+        set_view: emoji_p43
+    emoji_self_44:
+      outline: emoji_cat
+      icon: emoji-activities-symbolic
+      action:
+        set_view: emoji_p44
+    emoji_self_45:
+      outline: emoji_cat
+      icon: emoji-activities-symbolic
+      action:
+        set_view: emoji_p45
+    emoji_self_46:
+      outline: emoji_cat
+      icon: emoji-objects-symbolic
+      action:
+        set_view: emoji_p46
+    emoji_self_47:
+      outline: emoji_cat
+      icon: emoji-objects-symbolic
+      action:
+        set_view: emoji_p47
+    emoji_self_48:
+      outline: emoji_cat
+      icon: emoji-objects-symbolic
+      action:
+        set_view: emoji_p48
+    emoji_self_49:
+      outline: emoji_cat
+      icon: emoji-objects-symbolic
+      action:
+        set_view: emoji_p49
+    emoji_self_50:
+      outline: emoji_cat
+      icon: emoji-objects-symbolic
+      action:
+        set_view: emoji_p50
+    emoji_self_51:
+      outline: emoji_cat
+      icon: emoji-objects-symbolic
+      action:
+        set_view: emoji_p51
+    emoji_self_52:
+      outline: emoji_cat
+      icon: emoji-objects-symbolic
+      action:
+        set_view: emoji_p52
+    emoji_self_53:
+      outline: emoji_cat
+      icon: emoji-objects-symbolic
+      action:
+        set_view: emoji_p53
+    emoji_self_54:
+      outline: emoji_cat
+      icon: emoji-objects-symbolic
+      action:
+        set_view: emoji_p54
+    emoji_self_55:
+      outline: emoji_cat
+      icon: emoji-objects-symbolic
+      action:
+        set_view: emoji_p55
+    emoji_self_56:
+      outline: emoji_cat
+      icon: emoji-symbols-symbolic
+      action:
+        set_view: emoji_p56
+    emoji_self_57:
+      outline: emoji_cat
+      icon: emoji-symbols-symbolic
+      action:
+        set_view: emoji_p57
+    emoji_self_58:
+      outline: emoji_cat
+      icon: emoji-symbols-symbolic
+      action:
+        set_view: emoji_p58
+    emoji_self_59:
+      outline: emoji_cat
+      icon: emoji-symbols-symbolic
+      action:
+        set_view: emoji_p59
+    emoji_self_60:
+      outline: emoji_cat
+      icon: emoji-symbols-symbolic
+      action:
+        set_view: emoji_p60
+    emoji_self_61:
+      outline: emoji_cat
+      icon: emoji-symbols-symbolic
+      action:
+        set_view: emoji_p61
+    emoji_self_62:
+      outline: emoji_cat
+      icon: emoji-symbols-symbolic
+      action:
+        set_view: emoji_p62
+    emoji_self_63:
+      outline: emoji_cat
+      icon: emoji-symbols-symbolic
+      action:
+        set_view: emoji_p63
+    emoji_self_64:
+      outline: emoji_cat
+      icon: emoji-symbols-symbolic
+      action:
+        set_view: emoji_p64
+    emoji_self_65:
+      outline: emoji_cat
+      icon: emoji-flags-symbolic
+      action:
+        set_view: emoji_p65
+    emoji_self_66:
+      outline: emoji_cat
+      icon: emoji-flags-symbolic
+      action:
+        set_view: emoji_p66
+    emoji_self_67:
+      outline: emoji_cat
+      icon: emoji-flags-symbolic
+      action:
+        set_view: emoji_p67
+    emoji_self_68:
+      outline: emoji_cat
+      icon: emoji-flags-symbolic
+      action:
+        set_view: emoji_p68
+    emoji_self_69:
+      outline: emoji_cat
+      icon: emoji-flags-symbolic
+      action:
+        set_view: emoji_p69
+    emoji_self_70:
+      outline: emoji_cat
+      icon: emoji-flags-symbolic
+      action:
+        set_view: emoji_p70
+    emoji_self_71:
+      outline: emoji_cat
+      icon: emoji-flags-symbolic
+      action:
+        set_view: emoji_p71
+    emoji_self_72:
+      outline: emoji_cat
+      icon: emoji-flags-symbolic
+      action:
+        set_view: emoji_p72
+    emoji_self_73:
+      outline: emoji_cat
+      icon: emoji-flags-symbolic
+      action:
+        set_view: emoji_p73
+    emoji_self_74:
+      outline: emoji_cat
+      icon: emoji-flags-symbolic
+      action:
+        set_view: emoji_p74
+    emoji_self_75:
+      outline: emoji_cat
+      icon: emoji-flags-symbolic
+      action:
+        set_view: emoji_p75
+    emoji_self_76:
+      outline: emoji_cat
+      icon: emoji-flags-symbolic
+      action:
+        set_view: emoji_p76
+    emoji_prev_01:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p01
+    emoji_next_01:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p02
+    emoji_prev_02:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p01
+    emoji_next_02:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p03
+    emoji_prev_03:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p02
+    emoji_next_03:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p04
+    emoji_prev_04:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p03
+    emoji_next_04:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p05
+    emoji_prev_05:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p04
+    emoji_next_05:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p06
+    emoji_prev_06:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p05
+    emoji_next_06:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p07
+    emoji_prev_07:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p06
+    emoji_next_07:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p08
+    emoji_prev_08:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p07
+    emoji_next_08:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p09
+    emoji_prev_09:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p08
+    emoji_next_09:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p10
+    emoji_prev_10:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p09
+    emoji_next_10:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p11
+    emoji_prev_11:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p10
+    emoji_next_11:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p12
+    emoji_prev_12:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p11
+    emoji_next_12:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p13
+    emoji_prev_13:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p12
+    emoji_next_13:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p14
+    emoji_prev_14:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p13
+    emoji_next_14:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p15
+    emoji_prev_15:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p14
+    emoji_next_15:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p16
+    emoji_prev_16:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p15
+    emoji_next_16:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p17
+    emoji_prev_17:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p16
+    emoji_next_17:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p18
+    emoji_prev_18:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p17
+    emoji_next_18:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p19
+    emoji_prev_19:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p18
+    emoji_next_19:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p20
+    emoji_prev_20:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p19
+    emoji_next_20:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p21
+    emoji_prev_21:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p20
+    emoji_next_21:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p22
+    emoji_prev_22:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p21
+    emoji_next_22:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p23
+    emoji_prev_23:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p22
+    emoji_next_23:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p24
+    emoji_prev_24:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p23
+    emoji_next_24:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p25
+    emoji_prev_25:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p24
+    emoji_next_25:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p26
+    emoji_prev_26:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p25
+    emoji_next_26:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p27
+    emoji_prev_27:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p26
+    emoji_next_27:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p28
+    emoji_prev_28:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p27
+    emoji_next_28:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p29
+    emoji_prev_29:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p28
+    emoji_next_29:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p30
+    emoji_prev_30:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p29
+    emoji_next_30:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p31
+    emoji_prev_31:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p30
+    emoji_next_31:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p32
+    emoji_prev_32:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p31
+    emoji_next_32:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p33
+    emoji_prev_33:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p32
+    emoji_next_33:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p34
+    emoji_prev_34:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p33
+    emoji_next_34:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p35
+    emoji_prev_35:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p34
+    emoji_next_35:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p36
+    emoji_prev_36:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p35
+    emoji_next_36:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p37
+    emoji_prev_37:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p36
+    emoji_next_37:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p38
+    emoji_prev_38:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p37
+    emoji_next_38:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p39
+    emoji_prev_39:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p38
+    emoji_next_39:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p40
+    emoji_prev_40:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p39
+    emoji_next_40:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p41
+    emoji_prev_41:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p40
+    emoji_next_41:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p42
+    emoji_prev_42:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p41
+    emoji_next_42:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p43
+    emoji_prev_43:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p42
+    emoji_next_43:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p44
+    emoji_prev_44:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p43
+    emoji_next_44:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p45
+    emoji_prev_45:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p44
+    emoji_next_45:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p46
+    emoji_prev_46:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p45
+    emoji_next_46:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p47
+    emoji_prev_47:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p46
+    emoji_next_47:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p48
+    emoji_prev_48:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p47
+    emoji_next_48:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p49
+    emoji_prev_49:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p48
+    emoji_next_49:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p50
+    emoji_prev_50:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p49
+    emoji_next_50:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p51
+    emoji_prev_51:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p50
+    emoji_next_51:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p52
+    emoji_prev_52:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p51
+    emoji_next_52:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p53
+    emoji_prev_53:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p52
+    emoji_next_53:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p54
+    emoji_prev_54:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p53
+    emoji_next_54:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p55
+    emoji_prev_55:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p54
+    emoji_next_55:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p56
+    emoji_prev_56:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p55
+    emoji_next_56:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p57
+    emoji_prev_57:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p56
+    emoji_next_57:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p58
+    emoji_prev_58:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p57
+    emoji_next_58:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p59
+    emoji_prev_59:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p58
+    emoji_next_59:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p60
+    emoji_prev_60:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p59
+    emoji_next_60:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p61
+    emoji_prev_61:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p60
+    emoji_next_61:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p62
+    emoji_prev_62:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p61
+    emoji_next_62:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p63
+    emoji_prev_63:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p62
+    emoji_next_63:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p64
+    emoji_prev_64:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p63
+    emoji_next_64:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p65
+    emoji_prev_65:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p64
+    emoji_next_65:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p66
+    emoji_prev_66:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p65
+    emoji_next_66:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p67
+    emoji_prev_67:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p66
+    emoji_next_67:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p68
+    emoji_prev_68:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p67
+    emoji_next_68:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p69
+    emoji_prev_69:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p68
+    emoji_next_69:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p70
+    emoji_prev_70:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p69
+    emoji_next_70:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p71
+    emoji_prev_71:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p70
+    emoji_next_71:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p72
+    emoji_prev_72:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p71
+    emoji_next_72:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p73
+    emoji_prev_73:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p72
+    emoji_next_73:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p74
+    emoji_prev_74:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p73
+    emoji_next_74:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p75
+    emoji_prev_75:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p74
+    emoji_next_75:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p76
+    emoji_prev_76:
+      outline: emoji_nav
+      label: ‹
+      action:
+        set_view: emoji_p75
+    emoji_next_76:
+      outline: emoji_nav
+      label: ›
+      action:
+        set_view: emoji_p76

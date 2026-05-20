@@ -17,7 +17,7 @@
 
       # notifications
       libnotify
-      dunst
+      swaynotificationcenter
 
       # brightness
       brightnessctl
@@ -66,8 +66,8 @@
   # so playerctl can receive play/pause/next/prev from BT headset controls
   systemd.user.services.mpris-proxy = {
     description = "Bluetooth MPRIS proxy";
-    after = [ "bluetooth.target" ];
-    wantedBy = [ "default.target" ];
+    after = ["bluetooth.target"];
+    wantedBy = ["default.target"];
     serviceConfig = {
       ExecStart = "${pkgs.bluez}/bin/mpris-proxy";
       Restart = "on-failure";

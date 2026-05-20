@@ -37,7 +37,7 @@ On first run on Fedora, the installer asks:
 3) both  — install everything
 ```
 
-Sway-only software (sway, waybar, rofi, dunst, swaylock, ...) is skipped when you pick `gnome`. GNOME-only software (gnome-shell, gnome-tweaks) and the dconf settings are skipped when you pick `sway`.
+Sway-only software (sway, waybar, rofi, swaync, swaylock, ...) is skipped when you pick `gnome`. GNOME-only software (gnome-shell, gnome-tweaks) and the dconf settings are skipped when you pick `sway`.
 
 Skip the prompt with `--de=`:
 

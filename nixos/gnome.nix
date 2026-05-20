@@ -16,6 +16,9 @@ in {
   };
 
   services.gnome.games.enable = false;
+  # Bundled apps come from gnome-apps.nix (always imported) so they
+  # exist without the GNOME desktop too; disable the duplicate set.
+  services.gnome.core-apps.enable = false;
   services.power-profiles-daemon.enable = false; # Conflicts with autocpu-freq
   environment.gnome.excludePackages = with pkgs; [gnome-tour gnome-user-docs yelp epiphany];
 

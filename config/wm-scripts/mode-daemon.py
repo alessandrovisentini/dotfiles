@@ -1,0 +1,261 @@
+#!/usr/bin/env python3
+"""
+Tablet/laptop mode detector for detachable convertibles.
+
+Watches `SW_TABLET_MODE` (kernel input switch) and the folio keyboard's
+USB presence; on a confirmed transition runs `apply-mode <mode>`
+and writes the current mode to `${XDG_RUNTIME_DIR}/mode-state`.
+
+Manual override:
+    systemctl --user kill -s USR1 mode-daemon  # cycle auto → laptop → tablet → auto
+    systemctl --user kill -s USR2 mode-daemon  # reset to auto, re-eval from hardware
+
+While manual_mode is set, the daemon ignores hardware changes — it holds the
+chosen mode until the user cycles back to auto. The choice is in-memory only;
+the daemon comes up in auto on every start.
+"""
+
+import errno
+import fcntl
+import logging
+import os
+import selectors
+import signal
+import subprocess
+import sys
+import time
+from pathlib import Path
+
+import evdev
+from evdev import ecodes
+
+LOG = logging.getLogger("mode-daemon")
+DEBOUNCE_SEC = 0.4
+# Substrings that identify the folio keyboard in /proc/bus/input/devices.
+FOLIO_KEYBOARD_HINTS = ("Darfon Thinkpad X12", "Folio case")
+
+def _eviocgsw(length: int) -> int:
+    """Compute the EVIOCGSW(length) ioctl number — read switch state bitmap."""
+    DIR_READ = 2
+    return (DIR_READ << 30) | (length << 16) | (ord('E') << 8) | 0x1b
+
+
+def read_switch_state(dev: evdev.InputDevice, sw_code: int) -> bool | None:
+    """Return current state of a switch (True=on, False=off, None=unsupported)."""
+    nbytes = (ecodes.SW_MAX + 7) // 8
+    buf = bytearray(nbytes)
+    try:
+        fcntl.ioctl(dev.fd, _eviocgsw(nbytes), buf, True)
+    except OSError as e:
+        LOG.warning("EVIOCGSW failed on %s: %s", dev.path, e)
+        return None
+    byte = buf[sw_code // 8]
+    return bool((byte >> (sw_code % 8)) & 1)
+
+
+def find_tablet_switch() -> evdev.InputDevice | None:
+    """Find an input device that exposes SW_TABLET_MODE."""
+    for path in evdev.list_devices():
+        try:
+            d = evdev.InputDevice(path)
+        except OSError as e:
+            LOG.debug("skip %s: %s", path, e)
+            continue
+        caps = d.capabilities()
+        sw_codes = caps.get(ecodes.EV_SW, [])
+        if ecodes.SW_TABLET_MODE in sw_codes:
+            LOG.info("Tablet-mode switch: %s (%s)", d.name, d.path)
+            return d
+        d.close()
+    return None
+
+
+def folio_keyboard_present() -> bool:
+    """Detect the folio keyboard by walking /proc/bus/input/devices."""
+    try:
+        text = Path("/proc/bus/input/devices").read_text()
+    except OSError:
+        return True  # if undetectable, assume present (laptop mode)
+    return any(hint in text for hint in FOLIO_KEYBOARD_HINTS)
+
+
+def write_runtime_mode(mode: str, source: str) -> None:
+    """Expose the current mode + source (auto|manual) to other scripts."""
+    runtime = os.environ.get("XDG_RUNTIME_DIR")
+    if not runtime:
+        runtime = f"/run/user/{os.getuid()}"
+    base = Path(runtime)
+    try:
+        (base / "mode-state").write_text(mode + "\n")
+        (base / "mode-source").write_text(source + "\n")
+    except OSError as e:
+        LOG.warning("Could not write runtime state files: %s", e)
+
+
+def apply_mode(mode: str, source: str = "auto") -> None:
+    """Run the apply-mode helper. Idempotent on the caller's side."""
+    LOG.info("Applying mode: %s (source=%s)", mode, source)
+    write_runtime_mode(mode, source)
+    try:
+        subprocess.run(
+            ["apply-mode", mode],
+            check=False,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            timeout=10,
+        )
+    except (FileNotFoundError, subprocess.TimeoutExpired) as e:
+        LOG.error("apply-mode failed: %s", e)
+
+
+def compute_mode(switch_state: bool, kbd_present: bool) -> str:
+    """Combine signals into a single mode."""
+    # Tablet if EITHER the switch says so OR the keyboard is gone.
+    if switch_state or not kbd_present:
+        return "tablet"
+    return "laptop"
+
+
+class ModeDaemon:
+    def __init__(self) -> None:
+        self.dev = find_tablet_switch()
+        self.sw_state = False
+        self.current_mode = "laptop"
+        # Manual override: None = auto (follow hardware); otherwise the
+        # latched mode that hardware changes won't override.
+        self.manual_mode: str | None = None
+        self.pending_mode: str | None = None
+        self.pending_since: float = 0.0
+        self.force_apply = False
+        signal.signal(signal.SIGUSR1, self._on_usr1)
+        signal.signal(signal.SIGUSR2, self._on_usr2)
+        signal.signal(signal.SIGTERM, self._on_term)
+        signal.signal(signal.SIGINT, self._on_term)
+        self._running = True
+
+    def _source(self) -> str:
+        return "manual" if self.manual_mode is not None else "auto"
+
+    def _on_usr1(self, *_a) -> None:
+        # Cycle: auto → laptop (manual) → tablet (manual) → auto
+        if self.manual_mode is None:
+            self.manual_mode = "laptop"
+        elif self.manual_mode == "laptop":
+            self.manual_mode = "tablet"
+        else:
+            self.manual_mode = None
+        LOG.info("USR1: cycle → manual_mode=%s", self.manual_mode)
+
+        if self.manual_mode is None:
+            # Back to auto — re-sample hardware and apply whatever it says.
+            self.force_apply = True
+            self._sample_and_maybe_apply(immediate=True)
+        else:
+            self.current_mode = self.manual_mode
+            apply_mode(self.manual_mode, source="manual")
+        self.pending_mode = None
+
+    def _on_usr2(self, *_a) -> None:
+        LOG.info("USR2: reset to auto, re-evaluate from hardware")
+        self.manual_mode = None
+        self.force_apply = True
+        self._sample_and_maybe_apply(immediate=True)
+
+    def _on_term(self, *_a) -> None:
+        LOG.info("Shutdown requested")
+        self._running = False
+
+    def _sample_state(self) -> bool:
+        if self.dev is None:
+            return False
+        s = read_switch_state(self.dev, ecodes.SW_TABLET_MODE)
+        if s is None:
+            return self.sw_state
+        return s
+
+    def _sample_and_maybe_apply(self, immediate: bool = False) -> None:
+        self.sw_state = self._sample_state()
+        desired = compute_mode(self.sw_state, folio_keyboard_present())
+        if desired != self.current_mode or self.force_apply:
+            if immediate:
+                self.current_mode = desired
+                apply_mode(desired, source=self._source())
+                self.force_apply = False
+            else:
+                self.pending_mode = desired
+                self.pending_since = time.monotonic()
+
+    def _flush_pending(self) -> None:
+        if self.pending_mode is None:
+            return
+        if (time.monotonic() - self.pending_since) < DEBOUNCE_SEC:
+            return
+        if self.pending_mode != self.current_mode:
+            self.current_mode = self.pending_mode
+            apply_mode(self.current_mode, source=self._source())
+        self.pending_mode = None
+
+    def run(self) -> int:
+        # Apply initial mode immediately. Boots in auto (manual_mode = None).
+        self.sw_state = self._sample_state()
+        self.current_mode = compute_mode(self.sw_state, folio_keyboard_present())
+        apply_mode(self.current_mode, source=self._source())
+
+        sel = selectors.DefaultSelector()
+        if self.dev is not None:
+            sel.register(self.dev.fd, selectors.EVENT_READ)
+            LOG.info("Watching %s for SW_TABLET_MODE events", self.dev.path)
+        else:
+            LOG.warning("No SW_TABLET_MODE device found — running in poll-only mode")
+
+        while self._running:
+            # Wait up to DEBOUNCE_SEC to flush pending transitions.
+            try:
+                events = sel.select(timeout=DEBOUNCE_SEC)
+            except (InterruptedError, OSError) as e:
+                if getattr(e, "errno", None) == errno.EINTR:
+                    continue
+                LOG.error("select failed: %s", e)
+                time.sleep(1)
+                continue
+
+            if events and self.dev is not None:
+                try:
+                    for ev in self.dev.read():
+                        if ev.type == ecodes.EV_SW and ev.code == ecodes.SW_TABLET_MODE:
+                            self.sw_state = bool(ev.value)
+                            LOG.info("SW_TABLET_MODE → %s", self.sw_state)
+                except (BlockingIOError, OSError) as e:
+                    LOG.warning("read() failed: %s", e)
+
+            # Manual override: ignore hardware until the user cycles to auto.
+            if self.manual_mode is not None:
+                self.pending_mode = None
+                continue
+
+            # Re-poll keyboard presence on every wakeup (cheap: a single file read).
+            desired = compute_mode(self.sw_state, folio_keyboard_present())
+            if desired != self.current_mode:
+                if self.pending_mode != desired:
+                    self.pending_mode = desired
+                    self.pending_since = time.monotonic()
+                    LOG.debug("Pending transition → %s", desired)
+            else:
+                self.pending_mode = None
+
+            self._flush_pending()
+
+        return 0
+
+
+def main() -> int:
+    logging.basicConfig(
+        level=os.environ.get("X12_MODE_LOG_LEVEL", "INFO"),
+        format="%(asctime)s %(levelname)s %(message)s",
+        datefmt="%H:%M:%S",
+    )
+    return ModeDaemon().run()
+
+
+if __name__ == "__main__":
+    sys.exit(main())

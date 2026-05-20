@@ -10,7 +10,9 @@
     ./main_user.nix
     ./display_manager.nix
     ./gnome.nix
-    # ./sway.nix
+    ./gnome-apps.nix
+    ./sway.nix
+    ./hyprland.nix
     ./development.nix
     ./printing.nix
     ./gaming.nix
