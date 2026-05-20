@@ -13,6 +13,7 @@
     ./gnome-apps.nix
     ./sway.nix
     ./hyprland.nix
+    ./howdy.nix
     ./development.nix
     ./printing.nix
     ./gaming.nix
