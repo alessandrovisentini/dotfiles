@@ -3,7 +3,6 @@
 //! GTK3, not GTK4: GTK4 layer-shell surfaces drop wl_touch events on
 //! Hyprland.
 
-use std::collections::HashMap;
 use std::env;
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -18,12 +17,6 @@ use gtk_layer_shell as lshell;
 
 const TILE_ICON_PX: i32 = 72;
 const FALLBACK_ICON: &str = "application-x-executable";
-
-const ICON_THEME_ORDER: &[&str] = &["Papirus", "Adwaita", "hicolor", "breeze"];
-const ICON_SIZE_ORDER: &[&str] = &[
-    "scalable", "512x512", "256x256", "128x128", "96x96", "72x72",
-    "64x64", "48x48", "32x32",
-];
 
 /// Signal an already-running grinch to show and return its PID, or
 /// None if this process is the singleton. Prevents stacked windows.
@@ -124,7 +117,17 @@ fn main() {
         settings.set_gtk_cursor_blink(false);
     }
 
-    let icon_index = build_icon_index();
+    // Resolve icons through GtkIconTheme — the same resolver GNOME and
+    // the notification daemon use — so grinch's icons match the rest of
+    // the system (correct theme, Inherits chain, scalable/sized dirs,
+    // pixmaps fallback). Pin it to the configured theme so we don't
+    // depend on an XSETTINGS daemon being present under Hyprland.
+    let icon_theme = gtk::IconTheme::default()
+        .unwrap_or_else(gtk::IconTheme::new);
+    if let Some(theme) = configured_icon_theme() {
+        icon_theme.set_custom_theme(Some(&theme));
+    }
+
     let apps = collect_apps();
 
     let (win, pending) = build_window(apps);
@@ -172,7 +175,6 @@ fn main() {
 
     // Lazy icon decode via idle callbacks; decoding all icons up front
     // would stall the launcher's first paint.
-    let icon_index = Rc::new(icon_index);
     let pending = Rc::new(std::cell::RefCell::new(pending));
     glib::idle_add_local(move || {
         let mut q = pending.borrow_mut();
@@ -180,7 +182,7 @@ fn main() {
             match q.pop() {
                 Some((img, icon_name)) => {
                     if let Some(pix) =
-                        load_icon_pixbuf(&icon_name, TILE_ICON_PX, &icon_index)
+                        load_icon_pixbuf(&icon_name, TILE_ICON_PX, &icon_theme)
                     {
                         img.set_from_pixbuf(Some(&pix));
                     }
@@ -307,77 +309,51 @@ fn parse_desktop(path: &Path) -> Option<App> {
     Some(App { name, icon, exec, terminal })
 }
 
-// ---------- Icon index ----------
+// ---------- Icons ----------
 
-/// Pre-scan all icon-theme apps dirs once. Maps both the .desktop
-/// Icon= name and lowercase to an absolute file path.
-fn build_icon_index() -> HashMap<String, PathBuf> {
-    let mut idx: HashMap<String, PathBuf> = HashMap::new();
-    for data in xdg_data_dirs() {
-        let icons_root = data.join("icons");
-        for theme in ICON_THEME_ORDER {
-            let theme_dir = icons_root.join(theme);
-            if !theme_dir.is_dir() {
-                continue;
-            }
-            for size in ICON_SIZE_ORDER {
-                let apps_dir = theme_dir.join(size).join("apps");
-                let entries = match fs::read_dir(&apps_dir) {
-                    Ok(e) => e,
-                    Err(_) => continue,
-                };
-                for ent in entries.flatten() {
-                    let path = ent.path();
-                    let stem = match path.file_stem().and_then(|s| s.to_str()) {
-                        Some(s) => s.to_string(),
-                        None => continue,
-                    };
-                    // First match per stem wins (theme priority order)
-                    idx.entry(stem.clone()).or_insert_with(|| path.clone());
-                    let lc = stem.to_lowercase();
-                    if lc != stem {
-                        idx.entry(lc).or_insert(path);
-                    }
-                }
-            }
-        }
-        // /share/pixmaps fallback
-        let pixmaps = data.join("pixmaps");
-        if let Ok(entries) = fs::read_dir(&pixmaps) {
-            for ent in entries.flatten() {
-                let path = ent.path();
-                if let Some(stem) = path.file_stem().and_then(|s| s.to_str()) {
-                    idx.entry(stem.to_string()).or_insert_with(|| path.clone());
-                }
-            }
-        }
+/// The user's configured GTK/GNOME icon theme, read from gsettings
+/// (`org.gnome.desktop.interface icon-theme`) — the same source GNOME
+/// apps use. Returns None if the schema isn't installed or the key is
+/// unset. The schema-source lookup guards against GLib aborting when
+/// the GNOME schemas are absent (gio::Settings::new aborts otherwise).
+fn configured_icon_theme() -> Option<String> {
+    const SCHEMA: &str = "org.gnome.desktop.interface";
+    let schema = gio::SettingsSchemaSource::default()?.lookup(SCHEMA, true)?;
+    if !schema.has_key("icon-theme") {
+        return None;
     }
-    idx
+    let theme = gio::Settings::new(SCHEMA).string("icon-theme").to_string();
+    if theme.is_empty() {
+        None
+    } else {
+        Some(theme)
+    }
 }
 
+/// Resolve a .desktop Icon= value to a pixbuf via GtkIconTheme (themed
+/// names) or directly (absolute paths). Using GtkIconTheme means we
+/// honor the active theme's full inheritance chain exactly like every
+/// other app, instead of guessing at directories ourselves.
 fn load_icon_pixbuf(
     icon: &str,
     size: i32,
-    idx: &HashMap<String, PathBuf>,
+    theme: &gtk::IconTheme,
 ) -> Option<Pixbuf> {
     if icon.is_empty() {
         return None;
     }
-    let path = if Path::new(icon).is_absolute() && Path::new(icon).exists() {
-        PathBuf::from(icon)
-    } else if let Some(p) = idx.get(icon) {
-        p.clone()
-    } else if let Some(p) = idx.get(&icon.to_lowercase()) {
-        p.clone()
-    } else {
-        return None;
-    };
-    let pix = Pixbuf::from_file_at_size(&path, size, size).ok()?;
-    if pix.width() == size && pix.height() == size {
-        Some(pix)
-    } else {
-        pix.scale_simple(size, size, InterpType::Bilinear)
+    if Path::new(icon).is_absolute() {
+        let pix = Pixbuf::from_file_at_size(icon, size, size).ok()?;
+        return if pix.width() == size && pix.height() == size {
+            Some(pix)
+        } else {
+            pix.scale_simple(size, size, InterpType::Bilinear)
+        };
     }
+    theme
+        .load_icon(icon, size, gtk::IconLookupFlags::FORCE_SIZE)
+        .ok()
+        .flatten()
 }
 
 // ---------- UI ----------
@@ -475,17 +451,23 @@ fn build_window(apps: Vec<App>) -> (gtk::Window, Vec<(gtk::Image, String)>) {
         })));
         let flow_s = flow.clone();
         let search_s = search.clone();
+        let apps_s = apps.clone();
         search.connect_search_changed(move |_| {
             flow_s.invalidate_filter();
             // Keep the Enter target pinned to the first match and visibly
             // selected. Only pull keyboard focus into the grid when the
             // entry isn't focused — touch typing keeps focus (and the OSK)
-            // on the entry itself.
-            if let Some(fc) = first_visible_child(&flow_s) {
-                flow_s.select_child(&fc);
-                if !search_s.has_focus() {
-                    fc.grab_focus();
+            // on the entry itself. With no match, drop the selection so a
+            // stale tile can't be activated.
+            let q = search_s.text().to_string().to_lowercase();
+            match first_matching_child(&flow_s, &apps_s, &q) {
+                Some(fc) => {
+                    flow_s.select_child(&fc);
+                    if !search_s.has_focus() {
+                        fc.grab_focus();
+                    }
                 }
+                None => flow_s.unselect_all(),
             }
         });
     }
@@ -558,6 +540,8 @@ fn build_window(apps: Vec<App>) -> (gtk::Window, Vec<(gtk::Image, String)>) {
         let flow_k = flow.clone();
         let win_k = win.clone();
         let search_k = search.clone();
+        let apps_k = apps.clone();
+        let scroll_k = scroll.clone();
         win.connect_key_press_event(move |_, ev| {
             let key = ev.keyval();
             if key == gdk::keys::constants::Escape {
@@ -567,21 +551,66 @@ fn build_window(apps: Vec<App>) -> (gtk::Window, Vec<(gtk::Image, String)>) {
             if key == gdk::keys::constants::Return
                 || key == gdk::keys::constants::KP_Enter
             {
-                let sel = flow_k.selected_children();
-                if let Some(c) = sel.first() {
-                    flow_k.emit_by_name::<()>("child-activated", &[c]);
-                    return glib::Propagation::Stop;
+                // Activate the current selection only if it still matches
+                // the query, else the first match. With no match, swallow
+                // Enter so grinch stays open instead of launching a stale
+                // tile (the selection survives filtering — see child_matches).
+                let q = search_k.text().to_string().to_lowercase();
+                let target = flow_k
+                    .selected_children()
+                    .into_iter()
+                    .find(|c| child_matches(c, &apps_k, &q))
+                    .or_else(|| first_matching_child(&flow_k, &apps_k, &q));
+                if let Some(c) = target {
+                    flow_k.emit_by_name::<()>("child-activated", &[&c]);
                 }
-                if let Some(fc) = first_visible_child(&flow_k) {
-                    flow_k.emit_by_name::<()>("child-activated", &[&fc]);
-                    return glib::Propagation::Stop;
-                }
+                return glib::Propagation::Stop;
             }
 
-            // The grid owns focus so arrow keys navigate it natively; the
-            // search entry stays unfocused. Route typing into the filter
-            // by hand so search works from anywhere. When the entry *does*
-            // hold focus (tapped on touch), let it edit itself.
+            // Arrow keys move the grid selection — by hand, so they work
+            // even while the search entry holds focus (touch typing), where
+            // they'd otherwise just move the text caret. Focus stays on the
+            // entry when it has it, keeping the on-screen keyboard up; Enter
+            // activates whatever ends up selected.
+            let arrow = if key == gdk::keys::constants::Left {
+                Some((-1i32, false))
+            } else if key == gdk::keys::constants::Right {
+                Some((1, false))
+            } else if key == gdk::keys::constants::Up {
+                Some((-1, true))
+            } else if key == gdk::keys::constants::Down {
+                Some((1, true))
+            } else {
+                None
+            };
+            if let Some((step, vertical)) = arrow {
+                let q = search_k.text().to_string().to_lowercase();
+                let matches = matching_children(&flow_k, &apps_k, &q);
+                if !matches.is_empty() {
+                    let sel = flow_k.selected_children();
+                    let cur = sel
+                        .first()
+                        .and_then(|s| matches.iter().position(|c| c == s))
+                        .unwrap_or(0) as i32;
+                    let delta = if vertical {
+                        step * flow_columns(&matches) as i32
+                    } else {
+                        step
+                    };
+                    let new = (cur + delta).clamp(0, matches.len() as i32 - 1);
+                    let target = &matches[new as usize];
+                    flow_k.select_child(target);
+                    scroll_child_into_view(&scroll_k, target);
+                    if !search_k.has_focus() {
+                        target.grab_focus();
+                    }
+                }
+                return glib::Propagation::Stop;
+            }
+
+            // Route typing into the filter by hand so search works from
+            // anywhere. When the entry *does* hold focus (tapped on touch),
+            // let it edit itself for everything else (Home/End, etc.).
             if search_k.has_focus() {
                 return glib::Propagation::Proceed;
             }
@@ -630,10 +659,12 @@ fn build_window(apps: Vec<App>) -> (gtk::Window, Vec<(gtk::Image, String)>) {
     {
         let search_m = search.clone();
         let flow_m = flow.clone();
+        let apps_m = apps.clone();
         win.connect_map(move |_| {
             search_m.set_text("");
             flow_m.invalidate_filter();
-            if let Some(fc) = first_visible_child(&flow_m) {
+            // Empty query → first tile overall is the Enter target.
+            if let Some(fc) = first_matching_child(&flow_m, &apps_m, "") {
                 flow_m.select_child(&fc);
                 fc.grab_focus();
             }
@@ -643,17 +674,85 @@ fn build_window(apps: Vec<App>) -> (gtk::Window, Vec<(gtk::Image, String)>) {
     (win, pending_icons)
 }
 
-/// First tile still visible under the current filter (top-left in
-/// reading order) — the implicit Enter target.
-fn first_visible_child(flow: &gtk::FlowBox) -> Option<gtk::FlowBoxChild> {
+/// Does this tile pass the current search filter? `query` must already
+/// be lowercased. GTK3's FlowBox filter keeps visibility in a private
+/// field and never touches the widget's child-visible flag, so
+/// `is_child_visible()` can't be trusted — we re-run the predicate the
+/// filter_func uses (app name contains query).
+fn child_matches(child: &gtk::FlowBoxChild, apps: &[App], query: &str) -> bool {
+    if query.is_empty() {
+        return true;
+    }
+    let idx_ptr: Option<std::ptr::NonNull<usize>> =
+        unsafe { child.data::<usize>("app_idx") };
+    match idx_ptr {
+        Some(p) => unsafe { apps[*p.as_ref()].name.to_lowercase().contains(query) },
+        None => false,
+    }
+}
+
+/// First tile matching the current query (top-left in reading order) —
+/// the implicit Enter target. `query` must already be lowercased.
+fn first_matching_child(
+    flow: &gtk::FlowBox,
+    apps: &[App],
+    query: &str,
+) -> Option<gtk::FlowBoxChild> {
     for c in flow.children() {
-        if c.is_child_visible() {
-            if let Ok(fc) = c.downcast::<gtk::FlowBoxChild>() {
+        if let Ok(fc) = c.downcast::<gtk::FlowBoxChild>() {
+            if child_matches(&fc, apps, query) {
                 return Some(fc);
             }
         }
     }
     None
+}
+
+/// All tiles matching the current query, in reading order. `query` must
+/// already be lowercased.
+fn matching_children(
+    flow: &gtk::FlowBox,
+    apps: &[App],
+    query: &str,
+) -> Vec<gtk::FlowBoxChild> {
+    flow.children()
+        .into_iter()
+        .filter_map(|c| c.downcast::<gtk::FlowBoxChild>().ok())
+        .filter(|c| child_matches(c, apps, query))
+        .collect()
+}
+
+/// Tiles in the top row of the current layout — the column count used to
+/// step the selection vertically. Reads widget allocations, so it's only
+/// meaningful once the grid has been laid out.
+fn flow_columns(matches: &[gtk::FlowBoxChild]) -> usize {
+    match matches.first() {
+        None => 1,
+        Some(first) => {
+            let top = first.allocation().y();
+            matches
+                .iter()
+                .filter(|c| c.allocation().y() == top)
+                .count()
+                .max(1)
+        }
+    }
+}
+
+/// Scroll just enough to bring `child` fully into the viewport. We move
+/// the selection by hand (to keep entry focus + the OSK), so the grid
+/// won't auto-scroll for us the way it would on focus changes.
+fn scroll_child_into_view(scroll: &gtk::ScrolledWindow, child: &gtk::FlowBoxChild) {
+    let alloc = child.allocation();
+    let adj = scroll.vadjustment();
+    let top = alloc.y() as f64;
+    let bottom = top + alloc.height() as f64;
+    let (val, page) = (adj.value(), adj.page_size());
+    if top < val {
+        adj.set_value(top);
+    } else if bottom > val + page {
+        adj.set_value((bottom - page).max(0.0));
+    }
 }
 
 fn build_tile(app: &App) -> (gtk::FlowBoxChild, gtk::Image) {
