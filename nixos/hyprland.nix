@@ -169,9 +169,6 @@ in {
     # Touchscreen gesture engine; native gestures only cover touchpad.
     hyprlandPlugins.hyprgrass
 
-    # Typed launcher ($mod+D); touch grid is grinch (see appGrid).
-    rofi
-
     # App OSK: squeekboard. Auto-popup is gated by the a11y gsetting
     # that apply-mode toggles per mode; layout via home-manager.
     squeekboard
