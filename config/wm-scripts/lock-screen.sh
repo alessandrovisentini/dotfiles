@@ -42,3 +42,12 @@ hyprlock
 if [[ -n "$wvkbd_pid" ]]; then
     kill "$wvkbd_pid" 2>/dev/null || true
 fi
+
+# Restart hyprpanel after unlock. Under fractional scaling its bar comes
+# back blurry (a stale scale-1 layer buffer gets upscaled), and its
+# workspace widget loses sync with Hyprland's IPC across the lock. A
+# clean restart fixes both, and unlike `hyprctl reload` it doesn't reset
+# runtime monitor/rule state. Small settle delay so the lock has fully
+# torn down before the new bar maps.
+sleep 0.3
+hyprpanel restart >/dev/null 2>&1 || true
