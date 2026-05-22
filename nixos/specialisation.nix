@@ -1,13 +1,15 @@
 {pkgs, lib, ...}: let
-  swayEgpuLauncher = pkgs.writeShellScriptBin "sway-egpu-launcher" ''
-    EGPU="/dev/dri/by-path/pci-0000:54:00.0-card"
-    IGPU="/dev/dri/by-path/pci-0000:00:02.0-card"
-    export WLR_DRM_DEVICES="$(readlink -f "$EGPU"):$(readlink -f "$IGPU")"
-    exec sway "$@"
+  # Run a command on the AMD eGPU instead of the default Intel iGPU (PRIME offload).
+  # Usage: prime-run <cmd>   |   Steam launch options: prime-run %command%
+  primeRun = pkgs.writeShellScriptBin "prime-run" ''
+    export DRI_PRIME=1
+    exec "$@"
   '';
 in {
   specialisation = {
-    # Dual GPU: AMD RX 7600 eGPU (primary renderer) + Intel Iris Xe iGPU (display output)
+    # Dual GPU: Intel Iris Xe iGPU is the default renderer; AMD RX 7600 eGPU stays
+    # available for game offload via prime-run. Both DRM nodes load, compositor
+    # auto-detects them (external monitor on the eGPU still works).
     egpu.configuration = {
       system.nixos.tags = ["egpu"];
 
@@ -16,7 +18,7 @@ in {
         kernelParams = ["amdgpu.pcie_gen_cap=0x40000"];
       };
 
-      services.xserver.videoDrivers = lib.mkForce ["amdgpu" "modesetting"];
+      services.xserver.videoDrivers = lib.mkForce ["modesetting" "amdgpu"];
 
       hardware.graphics = lib.mkForce {
         enable = true;
@@ -25,14 +27,7 @@ in {
 
       environment.sessionVariables.AMD_VULKAN_ICD = "RADV";
 
-      environment.etc."wayland-sessions/sway-egpu.desktop".text = ''
-        [Desktop Entry]
-        Name=Sway (eGPU)
-        Comment=Sway with AMD eGPU as primary renderer
-        Exec=${swayEgpuLauncher}/bin/sway-egpu-launcher
-        Type=Application
-        DesktopNames=sway
-      '';
+      environment.systemPackages = [primeRun];
     };
   };
 }
