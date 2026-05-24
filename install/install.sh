@@ -1,12 +1,5 @@
 #!/usr/bin/env bash
-#
-# Dispatches to the per-OS installer. Supported: nixos, macos, fedora.
-#
-# Usage:
-#   ./install.sh                  Run all steps (default)
-#   ./install.sh <step> ...       Run only the specified steps
-#   ./install.sh --de=<value>     Fedora: pick desktop env (gnome|sway|both)
-#
+# Per-OS installer dispatcher. Supported: nixos, macos, fedora.
 # Steps: symlinks, packages, nixos, gnome, shell, post, all
 
 set -e

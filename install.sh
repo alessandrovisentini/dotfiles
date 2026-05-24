@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
-#
-# Bootstrap entry point — meant to be invoked via `curl … | bash`. It detects the OS,
-# installs git if needed, clones the dotfiles repo, then hands off to install/install.sh.
-# Local invocations skip the clone (or pull if the repo is already present).
+# Bootstrap entry, invoked via `curl … | bash`. Detects OS, ensures git,
+# clones the repo, then hands off to install/install.sh.
 
 set -e
 
@@ -54,7 +52,7 @@ install_git() {
     log_info "Git not found. Installing git..."
     case "$DETECTED_OS" in
         nixos)
-            # Provided on-demand via nix-shell in run_git.
+            # Provided on-demand via nix-shell.
             return 0
             ;;
         macos)
@@ -62,7 +60,7 @@ install_git() {
                 brew install git || { log_error "Failed to install git with brew"; exit 1; }
             elif command -v xcode-select &>/dev/null; then
                 log_info "Triggering Xcode Command Line Tools install (provides git)..."
-                # xcode-select --install can exit non-zero even when the GUI launches; don't trip `set -e`.
+                # The CLT installer can exit non-zero when the GUI launches.
                 xcode-select --install 2>/dev/null || true
                 cat <<EOF
 

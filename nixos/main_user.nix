@@ -8,8 +8,8 @@
   unstable = import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz") {
     config.allowUnfree = true;
   };
-  configDir = builtins.dirOf (toString ./.); # Gets the directory of the .nix file
-  parentDir = builtins.dirOf configDir; # Moves one level up
+  configDir = builtins.dirOf (toString ./.);
+  parentDir = builtins.dirOf configDir;
   vars = import ./variables.nix;
 in {
   imports = [
@@ -18,7 +18,7 @@ in {
 
   nixpkgs.config.allowUnfree = true;
 
-  # User and Packages
+  # User and packages
   users.users.${vars.mainUserName} = {
     isNormalUser = true;
     uid = 1000;
@@ -70,7 +70,7 @@ in {
   # Programs
   programs.firefox = {
     enable = true;
-    # text-input-v3 (for OSK auto-popup) is behind a Firefox pref.
+    # text-input-v3 (OSK auto-popup) is behind a pref.
     policies.Preferences = {
       "widget.wayland-text-input-v3.enabled" = {
         Value = true;
@@ -90,10 +90,10 @@ in {
     openFirewall = true;
   };
 
-  # Spotify Firewall
+  # Spotify
   networking.firewall.allowedTCPPorts = [57621];
 
-  # Appimages
+  # AppImages
   programs.appimage.enable = true;
   programs.appimage.binfmt = true;
 
@@ -103,7 +103,7 @@ in {
   # Keyring
   services.gnome.gnome-keyring.enable = true;
 
-  # Nerd Fonts
+  # Fonts
   fonts.packages = [
     pkgs.nerd-fonts.dejavu-sans-mono
   ];
@@ -127,7 +127,7 @@ in {
     };
   };
 
-  # Session Variables
+  # Session variables
   environment.sessionVariables = {
     XDG_CACHE_HOME = "$HOME/.cache";
     XDG_CONFIG_HOME = "$HOME/.config";
@@ -151,7 +151,7 @@ in {
     h = "$REPOS_HOME/dotfiles/scripts/ai/h.sh";
   };
 
-  # Home manager
+  # Home Manager
   home-manager.users.${vars.mainUserName} = {
     lib,
     pkgs,
@@ -165,13 +165,11 @@ in {
     dconf = {
       enable = true;
       settings = {
-        # Dark mode for GTK and QT
         "org/gnome/desktop/interface" = {
           color-scheme = "prefer-dark";
           gtk-theme = "Adwaita-dark";
         };
-        # Squeekboard panel-height multipliers; the default renders the
-        # OSK too short, so bump both (more in portrait).
+        # Default OSK height is too short; bump it, more in portrait.
         "sm/puri/Squeekboard" = {
           scale-in-vertical-screen-orientation =
             lib.hm.gvariant.mkDouble 2.0;
@@ -194,9 +192,8 @@ in {
       style.name = "adwaita-dark";
     };
 
-    # Squeekboard maps content_purpose to subdirs (url/, email/, …) and
-    # doesn't fall back to the root layout, so the custom layout must be
-    # deployed into each subdir to override. Number/pin keep defaults.
+    # Squeekboard maps content_purpose to subdirs without falling back to
+    # the root layout, so the custom layout must be deployed in each subdir.
     xdg.dataFile."squeekboard/keyboards/us.yaml".source =
       ../config/squeekboard/us.yaml;
     xdg.dataFile."squeekboard/keyboards/us_wide.yaml".source =

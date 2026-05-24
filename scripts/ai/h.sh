@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-# h — "how to" helper: outputs the shell command to do something
-# Usage: h how to list files in a directory
+# h <question>  → outputs the shell command to do it.
 
 if [ $# -eq 0 ]; then
     echo "Usage: h <what you want to do>" >&2

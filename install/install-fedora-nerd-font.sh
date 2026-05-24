@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
-#
-# Fedora doesn't ship DejaVu Sans Mono Nerd Font as a package, so we fetch it
-# from the upstream GitHub release to keep parity with macOS (Homebrew cask)
-# and NixOS (nerd-fonts.dejavu-sans-mono).
+# Fedora doesn't package DejaVu Sans Mono Nerd Font; fetch the upstream release.
 
 set -e
 

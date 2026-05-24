@@ -1,0 +1,214 @@
+// Theme tokens. Touch-sized hit targets; translucent island bar.
+$bg:         #1c1c1c;
+$surface:    #1c1c1c;
+$card:       #303030;
+$card-hover: #404040;
+$fg:         #ffffff;
+$muted:      #9a9996;
+$faint:      #5e5c64;
+$accent:     #3584e4;
+$accent-dim: rgba(53, 132, 228, 0.18);
+$accent-brd: rgba(53, 132, 228, 0.55);
+$danger:     #c01c28;
+$success:    #26a269;
+$warning:    #cd9309;
+$border:     #1a1a1a;
+$track:      #45454a;
+$knob:       #ffffff;
+
+$radius:  10px;
+$pill:     8px;
+$touch:   28px;
+$ease:    150ms ease;
+
+* {
+  font-family: "DejaVuSansM Nerd Font Mono", "JetBrains Mono", monospace;
+  font-size: 15px;
+}
+
+window.Bar,
+window.Menu {
+  color: $fg;
+  background: transparent;
+}
+
+window.Bar > centerbox { margin: 0 6px; }
+
+.cluster {
+  background: rgba(28, 28, 28, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: $radius;
+  padding: 3px;
+  margin: 5px 4px;
+}
+
+@mixin item {
+  min-height: $touch;
+  min-width: $touch;
+  padding: 0 10px;
+  margin: 0 1px;
+  border-radius: $pill;
+  background: transparent;
+  color: $fg;
+  transition: background $ease, color $ease;
+}
+
+.bar-button {
+  @include item;
+  &:hover { background: $card-hover; }
+  &:active,
+  &.active { background: $accent; color: #ffffff; }
+}
+
+.chip { @include item; }
+
+.bar-icon { font-size: 19px; }
+.accent-icon .bar-icon { color: $accent; }
+.module-icon { margin-right: 6px; }
+.clock { font-weight: 600; letter-spacing: 0.3px; }
+
+.workspaces { margin: 0 2px; }
+.ws {
+  @include item;
+  color: $muted;
+  &:hover  { background: $card-hover; color: $fg; }
+  &.visible { background: $card-hover; color: $fg; }
+  &.focused { background: $accent; color: #ffffff; }
+  &.urgent  { background: $danger; color: #ffffff; }
+}
+
+.tray button { @include item; }
+.tray icon { font-size: 17px; }
+
+.battery.charging .module-icon { color: $success; }
+.battery.warning  { color: $warning; }
+.battery.critical { color: $danger; }
+
+.menu-card {
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: 16px;
+  padding: 8px;
+  margin: 8px;
+  min-width: 360px;
+}
+
+.menu-card button {
+  border: none;
+  box-shadow: none;
+  background-image: none;
+  outline: none;
+  text-shadow: none;
+}
+
+.section {
+  background: $card;
+  border-radius: 12px;
+  padding: 10px;
+  margin: 4px 4px 8px 4px;
+}
+.section:last-child { margin-bottom: 4px; }
+
+.section-head { margin-bottom: 8px; }
+.section-head button { margin-left: 4px; }
+.section-title {
+  font-size: 17px;
+  font-weight: bold;
+  color: $accent;
+}
+
+// Strip the GtkScrolledWindow frame + edge fades.
+scrollable,
+.scroll-list,
+.scroll-list > viewport {
+  border: none;
+  box-shadow: none;
+  background: transparent;
+}
+scrollable undershoot,
+scrollable overshoot,
+scrollable junction {
+  background: none;
+  box-shadow: none;
+}
+scrollbar {
+  background: transparent;
+  slider {
+    min-width: 6px;
+    border-radius: 4px;
+    background: $track;
+    &:hover { background: $muted; }
+  }
+}
+
+.dev-row {
+  min-height: 50px;
+  padding: 8px 12px;
+  margin: 3px 0;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  color: $fg;
+  transition: background $ease;
+  &:hover { background: $card-hover; }
+}
+.dev-icon { font-size: 26px; margin-right: 14px; color: $muted; }
+.dev-name { color: $fg; }
+.subtle   { color: $muted; font-size: 13px; margin-top: 1px; }
+
+.dev-row.active {
+  background: $accent-dim;
+  border: 1px solid $accent-brd;
+  &:hover { background: rgba(53, 132, 228, 0.26); }
+  .dev-icon, .dev-name { color: $accent; }
+}
+
+.icon-btn {
+  min-width: 40px;
+  min-height: 40px;
+  border-radius: 8px;
+  background: transparent;
+  color: $muted;
+  transition: background $ease, color $ease;
+  label { font-size: 24px; }
+  &:hover { background: $card-hover; color: $fg; }
+}
+
+switch {
+  min-width: 46px;
+  min-height: 26px;
+  border-radius: 14px;
+  background: $track;
+  transition: background $ease;
+}
+switch slider { border-radius: 50%; background: $knob; }
+switch:checked { background: $accent; }
+
+scale { margin: 0 4px; }
+scale trough { min-height: 8px; border-radius: 6px; background: $track; }
+scale trough highlight,
+scale highlight { border-radius: 6px; background: $accent; }
+scale slider {
+  min-width: 16px;
+  min-height: 16px;
+  border-radius: 50%;
+  background: $knob;
+  margin: -6px;
+}
+
+.vol-row { margin: 6px 0; }
+.vol-row .icon-btn { margin-right: 4px; }
+.vol-row > label { margin-left: 8px; color: $muted; }
+.audio-col { min-width: 360px; }
+
+.power-grid button {
+  min-height: 72px;
+  min-width: 96px;
+  margin: 5px;
+  border-radius: 12px;
+  background: $card-hover;
+  color: $fg;
+  transition: background $ease, color $ease;
+  &:hover { background: $accent; color: #ffffff; }
+  &.danger:hover { background: $danger; color: #ffffff; }
+}
+.pwr-icon { font-size: 36px; }

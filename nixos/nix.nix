@@ -6,8 +6,8 @@
     keep-outputs = true;
     keep-derivations = true;
 
-    min-free = 5368709120; # 5 GiB: trigger automatic GC when free space drops below
-    max-free = 21474836480; # 20 GiB: stop the automatic GC once this much is free
+    min-free = 5368709120; # 5 GiB
+    max-free = 21474836480; # 20 GiB
   };
 
   nix.optimise.automatic = true;

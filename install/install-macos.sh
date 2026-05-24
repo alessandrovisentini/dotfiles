@@ -6,14 +6,11 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(dirname "$SCRIPT_DIR")"
 JSON_FILE="$SCRIPT_DIR/install.json"
 
-# Under `curl | bash` stdin is the pipe; any brew/sudo prompt would hit EOF and
-# the step would silently skip (this is how sketchybar/fzf/amethyst slipped through
-# before). Reattach stdin to the controlling TTY.
+# Reattach stdin to the TTY so brew/sudo prompts work under `curl | bash`.
 if [[ ! -t 0 && -e /dev/tty ]]; then
     exec < /dev/tty
 fi
 
-# Skip the noisy auto-update before every install and the post-install hints.
 export HOMEBREW_NO_AUTO_UPDATE=1
 export HOMEBREW_NO_ENV_HINTS=1
 

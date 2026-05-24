@@ -8,15 +8,13 @@
     "nixos": {
       "config_symlinks": [
         "alacritty",
+        "astal-bar",
         "git",
         "glow",
-        "hypr",
-        "hyprpanel",
         "lazygit",
         "nvim",
         "rofi",
         "sway",
-        "swaylock",
         "swaync",
         "tmux",
         "waybar",
@@ -80,11 +78,12 @@
         ],
         "gnome": [],
         "sway": [
+          "astal-bar",
           "rofi",
           "sway",
-          "swaylock",
           "swaync",
-          "waybar"
+          "waybar",
+          "wm-scripts"
         ]
       },
       "nixos_symlinks": {
@@ -205,7 +204,7 @@
           ],
           "sway": [
             "sway",
-            "swaylock",
+            "gtklock",
             "swayidle",
             "rofi-wayland",
             "waybar",
@@ -219,7 +218,12 @@
             "ImageMagick",
             "blueman",
             "grimshot",
-            "wl-mirror"
+            "wl-mirror",
+            "lisgd",
+            "wtype",
+            "squeekboard",
+            "iio-sensor-proxy",
+            "playerctl"
           ]
         },
         "flatpak": {

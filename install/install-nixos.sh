@@ -34,8 +34,7 @@ is_excluded() {
     return 1
 }
 
-# hardware-configuration.nix is machine-specific and lives in /etc/nixos. Mirror it
-# into the repo with a *reverse* symlink so editing the repo edits the real file.
+# Reverse-symlink hardware-configuration.nix so editing the repo edits the real file.
 setup_hw_config_reverse_link() {
     local target_dir="$1" source_dir="$2"
     local hw_config="$target_dir/hardware-configuration.nix"
@@ -72,7 +71,7 @@ clear_target_nix_files() {
         [[ -e "$nix_file" ]] || continue
         local filename
         filename=$(basename "$nix_file")
-        # Safety net: never delete hardware-configuration.nix even if not in exclude list.
+        # Never delete hardware-configuration.nix.
         if [[ "$filename" == "hardware-configuration.nix" ]]; then
             log_info "Preserving: $nix_file (machine-specific)"
             continue

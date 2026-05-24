@@ -11,7 +11,7 @@ if [ $# -eq 0 ]; then
     ACTIVE_SESSIONS=$(tmux list-sessions -F '#{session_name}' 2>/dev/null)
     REPOS=$(ls "$BASE_PATH")
 
-    # Active sessions last so they appear at the bottom near the prompt
+    # Active sessions last so they're closest to the fzf prompt.
     INACTIVE=$(echo "$REPOS" | while read -r repo; do
         if ! echo "$ACTIVE_SESSIONS" | grep -qx "$repo"; then
             echo "$repo"
@@ -70,10 +70,7 @@ if tmux has-session -t "$SESSION_NAME" 2>/dev/null; then
     exit 0
 fi
 
-# Pin the dev shell as a GC root so nix-collect-garbage can't reclaim it.
-# Backgrounded so the launcher popup closes immediately; the build runs in
-# parallel with pane setup, and Nix's build lock dedupes against the panes'
-# own `nix develop` calls.
+# Pin the dev shell as a GC root; backgrounded so the popup closes immediately.
 if [ -f "$REPO_PATH/flake.nix" ]; then
     (cd "$REPO_PATH" && nix develop --profile .nix-dev-profile --command true) >/dev/null 2>&1 &
     disown

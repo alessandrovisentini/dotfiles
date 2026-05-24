@@ -23,7 +23,6 @@ if [ -z "$BASE_PATH" ]; then
     exit 1
 fi
 
-# Detect if we're inside a repo
 CURRENT_REPO=""
 if [[ "$PWD" == "$BASE_PATH"/* ]]; then
     CURRENT_REPO=$(echo "$PWD" | sed "s|^$BASE_PATH/||" | cut -d'/' -f1)
@@ -53,8 +52,6 @@ while IFS= read -r repo; do
     DIRS+=("$BASE_PATH/$repo")
 done <<< "$SELECTED"
 
-# If inside a repo, use current directory as working dir
-# Otherwise use the first selected repo
 if [ -n "$CURRENT_REPO" ]; then
     WORK_DIR="$PWD"
     ADD_DIRS=()

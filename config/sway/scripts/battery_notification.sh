@@ -14,7 +14,6 @@ while true; do
             ALREADY_NOTIFIED=true
         fi
     else
-        # Reset notification flag when battery is charging or above threshold
         ALREADY_NOTIFIED=false
     fi
 

@@ -1,6 +1,4 @@
-# Read `man 5 sway` for a complete reference.
-
-# Custom theme
+# Theme
 set $bg         #1d1d20
 set $surface    #222226
 set $headerbar  #2e2e32
@@ -15,7 +13,6 @@ client.focused_inactive $surface $headerbar $muted $surface $surface
 client.urgent           $danger  $surface   $fg    $danger  $danger
 client.background       $bg
 
-# Logo key. Use Mod1 for Alt.
 set $mod Mod4
 
 set $left h
@@ -27,27 +24,21 @@ set $term alacritty
 
 set $menu rofi -terminal '$term' -show drun
 
-# Status Bar
-# Read `man 5 sway-bar` for more information about this section.
-bar {
-    swaybar_command waybar
-}
-
 # Look
 default_border pixel 2
 hide_edge_borders smart
 
-# Start a terminal
+# Terminal + window kill
 bindsym $mod+Return exec $term
-
-# Kill focused window
 bindsym $mod+Shift+q kill
 
-# Start your launcher
+# Launchers
 bindsym $mod+d exec $menu
 bindsym $mod+m exec $menu
+# Touch app-grid; also on 3-finger-up gesture.
+bindsym $mod+Shift+d exec grid-toggle
 
-# Move your focus around
+# Focus
 bindsym $mod+$left focus left
 bindsym $mod+$down focus down
 bindsym $mod+$up focus up
@@ -58,7 +49,7 @@ bindsym $mod+Down focus down
 bindsym $mod+Up focus up
 bindsym $mod+Right focus right
 
-# Move the focused window
+# Move focused window
 bindsym $mod+Shift+$left move left
 bindsym $mod+Shift+$down move down
 bindsym $mod+Shift+$up move up
@@ -69,15 +60,11 @@ bindsym $mod+Shift+Down move down
 bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
-# Default to tabbed layout
-workspace_layout tabbed
-
-# Switch the current container between different layout styles
+# Layouts
 bindsym $mod+s layout stacking
 bindsym $mod+t layout tabbed
 bindsym $mod+e layout toggle split
 
-# Split direction
 bindsym $mod+b splith
 bindsym $mod+v splitv
 
@@ -105,26 +92,13 @@ bindsym $mod+Shift+8 move container to workspace number 8
 bindsym $mod+Shift+9 move container to workspace number 9
 bindsym $mod+Shift+0 move container to workspace number 10
 
-# Make the current focus fullscreen
+# Fullscreen + tiling/floating
 bindsym $mod+f fullscreen
-
-# Toggle the current focus between tiling and floating mode
 bindsym $mod+Shift+space floating toggle
-
-# Swap focus between the tiling area and the floating area
 bindsym $mod+space focus mode_toggle
-
-# Move focus to the parent container
 bindsym $mod+a focus parent
 
-# Move the currently focused window to the scratchpad
-# bindsym $mod+Shift+minus move scratchpad
-
-# Show the next scratchpad window or hide the focused scratchpad window.
-# If there are multiple scratchpad windows, this command cycles through them.
-#bindsym $mod+minus scratchpad show
-
-# Resizing containers
+# Resize
 mode "resize" {
     bindsym $left resize shrink width 10px
     bindsym $down resize grow height 10px
@@ -136,31 +110,25 @@ mode "resize" {
     bindsym Up resize shrink height 10px
     bindsym Right resize grow width 10px
 
-    # Return to default mode
     bindsym Return mode "default"
     bindsym Escape mode "default"
 }
 bindsym $mod+r mode "resize"
 
-# Drag floating windows by holding down $mod and left mouse button.
-# Resize them with right mouse button + $mod.
-# Despite the name, also works for non-floating windows.
-# Change normal to inverse to use left mouse button for resizing and right
-# mouse button for dragging.
 floating_modifier $mod normal
 
-# Reload the configuration file
-bindsym $mod+Shift+r reload
+# Reload + respawn the Astal bar (the [a]gs.js pattern avoids matching pkill itself).
+bindsym $mod+Shift+r reload; exec "pkill -f '[a]gs.js'; sleep 0.4; astal-bar"
 
-# Exit sway (logs you out of your Wayland session)
-bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
+# Exit + lock
+bindsym $mod+Shift+e exec swaynag -t warning -m 'Exit sway?' -B 'Yes' 'swaymsg exit'
+bindsym $mod+Ctrl+q exec lock-screen
 
-# Lock screen
-bindsym $mod+Ctrl+q exec swaylock
+# Tablet/laptop mode cycle
+bindsym $mod+Shift+t exec mode-cycle
 
-# Color picker 
+# Color picker
 bindsym $mod+Shift+c exec grim -g "$(slurp -p)" -t ppm - | convert - -format '%[pixel:p{0,0}]' txt:- | tail -n 1 | cut -d ' ' -f 4 | wl-copy
 
-# Include all configration files
 include /etc/sway/config.d/*
 include '$XDG_CONFIG_HOME/sway/config.d/*.conf'

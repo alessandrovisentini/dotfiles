@@ -1,8 +1,8 @@
 {pkgs, ...}: let
   vars = import ./variables.nix;
 in {
-  # System Packages and Programs
-  programs.nix-ld.enable = true; # Fixes some issues with dynamically linked executables
+  # Packages and programs
+  programs.nix-ld.enable = true; # runs dynamically-linked binaries
   programs.tmux.enable = true;
   programs.neovim = {
     enable = true;
@@ -33,7 +33,7 @@ in {
   # Timezone
   time.timeZone = "Europe/Rome";
 
-  # i18n
+  # Locale
   i18n.defaultLocale = "en_US.UTF-8";
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "it_IT.UTF-8";
@@ -55,7 +55,7 @@ in {
   ];
   networking.firewall.enable = true;
 
-  # Power Profiles
+  # Power profiles
   services.auto-cpufreq.enable = true;
   services.auto-cpufreq.settings = {
     battery = {

@@ -11,7 +11,7 @@ log_success() { echo -e "${GREEN}[SUCCESS]${NC} $1"; }
 log_warning() { echo -e "${YELLOW}[WARNING]${NC} $1"; }
 log_error()   { echo -e "${RED}[ERROR]${NC} $1"; }
 
-# Parse positional args into INSTALL_STEPS; intercept --de=<value> into DE_SELECTION.
+# Args → INSTALL_STEPS; intercept --de=<value> into DE_SELECTION.
 parse_install_steps() {
     INSTALL_STEPS=()
     local rest=()
@@ -41,7 +41,7 @@ prompt_de_selection() {
         return 0
     fi
 
-    # Under `curl … | bash` stdin is the pipe; borrow /dev/tty so the prompt still works.
+    # Borrow /dev/tty under `curl … | bash` so the prompt still works.
     local tty_dev=""
     if [[ -t 0 && -t 1 ]]; then
         :
@@ -104,7 +104,7 @@ ensure_jq() {
     command -v jq &>/dev/null && return 0
     log_info "jq not found. Installing jq..."
     case "$DETECTED_OS" in
-        nixos)  return 0 ;;  # provided on-demand via nix-shell in run_jq
+        nixos)  return 0 ;;  # on-demand via nix-shell
         macos)
             command -v brew &>/dev/null || { log_error "Homebrew not found. Install jq manually."; return 1; }
             brew install jq || { log_error "Failed to install jq with Homebrew"; return 1; }
@@ -138,7 +138,7 @@ json_value_exists() {
     [[ -n "$value" ]]
 }
 
-# Idempotent: skips if target already points to source, otherwise backs up and replaces.
+# Idempotent. Backs up an existing non-matching target before replacing.
 create_symlink() {
     local source_path target_path backup
     source_path=$(expand_vars "$1")
@@ -184,10 +184,7 @@ run_post_install() {
     done <<< "$commands"
 }
 
-# Supports two shapes for config_symlinks:
-#   array form:  [ "folder", ... ]
-#   object form: { common: [...], gnome: [...], sway: [...] }
-# Object form filters gnome/sway by DE_SELECTION; "common" is always included.
+# config_symlinks may be an array or a {common,gnome,sway} object filtered by DE_SELECTION.
 create_config_symlinks() {
     local json_file="$1" os="$2" repo_dir="$3"
     local config_dir="${XDG_CONFIG_HOME:-$HOME/.config}"
@@ -268,8 +265,7 @@ apply_gnome_dconf() {
     fi
 }
 
-# Symlink a repo-local extension dir into ~/.local/share/gnome-shell/extensions.
-# Symlinking (vs copy) means dotfiles edits are picked up on next shell reload.
+# Symlinking (vs copy) means edits are live on next shell reload.
 install_gnome_extension_local() {
     local uuid="$1" source_path="$2"
     local ext_dir="$HOME/.local/share/gnome-shell/extensions/$uuid"
@@ -290,8 +286,6 @@ install_gnome_extension_local() {
     log_success "Linked local extension: $uuid -> $source_path"
 }
 
-# Download an extension from extensions.gnome.org for the running shell version
-# and install it via `gnome-extensions install`. ext_id is the numeric e.g.o id.
 install_gnome_extension_ego() {
     local uuid="$1" ext_id="$2"
     local ext_dir="$HOME/.local/share/gnome-shell/extensions/$uuid"
@@ -347,8 +341,7 @@ enable_gnome_extension() {
     if gnome-extensions enable "$uuid" 2>/dev/null; then
         log_success "Enabled extension: $uuid"
     else
-        # Newly installed extensions sometimes need a shell reload before they
-        # can be enabled; warn so the user knows to re-login if anything's off.
+        # Some newly-installed extensions need a shell reload first.
         log_warning "Could not enable $uuid yet (may need shell reload)"
     fi
 }

@@ -7,19 +7,15 @@
 in {
   services.desktopManager.gnome.enable = true;
 
-  # Make nixpkgs Electron apps (Discord, VSCode, ...) and Firefox run as
-  # native Wayland clients; otherwise they go through XWayland and look
-  # blurry under fractional scaling.
+  # Native Wayland for Electron + Firefox; XWayland is blurry under fractional scaling.
   environment.sessionVariables = {
     NIXOS_OZONE_WL = "1";
     MOZ_ENABLE_WAYLAND = "1";
   };
 
   services.gnome.games.enable = false;
-  # Bundled apps come from gnome-apps.nix (always imported) so they
-  # exist without the GNOME desktop too; disable the duplicate set.
   services.gnome.core-apps.enable = false;
-  services.power-profiles-daemon.enable = false; # Conflicts with autocpu-freq
+  services.power-profiles-daemon.enable = false; # conflicts with auto-cpufreq
   environment.gnome.excludePackages = with pkgs; [gnome-tour gnome-user-docs yelp epiphany];
 
   services.gnome.gnome-browser-connector.enable = true;
@@ -85,16 +81,13 @@ in {
 
         "org/gnome/mutter" = {
           dynamic-workspaces = false;
-          # scale-monitor-framebuffer: enable fractional scaling.
-          # xwayland-native-scaling: render XWayland apps at integer scale and
-          # downsample, so any remaining XWayland app stays sharp.
+          # Fractional scaling + downsample XWayland to keep it sharp.
           experimental-features = ["scale-monitor-framebuffer" "xwayland-native-scaling"];
         };
         "org/gnome/desktop/wm/preferences" = {
           num-workspaces = lib.gvariant.mkInt32 9;
         };
 
-        # Disable conflicting Dash-to-Dock shortcuts
         "org/gnome/shell/keybindings" = {
           "switch-to-application-1" = lib.gvariant.mkEmptyArray "s";
           "switch-to-application-2" = lib.gvariant.mkEmptyArray "s";
@@ -126,8 +119,7 @@ in {
           "switch-to-workspace-8" = ["<Super>8"];
           "switch-to-workspace-9" = ["<Super>9"];
 
-          # Super+Shift+{1..9} is handled by the move-without-follow extension
-          # (sends window to workspace N without switching to it).
+          # Super+Shift+{1..9} handled by move-without-follow extension.
           "move-to-workspace-1" = lib.gvariant.mkEmptyArray "s";
           "move-to-workspace-2" = lib.gvariant.mkEmptyArray "s";
           "move-to-workspace-3" = lib.gvariant.mkEmptyArray "s";
@@ -142,7 +134,7 @@ in {
           "maximize" = ["<Super>f"];
           "minimize" = lib.gvariant.mkEmptyArray "s";
 
-          # Cycle all windows individually (not grouped by app)
+          # Cycle windows individually, not grouped by app.
           "switch-windows" = ["<Super>Tab"];
           "switch-windows-backward" = ["<Super><Shift>Tab"];
           "switch-applications" = lib.gvariant.mkEmptyArray "s";

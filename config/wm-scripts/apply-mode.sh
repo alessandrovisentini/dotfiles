@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # apply-mode <laptop|tablet>
-# Idempotent. Called by the mode-daemon on each confirmed transition.
+# Idempotent. Called on each confirmed mode transition.
 
 set -u
 
@@ -10,32 +10,33 @@ case "$mode" in
     *) echo "usage: $0 <laptop|tablet>" >&2; exit 64 ;;
 esac
 
-# iio-hyprland runs in tablet mode only. The laptop-mode reload also
-# wipes runtime hyprgrass binds, so re-source them.
+SWAY_TP="6127:24830:Darfon_Thinkpad_X12_Detachable_Gen_1_Folio_case_-1"
+
+# Auto-rotation: tablet only.
 if command -v systemctl >/dev/null 2>&1; then
+    rotsvc=""
+    [[ -n "${SWAYSOCK:-}" ]] && rotsvc="sway-rotate.service"
+
     if [[ "$mode" == "tablet" ]]; then
-        systemctl --user start iio-hyprland.service 2>/dev/null || true
+        [[ -n "$rotsvc" ]] && systemctl --user start "$rotsvc" 2>/dev/null || true
     else
-        systemctl --user stop iio-hyprland.service 2>/dev/null || true
-        if [[ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]]; then
-            hyprctl reload >/dev/null 2>&1 || true
-            hyprctl keyword source /etc/hypr/gestures-binds.conf >/dev/null 2>&1 || true
+        [[ -n "$rotsvc" ]] && systemctl --user stop "$rotsvc" 2>/dev/null || true
+        if [[ -n "${SWAYSOCK:-}" ]]; then
+            swaymsg output eDP-1 transform 0 >/dev/null 2>&1 || true
         fi
     fi
 fi
 
-# Disable the folio's touchpad while detached.
-if [[ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]]; then
-    TP="device:darfon-thinkpad-x12-detachable-gen-1-folio-case-1-touchpad:enabled"
+# Folio touchpad: disabled while detached.
+if [[ -n "${SWAYSOCK:-}" ]]; then
     if [[ "$mode" == "tablet" ]]; then
-        hyprctl keyword "$TP" false >/dev/null 2>&1 || true
+        swaymsg input "$SWAY_TP" events disabled >/dev/null 2>&1 || true
     else
-        hyprctl keyword "$TP" true  >/dev/null 2>&1 || true
+        swaymsg input "$SWAY_TP" events enabled  >/dev/null 2>&1 || true
     fi
 fi
 
-# OSK auto-popup, tablet only (live gsetting toggle). In laptop mode
-# also force-hide via D-Bus in case a field is focused.
+# OSK auto-popup gsetting; force-hide on laptop in case a field is focused.
 if command -v gsettings >/dev/null 2>&1; then
     KEY="org.gnome.desktop.a11y.applications screen-keyboard-enabled"
     if [[ "$mode" == "tablet" ]]; then
@@ -47,8 +48,7 @@ if command -v gsettings >/dev/null 2>&1; then
     fi
 fi
 
-# Notification. "manual" means a bar/keybind override holds the mode
-# and hardware changes are ignored.
+# "manual" means a user override holds the mode and hardware changes are ignored.
 src=$(cat "${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/mode-source" 2>/dev/null || echo "auto")
 suffix=""
 [[ "$src" == "manual" ]] && suffix=" (manual)"

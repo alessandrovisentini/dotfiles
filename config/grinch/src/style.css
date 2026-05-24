@@ -1,0 +1,38 @@
+window { background-color: rgba(28, 28, 28, 0.96); }
+.top-bar { margin: 24px 24px 0 24px; }
+entry {
+    padding: 14px 18px;
+    font-size: 18px;
+    border-radius: 12px;
+    background: #1d1d1d;
+    color: #ffffff;
+    border: 2px solid #4a4a4d;
+}
+entry:focus { border-color: #ffffff; }
+.close-btn {
+    padding: 0 16px;
+    margin-left: 12px;
+    border-radius: 12px;
+    background: #1d1d1d;
+    color: #ffffff;
+    border: 2px solid #4a4a4d;
+    font-size: 20px;
+    font-weight: bold;
+}
+.close-btn:hover { background: #4a4a4d; }
+.close-btn:active { background: #3584e4; }
+flowbox { padding: 16px; }
+flowboxchild { padding: 6px; }
+flowboxchild .tile {
+    padding: 14px 6px;
+    border-radius: 14px;
+    background: transparent;
+    transition: background-color 100ms ease;
+}
+flowboxchild:hover .tile { background: #4a4a4d; }
+flowboxchild:selected .tile {
+    background: #4a4a4d;
+    box-shadow: inset 0 0 0 2px #3584e4;
+}
+flowboxchild.activated .tile { background: #3584e4; }
+flowboxchild .tile label { color: #ffffff; font-size: 13px; }

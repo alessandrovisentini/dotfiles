@@ -9,7 +9,7 @@ install_homebrew_if_missing() {
     log_info "Installing Homebrew..."
     log_info "Homebrew needs sudo access. You may be prompted for your password."
 
-    # Read from /dev/tty so the sudo prompt works under `curl | bash`.
+    # /dev/tty so the sudo prompt works under `curl | bash`.
     if ! sudo -v < /dev/tty; then
         log_error "Could not obtain sudo access. Homebrew install aborted."
         return 1
@@ -34,14 +34,13 @@ install_homebrew_if_missing() {
     log_success "Homebrew installed successfully"
 }
 
-# One bulk `brew install` per kind, then verify each with `brew list`.
-# Verification catches packages brew silently skips — without this, a missing
-# install just scrolls off-screen and is never reported.
+# Bulk install per kind, then verify each with `brew list`. Verification
+# catches packages brew silently skips.
 install_packages_homebrew() {
     local json_file="$1"
     local failed_taps=() failed_formulae=() failed_casks=()
 
-    # Failed taps are fatal: their formulae would fail downstream.
+    # Failed taps are fatal; their formulae fail downstream.
     while IFS= read -r tap; do
         [[ -z "$tap" ]] && continue
         log_info "Adding Homebrew tap: $tap"
@@ -108,10 +107,9 @@ install_packages_homebrew() {
     fi
 }
 
-# Collect dnf packages for the DE-selected groups (common + gnome and/or sway).
-# Must not end the loop with a failing test under `set -e`: when the last
-# iterated group is inactive, `A && B` short-circuits to 1 and the caller's
-# `packages=$(collect_dnf_de_packages ...)` aborts the script. Use `|| continue`.
+# Collect dnf packages for the active DE groups (common + gnome and/or sway).
+# Must use `|| continue` (not `&&`) so the loop's last iteration doesn't
+# short-circuit to a non-zero exit under `set -e`.
 collect_dnf_de_packages() {
     local json_file="$1" base=".os.fedora.packages.dnf"
     for group in common gnome sway; do
@@ -127,7 +125,7 @@ install_dnf_rpm_repos() {
 
     while IFS= read -r repo_url; do
         [[ -z "$repo_url" ]] && continue
-        # Expand $(rpm -E %fedora) and similar in repo URLs.
+        # Expand $(rpm -E %fedora) etc.
         local expanded pkg_name
         expanded=$(eval echo "$repo_url")
         pkg_name=$(basename "$expanded" .noarch.rpm)
@@ -235,9 +233,7 @@ install_packages_flatpak() {
     apply_flatpak_overrides "$json_file"
 }
 
-# Apply per-app flatpak overrides (sockets, env vars, etc).
-# Overrides are idempotent: re-running `flatpak override` with the same args
-# is a no-op, so this is safe to run on every install.
+# Overrides (sockets, env vars, etc). Idempotent.
 apply_flatpak_overrides() {
     local json_file="$1"
     json_value_exists "$json_file" ".os.fedora.packages.flatpak.overrides" || return 0

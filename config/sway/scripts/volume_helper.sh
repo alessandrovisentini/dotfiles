@@ -4,7 +4,7 @@ if ! command -v pactl >/dev/null; then
     exit 0;
 fi
 
-# pactl output depends on the current locale
+# pactl output is locale-dependent.
 export LANG=C.UTF-8 LC_ALL=C.UTF-8
 
 DEFAULT_STEP=5
@@ -21,9 +21,8 @@ clamp() {
     fi
 }
 
-get_sink_volume() { # sink
+get_sink_volume() {
     ret=$(pactl get-sink-volume "$1")
-    # get first percent value
     ret=${ret%%%*}
     ret=${ret##* }
     echo "$ret"
@@ -64,8 +63,6 @@ if [ "$CHANGE" -ne 0 ]; then
 elif [ "$VOLUME" -ge 0 ]; then
     pactl set-sink-volume "$SINK" "$(clamp "$VOLUME")%"
 fi
-
-# Display desktop notification
 
 if ! command -v notify-send >/dev/null; then
     exit 0;

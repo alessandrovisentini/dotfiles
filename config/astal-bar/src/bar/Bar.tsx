@@ -1,0 +1,56 @@
+import { App, Astal, Gdk, Gtk } from "astal/gtk3"
+import {
+  Battery,
+  Bluetooth,
+  Brightness,
+  Clock,
+  Network,
+  Notifications,
+  Osk,
+  Power,
+  SysTray,
+  Volume,
+  Workspaces,
+} from "../widgets"
+
+// Geometry origin: connector isn't reliably populated on GDK3/Wayland.
+export const monitorKey = (m: any) =>
+  `${m?.geometry?.x ?? 0}-${m?.geometry?.y ?? 0}`
+
+export default function Bar(gdkmonitor: Gdk.Monitor) {
+  const { TOP, LEFT, RIGHT } = Astal.WindowAnchor
+  return (
+    <window
+      className="Bar"
+      name={`bar-${monitorKey(gdkmonitor)}`}
+      gdkmonitor={gdkmonitor}
+      exclusivity={Astal.Exclusivity.EXCLUSIVE}
+      anchor={TOP | LEFT | RIGHT}
+      application={App}
+    >
+      <centerbox>
+        <box className="cluster" halign={Gtk.Align.START}>
+          <Power />
+          <Workspaces gdkmonitor={gdkmonitor} />
+        </box>
+        <box className="cluster" halign={Gtk.Align.CENTER}>
+          <Clock />
+        </box>
+        <box halign={Gtk.Align.END}>
+          <box className="cluster">
+            <SysTray />
+            <Osk />
+          </box>
+          <box className="cluster">
+            <Network />
+            <Bluetooth />
+            <Volume />
+            <Brightness />
+            <Battery />
+            <Notifications />
+          </box>
+        </box>
+      </centerbox>
+    </window>
+  )
+}
