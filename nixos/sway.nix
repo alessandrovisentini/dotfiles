@@ -46,8 +46,7 @@ in {
       # launcher
       rofi
 
-      # bars
-      waybar
+      # bar
       astalBar
 
       # touchscreen gestures + key injection

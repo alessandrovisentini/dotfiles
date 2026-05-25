@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 # Touchscreen gestures via lisgd. Watches libinput touch events without
 # grabbing them, so normal taps still pass through.
+#
+# The Wacom HID touch axes follow the sway output transform on their own
+# (driver/libinput via `map_to_output eDP-1` in sway's input config), so a
+# user swipe-up lands as raw DU in every rotation. No remap needed.
 
 set -u
 
@@ -25,7 +29,7 @@ if [[ -z "$dev" ]]; then
 fi
 
 # Gesture spec: fingercount,direction,edge,distance,actmode,command
-#   direction is start->end (swipe up = "DU"). actmode R = fire on release.
+# direction is start->end (swipe up = "DU"); actmode R = fire on release.
 exec lisgd -d "$dev" \
     -g "3,DU,*,*,R,grid-toggle" \
     -g "4,UD,*,*,R,swaymsg kill" \

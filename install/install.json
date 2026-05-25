@@ -17,7 +17,6 @@
         "sway",
         "swaync",
         "tmux",
-        "waybar",
         "wm-scripts"
       ],
       "nixos_symlinks": {
@@ -82,7 +81,6 @@
           "rofi",
           "sway",
           "swaync",
-          "waybar",
           "wm-scripts"
         ]
       },
@@ -207,7 +205,6 @@
             "gtklock",
             "swayidle",
             "rofi-wayland",
-            "waybar",
             "SwayNotificationCenter",
             "libnotify",
             "brightnessctl",
