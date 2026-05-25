@@ -2,8 +2,8 @@ import { Variable, bind } from "astal"
 import { execAsync } from "astal/process"
 import { Gtk } from "astal/gtk3"
 import AstalWp from "gi://AstalWp"
-import { Icon, MIC_ICONS, VOLUME_RAMP } from "../enums/icons"
-import { MENU } from "../enums/menu"
+import { Icon, MIC_ICONS, VOLUME_RAMP } from "../const/icons"
+import { MENU } from "../const/menu"
 import { defaultMicrophone, defaultSpeaker } from "../services/audio"
 import {
   audioNameOf,
@@ -113,12 +113,6 @@ function deviceList(endpoints: any[], icon: string) {
                     label={audioNameOf(ep)}
                     halign={Gtk.Align.START}
                     truncate
-                  />
-                  <label
-                    className="subtle"
-                    halign={Gtk.Align.START}
-                    label="In use"
-                    visible={bind(ep, "isDefault")}
                   />
                 </box>
               </box>

@@ -1,6 +1,6 @@
 import { bind } from "astal"
-import { Icon } from "../enums/icons"
-import { MENU } from "../enums/menu"
+import { Icon } from "../const/icons"
+import { MENU } from "../const/menu"
 import { brightness, hasBacklight } from "../services/brightness"
 import { toggleMenu } from "../services/menu"
 import { tap } from "../utils/gtk"
@@ -8,7 +8,7 @@ import { tap } from "../utils/gtk"
 export function Brightness() {
   return (
     <button
-      className="bar-button"
+      className="bar-button state-bright"
       visible={bind(hasBacklight)}
       onClicked={tap(() => toggleMenu(MENU.brightness))}
       tooltipText="Brightness"

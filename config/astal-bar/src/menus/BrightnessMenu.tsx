@@ -1,6 +1,6 @@
 import { bind } from "astal"
-import { Icon } from "../enums/icons"
-import { MENU } from "../enums/menu"
+import { Icon } from "../const/icons"
+import { MENU } from "../const/menu"
 import { brightness, setBrightness } from "../services/brightness"
 import { Section } from "../ui/Section"
 import { MenuWindow } from "./MenuWindow"

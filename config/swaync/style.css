@@ -1,37 +1,39 @@
+/* Theme aligned with the Astal bar: dark surface + per-app accent. */
+
 * {
     font-family: "DejaVuSansM Nerd Font Mono", monospace;
     font-size: 11pt;
 }
 
-/* Single toast bubble */
+/* ---- Toast bubble ---- */
 .notification-row {
     background: transparent;
     margin: 6px;
 }
 
 .notification {
-    background: #222226;
+    background: #303030;
     color: #ffffff;
-    border: 1px solid #5e5c64;
-    border-radius: 8px;
-    padding: 6px;
+    border: 1px solid #1a1a1a;
+    border-radius: 12px;
+    padding: 8px;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
 }
 
 .notification.low {
-    background: #2e2e32;
+    background: #2a2a2a;
     color: #9a9996;
 }
 
 .notification.normal {
-    background: #222226;
+    background: #303030;
     color: #ffffff;
 }
 
 .notification.critical {
-    background: #c01c28;
+    background: rgba(232, 67, 75, 0.18);
     color: #ffffff;
-    border-color: #c01c28;
+    border-color: rgba(232, 67, 75, 0.55);
 }
 
 .notification-content {
@@ -54,40 +56,40 @@
     margin-right: 8px;
 }
 
-/* Close button on each toast */
 .close-button {
     background: transparent;
-    color: inherit;
+    color: #ffffff;
     border: none;
     padding: 4px;
     margin: 0;
-    border-radius: 6px;
+    border-radius: 8px;
 }
 
 .close-button:hover {
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 138, 61, 0.22);
+    color: #ff8a3d;
 }
 
-/* Action buttons */
 .notification-action {
-    background: #303030;
-    color: #ffffff;
-    border: 1px solid #5e5c64;
-    border-radius: 6px;
+    background: rgba(255, 138, 61, 0.16);
+    color: #ff8a3d;
+    border: 1px solid rgba(255, 138, 61, 0.55);
+    border-radius: 8px;
     padding: 4px 10px;
     margin: 2px;
 }
 
 .notification-action:hover {
-    background: #404040;
+    background: rgba(255, 138, 61, 0.28);
+    color: #ffffff;
 }
 
-/* Control Center (the panel that lists past notifications) */
+/* ---- Control Center panel ---- */
 .control-center {
     background: #1c1c1c;
     color: #ffffff;
-    border: 1px solid #5e5c64;
-    border-radius: 10px;
+    border: 1px solid #1a1a1a;
+    border-radius: 16px;
     padding: 8px;
 }
 
@@ -97,35 +99,164 @@
 
 .control-center-clear-all,
 .control-center-dnd {
-    background: #303030;
+    background: transparent;
     color: #ffffff;
-    border: 1px solid #5e5c64;
-    border-radius: 6px;
-    padding: 4px 8px;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 10px;
+    min-width: 40px;
+    min-height: 40px;
 }
 
 .control-center-clear-all:hover,
 .control-center-dnd:hover {
-    background: #404040;
+    background: rgba(255, 138, 61, 0.22);
+    color: #ff8a3d;
 }
 
-/* Widgets in the control center body */
+/* ---- Header: title + switch + clear-all icon, all on one row.
+   swaync renders the title and dnd widgets as separate vertical boxes, so
+   we paint the title row tall enough to host the switch, leave a gap on
+   its right for the clear-all icon, then pull the dnd widget up onto that
+   row with a negative top-margin. The clear-all sits in the title widget's
+   own button slot, the switch in the dnd widget's slot — each keeps its
+   own hit area where its glyph is drawn. ---- */
 .widget-title {
-    color: #3584e4;
+    background: #303030;
+    border-radius: 12px 12px 0 0;
+    padding: 10px 10px 6px 14px;
+    margin: 4px 4px 0 4px;
+}
+
+.widget-title > label {
+    color: #ff8a3d;
+    font-size: 13pt;
     font-weight: bold;
-    padding: 6px 4px 2px 4px;
 }
 
-.widget-mpris {
-    background: #262626;
+/* clear-all button — mirrors .icon-btn from the bar (40x40, 22px glyph) */
+.widget-title > button,
+.widget-title button.clear-all-button,
+.widget-title #clear-all-button {
+    font-family: "DejaVuSansM Nerd Font Mono", monospace;
+    font-size: 22px;
+    min-width: 40px;
+    min-height: 40px;
+    padding: 0;
+    background: transparent;
+    background-image: none;
+    color: #ffffff;
+    border: none;
     border-radius: 8px;
-    padding: 8px;
+    margin-left: 4px;
+    box-shadow: none;
 }
 
+.widget-title > button label,
+.widget-title button.clear-all-button label,
+.widget-title #clear-all-button label {
+    font-size: 22px;
+    color: #ffffff;
+}
+
+.widget-title > button:hover,
+.widget-title button.clear-all-button:hover,
+.widget-title #clear-all-button:hover {
+    background: rgba(255, 138, 61, 0.22);
+    color: #ff8a3d;
+}
+
+.widget-title > button:hover label,
+.widget-title button.clear-all-button:hover label,
+.widget-title #clear-all-button:hover label {
+    color: #ff8a3d;
+}
+
+/* DND row sits below the title row, sharing the card background and the
+   bottom-rounded corners so the two rows read as one header card. */
+.widget-dnd {
+    background: #303030;
+    border-radius: 0 0 12px 12px;
+    padding: 6px 14px 10px 14px;
+    margin: 0 4px 8px 4px;
+}
+
+.widget-dnd > label {
+    color: #ffffff;
+    font-size: 11pt;
+}
+
+.widget-mpris,
 .widget-volume,
-.widget-backlight {
-    background: #262626;
-    border-radius: 8px;
-    padding: 8px;
-    margin: 4px 0;
+.widget-backlight,
+.widget-buttons-grid,
+.widget-menubar {
+    background: #303030;
+    border-radius: 12px;
+    padding: 10px;
+    margin: 4px 4px 8px 4px;
+}
+
+.widget-label > label {
+    color: #ffffff;
+}
+
+/* ---- GTK switch — identical pill to the bar's bluetooth switch.
+   swaync hard-binds checked = DND on, so the natural mapping is:
+     switch off (default) → notifications enabled / DND off
+     switch on            → DND on / notifications muted
+   This is the standard iOS/macOS "Do Not Disturb" semantic and the only
+   polarity swaync's widget supports. ---- */
+.widget-dnd switch,
+window switch {
+    min-width: 46px;
+    min-height: 26px;
+    border-radius: 14px;
+    background: #45454a;
+    background-image: none;
+    border: none;
+    box-shadow: none;
+    padding: 2px;
+}
+
+.widget-dnd switch slider,
+window switch slider {
+    min-width: 20px;
+    min-height: 20px;
+    border-radius: 50%;
+    background: #ffffff;
+    background-image: none;
+    border: none;
+    box-shadow: none;
+}
+
+.widget-dnd switch:checked,
+window switch:checked {
+    background: #ff8a3d;
+    background-image: none;
+}
+
+/* ---- Scale (volume / backlight widgets) ---- */
+scale {
+    margin: 0 4px;
+}
+
+scale trough {
+    min-height: 8px;
+    border-radius: 6px;
+    background: #45454a;
+}
+
+scale trough highlight,
+scale highlight {
+    border-radius: 6px;
+    background: #ff8a3d;
+}
+
+scale slider {
+    min-width: 16px;
+    min-height: 16px;
+    border-radius: 50%;
+    background: #ffffff;
+    margin: -6px;
 }

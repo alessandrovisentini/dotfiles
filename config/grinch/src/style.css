@@ -22,17 +22,28 @@ entry:focus { border-color: #ffffff; }
 .close-btn:hover { background: #4a4a4d; }
 .close-btn:active { background: #3584e4; }
 flowbox { padding: 16px; }
-flowboxchild { padding: 6px; }
-flowboxchild .tile {
-    padding: 14px 6px;
-    border-radius: 14px;
+flowboxchild {
+    padding: 6px;
     background: transparent;
-    transition: background-color 100ms ease;
+    box-shadow: none;
+    outline: none;
 }
-flowboxchild:hover .tile { background: #4a4a4d; }
-flowboxchild:selected .tile {
-    background: #4a4a4d;
-    box-shadow: inset 0 0 0 2px #3584e4;
+flowboxchild:hover,
+flowboxchild:selected,
+flowboxchild:focus,
+flowboxchild.activated {
+    background: transparent;
+    box-shadow: none;
+    outline: none;
 }
-flowboxchild.activated .tile { background: #3584e4; }
+flowboxchild .tile {
+    padding: 10px 12px;
+    border-radius: 14px;
+    border: 2px solid transparent;
+    background: transparent;
+    transition: border-color 100ms ease;
+}
+flowboxchild:hover .tile { border-color: #4a4a4d; }
+flowboxchild:selected .tile { border-color: #3584e4; }
+flowboxchild.activated .tile { border-color: #3584e4; }
 flowboxchild .tile label { color: #ffffff; font-size: 13px; }

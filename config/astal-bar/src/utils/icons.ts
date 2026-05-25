@@ -3,7 +3,7 @@ import {
   BATTERY_RAMP,
   VOLUME_RAMP,
   WIFI_RAMP,
-} from "../enums/icons"
+} from "../const/icons"
 
 export function wifiIcon(strength: number): string {
   if (strength >= 80) return WIFI_RAMP.full

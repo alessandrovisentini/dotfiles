@@ -1,7 +1,7 @@
 import { Variable, bind } from "astal"
 import AstalNetwork from "gi://AstalNetwork"
-import { Icon, WIFI_DISABLED } from "../enums/icons"
-import { MENU } from "../enums/menu"
+import { Icon, WIFI_DISABLED } from "../const/icons"
+import { MENU } from "../const/menu"
 import { toggleMenu } from "../services/menu"
 import { tap } from "../utils/gtk"
 import { wifiIcon } from "../utils/icons"
@@ -22,9 +22,15 @@ export function Network() {
     if (w && w.enabled) return `${wifiIcon(w.strength)} ${w.ssid ?? "Wi-Fi"}`
     return `${WIFI_DISABLED} Off`
   })
+  const cls = Variable.derive(deps, () => {
+    const w = net.wifi
+    if (net.primary === AstalNetwork.Primary.WIRED) return "bar-button state-wifi-on"
+    if (w && w.enabled) return `bar-button ${w.ssid ? "state-wifi-on" : "state-net-on"}`
+    return "bar-button"
+  })
   return (
     <button
-      className="bar-button"
+      className={bind(cls)}
       onClicked={tap(() => toggleMenu(MENU.network))}
       tooltipText="Network"
     >

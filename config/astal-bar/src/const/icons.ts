@@ -34,7 +34,7 @@ export const BLUETOOTH_ICONS = {
 } as const
 
 export const NOTIFICATION_ICONS = {
-  dndOn: "󰂛",
+  dndOn: "󰟎",
   dndOff: "󰂚",
 } as const
 
@@ -46,6 +46,9 @@ export const Icon = {
   remove: "󰧧",
   scan: "󰑐",
   settings: "󰒓",
+  add: "󰐕",
+  clear: "󰩹",
+  close: "󰅖",
   // PowerMenu tiles
   lock: "󰌾",
   suspend: "󰒲",

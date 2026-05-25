@@ -1,6 +1,7 @@
 import { Variable, bind } from "astal"
 import { Gdk } from "astal/gtk3"
-import { focusWorkspace, outputs, workspaces } from "../services/sway"
+import { Icon } from "../const/icons"
+import { addWorkspace, focusWorkspace, outputs, workspaces } from "../services/sway"
 import { closeAllMenus } from "../services/menu"
 import { tap } from "../utils/gtk"
 
@@ -36,6 +37,16 @@ export function Workspaces({ gdkmonitor }: { gdkmonitor?: Gdk.Monitor } = {}) {
           </button>
         )),
       )}
+      <button
+        className="ws ws-add"
+        tooltipText="New workspace"
+        onClicked={tap(() => {
+          closeAllMenus()
+          addWorkspace()
+        })}
+      >
+        <label label={Icon.add} />
+      </button>
     </box>
   )
 }

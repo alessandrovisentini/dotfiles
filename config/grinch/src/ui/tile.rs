@@ -1,7 +1,7 @@
 use gtk::prelude::*;
 
 use crate::apps::App;
-use crate::config::{FALLBACK_ICON, TILE_ICON_PX};
+use crate::config::{FALLBACK_ICON, TILE_ICON_PX, TILE_LABEL_H};
 
 pub fn build_tile(app: &App) -> (gtk::FlowBoxChild, gtk::Image) {
     let tile = gtk::Box::new(gtk::Orientation::Vertical, 4);
@@ -16,10 +16,14 @@ pub fn build_tile(app: &App) -> (gtk::FlowBoxChild, gtk::Image) {
 
     let lbl = gtk::Label::new(Some(&app.name));
     lbl.set_halign(gtk::Align::Center);
+    lbl.set_valign(gtk::Align::Start);
     lbl.set_max_width_chars(14);
+    lbl.set_width_chars(14);
     lbl.set_lines(2);
     lbl.set_line_wrap(true);
     lbl.set_justify(gtk::Justification::Center);
+    lbl.set_ellipsize(gtk::pango::EllipsizeMode::End);
+    lbl.set_size_request(-1, TILE_LABEL_H);
     tile.pack_start(&lbl, false, false, 0);
 
     let child = gtk::FlowBoxChild::new();

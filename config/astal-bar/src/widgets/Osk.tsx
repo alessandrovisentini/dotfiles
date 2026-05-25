@@ -1,4 +1,4 @@
-import { Icon } from "../enums/icons"
+import { Icon } from "../const/icons"
 import { closeAllMenus } from "../services/menu"
 import { tap } from "../utils/gtk"
 import { sh } from "../utils/shell"

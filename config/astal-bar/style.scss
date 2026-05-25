@@ -16,6 +16,22 @@ $border:     #1a1a1a;
 $track:      #45454a;
 $knob:       #ffffff;
 
+// State palette — saturated but grown-up. Subtle bg + colored label so the
+// state color reads in the text itself, not on a saturated chip.
+$wifi-on:    #14b8a6;  // teal          — wifi connected
+$net-on:     #4a90e2;  // blue          — wifi enabled (no ssid) / wired generic
+$bt-on:      #4f8cff;  // bright blue   — bluetooth device connected
+$bt-rdy:     #2196f3;  // deep blue     — bluetooth powered (no device)
+$ws-focus:   #6fb6ff;  // bright blue   — focused workspace
+$vol-mute:   $muted;   // gray          — muted volume
+$batt-ok:    #16a34a;  // deep green    — battery charging / healthy
+$warn:       #fde047;  // lemon yellow  — battery warning (distinct from gold)
+$crit:       #e8434b;  // red           — battery critical / volume muted
+$dnd:        #d96be0;  // magenta       — DND on
+$notif:      #ff8a3d;  // orange        — notifications pending
+$vol:        #ed5a92;  // rose          — volume normal
+$bright:     #f5c823;  // gold          — brightness
+
 $radius:  10px;
 $pill:     8px;
 $touch:   28px;
@@ -62,6 +78,33 @@ window.Bar > centerbox { margin: 0 6px; }
 
 .chip { @include item; }
 
+// Subtle background wash + saturated colored label. The dim bg shows the
+// state at a glance; the brighter colored text is what the eye reads.
+@mixin state-tint($c) {
+  background: rgba($c, 0.20);
+  .bar-icon, .module-icon, label { color: $c; }
+  &:hover { background: rgba($c, 0.32); }
+}
+// Text-only tint variant for chips that should stay visually quiet (volume,
+// brightness): just color the glyph/label, no background wash.
+@mixin text-tint($c) {
+  .bar-icon, .module-icon, label { color: $c; }
+}
+
+.bar-button.state-wifi-on   { @include text-tint($wifi-on); }
+.bar-button.state-net-on    { @include text-tint($net-on); }
+.bar-button.state-bt-on     { @include text-tint($bt-on); }
+.bar-button.state-bt-rdy    { @include text-tint($bt-rdy); }
+.bar-button.state-vol       { @include text-tint($vol); }
+.bar-button.state-vol-mute  { @include text-tint($vol-mute); }
+.bar-button.state-bright    { @include text-tint($bright); }
+.bar-button.state-power     { @include text-tint($crit); }
+.bar-button.state-dnd       { @include text-tint($dnd); }
+.bar-button.state-notif     { @include text-tint($notif); }
+.bar-button.active,
+.bar-button.active:hover { background: $accent; color: #ffffff;
+  .bar-icon, .module-icon, label { color: #ffffff; } }
+
 .bar-icon { font-size: 19px; }
 .accent-icon .bar-icon { color: $accent; }
 .module-icon { margin-right: 6px; }
@@ -72,17 +115,25 @@ window.Bar > centerbox { margin: 0 6px; }
   @include item;
   color: $muted;
   &:hover  { background: $card-hover; color: $fg; }
-  &.visible { background: $card-hover; color: $fg; }
-  &.focused { background: $accent; color: #ffffff; }
-  &.urgent  { background: $danger; color: #ffffff; }
+  &.visible { color: $fg; }
+  &.focused { color: $ws-focus; font-weight: bold; }
+  &.urgent  { color: $crit; font-weight: bold; }
+}
+.ws.ws-add {
+  color: $fg;
+  font-size: 17px;
+  &:hover { background: $card-hover; color: $fg; }
 }
 
 .tray button { @include item; }
 .tray icon { font-size: 17px; }
 
-.battery.charging .module-icon { color: $success; }
-.battery.warning  { color: $warning; }
-.battery.critical { color: $danger; }
+.chip.battery {
+  &.normal,
+  &.charging { @include text-tint($batt-ok); }
+  &.warning  { @include text-tint($warn); }
+  &.critical { @include text-tint($crit); }
+}
 
 .menu-card {
   background: $surface;
@@ -110,7 +161,12 @@ window.Bar > centerbox { margin: 0 6px; }
 .section:last-child { margin-bottom: 4px; }
 
 .section-head { margin-bottom: 8px; }
-.section-head button { margin-left: 4px; }
+// Switch sits flush against its widget bounds while .icon-btn has ~8 px of
+// internal padding around its glyph. To make the *visual* gap between glyphs
+// look uniform, put 8 px between switch and the first icon button, and 0 px
+// between consecutive icon buttons.
+.section-head > box > * + * { margin-left: 20px; }
+.section-head > box > button + button { margin-left: 0; }
 .section-title {
   font-size: 17px;
   font-weight: bold;
@@ -159,7 +215,7 @@ scrollbar {
   background: $accent-dim;
   border: 1px solid $accent-brd;
   &:hover { background: rgba(53, 132, 228, 0.26); }
-  .dev-icon, .dev-name { color: $accent; }
+  .dev-icon, .dev-name { color: $fg; }
 }
 
 .icon-btn {
@@ -167,10 +223,20 @@ scrollbar {
   min-height: 40px;
   border-radius: 8px;
   background: transparent;
-  color: $muted;
+  color: $fg;
   transition: background $ease, color $ease;
   label { font-size: 24px; }
   &:hover { background: $card-hover; color: $fg; }
+}
+
+.icon-btn-content {
+  min-width: 24px;
+  min-height: 24px;
+}
+
+.cs-spinner {
+  min-width: 20px;
+  min-height: 20px;
 }
 
 switch {
@@ -212,3 +278,29 @@ scale slider {
   &.danger:hover { background: $danger; color: #ffffff; }
 }
 .pwr-icon { font-size: 36px; }
+
+// Per-menu accent: re-themes section titles, switches, sliders, active rows
+// and power tiles so each menu's interior matches the color of the button
+// that opens it.
+@mixin menu-accent($c) {
+  .section-title { color: $c; }
+  switch:checked { background: $c; }
+  scale trough highlight,
+  scale highlight { background: $c; }
+  .dev-row.active {
+    background: rgba($c, 0.16);
+    border-color: rgba($c, 0.55);
+    &:hover { background: rgba($c, 0.26); }
+  }
+  .icon-btn:hover { background: rgba($c, 0.22); color: $c; }
+  .power-grid button:hover { background: $c; color: #ffffff; }
+}
+
+window.Menu.net    .menu-card { @include menu-accent($wifi-on); }
+window.Menu.bt     .menu-card { @include menu-accent($bt-rdy); }
+window.Menu.audio  .menu-card { @include menu-accent($vol); }
+window.Menu.bright .menu-card { @include menu-accent($bright); }
+window.Menu.pwr    .menu-card { @include menu-accent($crit); }
+
+// Centered empty-state placeholder used by menus when their list has no rows.
+.notif-empty { min-height: 160px; }

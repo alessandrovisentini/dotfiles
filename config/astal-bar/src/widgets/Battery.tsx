@@ -14,8 +14,10 @@ export function Battery() {
   const bat = AstalBattery.get_default()
   const cls = Variable.derive(
     [bind(bat, "percentage"), bind(bat, "charging")],
-    (p: number, charging: boolean) =>
-      `chip battery ${charging ? "charging" : p <= 0.1 ? "critical" : p <= 0.2 ? "warning" : ""}`,
+    (p: number, charging: boolean) => {
+      const level = p <= 0.15 ? "critical" : p <= 0.25 ? "warning" : "normal"
+      return `chip battery ${level}${charging ? " charging" : ""}`
+    },
   )
   const icon = Variable.derive(
     [bind(bat, "percentage"), bind(bat, "charging")],

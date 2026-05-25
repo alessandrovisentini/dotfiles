@@ -48,6 +48,14 @@ export function focusWorkspace(num: number) {
   execAsync(["swaymsg", "workspace", "number", String(num)]).catch(() => {})
 }
 
+// Create + focus a new workspace. Number is global-max+1 so it never collides
+// across outputs. Sway auto-creates the workspace on focus.
+export function addWorkspace() {
+  const wss = workspaces.get()
+  const max = wss.reduce((m, ws) => (ws.num > m ? ws.num : m), 0)
+  focusWorkspace(max + 1)
+}
+
 // Resolve a Gdk.Monitor to its sway output name by matching geometry origin.
 // Returns undefined when outputs haven't loaded or no match exists.
 export function outputNameFor(monitor: any): string | undefined {

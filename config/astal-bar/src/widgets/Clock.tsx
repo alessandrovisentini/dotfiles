@@ -4,7 +4,7 @@ import GLib from "gi://GLib"
 export function Clock() {
   const time = Variable("").poll(
     1000,
-    () => GLib.DateTime.new_now_local().format("%a %-d %b   %H:%M") ?? "",
+    () => GLib.DateTime.new_now_local().format("%a %-d %b   %H:%M:%S") ?? "",
   )
   return (
     <box className="chip clock">

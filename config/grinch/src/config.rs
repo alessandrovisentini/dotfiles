@@ -1,4 +1,6 @@
 pub const TILE_ICON_PX: i32 = 72;
+// Reserve two label lines so every tile is the same height.
+pub const TILE_LABEL_H: i32 = 36;
 pub const FALLBACK_ICON: &str = "application-x-executable";
 
 // Visible-tile flash before the launched app appears.

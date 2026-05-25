@@ -29,9 +29,13 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
       application={App}
     >
       <centerbox>
-        <box className="cluster" halign={Gtk.Align.START}>
-          <Power />
-          <Workspaces gdkmonitor={gdkmonitor} />
+        <box halign={Gtk.Align.START}>
+          <box className="cluster">
+            <Power />
+          </box>
+          <box className="cluster">
+            <Workspaces gdkmonitor={gdkmonitor} />
+          </box>
         </box>
         <box className="cluster" halign={Gtk.Align.CENTER}>
           <Clock />

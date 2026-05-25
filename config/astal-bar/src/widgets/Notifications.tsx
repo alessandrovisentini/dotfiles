@@ -1,22 +1,41 @@
 import { Variable, bind } from "astal"
-import { execAsync } from "astal/process"
-import { NOTIFICATION_ICONS } from "../enums/icons"
+import { execAsync, subprocess } from "astal/process"
+import { NOTIFICATION_ICONS } from "../const/icons"
 import { closeAllMenus } from "../services/menu"
 import { tap } from "../utils/gtk"
 import { sh } from "../utils/shell"
 
-// Left: toggle swaync panel. Right: toggle DND.
-export function Notifications() {
-  const dnd = Variable(false).poll(2000, async () => {
+// swaync handles the notification panel and toasts. We just subscribe to its
+// waybar feed so the bell reflects DND + has-notifications state.
+const dnd = Variable(false)
+const count = Variable(0)
+
+execAsync(["swaync-client", "-D"])
+  .then((out) => dnd.set(out.trim() === "true"))
+  .catch(() => {})
+execAsync(["swaync-client", "-c"])
+  .then((out) => count.set(Number(out.trim()) || 0))
+  .catch(() => {})
+
+subprocess(
+  ["swaync-client", "--subscribe-waybar", "-sw"],
+  (line: string) => {
     try {
-      return (await execAsync(["swaync-client", "-D"])).trim() === "true"
-    } catch {
-      return false
-    }
-  })
+      const data = JSON.parse(line)
+      if (typeof data.class === "string") dnd.set(data.class.includes("dnd"))
+      if (typeof data.text === "string") count.set(Number(data.text) || 0)
+    } catch {}
+  },
+  () => {},
+)
+
+export function Notifications() {
+  const cls = Variable.derive([bind(dnd)], (d) =>
+    `bar-button ${d ? "state-dnd" : "state-notif"}`,
+  )
   return (
     <button
-      className="bar-button"
+      className={bind(cls)}
       tooltipText="Notifications  ·  right-click: Do-Not-Disturb"
       onClicked={tap(() => {
         closeAllMenus()
@@ -26,8 +45,8 @@ export function Notifications() {
         const [ok, btn] = event.get_button()
         if (ok && btn === 3) {
           closeAllMenus()
-          sh(["swaync-client", "-d"])
           dnd.set(!dnd.get())
+          sh(["swaync-client", "-d"])
           return true
         }
         return false

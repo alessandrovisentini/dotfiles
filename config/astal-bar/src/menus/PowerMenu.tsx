@@ -1,6 +1,6 @@
 import { Gtk } from "astal/gtk3"
-import { Icon } from "../enums/icons"
-import { MENU } from "../enums/menu"
+import { Icon } from "../const/icons"
+import { MENU } from "../const/menu"
 import { closeAllMenus } from "../services/menu"
 import { tap } from "../utils/gtk"
 import { sh } from "../utils/shell"

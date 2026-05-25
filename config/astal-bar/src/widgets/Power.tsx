@@ -1,12 +1,12 @@
-import { Icon } from "../enums/icons"
-import { MENU } from "../enums/menu"
+import { Icon } from "../const/icons"
+import { MENU } from "../const/menu"
 import { toggleMenu } from "../services/menu"
 import { tap } from "../utils/gtk"
 
 export function Power() {
   return (
     <button
-      className="bar-button accent-icon"
+      className="bar-button state-power"
       onClicked={tap(() => toggleMenu(MENU.power))}
       tooltipText="Power menu"
     >

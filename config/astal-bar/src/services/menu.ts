@@ -1,5 +1,5 @@
 import { App } from "astal/gtk3"
-import { MENU_NAMES } from "../enums/menu"
+import { MENU_NAMES } from "../const/menu"
 
 export function closeAllMenus(except?: string) {
   for (const name of MENU_NAMES) {

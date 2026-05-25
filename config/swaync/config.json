@@ -30,5 +30,17 @@
 
   "keyboard-shortcuts": true,
 
-  "script-fail-notify": true
+  "script-fail-notify": true,
+
+  "widgets": ["title", "dnd", "notifications"],
+  "widget-config": {
+    "title": {
+      "text": "Notifications",
+      "clear-all-button": true,
+      "button-text": "󰩹"
+    },
+    "dnd": {
+      "text": "Do Not Disturb"
+    }
+  }
 }
