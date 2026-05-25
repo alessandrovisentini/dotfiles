@@ -58,6 +58,7 @@ secrets/
 # Lock Files and Dependencies
 .lock
 *.lock
+!config/grinch/Cargo.lock
 node_modules/
 vendor/
 **/lazy-lock.json
