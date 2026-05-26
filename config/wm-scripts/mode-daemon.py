@@ -28,6 +28,10 @@ LOG = logging.getLogger("mode-daemon")
 DEBOUNCE_SEC = 0.4
 FOLIO_KEYBOARD_HINTS = ("Darfon Thinkpad X12", "Folio case")
 
+
+class NoTabletHardware(Exception):
+    """Raised when no SW_TABLET_MODE input device is present."""
+
 def _eviocgsw(length: int) -> int:
     DIR_READ = 2
     return (DIR_READ << 30) | (length << 16) | (ord('E') << 8) | 0x1b
@@ -106,6 +110,8 @@ def compute_mode(switch_state: bool, kbd_present: bool) -> str:
 class ModeDaemon:
     def __init__(self) -> None:
         self.dev = find_tablet_switch()
+        if self.dev is None:
+            raise NoTabletHardware
         self.sw_state = False
         self.current_mode = "laptop"
         # None = follow hardware; otherwise latched mode.
@@ -234,7 +240,11 @@ def main() -> int:
         format="%(asctime)s %(levelname)s %(message)s",
         datefmt="%H:%M:%S",
     )
-    return ModeDaemon().run()
+    try:
+        return ModeDaemon().run()
+    except NoTabletHardware:
+        LOG.info("No SW_TABLET_MODE device — not a detachable, exiting.")
+        return 0
 
 
 if __name__ == "__main__":
