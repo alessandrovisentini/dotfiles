@@ -2,12 +2,25 @@ import { Variable, bind } from "astal"
 import { Gdk, Gtk } from "astal/gtk3"
 import AstalTray from "gi://AstalTray"
 
+// Items we never want in the tray. nm-applet only runs as our NM secret
+// agent; its icon would be a confusing duplicate of the Network widget.
+const HIDDEN_TRAY_IDS = new Set(["nm-applet"])
+
+const visibleItems = (items: any[]) =>
+  items.filter((item) => !HIDDEN_TRAY_IDS.has(item.id ?? ""))
+
+// True when at least one tray item is visible; consumers gate parent
+// containers on this so an empty tray collapses entirely.
+export const trayHasItems = bind(AstalTray.get_default(), "items").as(
+  (items) => visibleItems(items).length > 0,
+)
+
 export function SysTray() {
   const tray = AstalTray.get_default()
   return (
     <box className="tray">
       {bind(tray, "items").as((items) =>
-        items.map((item) => {
+        visibleItems(items).map((item) => {
           // Build a transient Gtk.Menu from the SNI MenuModel.
           const showMenu = (anchor: any) => {
             try {

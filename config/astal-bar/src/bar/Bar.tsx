@@ -12,6 +12,8 @@ import {
   Volume,
   Workspaces,
 } from "../widgets"
+import { hasTouch } from "../utils/hardware"
+import { trayHasItems } from "../widgets/SysTray"
 
 // Geometry origin: connector isn't reliably populated on GDK3/Wayland.
 export const monitorKey = (m: any) =>
@@ -41,9 +43,9 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
           <Clock />
         </box>
         <box halign={Gtk.Align.END}>
-          <box className="cluster">
+          <box className="cluster" visible={hasTouch ? true : trayHasItems}>
             <SysTray />
-            <Osk />
+            {hasTouch && <Osk />}
           </box>
           <box className="cluster">
             <Network />

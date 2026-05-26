@@ -43,6 +43,7 @@ export const Icon = {
   brightness: "󰃠",
   osk: "󰌌",
   wired: "󰈀",
+  vpn: "󰦝",
   remove: "󰧧",
   scan: "󰑐",
   settings: "󰒓",

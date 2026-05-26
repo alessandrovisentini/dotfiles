@@ -6,10 +6,18 @@ import GLib from "gi://GLib"
 import { Icon } from "../const/icons"
 import { MENU } from "../const/menu"
 import { enabledView, setEnabledIntent } from "../services/wifi"
+import {
+  busyFor as vpnBusyFor,
+  toggleVpn,
+  vpns,
+  type VpnEntry,
+} from "../services/vpn"
 import { HeaderButton } from "../ui/HeaderButton"
 import { Row } from "../ui/Row"
 import { ScrollList } from "../ui/ScrollList"
 import { Section } from "../ui/Section"
+import { Spinner } from "../ui/Spinner"
+import { tap } from "../utils/gtk"
 import { wifiIcon } from "../utils/icons"
 import { sh } from "../utils/shell"
 import { MenuWindow } from "./MenuWindow"
@@ -113,6 +121,67 @@ export function NetworkMenu() {
     </box>
   )
 
+  // VPN rows: inline so each row binds to its own busy variable for the
+  // optimistic spinner. Clicking toggles the connection via nmcli; the
+  // service refreshes state when it returns.
+  const vpnRow = (entry: VpnEntry) => {
+    const busy = vpnBusyFor(entry.uuid)
+    return (
+      <button
+        className={`dev-row ${entry.active ? "active" : ""}`}
+        onClicked={tap(() => toggleVpn(entry))}
+      >
+        <box>
+          {bind(busy).as((b) =>
+            b ? (
+              <box className="dev-icon" valign={Gtk.Align.CENTER}>
+                <Spinner active={busy} size={22} />
+              </box>
+            ) : (
+              <label
+                className="dev-icon"
+                valign={Gtk.Align.CENTER}
+                label={Icon.vpn}
+              />
+            ),
+          )}
+          <box vertical halign={Gtk.Align.START} hexpand valign={Gtk.Align.CENTER}>
+            <label
+              className="dev-name"
+              label={entry.name}
+              halign={Gtk.Align.START}
+              truncate
+            />
+            <label
+              className="subtle"
+              halign={Gtk.Align.START}
+              label={bind(busy).as((b) =>
+                b
+                  ? entry.active
+                    ? "Disconnecting…"
+                    : "Connecting…"
+                  : entry.active
+                    ? "Connected"
+                    : "Disconnected",
+              )}
+            />
+          </box>
+        </box>
+      </button>
+    )
+  }
+
+  const vpnHeader = (
+    <box>
+      {HeaderButton(
+        Icon.add,
+        () => sh(["nm-connection-editor", "--create", "--type=vpn"]),
+        "Add VPN",
+      )}
+      {HeaderButton(Icon.settings, () => sh(["nm-connection-editor"]), "Settings")}
+    </box>
+  )
+
   return MenuWindow({
     name: MENU.network,
     klass: "net",
@@ -125,6 +194,15 @@ export function NetworkMenu() {
             net.wifi ? bind(net.wifi, "accessPoints").as(() => apRows()) : apRows(),
           ),
           wifiHeader,
+        )}
+        {Section(
+          "VPN",
+          ScrollList(
+            bind(vpns).as((list) =>
+              list.length ? list.map((v) => vpnRow(v)) : empty("No VPN configs"),
+            ),
+          ),
+          vpnHeader,
         )}
       </box>
     ),
