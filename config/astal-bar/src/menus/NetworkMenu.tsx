@@ -78,13 +78,15 @@ export function NetworkMenu() {
     return rows.length ? rows : empty("No networks found")
   }
 
-  const ethernet = Row({
-    active: net.primary === AstalNetwork.Primary.WIRED,
-    icon: Icon.wired,
-    name: "Wired",
-    status:
-      net.primary === AstalNetwork.Primary.WIRED ? "Connected" : "Unplugged",
-  })
+  const ethernetRow = () => {
+    const wired = net.primary === AstalNetwork.Primary.WIRED
+    return Row({
+      active: wired,
+      icon: Icon.wired,
+      name: "Wired",
+      status: wired ? "Connected" : "Unplugged",
+    })
+  }
 
   const wifiHeader = (
     <box>
@@ -187,7 +189,7 @@ export function NetworkMenu() {
     klass: "net",
     child: (
       <box vertical>
-        {Section("Ethernet", ethernet)}
+        {Section("Ethernet", bind(net, "primary").as(() => ethernetRow()))}
         {Section(
           "Wi-Fi",
           ScrollList(
