@@ -1,3 +1,4 @@
+use std::cell::RefCell;
 use std::rc::Rc;
 use std::time::Duration;
 
@@ -11,7 +12,9 @@ use super::nav::{
     scroll_child_into_view, APP_IDX_KEY,
 };
 
-pub fn wire_search(flow: &gtk::FlowBox, search: &gtk::SearchEntry, apps: Rc<Vec<App>>) {
+pub type AppsRef = Rc<RefCell<Vec<App>>>;
+
+pub fn wire_search(flow: &gtk::FlowBox, search: &gtk::SearchEntry, apps: AppsRef) {
     // FlowBox filter: hide tiles whose app name doesn't contain the query.
     {
         let apps_f = apps.clone();
@@ -25,7 +28,7 @@ pub fn wire_search(flow: &gtk::FlowBox, search: &gtk::SearchEntry, apps: Rc<Vec<
                 unsafe { child.data::<usize>(APP_IDX_KEY) };
             match idx_ptr {
                 Some(p) => unsafe {
-                    apps_f[*p.as_ref()].name.to_lowercase().contains(&q)
+                    apps_f.borrow()[*p.as_ref()].name.to_lowercase().contains(&q)
                 },
                 None => true,
             }
@@ -41,7 +44,7 @@ pub fn wire_search(flow: &gtk::FlowBox, search: &gtk::SearchEntry, apps: Rc<Vec<
             // Pin the Enter target to the first match; don't steal focus
             // from the entry (touch typing keeps OSK up).
             let q = search_s.text().to_string().to_lowercase();
-            match first_matching_child(&flow_s, &apps_s, &q) {
+            match first_matching_child(&flow_s, &apps_s.borrow(), &q) {
                 Some(fc) => {
                     flow_s.select_child(&fc);
                     if !search_s.has_focus() {
@@ -89,7 +92,7 @@ pub fn wire_activate(
     flow: &gtk::FlowBox,
     win: &gtk::Window,
     search: &gtk::SearchEntry,
-    apps: Rc<Vec<App>>,
+    apps: AppsRef,
 ) {
     let apps_a = apps;
     let win_a = win.clone();
@@ -99,7 +102,7 @@ pub fn wire_activate(
         let idx_ptr: Option<std::ptr::NonNull<usize>> =
             unsafe { child.data::<usize>(APP_IDX_KEY) };
         let app = match idx_ptr {
-            Some(p) => unsafe { apps_a[*p.as_ref()].clone() },
+            Some(p) => unsafe { apps_a.borrow()[*p.as_ref()].clone() },
             None => return,
         };
         let win_l = win_a.clone();
@@ -119,7 +122,7 @@ pub fn wire_keys(
     flow: &gtk::FlowBox,
     search: &gtk::SearchEntry,
     scroll: &gtk::ScrolledWindow,
-    apps: Rc<Vec<App>>,
+    apps: AppsRef,
 ) {
     let flow_k = flow.clone();
     let win_k = win.clone();
@@ -138,11 +141,12 @@ pub fn wire_keys(
             // Activate the selection if it still matches, else first match.
             // No match → swallow Enter so we don't launch a stale tile.
             let q = search_k.text().to_string().to_lowercase();
+            let apps_b = apps_k.borrow();
             let target = flow_k
                 .selected_children()
                 .into_iter()
-                .find(|c| child_matches(c, &apps_k, &q))
-                .or_else(|| first_matching_child(&flow_k, &apps_k, &q));
+                .find(|c| child_matches(c, &apps_b, &q))
+                .or_else(|| first_matching_child(&flow_k, &apps_b, &q));
             if let Some(c) = target {
                 flow_k.emit_by_name::<()>("child-activated", &[&c]);
             }
@@ -164,7 +168,7 @@ pub fn wire_keys(
         };
         if let Some((step, vertical)) = arrow {
             let q = search_k.text().to_string().to_lowercase();
-            let matches = matching_children(&flow_k, &apps_k, &q);
+            let matches = matching_children(&flow_k, &apps_k.borrow(), &q);
             if !matches.is_empty() {
                 let sel = flow_k.selected_children();
                 let cur = sel
@@ -234,7 +238,7 @@ pub fn wire_show_reset(
     win: &gtk::Window,
     flow: &gtk::FlowBox,
     search: &gtk::SearchEntry,
-    apps: Rc<Vec<App>>,
+    apps: AppsRef,
 ) {
     let search_m = search.clone();
     let flow_m = flow.clone();
@@ -242,7 +246,7 @@ pub fn wire_show_reset(
     win.connect_map(move |_| {
         search_m.set_text("");
         flow_m.invalidate_filter();
-        if let Some(fc) = first_matching_child(&flow_m, &apps_m, "") {
+        if let Some(fc) = first_matching_child(&flow_m, &apps_m.borrow(), "") {
             flow_m.select_child(&fc);
             fc.grab_focus();
         }

@@ -2,18 +2,25 @@ mod input;
 mod nav;
 mod tile;
 
+use std::cell::RefCell;
 use std::rc::Rc;
 
 use gtk::prelude::*;
 use gtk_layer_shell as lshell;
 
-use crate::apps::App;
+use crate::apps::{self, App};
 use crate::config::{MAX_COLS, MIN_COLS};
 
+pub use input::AppsRef;
 use nav::APP_IDX_KEY;
 use tile::build_tile;
 
-pub fn build_window(apps: Vec<App>) -> (gtk::Window, Vec<(gtk::Image, String)>) {
+pub type PendingIcons = Rc<RefCell<Vec<(gtk::Image, String)>>>;
+
+pub fn build_window(
+    apps: AppsRef,
+    pending: PendingIcons,
+) -> (gtk::Window, gtk::FlowBox) {
     let win = gtk::Window::new(gtk::WindowType::Toplevel);
     win.set_title("Apps");
 
@@ -55,21 +62,7 @@ pub fn build_window(apps: Vec<App>) -> (gtk::Window, Vec<(gtk::Image, String)>) 
     flow.set_selection_mode(gtk::SelectionMode::Single);
     scroll.add(&flow);
 
-    // Each child stores its index into `apps`; icons queued for lazy decode.
-    let apps = Rc::new(apps);
-    let mut pending_icons: Vec<(gtk::Image, String)> = Vec::new();
-    for (idx, app) in apps.iter().enumerate() {
-        let (child, img) = build_tile(app);
-        unsafe {
-            child.set_data::<usize>(APP_IDX_KEY, idx);
-        }
-        flow.insert(&child, -1);
-        if !app.icon.is_empty() {
-            pending_icons.push((img, app.icon.clone()));
-        }
-    }
-    // Reverse so .pop() drains top-first.
-    pending_icons.reverse();
+    populate_flow(&flow, &apps.borrow(), &mut pending.borrow_mut());
 
     input::wire_search(&flow, &search, apps.clone());
     input::wire_activate(&flow, &win, &search, apps.clone());
@@ -77,7 +70,43 @@ pub fn build_window(apps: Vec<App>) -> (gtk::Window, Vec<(gtk::Image, String)>) 
     input::wire_swipe(&win);
     input::wire_show_reset(&win, &flow, &search, apps);
 
-    (win, pending_icons)
+    (win, flow)
+}
+
+/// Re-scan .desktop files and rebuild tiles in place. Returns true if any
+/// icons need decoding so the caller can re-arm the lazy decoder.
+pub fn refresh(flow: &gtk::FlowBox, apps: &AppsRef, pending: &PendingIcons) -> bool {
+    for c in flow.children() {
+        flow.remove(&c);
+    }
+    *apps.borrow_mut() = apps::collect_apps();
+    {
+        let mut p = pending.borrow_mut();
+        p.clear();
+    }
+    populate_flow(flow, &apps.borrow(), &mut pending.borrow_mut());
+    flow.show_all();
+    !pending.borrow().is_empty()
+}
+
+// Each child stores its index into `apps`; icons queued for lazy decode.
+fn populate_flow(
+    flow: &gtk::FlowBox,
+    apps: &[App],
+    pending: &mut Vec<(gtk::Image, String)>,
+) {
+    for (idx, app) in apps.iter().enumerate() {
+        let (child, img) = build_tile(app);
+        unsafe {
+            child.set_data::<usize>(APP_IDX_KEY, idx);
+        }
+        flow.insert(&child, -1);
+        if !app.icon.is_empty() {
+            pending.push((img, app.icon.clone()));
+        }
+    }
+    // Reverse so .pop() drains top-first.
+    pending.reverse();
 }
 
 fn init_layer_shell(win: &gtk::Window) {
