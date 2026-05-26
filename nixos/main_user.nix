@@ -59,6 +59,7 @@ in {
       audacity
       transcribe
       spotdl
+      brave
       unstable.pdfarranger
       unstable.claude-code
     ];
@@ -210,6 +211,5 @@ in {
       ../config/squeekboard/us.yaml;
     xdg.dataFile."squeekboard/keyboards/terminal/us_wide.yaml".source =
       ../config/squeekboard/us_wide.yaml;
-
   };
 }
