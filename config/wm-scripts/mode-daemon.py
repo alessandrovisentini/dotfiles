@@ -244,6 +244,19 @@ def main() -> int:
         return ModeDaemon().run()
     except NoTabletHardware:
         LOG.info("No SW_TABLET_MODE device — not a detachable, exiting.")
+        # Re-assert laptop state silently in case a previous buggy run
+        # left persistent settings (e.g. gsettings OSK) in tablet state.
+        try:
+            subprocess.run(
+                ["apply-mode", "laptop"],
+                check=False,
+                env={**os.environ, "MODE_QUIET": "1"},
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                timeout=10,
+            )
+        except (FileNotFoundError, subprocess.TimeoutExpired):
+            pass
         return 0
 
 

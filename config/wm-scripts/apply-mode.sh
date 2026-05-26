@@ -53,7 +53,7 @@ src=$(cat "${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/mode-source" 2>/dev/null || ec
 suffix=""
 [[ "$src" == "manual" ]] && suffix=" (manual)"
 
-if command -v notify-send >/dev/null 2>&1; then
+if [[ "${MODE_QUIET:-0}" != "1" ]] && command -v notify-send >/dev/null 2>&1; then
     if [[ "$mode" == "tablet" ]]; then
         if [[ "$src" == "manual" ]]; then desc="Tablet mode held manually"
         else                              desc="Folio detached — touch UI active"; fi
