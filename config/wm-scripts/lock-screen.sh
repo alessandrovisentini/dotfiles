@@ -8,7 +8,7 @@
 # The virtkb module unconditionally reveals the keyboard, so it's only
 # loaded in tablet mode; laptop mode gets a plain gtklock.
 #
-# LOCK_FORCE_OSK=1 forces the OSK path with the folio attached (testing).
+# LOCK_FORCE_OSK=1 forces the OSK path while in laptop mode (testing).
 
 set -u
 

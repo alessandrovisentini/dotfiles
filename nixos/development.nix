@@ -1,28 +1,10 @@
-{pkgs, ...}: let
-  vars = import ./variables.nix;
-in {
-  virtualisation.docker = {
-    enable = true;
-  };
-
-  environment.systemPackages = with pkgs; [
-    nodejs
-    cargo
-    docker-compose
-    glow
-    jq
+{
+  config,
+  pkgs,
+  ...
+}: {
+  users.users.${config.local.device.userName}.extraGroups = [
+    "adbusers"
+    "docker"
   ];
-
-  programs.adb.enable = true;
-  programs.lazygit.enable = true;
-
-  users.users.${vars.mainUserName} = {
-    packages = with pkgs; [
-      vscodium
-    ];
-    extraGroups = [
-      "adbusers"
-      "docker"
-    ];
-  };
 }

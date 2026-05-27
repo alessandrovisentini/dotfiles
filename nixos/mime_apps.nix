@@ -1,7 +1,5 @@
-{...}: let
-  vars = import ./variables.nix;
-in {
-  home-manager.users.${vars.mainUserName} = {
+{config, ...}: {
+  home-manager.users.${config.local.device.userName} = {
     pkgs,
     config,
     ...

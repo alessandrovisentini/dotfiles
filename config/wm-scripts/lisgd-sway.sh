@@ -2,9 +2,9 @@
 # Touchscreen gestures via lisgd. Watches libinput touch events without
 # grabbing them, so normal taps still pass through.
 #
-# The Wacom HID touch axes follow the sway output transform on their own
-# (driver/libinput via `map_to_output eDP-1` in sway's input config), so a
-# user swipe-up lands as raw DU in every rotation. No remap needed.
+# Touch axes follow the sway output transform on their own (driver/
+# libinput via `map_to_output` in sway's input config), so a user
+# swipe-up lands as raw DU in every rotation. No remap needed.
 
 set -u
 

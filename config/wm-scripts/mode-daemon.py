@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Tablet/laptop mode detector for detachable convertibles.
 
-Watches SW_TABLET_MODE and folio keyboard USB presence; on each confirmed
-transition runs `apply-mode <mode>` and writes mode-state / mode-source
-into XDG_RUNTIME_DIR.
+Watches SW_TABLET_MODE and detachable-keyboard presence; on each
+confirmed transition runs `apply-mode <mode>` and writes mode-state /
+mode-source into XDG_RUNTIME_DIR.
 
 Signals:
     USR1  cycle auto → laptop → tablet → auto
@@ -26,7 +26,13 @@ from evdev import ecodes
 
 LOG = logging.getLogger("mode-daemon")
 DEBOUNCE_SEC = 0.4
-FOLIO_KEYBOARD_HINTS = ("Darfon Thinkpad X12", "Folio case")
+# Substrings matched against /proc/bus/input/devices to decide whether
+# the detachable keyboard is currently attached. Comes from the
+# mode-daemon service environment (set per-device via
+# local.device.detachableKeyboardHints), pipe-separated.
+DETACHABLE_KEYBOARD_HINTS = tuple(
+    h for h in os.environ.get("DETACHABLE_KEYBOARD_HINTS", "").split("|") if h
+)
 
 
 class NoTabletHardware(Exception):
@@ -65,12 +71,14 @@ def find_tablet_switch() -> evdev.InputDevice | None:
     return None
 
 
-def folio_keyboard_present() -> bool:
+def detachable_keyboard_present() -> bool:
+    if not DETACHABLE_KEYBOARD_HINTS:
+        return True  # no hints configured → trust the SW_TABLET_MODE switch alone
     try:
         text = Path("/proc/bus/input/devices").read_text()
     except OSError:
         return True  # undetectable → assume attached
-    return any(hint in text for hint in FOLIO_KEYBOARD_HINTS)
+    return any(hint in text for hint in DETACHABLE_KEYBOARD_HINTS)
 
 
 def write_runtime_mode(mode: str, source: str) -> None:
@@ -165,7 +173,7 @@ class ModeDaemon:
 
     def _sample_and_maybe_apply(self, immediate: bool = False) -> None:
         self.sw_state = self._sample_state()
-        desired = compute_mode(self.sw_state, folio_keyboard_present())
+        desired = compute_mode(self.sw_state, detachable_keyboard_present())
         if desired != self.current_mode or self.force_apply:
             if immediate:
                 self.current_mode = desired
@@ -187,7 +195,7 @@ class ModeDaemon:
 
     def run(self) -> int:
         self.sw_state = self._sample_state()
-        self.current_mode = compute_mode(self.sw_state, folio_keyboard_present())
+        self.current_mode = compute_mode(self.sw_state, detachable_keyboard_present())
         apply_mode(self.current_mode, source=self._source())
 
         sel = selectors.DefaultSelector()
@@ -220,7 +228,7 @@ class ModeDaemon:
                 self.pending_mode = None
                 continue
 
-            desired = compute_mode(self.sw_state, folio_keyboard_present())
+            desired = compute_mode(self.sw_state, detachable_keyboard_present())
             if desired != self.current_mode:
                 if self.pending_mode != desired:
                     self.pending_mode = desired
@@ -236,7 +244,7 @@ class ModeDaemon:
 
 def main() -> int:
     logging.basicConfig(
-        level=os.environ.get("X12_MODE_LOG_LEVEL", "INFO"),
+        level=os.environ.get("MODE_LOG_LEVEL", "INFO"),
         format="%(asctime)s %(levelname)s %(message)s",
         datefmt="%H:%M:%S",
     )

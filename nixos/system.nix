@@ -1,31 +1,8 @@
-{pkgs, ...}: let
-  vars = import ./variables.nix;
-in {
-  # Packages and programs
-  programs.nix-ld.enable = true; # runs dynamically-linked binaries
-  programs.tmux.enable = true;
-  programs.neovim = {
-    enable = true;
-    defaultEditor = true;
-  };
-  programs.tcpdump.enable = true;
-  services.fwupd.enable = true;
-  programs.git.enable = true;
-  programs.git.lfs.enable = true;
-  environment.systemPackages = with pkgs; [
-    nano
-    wget
-    htop
-    fastfetch
-    wl-screenrec
-    wl-clipboard
-    gcc_multi
-    dig
-    traceroute
-    ripgrep
-    fzf
-    unzip
-  ];
+{
+  config,
+  pkgs,
+  ...
+}: {
   programs.bash.interactiveShellInit = ''
     eval "$(fzf --bash)"
   '';
@@ -48,7 +25,7 @@ in {
   };
 
   # Networking
-  networking.hostName = vars.hostName;
+  networking.hostName = config.local.device.hostName;
   networking.networkmanager.enable = true;
   networking.networkmanager.plugins = with pkgs; [
     networkmanager-openvpn

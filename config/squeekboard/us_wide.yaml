@@ -4,10 +4,10 @@
 # outlines are taller so the keys aren't cramped on a 3:2 panel.
 
 # Outline sizes match the bundled terminal/us_wide.yaml. squeekboard
-# fits the keyboard within a fixed panel height (~280 px on a 1920-wide
-# X12 in landscape), so raising YAML heights doesn't make the keyboard
-# taller — it makes it narrower (everything shrinks to fit). Match
-# terminal's ratios so the keyboard renders at the same size you like.
+# fits the keyboard within a fixed panel-relative height in landscape,
+# so raising YAML heights doesn't make the keyboard taller — it makes
+# it narrower (everything shrinks to fit). Match terminal's ratios so
+# the keyboard renders at the same size you like.
 outlines:
     default:   { width: 54,  height: 37 }
     altline:   { width: 81,  height: 37 }

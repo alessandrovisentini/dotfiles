@@ -16,8 +16,9 @@ apply() {
 }
 
 map_orientation() {
-    # X12 panel: iio's left-up/right-up are inverted relative to sway's
-    # transform direction, so a 90° tilt was landing on 270° (upside-down).
+    # On some panels iio's left-up/right-up are inverted relative to
+    # sway's transform direction, so a 90° tilt lands on 270° (upside-
+    # down). Adjust the mapping below if your panel rotates the wrong way.
     case "$1" in
         normal)    echo 0 ;;
         bottom-up) echo 180 ;;

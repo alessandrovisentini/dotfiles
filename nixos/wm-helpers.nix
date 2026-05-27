@@ -26,5 +26,9 @@
     ];
   };
 
-  all = [modeDaemon applyMode oskToggle gridLauncher modeCycle appGrid];
+  # Detachable convertibles (SW_TABLET_MODE switch).
+  tablet = [modeDaemon applyMode modeCycle];
+
+  # Touchscreen (OSK toggle, touch app-grid).
+  touch = [oskToggle gridLauncher appGrid];
 }

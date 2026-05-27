@@ -1,4 +1,11 @@
-{pkgs, ...}: let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
+  dev = config.local.device;
+
   lisgdSway = pkgs.writeShellScriptBin "lisgd-sway" (builtins.readFile ../config/wm-scripts/lisgd-sway.sh);
   swayRotate = pkgs.writeShellScriptBin "sway-rotate" (builtins.readFile ../config/wm-scripts/sway-rotate.sh);
   swayWsShift = pkgs.writeShellScriptBin "sway-ws-shift" (builtins.readFile ../config/wm-scripts/sway-ws-shift.sh);
@@ -34,68 +41,60 @@
   astalBar = pkgs.writeShellScriptBin "astal-bar" ''
     exec ${agsBar}/bin/ags run "$HOME/.config/astal-bar/app.ts" "$@"
   '';
+
+  touchPackages = with pkgs; [
+    # touchscreen gestures + key injection
+    lisgd
+    wtype
+    lisgdSway
+    swayWsShift
+  ];
 in {
   programs.sway = {
     enable = true;
     wrapperFeatures.gtk = true;
-    extraPackages = with pkgs; [
-      # lock + idle (gtklock from programs.gtklock below)
-      swayidle
-      lockScreen
+    extraPackages = with pkgs;
+      [
+        # lock + idle (gtklock from programs.gtklock below)
+        swayidle
+        lockScreen
 
-      # launcher
-      rofi
+        # launcher
+        rofi
 
-      # bar
-      astalBar
+        # bar
+        astalBar
 
-      # touchscreen gestures + key injection
-      lisgd
-      wtype
-      jq
-      lisgdSway
-      swayWsShift
+        # notifications
+        libnotify
+        swaynotificationcenter
 
-      # accelerometer rotation
-      swayRotate
+        # brightness
+        brightnessctl
 
-      # notifications
-      libnotify
-      swaynotificationcenter
+        # network
+        networkmanagerapplet
 
-      # brightness
-      brightnessctl
+        # audio
+        pwvucontrol
+        pulseaudio
 
-      # network
-      networkmanagerapplet
+        # media keys
+        playerctl
 
-      # audio
-      pwvucontrol
-      pulseaudio
+        # screenshot + color picker
+        sway-contrib.grimshot
+        grim
+        slurp
+        imagemagick_light
 
-      # media keys
-      playerctl
+        # mirroring
+        wl-mirror
 
-      # screenshot + color picker
-      sway-contrib.grimshot
-      grim
-      slurp
-      imagemagick_light
-
-      # mirroring
-      wl-mirror
-
-      # icons
-      adwaita-icon-theme
-
-      # apps
-      nautilus
-      gnome-calculator
-      gnome-contacts
-      gnome-font-viewer
-      gnome-music
-      papers
-    ];
+        # icons
+        adwaita-icon-theme
+      ]
+      ++ lib.optionals dev.hasTouchscreen touchPackages;
   };
 
   # File manager
@@ -125,14 +124,10 @@ in {
     };
   };
 
-  # gtklock: GTK locker that can embed an OSK widget (virtkb module)
-  # inside the lock window. Sway has no `abovelock` equivalent, so
-  # layer-shell OSKs (squeekboard, wvkbd) can't render above
-  # ext-session-lock — the locker must own the keyboard.
   programs.gtklock.enable = true;
 
   # Password only; fingerprint reader stays disabled at the lock.
-  security.pam.services.gtklock.fprintAuth = false;
+  security.pam.services.gtklock.fprintAuth = lib.mkIf dev.hasFingerprint false;
 
   # Screenshare + file pickers
   xdg.portal = {
@@ -142,14 +137,14 @@ in {
   };
 
   # Auto-rotation (started/stopped by apply-mode, tablet only)
-  systemd.user.services."sway-rotate" = {
+  systemd.user.services."sway-rotate" = lib.mkIf dev.hasAccelerometer {
     description = "Auto-rotate the Sway panel from the accelerometer";
     partOf = ["graphical-session.target"];
     after = ["graphical-session.target"];
     path = with pkgs; [iio-sensor-proxy sway coreutils gnugrep];
     serviceConfig = {
       Type = "simple";
-      ExecStart = "${swayRotate}/bin/sway-rotate eDP-1";
+      ExecStart = "${swayRotate}/bin/sway-rotate ${dev.internalOutput}";
       # always, not on-failure: monitor-sensor can exit cleanly when
       # iio-sensor-proxy drops its claim across suspend, ending the
       # script's read loop with exit 0 and leaving rotation dead.

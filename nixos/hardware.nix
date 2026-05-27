@@ -1,4 +1,11 @@
-{pkgs, ...}: {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
+  dev = config.local.device;
+in {
   # Graphics
   hardware.graphics = {
     enable = true;
@@ -8,9 +15,6 @@
     ];
   };
 
-  # Thunderbolt
-  services.hardware.bolt.enable = true;
-
   # Bluetooth
   hardware.bluetooth = {
     enable = true;
@@ -18,22 +22,27 @@
     settings.General.Enable = "Source,Sink,Media,Socket";
   };
 
+  # Thunderbolt
+  services.hardware.bolt.enable = lib.mkIf dev.hasThunderbolt true;
+
   # Accelerometer
-  hardware.sensor.iio.enable = true;
+  hardware.sensor.iio.enable = lib.mkIf dev.hasAccelerometer true;
 
   # Fingerprint
-  systemd.services.fprintd = {
-    wantedBy = [ "multi-user.target" ];
+  systemd.services.fprintd = lib.mkIf dev.hasFingerprint {
+    wantedBy = ["multi-user.target"];
     serviceConfig.Type = "simple";
   };
-  services.fprintd.enable = true;
+  services.fprintd.enable = lib.mkIf dev.hasFingerprint true;
 
   # Camera: IPU6 has no working soft-ISP and spawns ~60 dead /dev/video nodes
   # that exhaust the v4l2 device limit and hide the USB cameras.
-  boot.blacklistedKernelModules = ["intel_ipu6_isys" "intel_ipu6"];
+  boot.blacklistedKernelModules = lib.mkIf dev.hasIpu6Camera ["intel_ipu6_isys" "intel_ipu6"];
 
   # Disable libcamera monitor so USB UVC cameras aren't enumerated twice.
-  services.pipewire.wireplumber.extraConfig."52-disable-libcamera" = {
-    "wireplumber.profiles".main."monitor.libcamera" = "disabled";
+  services.pipewire.wireplumber.extraConfig = lib.mkIf dev.hasIpu6Camera {
+    "52-disable-libcamera" = {
+      "wireplumber.profiles".main."monitor.libcamera" = "disabled";
+    };
   };
 }

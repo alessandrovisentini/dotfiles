@@ -10,7 +10,10 @@ case "$mode" in
     *) echo "usage: $0 <laptop|tablet>" >&2; exit 64 ;;
 esac
 
-SWAY_TP="6127:24830:Darfon_Thinkpad_X12_Detachable_Gen_1_Folio_case_-1"
+# Sway input identifier for the detachable keyboard's touchpad; comes
+# from the mode-daemon service environment (set per-device via
+# local.device.detachableTouchpadSwayId). Empty disables the toggle.
+SWAY_TP="${DETACHABLE_TOUCHPAD_SWAY_ID:-}"
 
 # Auto-rotation: tablet only.
 if command -v systemctl >/dev/null 2>&1; then
@@ -27,8 +30,8 @@ if command -v systemctl >/dev/null 2>&1; then
     fi
 fi
 
-# Folio touchpad: disabled while detached.
-if [[ -n "${SWAYSOCK:-}" ]]; then
+# Detachable touchpad: disabled while detached.
+if [[ -n "$SWAY_TP" && -n "${SWAYSOCK:-}" ]]; then
     if [[ "$mode" == "tablet" ]]; then
         swaymsg input "$SWAY_TP" events disabled >/dev/null 2>&1 || true
     else
@@ -56,12 +59,12 @@ suffix=""
 if [[ "${MODE_QUIET:-0}" != "1" ]] && command -v notify-send >/dev/null 2>&1; then
     if [[ "$mode" == "tablet" ]]; then
         if [[ "$src" == "manual" ]]; then desc="Tablet mode held manually"
-        else                              desc="Folio detached — touch UI active"; fi
+        else                              desc="Keyboard detached — touch UI active"; fi
         notify-send -t 1500 -i input-tablet \
             -a "mode-state" "Tablet mode${suffix}" "$desc"
     else
         if [[ "$src" == "manual" ]]; then desc="Laptop mode held manually"
-        else                              desc="Folio attached"; fi
+        else                              desc="Keyboard attached"; fi
         notify-send -t 1500 -i input-keyboard \
             -a "mode-state" "Laptop mode${suffix}" "$desc"
     fi

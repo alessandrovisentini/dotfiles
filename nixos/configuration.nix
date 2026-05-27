@@ -1,21 +1,29 @@
 {pkgs, ...}: {
-  imports = [
-    ./hardware-configuration.nix
-    ./specialisation.nix
-    ./system.nix
-    ./hardware.nix
-    ./main_user.nix
-    ./display_manager.nix
-    ./gnome.nix
-    ./gnome-apps.nix
-    ./wm-common.nix
-    ./sway.nix
-    ./development.nix
-    ./printing.nix
-    ./gaming.nix
-    ./mime_apps.nix
-    ./nix.nix
-  ];
+  imports =
+    [
+      ./hardware-configuration.nix
+      ./device.options.nix
+      ./specialisation.nix
+      ./system.nix
+      ./hardware.nix
+      ./main_user.nix
+      ./apps.nix
+      ./display_manager.nix
+      ./gnome.nix
+      ./wm-common.nix
+      ./sway.nix
+      ./development.nix
+      ./printing.nix
+      ./mime_apps.nix
+      ./nix.nix
+    ]
+    # Per-machine device flags. Falls back to safe defaults from
+    # device.options.nix when the file is absent
+    ++ (
+      if builtins.pathExists ./device.nix
+      then [./device.nix]
+      else []
+    );
 
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;

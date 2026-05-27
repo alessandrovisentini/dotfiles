@@ -23,7 +23,7 @@
         "enabled": true,
         "source_dir": "nixos",
         "target_dir": "/etc/nixos",
-        "exclude": ["hardware-configuration.nix"]
+        "exclude": ["hardware-configuration.nix", "device.nix"]
       },
       "post_install": [
         "echo 'Run: sudo nixos-rebuild switch'"

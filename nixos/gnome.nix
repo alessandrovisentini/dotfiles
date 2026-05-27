@@ -1,40 +1,26 @@
 {
+  config,
   lib,
   pkgs,
   ...
-}: let
-  vars = import ./variables.nix;
-in {
+}: {
   services.desktopManager.gnome.enable = true;
-
-  # Native Wayland for Electron + Firefox; XWayland is blurry under fractional scaling.
-  environment.sessionVariables = {
-    NIXOS_OZONE_WL = "1";
-    MOZ_ENABLE_WAYLAND = "1";
-  };
 
   services.gnome.games.enable = false;
   services.gnome.core-apps.enable = false;
   services.power-profiles-daemon.enable = false; # conflicts with auto-cpufreq
-  environment.gnome.excludePackages = with pkgs; [gnome-tour gnome-user-docs yelp epiphany];
+  environment.gnome.excludePackages = with pkgs; [gnome-tour gnome-user-docs];
+  users.users.${config.local.device.userName}.packages = with pkgs; [gnome-tweaks];
 
   services.gnome.gnome-browser-connector.enable = true;
-
   environment.systemPackages = with pkgs; [
     gnomeExtensions.appindicator
     gnomeExtensions.simple-workspaces-bar
     gnomeExtensions.disable-workspace-switcher-overlay
     (callPackage ./extensions/move-without-follow {})
   ];
+
   services.udev.packages = with pkgs; [gnome-settings-daemon];
-
-  qt = {
-    enable = true;
-    style = "adwaita-dark";
-  };
-
-  users.users.${vars.mainUserName}.packages = with pkgs; [gnome-tweaks];
-
   programs.dconf.enable = true;
   programs.dconf.profiles.user.databases = [
     {

@@ -5,12 +5,10 @@
   ...
 }: let
   home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/release-25.11.tar.gz";
-  unstable = import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz") {
-    config.allowUnfree = true;
-  };
   configDir = builtins.dirOf (toString ./.);
   parentDir = builtins.dirOf configDir;
-  vars = import ./variables.nix;
+  dev = config.local.device;
+  outerCfg = config;
 in {
   imports = [
     (import "${home-manager}/nixos")
@@ -18,85 +16,21 @@ in {
 
   nixpkgs.config.allowUnfree = true;
 
-  # User and packages
-  users.users.${vars.mainUserName} = {
+  # User and group (app packages live in apps.nix)
+  users.users.${dev.userName} = {
     isNormalUser = true;
     uid = 1000;
-    group = vars.mainUserName;
-    description = vars.mainUserName;
+    group = dev.userName;
+    description = dev.userName;
     extraGroups = ["networkmanager" "wheel" "video" "audio" "disk" "pcap" "input"];
-    packages = with pkgs; [
-      alacritty
-      delta
-      python314
-      geary
-      protonmail-bridge
-      protonmail-bridge-gui
-      proton-pass
-      tor-browser
-      deja-dup
-      gnome-calendar
-      telegram-desktop
-      pdftk
-      libreoffice
-      f3d
-      mpv
-      imv
-      gnome-system-monitor
-      gnome-disk-utility
-      yt-dlp
-      vlc
-      calibre
-      gimp
-      inkscape-with-extensions
-      obsidian
-      ungoogled-chromium
-      discord
-      spotify
-      easyeffects
-      qpwgraph
-      musescore
-      audacity
-      transcribe
-      spotdl
-      brave
-      unstable.pdfarranger
-      unstable.claude-code
-    ];
   };
-  users.groups.${vars.mainUserName} = {
+  users.groups.${dev.userName} = {
     gid = 1000;
-  };
-
-  # Programs
-  programs.firefox = {
-    enable = true;
-    # text-input-v3 (OSK auto-popup) is behind a pref.
-    policies.Preferences = {
-      "widget.wayland-text-input-v3.enabled" = {
-        Value = true;
-        Status = "locked";
-      };
-    };
   };
 
   xdg.mime.enable = true;
   xdg.portal.enable = true;
   xdg.portal.wlr.enable = true;
-
-  services.deluge.enable = true;
-
-  programs.localsend = {
-    enable = true;
-    openFirewall = true;
-  };
-
-  # Spotify
-  networking.firewall.allowedTCPPorts = [57621];
-
-  # AppImages
-  programs.appimage.enable = true;
-  programs.appimage.binfmt = true;
 
   # Polkit
   security.polkit.enable = true;
@@ -105,9 +39,17 @@ in {
   services.gnome.gnome-keyring.enable = true;
 
   # Fonts
-  fonts.packages = [
-    pkgs.nerd-fonts.dejavu-sans-mono
+  fonts.packages = with pkgs; [
+    nerd-fonts.dejavu-sans-mono
+    adwaita-fonts
   ];
+
+  # System-wide Qt platform theme (user-level qt5ct/qt6ct config lives
+  # in the home-manager block below).
+  qt = {
+    enable = true;
+    style = "adwaita-dark";
+  };
 
   # Sound
   security.rtkit.enable = true;
@@ -137,6 +79,11 @@ in {
 
     REPOS_HOME = parentDir;
     TTRPG_NOTES_HOME = "${parentDir}/ttrpg-notes";
+
+    # Native Wayland for Electron + Firefox; XWayland is blurry under
+    # fractional scaling.
+    NIXOS_OZONE_WL = "1";
+    MOZ_ENABLE_WAYLAND = "1";
   };
 
   # Aliases
@@ -153,31 +100,36 @@ in {
   };
 
   # Home Manager
-  home-manager.users.${vars.mainUserName} = {
+  home-manager.users.${dev.userName} = {
     lib,
     pkgs,
     config,
     ...
-  }: {
+  }: let
+    dev = outerCfg.local.device;
+  in {
     home.stateVersion = "25.11";
 
-    home.username = vars.mainUserName;
+    home.username = dev.userName;
 
     dconf = {
       enable = true;
-      settings = {
-        "org/gnome/desktop/interface" = {
-          color-scheme = "prefer-dark";
-          gtk-theme = "Adwaita-dark";
-        };
+      settings =
+        {
+          "org/gnome/desktop/interface" = {
+            color-scheme = "prefer-dark";
+            gtk-theme = "Adwaita-dark";
+          };
+        }
         # Default OSK height is too short; bump it, more in portrait.
-        "sm/puri/Squeekboard" = {
-          scale-in-vertical-screen-orientation =
-            lib.hm.gvariant.mkDouble 2.0;
-          scale-in-horizontal-screen-orientation =
-            lib.hm.gvariant.mkDouble 1.4;
+        // lib.optionalAttrs dev.hasTouchscreen {
+          "sm/puri/Squeekboard" = {
+            scale-in-vertical-screen-orientation =
+              lib.hm.gvariant.mkDouble 2.0;
+            scale-in-horizontal-screen-orientation =
+              lib.hm.gvariant.mkDouble 1.4;
+          };
         };
-      };
     };
 
     gtk = {
@@ -195,21 +147,23 @@ in {
 
     # Squeekboard maps content_purpose to subdirs without falling back to
     # the root layout, so the custom layout must be deployed in each subdir.
-    xdg.dataFile."squeekboard/keyboards/us.yaml".source =
-      ../config/squeekboard/us.yaml;
-    xdg.dataFile."squeekboard/keyboards/us_wide.yaml".source =
-      ../config/squeekboard/us_wide.yaml;
-    xdg.dataFile."squeekboard/keyboards/url/us.yaml".source =
-      ../config/squeekboard/us.yaml;
-    xdg.dataFile."squeekboard/keyboards/url/us_wide.yaml".source =
-      ../config/squeekboard/us_wide.yaml;
-    xdg.dataFile."squeekboard/keyboards/email/us.yaml".source =
-      ../config/squeekboard/us.yaml;
-    xdg.dataFile."squeekboard/keyboards/email/us_wide.yaml".source =
-      ../config/squeekboard/us_wide.yaml;
-    xdg.dataFile."squeekboard/keyboards/terminal/us.yaml".source =
-      ../config/squeekboard/us.yaml;
-    xdg.dataFile."squeekboard/keyboards/terminal/us_wide.yaml".source =
-      ../config/squeekboard/us_wide.yaml;
+    xdg.dataFile = lib.optionalAttrs dev.hasTouchscreen {
+      "squeekboard/keyboards/us.yaml".source =
+        ../config/squeekboard/us.yaml;
+      "squeekboard/keyboards/us_wide.yaml".source =
+        ../config/squeekboard/us_wide.yaml;
+      "squeekboard/keyboards/url/us.yaml".source =
+        ../config/squeekboard/us.yaml;
+      "squeekboard/keyboards/url/us_wide.yaml".source =
+        ../config/squeekboard/us_wide.yaml;
+      "squeekboard/keyboards/email/us.yaml".source =
+        ../config/squeekboard/us.yaml;
+      "squeekboard/keyboards/email/us_wide.yaml".source =
+        ../config/squeekboard/us_wide.yaml;
+      "squeekboard/keyboards/terminal/us.yaml".source =
+        ../config/squeekboard/us.yaml;
+      "squeekboard/keyboards/terminal/us_wide.yaml".source =
+        ../config/squeekboard/us_wide.yaml;
+    };
   };
 }

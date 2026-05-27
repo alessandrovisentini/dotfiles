@@ -130,5 +130,8 @@ bindsym $mod+Shift+t exec mode-cycle
 # Color picker
 bindsym $mod+Shift+c exec grim -g "$(slurp -p)" -t ppm - | convert - -format '%[pixel:p{0,0}]' txt:- | tail -n 1 | cut -d ' ' -f 4 | wl-copy
 
+# Per-machine inputs/outputs/execs. Symlink to one of devices/*.conf.
+include '$XDG_CONFIG_HOME/sway/device.conf'
+
 include /etc/sway/config.d/*
 include '$XDG_CONFIG_HOME/sway/config.d/*.conf'
