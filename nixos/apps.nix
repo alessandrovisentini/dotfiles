@@ -86,7 +86,6 @@ in {
     audacity
     transcribe
     spotdl
-    brave
     vscodium
     unstable.pdfarranger
     unstable.claude-code
