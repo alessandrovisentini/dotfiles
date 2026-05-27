@@ -213,7 +213,10 @@ require('lazy').setup({
   { -- Fuzzy Finder (files, lsp, etc)
     'nvim-telescope/telescope.nvim',
     event = 'VimEnter',
-    branch = '0.1.x',
+    -- `master` is required for nvim-treesitter `main` compatibility: the tagged
+    -- 0.1.x previewer calls nvim-treesitter's removed `parsers.ft_to_lang`,
+    -- while master uses `vim.treesitter.language.get_lang`.
+    branch = 'master',
     dependencies = {
       'nvim-lua/plenary.nvim',
       { -- If encountering errors, see telescope-fzf-native README for installation instructions
@@ -913,32 +916,67 @@ require('lazy').setup({
   },
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
-    branch = 'master',
+    -- The `main` branch is the rewrite that supports Neovim 0.12+. The frozen
+    -- `master` branch does not (its query directives crash on 0.12's new match
+    -- format). See `:help nvim-treesitter`.
+    branch = 'main',
+    lazy = false, -- the main branch does not support lazy-loading
     build = ':TSUpdate',
-    -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
-    main = 'nvim-treesitter.configs',
-    config = function(_, opts)
-      require('nvim-treesitter.configs').setup(opts)
+    config = function()
+      local ts = require 'nvim-treesitter'
+      ts.setup()
+
+      -- Parsers to always keep installed.
+      ts.install {
+        'bash',
+        'c',
+        'diff',
+        'html',
+        'lua',
+        'luadoc',
+        'markdown',
+        'markdown_inline',
+        'query',
+        'vim',
+        'vimdoc',
+      }
+
+      -- On the `main` branch nothing is enabled automatically: highlighting and
+      -- indentation are started per-buffer from a FileType autocmd. Parsers not
+      -- yet installed are fetched on demand (replaces the old `auto_install`).
+      vim.api.nvim_create_autocmd('FileType', {
+        group = vim.api.nvim_create_augroup('treesitter-start', { clear = true }),
+        callback = function(args)
+          local buf = args.buf
+          local ft = args.match
+          local lang = vim.treesitter.language.get_lang(ft)
+          if not lang then
+            return
+          end
+
+          local function start()
+            if not pcall(vim.treesitter.start, buf, lang) then
+              return
+            end
+            -- Ruby relies on vim's regex highlighting/indent, so keep syntax on
+            -- and skip the (experimental) treesitter indentexpr for it.
+            if ft == 'ruby' then
+              vim.bo[buf].syntax = 'on'
+            else
+              vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+            end
+          end
+
+          if vim.tbl_contains(ts.get_installed(), lang) then
+            start()
+          elseif vim.tbl_contains(ts.get_available(), lang) then
+            ts.install({ lang }):await(function()
+              vim.schedule(start)
+            end)
+          end
+        end,
+      })
     end,
-    opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
-      -- Autoinstall languages that are not installed
-      auto_install = true,
-      highlight = {
-        enable = true,
-        -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-        --  If you are experiencing weird indenting issues, add the language to
-        --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-        additional_vim_regex_highlighting = { 'ruby' },
-      },
-      indent = { enable = true, disable = { 'ruby' } },
-    },
-    -- There are additional nvim-treesitter modules that you can use to interact
-    -- with nvim-treesitter. You should go explore a few and see what interests you:
-    --
-    --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-    --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
-    --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
   },
 
   require 'kickstart.plugins.debug',

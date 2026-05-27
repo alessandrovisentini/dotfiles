@@ -27,9 +27,7 @@ from evdev import ecodes
 LOG = logging.getLogger("mode-daemon")
 DEBOUNCE_SEC = 0.4
 # Substrings matched against /proc/bus/input/devices to decide whether
-# the detachable keyboard is currently attached. Comes from the
-# mode-daemon service environment (set per-device via
-# local.device.detachableKeyboardHints), pipe-separated.
+# the detachable keyboard is currently attached. Pipe-separated.
 DETACHABLE_KEYBOARD_HINTS = tuple(
     h for h in os.environ.get("DETACHABLE_KEYBOARD_HINTS", "").split("|") if h
 )

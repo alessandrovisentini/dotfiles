@@ -120,8 +120,18 @@ setup_nixos_system_symlinks() {
     link_source_nix_files        "$source_dir" "$target_dir"
 }
 
+autodetect_device() {
+    local script="$REPO_DIR/scripts/setup-device.sh"
+    [[ -x "$script" ]] || return 0
+    log_info "Autodetecting per-device config selectors..."
+    if ! "$script"; then
+        log_warning "Device autodetection failed — link nixos/device.nix, config/sway/device.conf, and config/astal-bar/src/device.ts manually before nixos-rebuild."
+    fi
+}
+
 should_run symlinks && create_config_symlinks "$JSON_FILE" nixos "$REPO_DIR"
 should_run nixos    && setup_nixos_system_symlinks
+should_run nixos    && autodetect_device
 should_run post     && run_post_install       "$JSON_FILE" nixos
 
 log_success "NixOS installation complete!"

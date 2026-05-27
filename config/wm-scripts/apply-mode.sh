@@ -10,9 +10,8 @@ case "$mode" in
     *) echo "usage: $0 <laptop|tablet>" >&2; exit 64 ;;
 esac
 
-# Sway input identifier for the detachable keyboard's touchpad; comes
-# from the mode-daemon service environment (set per-device via
-# local.device.detachableTouchpadSwayId). Empty disables the toggle.
+# Sway input identifier for the detachable keyboard's touchpad. Empty
+# disables the toggle.
 SWAY_TP="${DETACHABLE_TOUCHPAD_SWAY_ID:-}"
 
 # Auto-rotation: tablet only.

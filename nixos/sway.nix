@@ -136,6 +136,24 @@ in {
     extraPortals = [pkgs.xdg-desktop-portal-gtk];
   };
 
+  # Detection runs in bash, not Nix eval: sysfs reports a page-size
+  # length and `builtins.readFile` hits unexpected EOF before reading
+  # the actual contents.
+  system.activationScripts.swayDeviceLink = ''
+    set +e
+    ver="$(cat /sys/class/dmi/id/product_version 2>/dev/null)"
+    case "$ver" in
+        "ThinkPad X12 Detachable Gen 1") devid=x12 ;;
+        "ThinkPad P14s Gen 4")           devid=p14s ;;
+        *) exit 0 ;;
+    esac
+    repo="/home/${dev.userName}/Development/repos/dotfiles"
+    [ -d "$repo/config/sway/devices" ] || exit 0
+    [ -e "$repo/config/sway/devices/$devid.conf" ] || exit 0
+    ${pkgs.coreutils}/bin/ln -sfn "devices/$devid.conf" "$repo/config/sway/device.conf"
+    ${pkgs.coreutils}/bin/chown -h ${dev.userName}:${dev.userName} "$repo/config/sway/device.conf" 2>/dev/null || true
+  '';
+
   # Auto-rotation (started/stopped by apply-mode, tablet only)
   systemd.user.services."sway-rotate" = lib.mkIf dev.hasAccelerometer {
     description = "Auto-rotate the Sway panel from the accelerometer";

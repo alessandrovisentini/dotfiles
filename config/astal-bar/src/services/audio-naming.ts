@@ -1,12 +1,11 @@
-// Hardware-specific audio endpoint labels, filtering and ordering.
+// Audio endpoint labels, filtering and ordering.
 import { bind } from "astal"
 import AstalWp from "gi://AstalWp"
 import { AudioPriority } from "../enums/audio"
+import { DEVICE } from "../device"
 
 export function isIntegratedAudio(ep: any): boolean {
-  return /Smart Sound|HDA Intel|HD Audio|Tiger Lake|Realtek/i.test(
-    ep?.device?.description ?? "",
-  )
+  return DEVICE.integratedAudioPattern.test(ep?.device?.description ?? "")
 }
 
 // The analog node's name doesn't flip Speaker↔Headphones; route availability does.
