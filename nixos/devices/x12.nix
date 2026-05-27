@@ -1,5 +1,7 @@
 # ThinkPad X12 Detachable Gen 1
 {
+  boot.initrd.luks.devices."luks-5cbfb211-230a-4462-ba9b-80c2395d8dd4".crypttabExtraOpts = [ "tpm2-device=auto" ];
+
   local.device = {
     userName = "alessandrovisentini";
     hostName = "x12";
