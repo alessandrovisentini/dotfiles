@@ -26,11 +26,15 @@ in {
     # Development
     nodejs
     cargo
+    go
     python314
     docker-compose
     delta
     glow
     jq
+    gnumake
+    tree-sitter
+    markdownlint-cli
   ];
 
   programs.nix-ld.enable = true; # runs dynamically-linked binaries
@@ -109,6 +113,8 @@ in {
   programs.neovim = {
     enable = true;
     defaultEditor = true;
+    # kickstart config uses vim.pack, which needs Neovim 0.12+
+    package = unstable.neovim-unwrapped;
   };
   programs.tcpdump.enable = true;
   programs.lazygit.enable = true;

@@ -55,7 +55,10 @@
             "fd",
             "fzf",
             "nvm",
-            "sketchybar"
+            "sketchybar",
+            "tree-sitter",
+            "markdownlint-cli",
+            "go"
           ],
           "casks": ["alacritty", "iterm2", "amethyst", "scroll-reverser", "font-dejavu-sans-mono-nerd-font"]
         }
