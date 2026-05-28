@@ -35,19 +35,47 @@ vim.keymap.set('n', '<leader>tt', function()
 end, { desc = '[T]ree focus toggle', silent = true })
 
 vim.keymap.set('n', '<leader>tc', '<Cmd>Neotree close<CR>', { desc = '[T]ree [C]lose', silent = true })
+vim.keymap.set('n', '<leader>tb', '<Cmd>wincmd p<CR>', { desc = '[T]ree [B]uffer focus', silent = true })
 
-require('neo-tree').setup {
-  filesystem = {
-    filtered_items = {
-      visible = true,
-      hide_dotfiles = false,
-      hide_gitignored = false,
-      hide_hidden = false,
-    },
-    window = {
-      mappings = {
-        ['\\'] = 'close_window',
+local FIXED_WIDTH = 40
+local adaptive = false
+
+local function apply_setup()
+  require('neo-tree').setup {
+    filesystem = {
+      filtered_items = {
+        visible = true,
+        hide_dotfiles = false,
+        hide_gitignored = false,
+        hide_hidden = false,
+      },
+      window = {
+        width = FIXED_WIDTH,
+        auto_expand_width = adaptive,
+        mappings = {
+          ['\\'] = 'close_window',
+          ['<space>'] = 'none',
+        },
       },
     },
-  },
-}
+  }
+end
+
+apply_setup()
+
+vim.keymap.set('n', '<leader>tw', function()
+  adaptive = not adaptive
+  apply_setup()
+  local was_open = false
+  for _, win in ipairs(vim.api.nvim_list_wins()) do
+    if vim.bo[vim.api.nvim_win_get_buf(win)].filetype == 'neo-tree' then
+      was_open = true
+      break
+    end
+  end
+  if was_open then
+    vim.cmd 'Neotree close'
+    vim.cmd 'Neotree show'
+  end
+  vim.notify('Neotree width: ' .. (adaptive and 'adaptive' or ('fixed (' .. FIXED_WIDTH .. ')')), vim.log.levels.INFO)
+end, { desc = '[T]ree [W]idth toggle', silent = true })
