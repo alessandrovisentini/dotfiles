@@ -31,9 +31,9 @@
 }
 
 .notification.critical {
-    background: rgba(232, 67, 75, 0.18);
+    background: #303030;
     color: #ffffff;
-    border-color: rgba(232, 67, 75, 0.55);
+    border-color: #e8434b;
 }
 
 .notification-content {
@@ -66,21 +66,21 @@
 }
 
 .close-button:hover {
-    background: rgba(255, 138, 61, 0.22);
-    color: #ff8a3d;
+    background: #3584e4;
+    color: #ffffff;
 }
 
 .notification-action {
-    background: rgba(255, 138, 61, 0.16);
-    color: #ff8a3d;
-    border: 1px solid rgba(255, 138, 61, 0.55);
+    background: #2a2a2a;
+    color: #3584e4;
+    border: 1px solid #3584e4;
     border-radius: 8px;
     padding: 4px 10px;
     margin: 2px;
 }
 
 .notification-action:hover {
-    background: rgba(255, 138, 61, 0.28);
+    background: #3584e4;
     color: #ffffff;
 }
 
@@ -110,8 +110,8 @@
 
 .control-center-clear-all:hover,
 .control-center-dnd:hover {
-    background: rgba(255, 138, 61, 0.22);
-    color: #ff8a3d;
+    background: #3584e4;
+    color: #ffffff;
 }
 
 /* ---- Header: title + switch + clear-all icon, all on one row.
@@ -129,7 +129,7 @@
 }
 
 .widget-title > label {
-    color: #ff8a3d;
+    color: #ffffff;
     font-size: 13pt;
     font-weight: bold;
 }
@@ -162,14 +162,14 @@
 .widget-title > button:hover,
 .widget-title button.clear-all-button:hover,
 .widget-title #clear-all-button:hover {
-    background: rgba(255, 138, 61, 0.22);
-    color: #ff8a3d;
+    background: #3584e4;
+    color: #ffffff;
 }
 
 .widget-title > button:hover label,
 .widget-title button.clear-all-button:hover label,
 .widget-title #clear-all-button:hover label {
-    color: #ff8a3d;
+    color: #ffffff;
 }
 
 /* DND row sits below the title row, sharing the card background and the
@@ -232,7 +232,7 @@ window switch slider {
 
 .widget-dnd switch:checked,
 window switch:checked {
-    background: #ff8a3d;
+    background: #3584e4;
     background-image: none;
 }
 
@@ -250,7 +250,7 @@ scale trough {
 scale trough highlight,
 scale highlight {
     border-radius: 6px;
-    background: #ff8a3d;
+    background: #3584e4;
 }
 
 scale slider {

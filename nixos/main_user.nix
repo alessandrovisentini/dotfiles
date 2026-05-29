@@ -120,6 +120,12 @@ in {
             color-scheme = "prefer-dark";
             gtk-theme = "Adwaita-dark";
           };
+          "org/gnome/nm-applet" = {
+            disable-connected-notifications = true;
+            disable-disconnected-notifications = true;
+            disable-vpn-notifications = true;
+            suppress-wireless-networks-available = true;
+          };
         }
         # Default OSK height is too short; bump it, more in portrait.
         // lib.optionalAttrs dev.hasTouchscreen {

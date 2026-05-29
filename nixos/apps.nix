@@ -91,6 +91,7 @@ in {
     transcribe
     spotdl
     vscodium
+    brave
     unstable.pdfarranger
     unstable.claude-code
   ];
