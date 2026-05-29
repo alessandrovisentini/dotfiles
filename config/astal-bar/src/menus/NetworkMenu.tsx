@@ -193,7 +193,12 @@ export function NetworkMenu() {
         {Section(
           "Wi-Fi",
           ScrollList(
-            net.wifi ? bind(net.wifi, "accessPoints").as(() => apRows()) : apRows(),
+            net.wifi
+              ? Variable.derive(
+                  [bind(net.wifi, "accessPoints"), bind(net.wifi, "ssid")],
+                  () => apRows(),
+                )()
+              : apRows(),
           ),
           wifiHeader,
         )}
