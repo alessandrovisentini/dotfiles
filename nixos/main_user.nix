@@ -119,6 +119,7 @@ in {
           "org/gnome/desktop/interface" = {
             color-scheme = "prefer-dark";
             gtk-theme = "Adwaita-dark";
+            cursor-theme = "Adwaita";
           };
           "org/gnome/nm-applet" = {
             disable-connected-notifications = true;
