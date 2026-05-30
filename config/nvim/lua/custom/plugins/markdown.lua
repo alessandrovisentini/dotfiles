@@ -144,13 +144,26 @@ local function setup_obsidian()
   vim.keymap.set('n', '<leader>ot', '<cmd>Obsidian tags<CR>', { desc = '[O]bsidian: Search [T]ags' })
   vim.keymap.set('n', '<leader>or', '<cmd>Obsidian rename<CR>', { desc = '[O]bsidian: [R]ename note' })
 
+  local function bind_follow_link(buf)
+    vim.keymap.set('n', 'gd', '<cmd>Obsidian follow_link<CR>', { buffer = buf, desc = '[G]o to [D]efinition (follow Obsidian link)' })
+    vim.keymap.set('n', '<CR>', '<cmd>Obsidian follow_link<CR>', { buffer = buf, desc = 'Follow Obsidian link' })
+  end
+
   vim.api.nvim_create_autocmd('FileType', {
     pattern = 'markdown',
     group = vim.api.nvim_create_augroup('custom-obsidian-md', { clear = true }),
-    callback = function()
-      vim.keymap.set('n', 'gd', '<cmd>Obsidian follow_link<CR>', { buffer = true, desc = '[G]o to [D]efinition (follow Obsidian link)' })
-      vim.keymap.set('n', '<CR>', '<cmd>Obsidian follow_link<CR>', { buffer = true, desc = 'Follow Obsidian link' })
+    callback = function(args)
+      bind_follow_link(args.buf)
       vim.opt_local.spell = false
+    end,
+  })
+
+  -- obsidian-ls attaches to markdown buffers, which fires the global LspAttach
+  -- autocmd that rebinds gd to telescope lsp_definitions. Re-bind after attach.
+  vim.api.nvim_create_autocmd('LspAttach', {
+    group = vim.api.nvim_create_augroup('custom-obsidian-md-lsp', { clear = true }),
+    callback = function(args)
+      if vim.bo[args.buf].filetype == 'markdown' then bind_follow_link(args.buf) end
     end,
   })
 end
