@@ -1,4 +1,5 @@
 import { Variable, bind } from "astal"
+import { Gtk } from "astal/gtk3"
 import AstalWp from "gi://AstalWp"
 import { MENU } from "../const/menu"
 import { defaultSpeaker } from "../services/audio"
@@ -40,7 +41,9 @@ export function Volume() {
     >
       {bind(defaultSpeaker()).as((sp: any) =>
         sp ? (
-          <box>
+          // halign center: the button keeps a 28px touch target, wider than
+          // the lone mute glyph, so center the content or it packs left.
+          <box halign={Gtk.Align.CENTER}>
             <label
               className="module-icon"
               label={Variable.derive(

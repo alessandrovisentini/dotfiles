@@ -3,6 +3,7 @@
 # terminal/us.yaml: a constant top row exposes Esc/Tab + modifiers
 # (Ctrl/Alt/Super) + arrows on every view. F1–F12 + navigation live
 # in the "actions" view, reached via the ">_" button on the bottom row.
+# base/upper also expose a persistent 1–0 row (iPadOS-style).
 
 outlines:
     default:   { width: 35.33,  height: 52 }
@@ -23,12 +24,14 @@ outlines:
 views:
     base:
         - "Esc Tab Ctrl Alt Super ← ↑ ↓ →"
+        - "1 2 3 4 5 6 7 8 9 0"
         - "q w e r t y u i o p"
         - "a s d f g h j k l"
         - "Shift_L   z x c v b n m   BackSpace"
         - "show_numbers show_actions world space period Return"
     upper:
         - "Esc Tab Ctrl Alt Super ← ↑ ↓ →"
+        - "1 2 3 4 5 6 7 8 9 0"
         - "Q W E R T Y U I O P"
         - "A S D F G H J K L"
         - "Shift_L   Z X C V B N M   BackSpace"

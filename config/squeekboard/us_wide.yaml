@@ -2,6 +2,7 @@
 # Landscape variant of us.yaml. Squeekboard picks <layout>_wide.yaml
 # when the screen is wider than tall. Same key layout as portrait;
 # outlines are taller so the keys aren't cramped on a 3:2 panel.
+# base/upper also expose a persistent 1–0 row (iPadOS-style).
 
 # Outline sizes match the bundled terminal/us_wide.yaml. squeekboard
 # fits the keyboard within a fixed panel-relative height in landscape,
@@ -28,12 +29,14 @@ outlines:
 views:
     base:
         - "Esc Tab Ctrl Alt Super ← ↑ ↓ →"
+        - "1 2 3 4 5 6 7 8 9 0"
         - "q w e r t y u i o p"
         - "a s d f g h j k l"
         - "Shift_L   z x c v b n m   BackSpace"
         - "show_numbers show_actions world space period Return"
     upper:
         - "Esc Tab Ctrl Alt Super ← ↑ ↓ →"
+        - "1 2 3 4 5 6 7 8 9 0"
         - "Q W E R T Y U I O P"
         - "A S D F G H J K L"
         - "Shift_L   Z X C V B N M   BackSpace"

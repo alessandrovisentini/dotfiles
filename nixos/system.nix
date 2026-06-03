@@ -32,6 +32,10 @@
   ];
   networking.firewall.enable = true;
 
+  # Suspend on the physical power button instead of powering off.
+  services.logind.powerKey = "suspend";
+  services.logind.powerKeyLongPress = "poweroff";
+
   # Power profiles
   services.auto-cpufreq.enable = true;
   services.auto-cpufreq.settings = {
