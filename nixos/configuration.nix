@@ -9,7 +9,7 @@
       ./main_user.nix
       ./apps.nix
       ./display_manager.nix
-      ./gnome.nix
+      # ./gnome.nix
       ./wm-common.nix
       ./sway.nix
       ./development.nix
