@@ -33,8 +33,8 @@
   networking.firewall.enable = true;
 
   # Suspend on the physical power button instead of powering off.
-  services.logind.powerKey = "suspend";
-  services.logind.powerKeyLongPress = "poweroff";
+  services.logind.settings.Login.HandlePowerKey = "suspend";
+  services.logind.settings.Login.HandlePowerKeyLongPress = "poweroff";
 
   # Power profiles
   services.auto-cpufreq.enable = true;
