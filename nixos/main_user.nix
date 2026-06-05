@@ -35,6 +35,9 @@ in {
   # Polkit
   security.polkit.enable = true;
 
+  # dconf GSettings backend (was implicit via GNOME); home-manager dconf needs it.
+  programs.dconf.enable = true;
+
   # Keyring
   services.gnome.gnome-keyring.enable = true;
 

@@ -5,7 +5,7 @@ import AstalNetwork from "gi://AstalNetwork"
 import GLib from "gi://GLib"
 import { Icon } from "../const/icons"
 import { MENU } from "../const/menu"
-import { enabledView, setEnabledIntent } from "../services/wifi"
+import { enabledView, setEnabledIntent, wifiState } from "../services/wifi"
 import {
   busyFor as vpnBusyFor,
   toggleVpn,
@@ -33,12 +33,10 @@ export function NetworkMenu() {
   // Scan feedback: true while either NM reports scanning or we're inside the
   // post-click grace window. Pinged from the scan button below.
   const scanPing = Variable(false)
-  const scanBusy = net.wifi
-    ? Variable.derive(
-        [scanPing, bind(net.wifi, "scanning")],
-        (p, s) => p || s,
-      )
-    : scanPing
+  const scanBusy = Variable.derive(
+    [scanPing, wifiState],
+    (p, st) => p || st.scanning,
+  )
 
   const empty = (text: string) => (
     <box
@@ -53,16 +51,16 @@ export function NetworkMenu() {
   )
 
   const apRows = () => {
-    const w = net.wifi
-    if (!w) return empty("No Wi-Fi device")
+    const st = wifiState.get()
+    if (!st.device) return empty("No Wi-Fi device")
     const seen = new Set<string>()
-    const rows = w.accessPoints
+    const rows = st.accessPoints
       .filter((ap) => ap.ssid)
       .sort((a, b) => b.strength - a.strength)
       .filter((ap) => !seen.has(ap.ssid!) && seen.add(ap.ssid!))
       .slice(0, 20)
       .map((ap) => {
-        const active = ap.ssid === w.ssid
+        const active = ap.ssid === st.ssid
         return Row({
           active,
           icon: wifiIcon(ap.strength),
@@ -192,14 +190,7 @@ export function NetworkMenu() {
         {Section("Ethernet", bind(net, "primary").as(() => ethernetRow()))}
         {Section(
           "Wi-Fi",
-          ScrollList(
-            net.wifi
-              ? Variable.derive(
-                  [bind(net.wifi, "accessPoints"), bind(net.wifi, "ssid")],
-                  () => apRows(),
-                )()
-              : apRows(),
-          ),
+          ScrollList(Variable.derive([wifiState], () => apRows())()),
           wifiHeader,
         )}
         {Section(

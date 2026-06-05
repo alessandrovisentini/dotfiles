@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  lib,
   ...
 }: let
   unstable = import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz") {
@@ -124,7 +125,7 @@ in {
   programs.gnome-disks.enable = true;
   programs.seahorse.enable = true;
   services.gnome.sushi.enable = true;
-  programs.steam = {
+  programs.steam = lib.mkIf dev.hasGaming {
     enable = true;
     remotePlay.openFirewall = true;
     dedicatedServer.openFirewall = true;

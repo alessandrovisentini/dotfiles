@@ -30,6 +30,11 @@
       default = false;
       description = "Has a Thunderbolt controller. Enables bolt.";
     };
+    hasGaming = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Enables gaming software (Steam with Remote Play and dedicated server firewall openings).";
+    };
     internalOutput = lib.mkOption {
       type = lib.types.str;
       default = "eDP-1";

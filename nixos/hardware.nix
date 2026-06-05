@@ -22,6 +22,9 @@ in {
     settings.General.Enable = "Source,Sink,Media,Socket";
   };
 
+  # Battery/power over D-Bus (was implicit via GNOME); AstalBattery needs it.
+  services.upower.enable = true;
+
   # Thunderbolt
   services.hardware.bolt.enable = lib.mkIf dev.hasThunderbolt true;
 

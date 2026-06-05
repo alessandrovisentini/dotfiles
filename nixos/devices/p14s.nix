@@ -6,5 +6,6 @@
 
     hasFingerprint = true;
     hasThunderbolt = true;
+    hasGaming = true;
   };
 }
