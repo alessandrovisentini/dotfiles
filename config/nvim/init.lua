@@ -98,6 +98,11 @@ do
   vim.g.mapleader = ' '
   vim.g.maplocalleader = ' '
 
+  -- Disable netrw early so nvim-tree can cleanly hijack directory buffers
+  --  NOTE: Must happen before plugins/UI load (otherwise opening a directory shows a blank tree)
+  vim.g.loaded_netrw = 1
+  vim.g.loaded_netrwPlugin = 1
+
   -- Set to true if you have a Nerd Font installed and selected in the terminal
   vim.g.have_nerd_font = true
 
@@ -1089,7 +1094,7 @@ do
   require 'kickstart.plugins.indent_line'
   require 'kickstart.plugins.lint'
   require 'kickstart.plugins.autopairs'
-  require 'kickstart.plugins.neo-tree'
+  require 'kickstart.plugins.nvim-tree'
   require 'kickstart.plugins.gitsigns'
 
   require 'custom.plugins'

@@ -134,6 +134,24 @@ in {
     enable = true;
     wlr.enable = true;
     extraPortals = [pkgs.xdg-desktop-portal-gtk];
+    # Without an explicit routing config, xdg-desktop-portal under
+    # XDG_CURRENT_DESKTOP=sway finds no backend for FileChooser/
+    # AppChooser/OpenURI: the gtk backend ships UseIn=gnome and only a
+    # gnome-portals.conf exists. The result is GTK/GNOME apps (e.g.
+    # deja-dup) failing with "no application to browse the folder".
+    # Pin the default interfaces to gtk and keep screencast on wlr.
+    config = {
+      common = {
+        default = ["gtk"];
+        "org.freedesktop.impl.portal.Screenshot" = ["wlr"];
+        "org.freedesktop.impl.portal.ScreenCast" = ["wlr"];
+      };
+      sway = {
+        default = ["gtk"];
+        "org.freedesktop.impl.portal.Screenshot" = ["wlr"];
+        "org.freedesktop.impl.portal.ScreenCast" = ["wlr"];
+      };
+    };
   };
 
   # Detection runs in bash, not Nix eval: sysfs reports a page-size

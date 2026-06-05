@@ -28,7 +28,6 @@ require('bufferline').setup {
     end,
     offsets = {
       { filetype = 'NvimTree', text = 'File Explorer', text_align = 'center', separator = true },
-      { filetype = 'neo-tree', text = 'File Explorer', text_align = 'center', separator = true },
     },
     color_icons = true,
     show_buffer_icons = true,
