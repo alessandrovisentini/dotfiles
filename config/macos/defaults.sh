@@ -72,6 +72,14 @@ defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 127 "<di
 defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 "<dict><key>enabled</key><true/><key>value</key><dict><key>parameters</key><array><integer>100</integer><integer>2</integer><integer>524288</integer></array><key>type</key><string>standard</string></dict></dict>"
 defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 65 "<dict><key>enabled</key><false/><key>value</key><dict><key>parameters</key><array><integer>65535</integer><integer>49</integer><integer>1572864</integer></array><key>type</key><string>standard</string></dict></dict>"
 
+# Show Launchpad on Option+Shift+D. Modifier mask 655360 = option (0x80000) + shift (0x20000).
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 160 "<dict><key>enabled</key><true/><key>value</key><dict><key>parameters</key><array><integer>68</integer><integer>2</integer><integer>655360</integer></array><key>type</key><string>standard</string></dict></dict>"
+
+# Disable Ctrl+Space / Ctrl+Option+Space input source switching (conflicts with tmux prefix).
+# Hotkey IDs 60 = "Select previous input source", 61 = "Select next source in Input menu".
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 60 "<dict><key>enabled</key><false/><key>value</key><dict><key>parameters</key><array><integer>32</integer><integer>49</integer><integer>262144</integer></array><key>type</key><string>standard</string></dict></dict>"
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 61 "<dict><key>enabled</key><false/><key>value</key><dict><key>parameters</key><array><integer>32</integer><integer>49</integer><integer>786432</integer></array><key>type</key><string>standard</string></dict></dict>"
+
 # Amethyst
 
 AMETHYST_YAML_SRC="$SCRIPT_DIR/.amethyst.yml"

@@ -58,9 +58,10 @@
             "sketchybar",
             "tree-sitter",
             "markdownlint-cli",
-            "go"
+            "go",
+            "git-delta"
           ],
-          "casks": ["alacritty", "iterm2", "amethyst", "scroll-reverser", "font-dejavu-sans-mono-nerd-font"]
+          "casks": ["alacritty", "iterm2", "amethyst", "scroll-reverser", "font-dejavu-sans-mono-nerd-font", "firefox", "claude-code"]
         }
       },
       "post_install": [
