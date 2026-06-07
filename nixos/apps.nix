@@ -62,6 +62,7 @@ in {
     loupe
     nautilus
     papers
+    zathura
     showtime
     simple-scan
     geary
