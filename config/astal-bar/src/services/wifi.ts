@@ -4,31 +4,13 @@
 // doesn't flicker while NM cycles `enabled` bringing the radio up.
 import { Variable } from "astal"
 import AstalNetwork from "gi://AstalNetwork"
-import GLib from "gi://GLib"
+import { createIntent } from "./intent"
 
 const net = AstalNetwork.get_default()
+const intent = createIntent()
 
-// ---- optimistic enabled intent ----
-const intent = Variable<boolean | null>(null)
-let timeoutId: number | null = null
-
-function clearIntent() {
-  if (timeoutId !== null) {
-    GLib.source_remove(timeoutId)
-    timeoutId = null
-  }
-  if (intent.get() !== null) intent.set(null)
-}
-
-export function setEnabledIntent(want: boolean, revertMs = 5000) {
-  intent.set(want)
-  if (timeoutId !== null) GLib.source_remove(timeoutId)
-  timeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, revertMs, () => {
-    intent.set(null)
-    timeoutId = null
-    return GLib.SOURCE_REMOVE
-  })
-}
+// Called by the menu on user toggle.
+export const setEnabledIntent = intent.set
 
 export type WifiState = {
   device: AstalNetwork.Wifi | null
@@ -77,10 +59,7 @@ function attach() {
         handlerIds.push(
           dev.connect(`notify::${prop}`, () => {
             wifiState.set(snapshot(dev))
-            if (prop === "enabled") {
-              const want = intent.get()
-              if (want !== null && dev.enabled === want) clearIntent()
-            }
+            if (prop === "enabled") intent.reconcile(dev.enabled)
           }),
         )
       }
@@ -94,6 +73,6 @@ attach()
 
 // Intent-aware enabled view: the user's pending intent wins until NM settles.
 export const enabledView: Variable<boolean> = Variable.derive(
-  [intent, wifiState],
+  [intent.value, wifiState],
   (want, st) => (want !== null ? want : st.enabled),
 )

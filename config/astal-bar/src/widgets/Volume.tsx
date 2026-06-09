@@ -8,11 +8,13 @@ import { tap } from "../utils/gtk"
 import { volumeIcon } from "../utils/icons"
 import { pct } from "../utils/shell"
 
+type Endpoint = AstalWp.Endpoint
+
 // Flatten "default speaker → its mute" into a single observable Variable.
 function speakerMute(): Variable<boolean> {
   const v = Variable(false)
-  let conn: { ep: any; id: number } | null = null
-  defaultSpeaker().subscribe((sp: any) => {
+  let conn: { ep: Endpoint; id: number } | null = null
+  defaultSpeaker().subscribe((sp) => {
     if (conn) {
       try { conn.ep.disconnect(conn.id) } catch {}
       conn = null
@@ -39,17 +41,19 @@ export function Volume() {
       onClicked={tap(() => toggleMenu(MENU.volume))}
       tooltipText="Sound"
     >
-      {bind(defaultSpeaker()).as((sp: any) =>
+      {bind(defaultSpeaker()).as((sp) =>
         sp ? (
           // halign center: the button keeps a 28px touch target, wider than
           // the lone mute glyph, so center the content or it packs left.
           <box halign={Gtk.Align.CENTER}>
             <label
               className="module-icon"
-              label={Variable.derive(
-                [bind(sp, "volume"), bind(sp, "mute")],
-                (v: number, m: boolean) => volumeIcon(v, m),
-              )()}
+              label={bind(
+                Variable.derive(
+                  [bind(sp, "volume"), bind(sp, "mute")],
+                  (v: number, m: boolean) => volumeIcon(v, m),
+                ),
+              )}
             />
             <label
               label={bind(sp, "volume").as(pct)}

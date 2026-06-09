@@ -12,6 +12,7 @@ import {
   sortPriority,
 } from "../services/audio-naming"
 import { HeaderButton } from "../ui/HeaderButton"
+import { Row } from "../ui/Row"
 import { ScrollList } from "../ui/ScrollList"
 import { Section } from "../ui/Section"
 import { tap } from "../utils/gtk"
@@ -82,42 +83,15 @@ function deviceList(endpoints: any[], icon: string) {
         })
         .map((ep) => {
           const dev = ep.device
-          return (
-            <button
-              className={bind(ep, "isDefault").as(
-                (d: boolean) => `dev-row ${d ? "active" : ""}`,
-              )}
-              visible={
-                dev
-                  ? bind(dev, "routes").as(
-                      () => ep.isDefault || endpointConnected(ep),
-                    )
-                  : true
-              }
-              onClicked={tap(() => setDefault(ep))}
-            >
-              <box>
-                <label
-                  className="dev-icon"
-                  label={icon}
-                  valign={Gtk.Align.CENTER}
-                />
-                <box
-                  vertical
-                  halign={Gtk.Align.START}
-                  hexpand
-                  valign={Gtk.Align.CENTER}
-                >
-                  <label
-                    className="dev-name"
-                    label={audioNameOf(ep)}
-                    halign={Gtk.Align.START}
-                    truncate
-                  />
-                </box>
-              </box>
-            </button>
-          )
+          return Row({
+            icon,
+            name: audioNameOf(ep),
+            active: bind(ep, "isDefault"),
+            visible: dev
+              ? bind(dev, "routes").as(() => ep.isDefault || endpointConnected(ep))
+              : true,
+            onClicked: () => setDefault(ep),
+          })
         })}
     </box>
   )

@@ -1,16 +1,20 @@
+import type { Reactive } from "../utils/reactive"
+
 export interface RowProps {
-  active?: boolean
-  icon: string
-  name: any
-  status?: string
+  icon: Reactive<string>
+  name: Reactive<string>
+  status?: Reactive<string>
+  active?: Reactive<boolean>
+  // When set, the icon glyph is replaced by a spinner while it reads true.
+  busy?: Reactive<boolean>
+  visible?: Reactive<boolean>
+  action?: JSX.Element
   onClicked?: () => void
-  action?: any
-  visible?: any
 }
 
 export interface MenuWindowProps {
   name: string
-  child: any
+  child: JSX.Element
   side?: "left" | "right"
   klass?: string
 }

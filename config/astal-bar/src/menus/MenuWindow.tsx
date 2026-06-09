@@ -1,9 +1,7 @@
 import { App, Astal, Gdk, Gtk } from "astal/gtk3"
+import { BAR_HEIGHT } from "../const/ui"
 import { closeAllMenus } from "../services/menu"
 import type { MenuWindowProps } from "../types/ui"
-
-// Inset the menu so the click-catcher doesn't cover the bar.
-const BAR_HEIGHT = 40
 
 export function MenuWindow(opts: MenuWindowProps) {
   const { TOP, BOTTOM, LEFT, RIGHT } = Astal.WindowAnchor

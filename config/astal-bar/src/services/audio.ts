@@ -4,13 +4,18 @@ import { Variable } from "astal"
 import AstalWp from "gi://AstalWp"
 import type { EndpointKind } from "../types/audio"
 
-function trackDefault(audio: any, kind: EndpointKind): Variable<any> {
+type Endpoint = AstalWp.Endpoint
+
+function trackDefault(
+  audio: AstalWp.Audio,
+  kind: EndpointKind,
+): Variable<Endpoint | null> {
   const getList = () =>
     kind === "speaker" ? audio.get_speakers() : audio.get_microphones()
   const initial =
     kind === "speaker" ? audio.defaultSpeaker : audio.defaultMicrophone
-  const v = Variable<any>(initial)
-  let conns: Array<{ ep: any; id: number }> = []
+  const v = Variable<Endpoint | null>(initial)
+  let conns: Array<{ ep: Endpoint; id: number }> = []
   const reattach = () => {
     for (const c of conns) try { c.ep.disconnect(c.id) } catch {}
     conns = []
@@ -20,7 +25,7 @@ function trackDefault(audio: any, kind: EndpointKind): Variable<any> {
       })
       conns.push({ ep, id })
     }
-    const cur = getList().find((e: any) => e.isDefault)
+    const cur = getList().find((e) => e.isDefault)
     if (cur && cur !== v.get()) v.set(cur)
   }
   reattach()
@@ -29,21 +34,21 @@ function trackDefault(audio: any, kind: EndpointKind): Variable<any> {
   return v
 }
 
-let _defSpeaker: Variable<any> | null = null
-let _defMic: Variable<any> | null = null
+let _defSpeaker: Variable<Endpoint | null> | null = null
+let _defMic: Variable<Endpoint | null> | null = null
 
-export function defaultSpeaker(): Variable<any> {
+export function defaultSpeaker(): Variable<Endpoint | null> {
   if (_defSpeaker) return _defSpeaker
   const audio = AstalWp.get_default()?.audio
   return (_defSpeaker = audio
     ? trackDefault(audio, "speaker")
-    : Variable<any>(null))
+    : Variable<Endpoint | null>(null))
 }
 
-export function defaultMicrophone(): Variable<any> {
+export function defaultMicrophone(): Variable<Endpoint | null> {
   if (_defMic) return _defMic
   const audio = AstalWp.get_default()?.audio
   return (_defMic = audio
     ? trackDefault(audio, "microphone")
-    : Variable<any>(null))
+    : Variable<Endpoint | null>(null))
 }

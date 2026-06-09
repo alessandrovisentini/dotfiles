@@ -1,6 +1,12 @@
+import type { Binding } from "astal"
 import { Gtk } from "astal/gtk3"
 
-export function Section(title: string, body: any, right?: any) {
+// `body` may be a binding (e.g. a row that re-renders on a state change).
+export function Section(
+  title: string,
+  body: JSX.Element | Binding<JSX.Element>,
+  right?: JSX.Element,
+) {
   return (
     <box className="section" vertical>
       <box className="section-head">

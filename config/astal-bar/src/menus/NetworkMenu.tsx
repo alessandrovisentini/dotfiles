@@ -2,7 +2,6 @@ import { Variable, bind } from "astal"
 import { execAsync } from "astal/process"
 import { Gtk } from "astal/gtk3"
 import AstalNetwork from "gi://AstalNetwork"
-import GLib from "gi://GLib"
 import { Icon } from "../const/icons"
 import { MENU } from "../const/menu"
 import { enabledView, setEnabledIntent, wifiState } from "../services/wifi"
@@ -12,12 +11,12 @@ import {
   vpns,
   type VpnEntry,
 } from "../services/vpn"
+import { EmptyState } from "../ui/EmptyState"
 import { HeaderButton } from "../ui/HeaderButton"
 import { Row } from "../ui/Row"
 import { ScrollList } from "../ui/ScrollList"
 import { Section } from "../ui/Section"
-import { Spinner } from "../ui/Spinner"
-import { tap } from "../utils/gtk"
+import { useScanPing } from "../utils/scan"
 import { wifiIcon } from "../utils/icons"
 import { sh } from "../utils/shell"
 import { MenuWindow } from "./MenuWindow"
@@ -30,29 +29,11 @@ export function NetworkMenu() {
       sh(["nm-connection-editor"]),
     )
 
-  // Scan feedback: true while either NM reports scanning or we're inside the
-  // post-click grace window. Pinged from the scan button below.
-  const scanPing = Variable(false)
-  const scanBusy = Variable.derive(
-    [scanPing, wifiState],
-    (p, st) => p || st.scanning,
-  )
-
-  const empty = (text: string) => (
-    <box
-      className="notif-empty"
-      hexpand
-      vexpand
-      halign={Gtk.Align.CENTER}
-      valign={Gtk.Align.CENTER}
-    >
-      <label className="subtle" label={text} />
-    </box>
-  )
+  const scan = useScanPing(bind(wifiState).as((st) => st.scanning))
 
   const apRows = () => {
     const st = wifiState.get()
-    if (!st.device) return empty("No Wi-Fi device")
+    if (!st.device) return EmptyState("No Wi-Fi device")
     const seen = new Set<string>()
     const rows = st.accessPoints
       .filter((ap) => ap.ssid)
@@ -73,7 +54,7 @@ export function NetworkMenu() {
           onClicked: () => connect(ap.ssid!),
         })
       })
-    return rows.length ? rows : empty("No networks found")
+    return rows.length ? rows : EmptyState("No networks found")
   }
 
   const ethernetRow = () => {
@@ -106,69 +87,33 @@ export function NetworkMenu() {
         Icon.scan,
         () => {
           net.wifi?.scan()
-          // Guaranteed feedback: spin for at least 1.2 s on click in case NM
-          // throttles the scan or `wifi.scanning` flips back too quickly.
-          scanPing.set(true)
-          GLib.timeout_add(GLib.PRIORITY_DEFAULT, 1200, () => {
-            scanPing.set(false)
-            return GLib.SOURCE_REMOVE
-          })
+          scan.ping()
         },
         "Scan",
-        scanBusy,
+        scan.busy,
       )}
       {HeaderButton(Icon.settings, () => sh(["nm-connection-editor"]), "Settings")}
     </box>
   )
 
-  // VPN rows: inline so each row binds to its own busy variable for the
-  // optimistic spinner. Clicking toggles the connection via nmcli; the
-  // service refreshes state when it returns.
   const vpnRow = (entry: VpnEntry) => {
-    const busy = vpnBusyFor(entry.uuid)
-    return (
-      <button
-        className={`dev-row ${entry.active ? "active" : ""}`}
-        onClicked={tap(() => toggleVpn(entry))}
-      >
-        <box>
-          {bind(busy).as((b) =>
-            b ? (
-              <box className="dev-icon" valign={Gtk.Align.CENTER}>
-                <Spinner active={busy} size={22} />
-              </box>
-            ) : (
-              <label
-                className="dev-icon"
-                valign={Gtk.Align.CENTER}
-                label={Icon.vpn}
-              />
-            ),
-          )}
-          <box vertical halign={Gtk.Align.START} hexpand valign={Gtk.Align.CENTER}>
-            <label
-              className="dev-name"
-              label={entry.name}
-              halign={Gtk.Align.START}
-              truncate
-            />
-            <label
-              className="subtle"
-              halign={Gtk.Align.START}
-              label={bind(busy).as((b) =>
-                b
-                  ? entry.active
-                    ? "Disconnecting…"
-                    : "Connecting…"
-                  : entry.active
-                    ? "Connected"
-                    : "Disconnected",
-              )}
-            />
-          </box>
-        </box>
-      </button>
-    )
+    const busy = bind(vpnBusyFor(entry.uuid))
+    return Row({
+      icon: Icon.vpn,
+      name: entry.name,
+      active: entry.active,
+      busy,
+      status: busy.as((b) =>
+        b
+          ? entry.active
+            ? "Disconnecting…"
+            : "Connecting…"
+          : entry.active
+            ? "Connected"
+            : "Disconnected",
+      ),
+      onClicked: () => toggleVpn(entry),
+    })
   }
 
   const vpnHeader = (
@@ -197,7 +142,9 @@ export function NetworkMenu() {
           "VPN",
           ScrollList(
             bind(vpns).as((list) =>
-              list.length ? list.map((v) => vpnRow(v)) : empty("No VPN configs"),
+              list.length
+                ? list.map((v) => vpnRow(v))
+                : EmptyState("No VPN configs"),
             ),
           ),
           vpnHeader,

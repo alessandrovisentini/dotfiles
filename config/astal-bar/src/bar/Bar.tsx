@@ -15,16 +15,17 @@ import {
 import { hasTouch } from "../utils/hardware"
 import { trayHasItems } from "../widgets/SysTray"
 
-// Geometry origin: connector isn't reliably populated on GDK3/Wayland.
-export const monitorKey = (m: any) =>
-  `${m?.geometry?.x ?? 0}-${m?.geometry?.y ?? 0}`
+// Unique per window. Geometry can't be the id: it's 0,0 until sway positions
+// the output, and connector isn't reliably populated on GDK3/Wayland.
+let barSeq = 0
 
 export default function Bar(gdkmonitor: Gdk.Monitor) {
   const { TOP, LEFT, RIGHT } = Astal.WindowAnchor
+  const name = `bar-${barSeq++}`
   return (
     <window
       className="Bar"
-      name={`bar-${monitorKey(gdkmonitor)}`}
+      name={name}
       gdkmonitor={gdkmonitor}
       exclusivity={Astal.Exclusivity.EXCLUSIVE}
       anchor={TOP | LEFT | RIGHT}

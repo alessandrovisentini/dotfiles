@@ -7,8 +7,8 @@ $fg:         #ffffff;
 $muted:      #9a9996;
 $faint:      #5e5c64;
 $accent:     #3584e4;
-$accent-dim: rgba(53, 132, 228, 0.18);
-$accent-brd: rgba(53, 132, 228, 0.55);
+$accent-dim: rgba($accent, 0.18);
+$accent-brd: rgba($accent, 0.55);
 $danger:     #c01c28;
 $success:    #26a269;
 $warning:    #cd9309;
@@ -73,18 +73,11 @@ window.Bar > centerbox { margin: 0 6px; }
   @include item;
   &:hover { background: $card-hover; }
   &:active,
-  &.active { background: $accent; color: #ffffff; }
+  &.active { background: $accent; color: $fg; }
 }
 
 .chip { @include item; }
 
-// Subtle background wash + saturated colored label. The dim bg shows the
-// state at a glance; the brighter colored text is what the eye reads.
-@mixin state-tint($c) {
-  background: rgba($c, 0.20);
-  .bar-icon, .module-icon, label { color: $c; }
-  &:hover { background: rgba($c, 0.32); }
-}
 // Text-only tint variant for chips that should stay visually quiet (volume,
 // brightness): just color the glyph/label, no background wash.
 @mixin text-tint($c) {
@@ -102,11 +95,10 @@ window.Bar > centerbox { margin: 0 6px; }
 .bar-button.state-dnd       { @include text-tint($dnd); }
 .bar-button.state-notif     { @include text-tint($notif); }
 .bar-button.active,
-.bar-button.active:hover { background: $accent; color: #ffffff;
-  .bar-icon, .module-icon, label { color: #ffffff; } }
+.bar-button.active:hover { background: $accent; color: $fg;
+  .bar-icon, .module-icon, label { color: $fg; } }
 
 .bar-icon { font-size: 19px; }
-.accent-icon .bar-icon { color: $accent; }
 .module-icon { margin-right: 6px; }
 // Muted hides the % label, so center the lone glyph and size it up.
 .bar-button.state-vol-mute .module-icon { margin-right: 0; font-size: 22px; }
@@ -216,7 +208,7 @@ scrollbar {
 .dev-row.active {
   background: $accent-dim;
   border: 1px solid $accent-brd;
-  &:hover { background: rgba(53, 132, 228, 0.26); }
+  &:hover { background: rgba($accent, 0.26); }
   .dev-icon, .dev-name { color: $fg; }
 }
 
@@ -276,8 +268,8 @@ scale slider {
   background: $card-hover;
   color: $fg;
   transition: background $ease, color $ease;
-  &:hover { background: $accent; color: #ffffff; }
-  &.danger:hover { background: $danger; color: #ffffff; }
+  &:hover { background: $accent; color: $fg; }
+  &.danger:hover { background: $danger; color: $fg; }
 }
 .pwr-icon { font-size: 36px; }
 
@@ -295,7 +287,7 @@ scale slider {
     &:hover { background: rgba($c, 0.26); }
   }
   .icon-btn:hover { background: rgba($c, 0.22); color: $c; }
-  .power-grid button:hover { background: $c; color: #ffffff; }
+  .power-grid button:hover { background: $c; color: $fg; }
 }
 
 window.Menu.net    .menu-card { @include menu-accent($wifi-on); }

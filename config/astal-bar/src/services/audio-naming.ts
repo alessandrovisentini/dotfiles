@@ -3,6 +3,7 @@ import { bind } from "astal"
 import AstalWp from "gi://AstalWp"
 import { AudioPriority } from "../enums/audio"
 import { DEVICE } from "../device"
+import type { Reactive } from "../utils/reactive"
 
 export function isIntegratedAudio(ep: any): boolean {
   return DEVICE.integratedAudioPattern.test(ep?.device?.description ?? "")
@@ -47,7 +48,7 @@ export function prettyAudioName(ep: any): string {
 }
 
 // Reactive name; re-evaluates on port changes.
-export function audioNameOf(ep: any): any {
+export function audioNameOf(ep: any): Reactive<string> {
   return ep?.device
     ? bind(ep.device, "routes").as(() => prettyAudioName(ep))
     : prettyAudioName(ep)

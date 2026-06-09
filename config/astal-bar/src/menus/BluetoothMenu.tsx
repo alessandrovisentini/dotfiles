@@ -1,16 +1,16 @@
 import { Variable, bind } from "astal"
 import { Gtk } from "astal/gtk3"
 import AstalBluetooth from "gi://AstalBluetooth"
-import GLib from "gi://GLib"
 import { BLUETOOTH_ICONS, Icon } from "../const/icons"
 import { MENU } from "../const/menu"
 import { poweredView, setPoweredIntent } from "../services/bluetooth"
+import { EmptyState } from "../ui/EmptyState"
 import { HeaderButton } from "../ui/HeaderButton"
+import { Row } from "../ui/Row"
 import { ScrollList } from "../ui/ScrollList"
 import { Section } from "../ui/Section"
-import { Spinner } from "../ui/Spinner"
-import { tap } from "../utils/gtk"
 import { sh } from "../utils/shell"
+import { useScanPing } from "../utils/scan"
 import { MenuWindow } from "./MenuWindow"
 
 export function BluetoothMenu() {
@@ -46,69 +46,37 @@ export function BluetoothMenu() {
     }
   }
 
-  // Inline so each row re-renders on its own `connected` change.
   const row = (dev: AstalBluetooth.Device) => {
-    const busy = busyFor(dev)
-    const iconLabel = bind(dev, "connected").as((c) =>
-      c ? BLUETOOTH_ICONS.connected : BLUETOOTH_ICONS.powered,
-    )
-    return (
-      <button
-        className={bind(dev, "connected").as((c) => `dev-row ${c ? "active" : ""}`)}
-        onClicked={tap(() => connect(dev))}
-      >
-        <box>
-          {bind(busy).as((b) =>
-            b ? (
-              <box className="dev-icon" valign={Gtk.Align.CENTER}>
-                <Spinner active={busy} size={22} />
-              </box>
-            ) : (
-              <label
-                className="dev-icon"
-                valign={Gtk.Align.CENTER}
-                label={iconLabel}
-              />
-            ),
-          )}
-          <box vertical halign={Gtk.Align.START} hexpand valign={Gtk.Align.CENTER}>
-            <label
-              className="dev-name"
-              label={dev.name ?? dev.address}
-              halign={Gtk.Align.START}
-              truncate
-            />
-            <label
-              className="subtle"
-              halign={Gtk.Align.START}
-              label={Variable.derive(
-                [bind(dev, "connected"), bind(busy)],
-                (c: boolean, b: boolean) => {
-                  if (b) return c ? "Disconnecting…" : "Connecting…"
-                  if (c) {
-                    const bat = dev.batteryPercentage
-                    return bat > 0
-                      ? `Connected · ${Math.round(bat * 100)}%`
-                      : "Connected"
-                  }
-                  return dev.paired ? "Paired" : "Not paired"
-                },
-              )()}
-            />
-          </box>
-        </box>
-      </button>
-    )
+    const busy = bind(busyFor(dev))
+    const connected = bind(dev, "connected")
+    return Row({
+      icon: connected.as((c) =>
+        c ? BLUETOOTH_ICONS.connected : BLUETOOTH_ICONS.powered,
+      ),
+      name: dev.name ?? dev.address,
+      active: connected,
+      busy,
+      status: bind(
+        Variable.derive([connected, busy], (c: boolean, b: boolean) => {
+          if (b) return c ? "Disconnecting…" : "Connecting…"
+          if (c) {
+            const bat = dev.batteryPercentage
+            return bat > 0
+              ? `Connected · ${Math.round(bat * 100)}%`
+              : "Connected"
+          }
+          return dev.paired ? "Paired" : "Not paired"
+        }),
+      ),
+      onClicked: () => connect(dev),
+    })
   }
 
-  // Scan feedback: spin while bluez is discovering OR for ~1.2 s after click.
-  const scanPing = Variable(false)
-  const scanBusy = bt.adapter
-    ? Variable.derive(
-        [scanPing, bind(bt.adapter, "discovering")],
-        (p, d) => p || d,
-      )
-    : scanPing
+  // Scan feedback: spin while bluez is discovering OR for the grace window
+  // after a click.
+  const scan = useScanPing(
+    bt.adapter ? bind(bt.adapter, "discovering") : bind(Variable(false)),
+  )
 
   const header = (
     <box>
@@ -134,14 +102,10 @@ export function BluetoothMenu() {
         Icon.scan,
         () => {
           bt.adapter?.start_discovery()
-          scanPing.set(true)
-          GLib.timeout_add(GLib.PRIORITY_DEFAULT, 1200, () => {
-            scanPing.set(false)
-            return GLib.SOURCE_REMOVE
-          })
+          scan.ping()
         },
         "Scan",
-        scanBusy,
+        scan.busy,
       )}
       {HeaderButton(Icon.settings, () => sh(["blueman-manager"]), "Settings")}
     </box>
@@ -158,22 +122,11 @@ export function BluetoothMenu() {
             Variable.derive(
               [bind(bt, "devices"), bind(poweredView)],
               (devs: AstalBluetooth.Device[], powered: boolean) => {
-                const empty = (text: string) => (
-                  <box
-                    className="notif-empty"
-                    hexpand
-                    vexpand
-                    halign={Gtk.Align.CENTER}
-                    valign={Gtk.Align.CENTER}
-                  >
-                    <label className="subtle" label={text} />
-                  </box>
-                )
-                if (!powered) return empty("Bluetooth off")
+                if (!powered) return EmptyState("Bluetooth off")
                 const named = devs.filter((d) => d.name)
                 return named.length
                   ? named.map((d) => row(d))
-                  : empty("No devices")
+                  : EmptyState("No devices")
               },
             )(),
           ),

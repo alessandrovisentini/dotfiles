@@ -1,0 +1,24 @@
+{
+  // Editor IntelliSense + manual `tsc --noEmit` only. `ags run` bundles its own
+  // transpile and ignores this file. `gi://*` and `astal` resolve via the Nix
+  // store / `ags types`; if that resolution is imperfect the config still gives
+  // JSX and null-checking on our own code.
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ES2022",
+    "moduleResolution": "Bundler",
+    "lib": ["ES2022"],
+    "jsx": "react-jsx",
+    "jsxImportSource": "astal/gtk3",
+    "types": [],
+    "strict": false,
+    "strictNullChecks": true,
+    "noImplicitAny": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": false,
+    "skipLibCheck": true,
+    "allowJs": false,
+    "noEmit": true
+  },
+  "include": ["app.ts", "src/**/*.ts", "src/**/*.tsx"]
+}

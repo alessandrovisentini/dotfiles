@@ -1,6 +1,6 @@
 import { App } from "astal/gtk3"
 import style from "./style.scss"
-import Bar, { monitorKey } from "./src/bar/Bar"
+import Bar from "./src/bar/Bar"
 import {
   BluetoothMenu,
   BrightnessMenu,
@@ -9,19 +9,19 @@ import {
   VolumeMenu,
 } from "./src/menus"
 
-// One bar per monitor; keyed so we can recreate on add and destroy on remove.
-const bars = new Map<string, any>()
+// One bar per monitor. Keyed by the Gdk.Monitor object, not its geometry:
+// on hotplug GDK emits monitor-added before sway positions the output, so
+// geometry-based keys collide at 0,0 and clobber the existing monitor's bar.
+const bars = new Map<any, any>()
 
 function addBar(monitor: any) {
-  const key = monitorKey(monitor)
-  bars.get(key)?.destroy()
-  bars.set(key, Bar(monitor))
+  bars.get(monitor)?.destroy()
+  bars.set(monitor, Bar(monitor))
 }
 
 function dropBar(monitor: any) {
-  const key = monitorKey(monitor)
-  bars.get(key)?.destroy()
-  bars.delete(key)
+  bars.get(monitor)?.destroy()
+  bars.delete(monitor)
 }
 
 App.start({
