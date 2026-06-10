@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
-# apply-mode <laptop|tablet>
-# Idempotent. Called on each confirmed mode transition.
+# apply-mode <laptop|tablet|external>
+# Idempotent. Called on each confirmed mode transition. external (external
+# keyboard) behaves like laptop; only its notification differs.
 
 set -u
 
 mode="${1:-laptop}"
 case "$mode" in
-    laptop|tablet) ;;
-    *) echo "usage: $0 <laptop|tablet>" >&2; exit 64 ;;
+    laptop|tablet|external) ;;
+    *) echo "usage: $0 <laptop|tablet|external>" >&2; exit 64 ;;
 esac
 
 # Sway input identifier for the detachable keyboard's touchpad. Empty
@@ -56,15 +57,21 @@ suffix=""
 [[ "$src" == "manual" ]] && suffix=" (manual)"
 
 if [[ "${MODE_QUIET:-0}" != "1" ]] && command -v notify-send >/dev/null 2>&1; then
-    if [[ "$mode" == "tablet" ]]; then
-        if [[ "$src" == "manual" ]]; then desc="Tablet mode held manually"
-        else                              desc="Keyboard detached — touch UI active"; fi
-        notify-send -t 1500 -i input-tablet \
-            -a "mode-state" "Tablet mode${suffix}" "$desc"
-    else
-        if [[ "$src" == "manual" ]]; then desc="Laptop mode held manually"
-        else                              desc="Keyboard attached"; fi
-        notify-send -t 1500 -i input-keyboard \
-            -a "mode-state" "Laptop mode${suffix}" "$desc"
-    fi
+    case "$mode" in
+        tablet)
+            if [[ "$src" == "manual" ]]; then desc="Tablet mode held manually"
+            else                              desc="Keyboard detached — touch UI active"; fi
+            notify-send -t 1500 -i input-tablet \
+                -a "mode-state" "Tablet mode${suffix}" "$desc" ;;
+        external)
+            if [[ "$src" == "manual" ]]; then desc="External-keyboard mode held manually"
+            else                              desc="External keyboard connected"; fi
+            notify-send -t 1500 -i input-keyboard \
+                -a "mode-state" "External keyboard mode${suffix}" "$desc" ;;
+        *)
+            if [[ "$src" == "manual" ]]; then desc="Laptop mode held manually"
+            else                              desc="Keyboard attached"; fi
+            notify-send -t 1500 -i input-keyboard \
+                -a "mode-state" "Laptop mode${suffix}" "$desc" ;;
+    esac
 fi

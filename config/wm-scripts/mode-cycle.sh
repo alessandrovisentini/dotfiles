@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Cycle the mode daemon: auto → laptop → tablet → auto.
+# Cycle the mode daemon: auto → laptop → tablet → external → auto.
 
 set -u
 

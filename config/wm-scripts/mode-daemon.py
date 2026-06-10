@@ -6,7 +6,7 @@ confirmed transition runs `apply-mode <mode>` and writes mode-state /
 mode-source into XDG_RUNTIME_DIR.
 
 Signals:
-    USR1  cycle auto → laptop → tablet → auto
+    USR1  cycle auto → laptop → tablet → external → auto
     USR2  reset to auto, re-eval from hardware
 """
 
@@ -79,6 +79,42 @@ def detachable_keyboard_present() -> bool:
     return any(hint in text for hint in DETACHABLE_KEYBOARD_HINTS)
 
 
+# A real typing keyboard exposes the whole letter range; power buttons, lid
+# switches and media remotes only advertise a handful of EV_KEY codes.
+_KEYBOARD_SIGNATURE = (
+    ecodes.KEY_A,
+    ecodes.KEY_Z,
+    ecodes.KEY_M,
+    ecodes.KEY_ENTER,
+    ecodes.KEY_SPACE,
+)
+# External keyboards arrive over USB or Bluetooth; this excludes the built-in
+# i8042 "AT Translated Set 2 keyboard" that exists even on keyboard-less
+# tablets (the folio is on USB too, so it's excluded by name below).
+_EXTERNAL_BUSES = (ecodes.BUS_USB, ecodes.BUS_BLUETOOTH)
+
+
+def external_keyboard_present() -> bool:
+    for path in evdev.list_devices():
+        try:
+            d = evdev.InputDevice(path)
+        except OSError:
+            continue
+        try:
+            if d.info.bustype not in _EXTERNAL_BUSES:
+                continue
+            keys = d.capabilities().get(ecodes.EV_KEY, [])
+            if not all(k in keys for k in _KEYBOARD_SIGNATURE):
+                continue
+            # The folio is the detachable keyboard, not an external one.
+            if any(h in (d.name or "") for h in DETACHABLE_KEYBOARD_HINTS):
+                continue
+            return True
+        finally:
+            d.close()
+    return False
+
+
 def write_runtime_mode(mode: str, source: str) -> None:
     runtime = os.environ.get("XDG_RUNTIME_DIR")
     if not runtime:
@@ -106,8 +142,11 @@ def apply_mode(mode: str, source: str = "auto") -> None:
         LOG.error("apply-mode failed: %s", e)
 
 
-def compute_mode(switch_state: bool, kbd_present: bool) -> str:
-    # Tablet if the switch fires OR the keyboard is gone.
+def compute_mode(switch_state: bool, kbd_present: bool, external_kbd: bool) -> str:
+    # An external keyboard wins outright: desk use regardless of posture/folio.
+    if external_kbd:
+        return "external"
+    # Tablet if the switch fires OR the folio is gone.
     if switch_state or not kbd_present:
         return "tablet"
     return "laptop"
@@ -135,12 +174,8 @@ class ModeDaemon:
         return "manual" if self.manual_mode is not None else "auto"
 
     def _on_usr1(self, *_a) -> None:
-        if self.manual_mode is None:
-            self.manual_mode = "laptop"
-        elif self.manual_mode == "laptop":
-            self.manual_mode = "tablet"
-        else:
-            self.manual_mode = None
+        nxt = {None: "laptop", "laptop": "tablet", "tablet": "external", "external": None}
+        self.manual_mode = nxt.get(self.manual_mode)
         LOG.info("USR1: cycle → manual_mode=%s", self.manual_mode)
 
         if self.manual_mode is None:
@@ -169,9 +204,16 @@ class ModeDaemon:
             return self.sw_state
         return s
 
+    def _desired(self) -> str:
+        return compute_mode(
+            self.sw_state,
+            detachable_keyboard_present(),
+            external_keyboard_present(),
+        )
+
     def _sample_and_maybe_apply(self, immediate: bool = False) -> None:
         self.sw_state = self._sample_state()
-        desired = compute_mode(self.sw_state, detachable_keyboard_present())
+        desired = self._desired()
         if desired != self.current_mode or self.force_apply:
             if immediate:
                 self.current_mode = desired
@@ -193,7 +235,7 @@ class ModeDaemon:
 
     def run(self) -> int:
         self.sw_state = self._sample_state()
-        self.current_mode = compute_mode(self.sw_state, detachable_keyboard_present())
+        self.current_mode = self._desired()
         apply_mode(self.current_mode, source=self._source())
 
         sel = selectors.DefaultSelector()
@@ -226,7 +268,7 @@ class ModeDaemon:
                 self.pending_mode = None
                 continue
 
-            desired = compute_mode(self.sw_state, detachable_keyboard_present())
+            desired = self._desired()
             if desired != self.current_mode:
                 if self.pending_mode != desired:
                     self.pending_mode = desired
