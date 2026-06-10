@@ -35,17 +35,4 @@
   # Suspend on the physical power button instead of powering off.
   services.logind.settings.Login.HandlePowerKey = "suspend";
   services.logind.settings.Login.HandlePowerKeyLongPress = "poweroff";
-
-  # Power profiles
-  services.auto-cpufreq.enable = true;
-  services.auto-cpufreq.settings = {
-    battery = {
-      governor = "powersave";
-      turbo = "never";
-    };
-    charger = {
-      governor = "performance";
-      turbo = "auto";
-    };
-  };
 }

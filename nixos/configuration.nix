@@ -6,6 +6,7 @@
       ./specialisation.nix
       ./system.nix
       ./hardware.nix
+      ./power.nix
       ./main_user.nix
       ./apps.nix
       ./display_manager.nix

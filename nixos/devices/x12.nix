@@ -12,6 +12,8 @@
     hasFingerprint = true;
     hasIpu6Camera = true;
     hasThunderbolt = true;
+    isThinkpad = true;
+    tlp = true;
 
     detachableTouchpadSwayId = "6127:24830:Darfon_Thinkpad_X12_Detachable_Gen_1_Folio_case_-1";
     detachableKeyboardHints = ["Darfon Thinkpad X12" "Folio case"];
