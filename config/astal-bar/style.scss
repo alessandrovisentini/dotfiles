@@ -119,8 +119,11 @@ window.Bar > centerbox { margin: 0 6px; }
   &:hover { background: $card-hover; color: $fg; }
 }
 
-.tray button { @include item; }
 .tray icon { font-size: 17px; }
+// Native prelight sticks under the menu grab; styled out, highlight is class-driven.
+.tray button:hover { background: transparent; }
+.tray button.hl,
+.tray button.menu-open { background: $card-hover; }
 
 .chip.battery {
   &.normal,
