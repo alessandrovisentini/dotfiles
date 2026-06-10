@@ -1,25 +1,26 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }: let
   dev = config.local.device;
+  # Sets governor/turbo/platform_profile for the bar's performance-mode menu.
+  powerProfile =
+    pkgs.writeShellScriptBin "power-profile"
+    (builtins.readFile ../config/wm-scripts/power-profile.sh);
 in {
-  # TLP power management — opt-in per device via local.device.tlp. Single tool
-  # for CPU, device runtime PM and Wi-Fi.
-  config = lib.mkIf dev.tlp {
-    services.power-profiles-daemon.enable = false;
-    services.tlp = {
-      enable = true;
-      settings =
-        {
-          # powersave/no-turbo on battery, performance/turbo on AC.
-          CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
-          CPU_SCALING_GOVERNOR_ON_AC = "performance";
+  config = lib.mkMerge [
+    # TLP power management — opt-in per device via local.device.tlp. CPU
+    # governor/turbo and platform_profile are owned by the bar's performance
+    # menu (below); TLP keeps EPP, runtime PM, Wi-Fi and USB.
+    (lib.mkIf dev.tlp {
+      services.power-profiles-daemon.enable = false;
+      services.tlp = {
+        enable = true;
+        settings = {
           CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
           CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
-          CPU_BOOST_ON_BAT = 0;
-          CPU_BOOST_ON_AC = 1;
 
           # Device runtime PM on battery (PCIe ASPM stays firmware-controlled).
           RUNTIME_PM_ON_BAT = "auto";
@@ -30,12 +31,35 @@ in {
 
           # Off: keep USB devices responsive, no autosuspend surprises.
           USB_AUTOSUSPEND = 0;
-        }
-        # ThinkPad firmware power/TDP envelope via thinkpad_acpi.
-        // lib.optionalAttrs dev.isThinkpad {
-          PLATFORM_PROFILE_ON_BAT = "low-power";
-          PLATFORM_PROFILE_ON_AC = "balanced";
         };
-    };
-  };
+      };
+    })
+
+    # Performance-mode knobs the bar owns (governor + turbo + platform_profile).
+    # Make the sysfs files writable by the wheel group so the bar can switch
+    # profiles without root, and ship the helper it calls.
+    (lib.mkIf dev.isThinkpad {
+      environment.systemPackages = [powerProfile];
+      systemd.services."perf-profile-perms" = {
+        description = "Make CPU/platform performance knobs writable by wheel";
+        wantedBy = ["multi-user.target"];
+        after = ["multi-user.target"];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          ExecStart = pkgs.writeShellScript "perf-profile-perms" ''
+            set -u
+            for f in \
+              /sys/firmware/acpi/platform_profile \
+              /sys/devices/system/cpu/intel_pstate/no_turbo \
+              /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor; do
+              [ -e "$f" ] || continue
+              ${pkgs.coreutils}/bin/chgrp wheel "$f" 2>/dev/null || true
+              ${pkgs.coreutils}/bin/chmod g+w "$f" 2>/dev/null || true
+            done
+          '';
+        };
+      };
+    })
+  ];
 }

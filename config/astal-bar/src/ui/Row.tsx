@@ -27,7 +27,7 @@ export function Row(opts: RowProps) {
   )
   return (
     <button
-      className={active.as((a) => `dev-row ${a ? "active" : ""}`)}
+      className={active.as((a) => `dev-row ${opts.klass ?? ""} ${a ? "active" : ""}`)}
       visible={opts.visible ?? true}
       onClicked={tap(() => opts.onClicked?.())}
     >

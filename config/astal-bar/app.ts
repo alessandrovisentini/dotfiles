@@ -1,11 +1,13 @@
 import { App } from "astal/gtk3"
 import style from "./style.scss"
 import Bar from "./src/bar/Bar"
+import { startMetrics, stopMetrics } from "./src/services/metrics"
 import {
   BluetoothMenu,
   BrightnessMenu,
   NetworkMenu,
   PowerMenu,
+  PowerProfileMenu,
   VolumeMenu,
 } from "./src/menus"
 
@@ -37,5 +39,10 @@ App.start({
     BluetoothMenu()
     VolumeMenu()
     BrightnessMenu()
+    // Sample system metrics only while the performance menu is open.
+    const perfMenu = PowerProfileMenu()
+    perfMenu.connect("notify::visible", (w: any) =>
+      w.visible ? startMetrics() : stopMetrics(),
+    )
   },
 })
