@@ -1,6 +1,11 @@
 import { Variable, bind } from "astal"
 import { Gdk, Gtk } from "astal/gtk3"
 import AstalTray from "gi://AstalTray"
+import GLib from "gi://GLib"
+
+// Hold an icon this long to pop its menu instead of left-clicking. Lets a
+// touch tap activate while a press-and-hold reaches the menu (e.g. Discord).
+const LONG_PRESS_MS = 500
 
 // Items we never want in the tray. nm-applet only runs as our NM secret
 // agent; its icon would be a confusing duplicate of the Network widget.
@@ -40,6 +45,21 @@ export function SysTray() {
               return false
             }
           }
+          const leftClick = (anchor: any, x: number, y: number) => {
+            if (item.isMenu) return showMenu(anchor)
+            item.activate(x, y)
+            return true
+          }
+          // Per-item long-press state. The timer fires the menu mid-hold; a
+          // release before it fires cancels and counts as a left click.
+          let pressTimer = 0
+          let longPressed = false
+          const clearTimer = () => {
+            if (pressTimer) {
+              GLib.source_remove(pressTimer)
+              pressTimer = 0
+            }
+          }
           // Some apps register icons lazily.
           const hasIcon = Variable.derive(
             [bind(item, "gicon"), bind(item, "iconName")],
@@ -62,11 +82,32 @@ export function SysTray() {
                   return true
                 }
                 if (btn === 1) {
-                  if (item.isMenu) return showMenu(self)
-                  item.activate(x, y)
+                  longPressed = false
+                  clearTimer()
+                  pressTimer = GLib.timeout_add(
+                    GLib.PRIORITY_DEFAULT,
+                    LONG_PRESS_MS,
+                    () => {
+                      pressTimer = 0
+                      longPressed = true
+                      showMenu(self)
+                      return GLib.SOURCE_REMOVE
+                    },
+                  )
                   return true
                 }
                 return false
+              }}
+              onButtonReleaseEvent={(self: any, event: any) => {
+                const [okB, btn] = event.get_button()
+                if (!okB || btn !== 1) return false
+                clearTimer()
+                if (longPressed) {
+                  longPressed = false
+                  return true
+                }
+                const [okR, rx, ry] = event.get_root_coords()
+                return leftClick(self, okR ? rx : 0, okR ? ry : 0)
               }}
             >
               <icon gicon={bind(item, "gicon")} />

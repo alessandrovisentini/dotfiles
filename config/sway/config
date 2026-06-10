@@ -6,8 +6,9 @@ set $fg         #ffffff
 set $muted      #9a9996
 set $accent     #3584e4
 set $danger     #c01c28
+set $focus      #6fb6ff
 
-client.focused          $headerbar $headerbar $fg    $accent  $headerbar
+client.focused          $focus   $headerbar $fg    $focus   $focus
 client.unfocused        $surface $surface   $muted $surface $surface
 client.focused_inactive $surface $headerbar $muted $surface $surface
 client.urgent           $danger  $surface   $fg    $danger  $danger
