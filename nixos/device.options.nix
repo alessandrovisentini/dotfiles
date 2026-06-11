@@ -45,6 +45,11 @@
       default = false;
       description = "Enable TLP power management (CPU governor/turbo, PCIe ASPM, Wi-Fi powersave, runtime PM). Opt-in per device.";
     };
+    hasTranscription = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Enables the audio transcription stack (transcribe-audio: Vulkan whisper.cpp + sherpa-onnx + ffmpeg). Opt-in per device.";
+    };
     internalOutput = lib.mkOption {
       type = lib.types.str;
       default = "eDP-1";

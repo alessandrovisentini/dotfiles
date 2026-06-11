@@ -14,6 +14,7 @@
       ./wm-common.nix
       ./sway.nix
       ./development.nix
+      ./transcription.nix
       ./printing.nix
       ./mime_apps.nix
       ./nix.nix

@@ -9,5 +9,6 @@
     hasGaming = true;
     isThinkpad = true;
     tlp = true;
+    hasTranscription = true;
   };
 }
