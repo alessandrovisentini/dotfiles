@@ -36,6 +36,7 @@ in {
     gnumake
     tree-sitter
     markdownlint-cli
+    android-tools
   ];
 
   programs.nix-ld.enable = true; # runs dynamically-linked binaries
@@ -120,7 +121,6 @@ in {
   };
   programs.tcpdump.enable = true;
   programs.lazygit.enable = true;
-  programs.adb.enable = true;
 
   programs.gnome-disks.enable = true;
   programs.seahorse.enable = true;

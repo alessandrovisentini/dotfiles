@@ -4,7 +4,7 @@
       ./hardware-configuration.nix
       ./device.options.nix
       ./specialisation.nix
-      ./system.nix
+      ./base.nix
       ./hardware.nix
       ./power.nix
       ./main_user.nix

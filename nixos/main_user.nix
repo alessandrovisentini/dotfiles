@@ -4,7 +4,7 @@
   config,
   ...
 }: let
-  home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/release-25.11.tar.gz";
+  home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/release-26.05.tar.gz";
   configDir = builtins.dirOf (toString ./.);
   parentDir = builtins.dirOf configDir;
   dev = config.local.device;
@@ -145,6 +145,11 @@ in {
     gtk = {
       enable = true;
       theme = {
+        name = "Adwaita-dark";
+        package = pkgs.gnome-themes-extra;
+      };
+
+      gtk4.theme = {
         name = "Adwaita-dark";
         package = pkgs.gnome-themes-extra;
       };
