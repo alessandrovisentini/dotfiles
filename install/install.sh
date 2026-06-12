@@ -1,30 +1,12 @@
 #!/usr/bin/env bash
 # Per-OS installer dispatcher. Supported: nixos, macos, fedora.
-# Steps: symlinks, packages, nixos, gnome, shell, post, all
+# Steps: symlinks, packages, nixos, rebuild, gnome, shell, post, all
 
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_DIR="$(dirname "$SCRIPT_DIR")"
 
 source "$SCRIPT_DIR/lib/common.sh"
-
-detect_os() {
-    [[ "$OSTYPE" == "darwin"* ]] && { echo macos; return; }
-    if [[ -f /etc/nixos/configuration.nix ]] || command -v nixos-rebuild &>/dev/null; then
-        echo nixos; return
-    fi
-    if [[ -f /etc/os-release ]]; then
-        . /etc/os-release
-        case "$ID" in
-            nixos)  echo nixos ;;
-            fedora) echo fedora ;;
-            *)      echo unsupported ;;
-        esac
-        return
-    fi
-    echo unsupported
-}
 
 show_help() {
     cat <<EOF
@@ -36,6 +18,7 @@ Steps:
   symlinks   Create config symlinks (~/.config/*)
   packages   Install software packages
   nixos      Setup NixOS system config symlinks (/etc/nixos)
+  rebuild    Run \`sudo nixos-rebuild switch\` (NixOS)
   gnome      Apply GNOME dconf settings (non-NixOS, when GNOME is active)
   shell      Setup shell environment sourcing (.bashrc/.zshrc)
   post       Run post-install commands
@@ -53,7 +36,10 @@ EOF
 }
 
 main() {
-    case "${1:-}" in -h|--help) show_help; exit 0 ;; esac
+    local a
+    for a in "$@"; do
+        case "$a" in -h|--help) show_help; exit 0 ;; esac
+    done
 
     DETECTED_OS=$(detect_os)
     export DETECTED_OS

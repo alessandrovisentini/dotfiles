@@ -17,7 +17,8 @@ export HOMEBREW_NO_ENV_HINTS=1
 source "$SCRIPT_DIR/lib/common.sh"
 source "$SCRIPT_DIR/lib/packages.sh"
 
-DETECTED_OS="macos"
+# Read by the helpers sourced from lib/common.sh (run_jq, ensure_jq).
+export DETECTED_OS="macos"
 
 parse_install_steps "$@"
 

@@ -8,7 +8,8 @@ JSON_FILE="$SCRIPT_DIR/install.json"
 
 source "$SCRIPT_DIR/lib/common.sh"
 
-DETECTED_OS="nixos"
+# Read by the helpers sourced from lib/common.sh (run_jq, ensure_jq).
+export DETECTED_OS="nixos"
 
 parse_install_steps "$@"
 
@@ -21,7 +22,7 @@ if [[ $EUID -eq 0 ]]; then
     exit 1
 fi
 
-if should_run nixos; then
+if should_run nixos || should_run rebuild; then
     log_info "Sudo is required for NixOS configuration setup. Please authenticate:"
     sudo -v || { log_error "sudo authentication failed"; exit 1; }
 fi
@@ -129,9 +130,21 @@ autodetect_device() {
     fi
 }
 
+# Activate the linked configuration. `set -e` aborts the script if the
+# rebuild fails (stop on errors, no manual step when there are none).
+run_nixos_rebuild() {
+    log_info "Running nixos-rebuild switch (this can take a while)..."
+    # Refresh the sudo timestamp: the symlink steps are quick, but on a
+    # slow first run the earlier authentication may have expired.
+    sudo -v
+    sudo nixos-rebuild switch
+    log_success "nixos-rebuild switch completed"
+}
+
 should_run symlinks && create_config_symlinks "$JSON_FILE" nixos "$REPO_DIR"
 should_run nixos    && setup_nixos_system_symlinks
 should_run nixos    && autodetect_device
+should_run rebuild  && run_nixos_rebuild
 should_run post     && run_post_install       "$JSON_FILE" nixos
 
 log_success "NixOS installation complete!"

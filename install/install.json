@@ -25,9 +25,7 @@
         "target_dir": "/etc/nixos",
         "exclude": ["hardware-configuration.nix", "device.nix"]
       },
-      "post_install": [
-        "echo 'Run: sudo nixos-rebuild switch'"
-      ]
+      "post_install": []
     },
     "macos": {
       "config_symlinks": [

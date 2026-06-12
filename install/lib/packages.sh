@@ -150,7 +150,8 @@ install_dnf_copr() {
 
     while IFS= read -r copr; do
         [[ -z "$copr" ]] && continue
-        local repo_file="/etc/yum.repos.d/_copr:copr.fedorainfracloud.org:$(echo "$copr" | tr '/' ':').repo"
+        local repo_file
+        repo_file="/etc/yum.repos.d/_copr:copr.fedorainfracloud.org:$(echo "$copr" | tr '/' ':').repo"
         if [[ -f "$repo_file" ]]; then
             log_info "COPR already enabled: $copr"
         else

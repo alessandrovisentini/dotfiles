@@ -11,14 +11,42 @@ log_success() { echo -e "${GREEN}[SUCCESS]${NC} $1"; }
 log_warning() { echo -e "${YELLOW}[WARNING]${NC} $1"; }
 log_error()   { echo -e "${RED}[ERROR]${NC} $1"; }
 
+detect_os() {
+    [[ "$OSTYPE" == "darwin"* ]] && { echo macos; return; }
+    if [[ -f /etc/nixos/configuration.nix ]] || command -v nixos-rebuild &>/dev/null; then
+        echo nixos; return
+    fi
+    if [[ -f /etc/os-release ]]; then
+        . /etc/os-release
+        case "$ID" in
+            nixos)  echo nixos ;;
+            fedora) echo fedora ;;
+            *)      echo unsupported ;;
+        esac
+        return
+    fi
+    echo unsupported
+}
+
+# Every step any installer understands; an OS just no-ops steps it doesn't use.
+VALID_STEPS="symlinks packages nixos rebuild gnome shell post all"
+
 # Args → INSTALL_STEPS; intercept --de=<value> into DE_SELECTION.
+# Unknown steps are fatal: a typo would otherwise skip every step and
+# still print success.
 parse_install_steps() {
     INSTALL_STEPS=()
     local rest=()
     for arg in "$@"; do
         case "$arg" in
             --de=*) DE_SELECTION="${arg#--de=}"; export DE_SELECTION ;;
-            *) rest+=("$arg") ;;
+            *)
+                if [[ " $VALID_STEPS " != *" $arg "* ]]; then
+                    log_error "Unknown step '$arg'. Valid steps: $VALID_STEPS"
+                    exit 64
+                fi
+                rest+=("$arg")
+                ;;
         esac
     done
     if [[ ${#rest[@]} -eq 0 ]]; then
@@ -26,7 +54,6 @@ parse_install_steps() {
     else
         INSTALL_STEPS=("${rest[@]}")
     fi
-    export INSTALL_STEPS
 }
 
 prompt_de_selection() {
@@ -159,7 +186,8 @@ create_symlink() {
 
     if [[ -e "$target_path" || -L "$target_path" ]]; then
         if [[ "$backup" == "true" ]]; then
-            local backup_path="${target_path}.backup.$(date +%Y%m%d%H%M%S)"
+            local backup_path
+            backup_path="${target_path}.backup.$(date +%Y%m%d%H%M%S)"
             log_warning "Backing up existing: $target_path -> $backup_path"
             mv "$target_path" "$backup_path"
         else

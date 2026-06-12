@@ -18,6 +18,8 @@ log_error()   { echo -e "${RED}[ERROR]${NC} $1"; }
 log_warning() { echo -e "${YELLOW}[WARNING]${NC} $1"; }
 log_success() { echo -e "${GREEN}[SUCCESS]${NC} $1"; }
 
+# Duplicated from install/lib/common.sh on purpose: this bootstrap runs
+# before the repo exists, so it can't source anything from it.
 detect_os() {
     [[ "$OSTYPE" == "darwin"* ]] && { echo macos; return; }
     if [[ -f /etc/nixos/configuration.nix ]] || command -v nixos-rebuild &>/dev/null; then

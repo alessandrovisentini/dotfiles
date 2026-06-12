@@ -9,7 +9,8 @@ JSON_FILE="$SCRIPT_DIR/install.json"
 source "$SCRIPT_DIR/lib/common.sh"
 source "$SCRIPT_DIR/lib/packages.sh"
 
-DETECTED_OS="fedora"
+# Read by the helpers sourced from lib/common.sh (run_jq, ensure_jq).
+export DETECTED_OS="fedora"
 
 parse_install_steps "$@"
 
