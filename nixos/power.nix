@@ -22,9 +22,8 @@ in {
           CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
           CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
 
-          # Device runtime PM on battery (PCIe ASPM stays firmware-controlled).
-          RUNTIME_PM_ON_BAT = "auto";
-          RUNTIME_PM_ON_AC = "auto";
+          RUNTIME_PM_ON_BAT = "on";
+          RUNTIME_PM_ON_AC = "on";
 
           WIFI_PWR_ON_BAT = "on";
           WIFI_PWR_ON_AC = "off";
