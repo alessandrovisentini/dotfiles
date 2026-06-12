@@ -141,8 +141,8 @@ window.Bar > centerbox { margin: 0 6px; }
 .tray button.menu-open { background: $card-hover; }
 
 .battery {
-  &.normal,
-  &.charging { @include text-tint($batt-ok); }
+  &.normal   { @include text-tint($batt-ok); }
+  &.charging { @include text-tint($accent); }
   &.warning  { @include text-tint($warn); }
   &.critical { @include text-tint($crit); }
 }

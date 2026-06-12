@@ -12,8 +12,10 @@ export function Battery() {
   const cls = Variable.derive(
     [bind(bat, "percentage"), bind(bat, "charging")],
     (p: number, charging: boolean) => {
+      // Charging overrides the level tint (blue, matching the menu's
+      // "connected to power" color).
       const level = p <= 0.15 ? "critical" : p <= 0.25 ? "warning" : "normal"
-      return `bar-button battery ${level}${charging ? " charging" : ""}`
+      return `bar-button battery ${charging ? "charging" : level}`
     },
   )
   const icon = Variable.derive(
