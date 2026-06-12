@@ -21,6 +21,11 @@ export function BrightnessMenu() {
               max={100}
               step={1}
               value={bind(brightness)}
+              // astal applies bound props before static ones, so the initial
+              // value is clamped against the slider's default 0..1 range and
+              // the knob sticks at the far left. setup runs after all props:
+              // re-assert the real value once.
+              setup={(self: any) => (self.value = brightness.get())}
               onDragged={({ value }: any) => setBrightness(value)}
             />
             <label label={bind(brightness).as((v) => `${v}%`)} />

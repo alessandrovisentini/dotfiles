@@ -20,8 +20,10 @@ export function BatteryMenu() {
   const iconCls = Variable.derive(
     [bind(bat, "percentage"), bind(bat, "charging")],
     (p: number, charging: boolean) => {
+      // Charging overrides the level tint, matching the bar chip and the
+      // graph's "connected to power" blue.
       const level = p <= 0.15 ? "critical" : p <= 0.25 ? "warning" : "normal"
-      return `batt-icon ${charging ? "normal" : level}`
+      return `batt-icon ${charging ? "charging" : level}`
     },
   )
   const icon = Variable.derive(

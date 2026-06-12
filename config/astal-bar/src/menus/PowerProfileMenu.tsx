@@ -89,7 +89,8 @@ export function PowerProfileMenu() {
     name: MENU.perf,
     klass: "perf",
     child: (
-      <box vertical>
+      // Section titles track the effective profile color (see style.scss).
+      <box vertical className={bind(activeProfile).as((p) => `perf-now-${p}`)}>
         {Section(
           "Performance mode",
           <box vertical>

@@ -319,6 +319,11 @@ window.Menu.batt    .menu-card { @include menu-accent($batt-ok); }
 window.Menu.perf .dev-row.perf-power-saver .dev-icon { color: $batt-ok; }
 window.Menu.perf .dev-row.perf-balanced    .dev-icon { color: $accent; }
 window.Menu.perf .dev-row.perf-performance .dev-icon { color: $crit; }
+// Section titles follow the *effective* profile, so the menu interior shows
+// the mode currently driving the machine (auto included).
+window.Menu.perf .menu-card .perf-now-power-saver  .section-title { color: $batt-ok; }
+window.Menu.perf .menu-card .perf-now-balanced     .section-title { color: $accent; }
+window.Menu.perf .menu-card .perf-now-performance  .section-title { color: $crit; }
 .metric { padding: 4px 4px 10px; }
 .metric label { font-size: 15px; }
 .metric-val { color: $muted; }
@@ -329,6 +334,7 @@ window.Menu.perf .dev-row.perf-performance .dev-icon { color: $crit; }
   font-size: 38px;
   margin-right: 14px;
   color: $batt-ok;
+  &.charging { color: $accent; }
   &.warning  { color: $warn; }
   &.critical { color: $crit; }
 }
