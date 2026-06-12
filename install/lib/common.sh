@@ -247,6 +247,19 @@ create_config_symlinks() {
     done
 }
 
+# Claude Code reads ~/.claude regardless of OS, so the same files link in
+# everywhere. Per-machine state (settings.local.json, .claude.json) stays put
+# and is left untouched.
+create_claude_symlinks() {
+    local repo_dir="$1"
+    local claude_dir="$HOME/.claude"
+
+    log_info "Creating Claude config symlinks..."
+    for file in settings.json CLAUDE.md; do
+        create_symlink "$repo_dir/.claude/$file" "$claude_dir/$file"
+    done
+}
+
 gnome_detected() {
     [[ "${XDG_CURRENT_DESKTOP:-}" == *GNOME* ]] && return 0
     [[ "${DESKTOP_SESSION:-}" == *gnome*   ]] && return 0

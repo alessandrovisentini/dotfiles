@@ -142,6 +142,7 @@ run_nixos_rebuild() {
 }
 
 should_run symlinks && create_config_symlinks "$JSON_FILE" nixos "$REPO_DIR"
+should_run symlinks && create_claude_symlinks "$REPO_DIR"
 should_run nixos    && setup_nixos_system_symlinks
 should_run nixos    && autodetect_device
 should_run rebuild  && run_nixos_rebuild

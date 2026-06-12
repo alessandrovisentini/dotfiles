@@ -36,6 +36,7 @@ if should_run packages; then
 fi
 
 should_run symlinks && create_config_symlinks "$JSON_FILE" macos "$REPO_DIR"
+should_run symlinks && create_claude_symlinks "$REPO_DIR"
 should_run shell    && setup_shell_env
 should_run post     && run_post_install       "$JSON_FILE" macos
 
