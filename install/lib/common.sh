@@ -248,15 +248,16 @@ create_config_symlinks() {
 }
 
 # Claude Code reads ~/.claude regardless of OS, so the same files link in
-# everywhere. Per-machine state (settings.local.json, .claude.json) stays put
-# and is left untouched.
+# everywhere. The source lives under config/claude to keep the repo tidy, but
+# the target is ~/.claude, not ~/.config. Per-machine state
+# (settings.local.json, .claude.json) stays put and is left untouched.
 create_claude_symlinks() {
     local repo_dir="$1"
     local claude_dir="$HOME/.claude"
 
     log_info "Creating Claude config symlinks..."
     for file in settings.json CLAUDE.md; do
-        create_symlink "$repo_dir/.claude/$file" "$claude_dir/$file"
+        create_symlink "$repo_dir/config/claude/$file" "$claude_dir/$file"
     done
 }
 
