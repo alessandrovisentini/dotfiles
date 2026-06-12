@@ -1,8 +1,10 @@
 import { Variable, bind } from "astal"
 import { Gtk } from "astal/gtk3"
+import GLib from "gi://GLib"
 import AstalBluetooth from "gi://AstalBluetooth"
 import { BLUETOOTH_ICONS, Icon } from "../const/icons"
 import { MENU } from "../const/menu"
+import { BT_DISCOVERY_MS } from "../const/ui"
 import { poweredView, setPoweredIntent } from "../services/bluetooth"
 import { EmptyState } from "../ui/EmptyState"
 import { HeaderButton } from "../ui/HeaderButton"
@@ -78,6 +80,27 @@ export function BluetoothMenu() {
     bt.adapter ? bind(bt.adapter, "discovering") : bind(Variable(false)),
   )
 
+  // BlueZ discovery never stops on its own, so bound each scan to a window and
+  // stop it afterwards — otherwise `discovering` (and the spinner) stay on
+  // forever. A new click resets the timer instead of stacking another stop.
+  let discoveryTimer: number | null = null
+  const startScan = () => {
+    const adapter = bt.adapter
+    if (!adapter) return
+    adapter.start_discovery()
+    scan.ping()
+    if (discoveryTimer !== null) GLib.source_remove(discoveryTimer)
+    discoveryTimer = GLib.timeout_add(
+      GLib.PRIORITY_DEFAULT,
+      BT_DISCOVERY_MS,
+      () => {
+        if (bt.adapter?.discovering) bt.adapter.stop_discovery()
+        discoveryTimer = null
+        return GLib.SOURCE_REMOVE
+      },
+    )
+  }
+
   const header = (
     <box>
       <switch
@@ -98,15 +121,7 @@ export function BluetoothMenu() {
           sh(["sh", "-c", cmd])
         }}
       />
-      {HeaderButton(
-        Icon.scan,
-        () => {
-          bt.adapter?.start_discovery()
-          scan.ping()
-        },
-        "Scan",
-        scan.busy,
-      )}
+      {HeaderButton(Icon.scan, startScan, "Scan", scan.busy)}
       {HeaderButton(Icon.settings, () => sh(["blueman-manager"]), "Settings")}
     </box>
   )
