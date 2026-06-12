@@ -7,7 +7,6 @@
 	diffFilter = delta --color-only
 [delta]
 	dark = true
-	syntax-theme = GitHub-Dark
 	line-numbers = true
 	untracked-line-numbers = true
 [merge]
