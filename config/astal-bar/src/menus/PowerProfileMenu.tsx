@@ -1,4 +1,4 @@
-import { bind } from "astal"
+import { bind, Variable } from "astal"
 import { Gtk } from "astal/gtk3"
 import AstalBattery from "gi://AstalBattery"
 import { PERF_ICONS } from "../const/icons"
@@ -7,6 +7,19 @@ import {
   cpuFrac,
   cpuTemp,
   cpuUsage,
+  dgpuFrac,
+  dgpuMemFrac,
+  dgpuMemText,
+  dgpuPresent,
+  dgpuTemp,
+  dgpuTempFrac,
+  dgpuUsage,
+  igpuFrac,
+  igpuHasMem,
+  igpuMemFrac,
+  igpuMemText,
+  igpuPresent,
+  igpuUsage,
   memFrac,
   memText,
   tempFrac,
@@ -65,6 +78,11 @@ export function PowerProfileMenu() {
   const powerFrac = bind(bat, "energyRate").as((w) =>
     Math.min(1, w / POWER_FULL_W),
   )
+  // VRAM is only shown for an iGPU whose driver actually reports it.
+  const igpuMemVisible = Variable.derive(
+    [igpuPresent, igpuHasMem],
+    (p, m) => p && m,
+  )
   return MenuWindow({
     name: MENU.perf,
     klass: "perf",
@@ -90,6 +108,31 @@ export function PowerProfileMenu() {
             {metric("Memory", bind(memText), memFrac)}
             {metric("Temperature", bind(cpuTemp).as((v) => `${v}°C`), tempFrac)}
             {metric("Power", powerText, powerFrac, onBattery)}
+            {metric(
+              "iGPU",
+              bind(igpuUsage).as((v) => `${v}%`),
+              igpuFrac,
+              bind(igpuPresent),
+            )}
+            {metric(
+              "iGPU VRAM",
+              bind(igpuMemText),
+              igpuMemFrac,
+              bind(igpuMemVisible),
+            )}
+            {metric(
+              "dGPU",
+              bind(dgpuUsage).as((v) => `${v}%`),
+              dgpuFrac,
+              bind(dgpuPresent),
+            )}
+            {metric("dGPU VRAM", bind(dgpuMemText), dgpuMemFrac, bind(dgpuPresent))}
+            {metric(
+              "dGPU Temp",
+              bind(dgpuTemp).as((v) => `${v}°C`),
+              dgpuTempFrac,
+              bind(dgpuPresent),
+            )}
           </box>,
         )}
       </box>
