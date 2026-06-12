@@ -314,6 +314,7 @@ window.Menu.audio  .menu-card { @include menu-accent($vol); }
 window.Menu.bright  .menu-card { @include menu-accent($bright); }
 window.Menu.pwr     .menu-card { @include menu-accent($crit); }
 window.Menu.perf    .menu-card { @include menu-accent($batt-ok); }
+window.Menu.batt    .menu-card { @include menu-accent($batt-ok); }
 // Per-profile glyph colors (green / blue / red), mirrored on the bar button.
 window.Menu.perf .dev-row.perf-power-saver .dev-icon { color: $batt-ok; }
 window.Menu.perf .dev-row.perf-balanced    .dev-icon { color: $accent; }
@@ -321,6 +322,21 @@ window.Menu.perf .dev-row.perf-performance .dev-icon { color: $crit; }
 .metric { padding: 4px 4px 10px; }
 .metric label { font-size: 15px; }
 .metric-val { color: $muted; }
+
+// Battery menu: big state header + history graph legend.
+.batt-head { padding: 2px 4px 6px; }
+.batt-icon {
+  font-size: 38px;
+  margin-right: 14px;
+  color: $batt-ok;
+  &.warning  { color: $warn; }
+  &.critical { color: $crit; }
+}
+.batt-pct { font-size: 24px; font-weight: bold; }
+.legend { margin: 8px 4px 0; }
+.legend-swatch { font-size: 13px; }
+.legend-swatch.level { color: $batt-ok; }
+.legend-swatch.power { color: $accent; }
 
 // Centered empty-state placeholder used by menus when their list has no rows.
 .notif-empty { min-height: 160px; }

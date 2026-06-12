@@ -5,3 +5,4 @@ export type MenuName =
   | "volume"
   | "brightness"
   | "perf"
+  | "battery"

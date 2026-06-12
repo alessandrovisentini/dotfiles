@@ -2,6 +2,7 @@ import { App, Gdk, Gtk } from "astal/gtk3"
 import style from "./style.scss"
 import Bar from "./src/bar/Bar"
 import {
+  BatteryMenu,
   BluetoothMenu,
   BrightnessMenu,
   NetworkMenu,
@@ -41,5 +42,6 @@ App.start({
     VolumeMenu()
     BrightnessMenu()
     PowerProfileMenu()
+    BatteryMenu()
   },
 })
