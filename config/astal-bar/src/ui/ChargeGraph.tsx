@@ -79,18 +79,18 @@ function draw(area: Gtk.DrawingArea, cr: any, bat: AstalBattery.Device) {
     cr.showText(`${p}%`)
   }
 
-  // Vertical ticks + hour labels on round local 6-hour marks.
+  // Vertical ticks + hour labels on round local 2-hour marks.
   const first = GLib.DateTime.new_from_unix_local(start)
   let tick = GLib.DateTime.new_local(
     first.get_year(),
     first.get_month(),
     first.get_day_of_month(),
-    first.get_hour() - (first.get_hour() % 6),
+    first.get_hour() - (first.get_hour() % 2),
     0,
     0,
   )
-  while (tick.to_unix() < start) tick = tick.add_hours(6)
-  for (; tick.to_unix() <= now; tick = tick.add_hours(6)) {
+  while (tick.to_unix() < start) tick = tick.add_hours(2)
+  for (; tick.to_unix() <= now; tick = tick.add_hours(2)) {
     const x = X(tick.to_unix())
     cr.setSourceRGBA(1, 1, 1, 0.05)
     cr.moveTo(x, y0)
