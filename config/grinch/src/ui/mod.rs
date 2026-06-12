@@ -11,7 +11,7 @@ use gtk_layer_shell as lshell;
 use crate::apps::{self, App};
 use crate::config::{MAX_COLS, MIN_COLS};
 
-pub use input::AppsRef;
+pub use input::{AppsRef, QueryRef};
 use nav::APP_IDX_KEY;
 use tile::build_tile;
 
@@ -64,11 +64,12 @@ pub fn build_window(
 
     populate_flow(&flow, &apps.borrow(), &mut pending.borrow_mut());
 
-    input::wire_search(&flow, &search, apps.clone());
+    let query: QueryRef = Rc::new(RefCell::new(String::new()));
+    input::wire_search(&flow, &search, apps.clone(), query.clone());
     input::wire_activate(&flow, &win, &search, apps.clone());
-    input::wire_keys(&win, &flow, &search, &scroll, apps.clone());
+    input::wire_keys(&win, &flow, &search, &scroll, apps.clone(), query.clone());
     input::wire_swipe(&win);
-    input::wire_show_reset(&win, &flow, &search, apps);
+    input::wire_show_reset(&win, &flow, &search, apps, query);
 
     (win, flow)
 }
@@ -76,14 +77,17 @@ pub fn build_window(
 /// Re-scan .desktop files and rebuild tiles in place. Returns true if any
 /// icons need decoding so the caller can re-arm the lazy decoder.
 pub fn refresh(flow: &gtk::FlowBox, apps: &AppsRef, pending: &PendingIcons) -> bool {
+    let fresh = apps::collect_apps();
+    // Unchanged set → keep the tiles and their already-decoded icons; a
+    // rebuild would flash every tile back to the fallback icon on each show.
+    if *apps.borrow() == fresh {
+        return false;
+    }
     for c in flow.children() {
         flow.remove(&c);
     }
-    *apps.borrow_mut() = apps::collect_apps();
-    {
-        let mut p = pending.borrow_mut();
-        p.clear();
-    }
+    *apps.borrow_mut() = fresh;
+    pending.borrow_mut().clear();
     populate_flow(flow, &apps.borrow(), &mut pending.borrow_mut());
     flow.show_all();
     !pending.borrow().is_empty()
@@ -121,6 +125,11 @@ fn init_layer_shell(win: &gtk::Window) {
     ] {
         lshell::set_anchor(win, edge, true);
     }
-    lshell::set_keyboard_mode(win, lshell::KeyboardMode::OnDemand);
+    // Exclusive, not OnDemand: on-demand surfaces only get keyboard focus
+    // from a click/touch, so after a workspace round-trip sway hands focus
+    // back to a toplevel and Escape/typing go under the (still visible)
+    // overlay. The grid is modal while open; sway keybindings still work
+    // (the compositor handles them before clients).
+    lshell::set_keyboard_mode(win, lshell::KeyboardMode::Exclusive);
     lshell::set_exclusive_zone(win, 0);
 }

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Show the grinch launcher: signal the daemon, or start it.
+# Toggle the grinch launcher: signal the daemon, or start it.
 
 set -u
 

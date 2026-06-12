@@ -59,6 +59,8 @@ fn parse_desktop(path: &Path) -> Option<App> {
     let mut name = String::new();
     let mut icon = String::new();
     let mut exec = String::new();
+    let mut keywords = String::new();
+    let mut generic = String::new();
     let mut terminal = false;
     let mut typ = String::new();
     let mut no_display = false;
@@ -84,6 +86,8 @@ fn parse_desktop(path: &Path) -> Option<App> {
             "Name" if name.is_empty() => name = v.to_string(),
             "Icon" if icon.is_empty() => icon = v.to_string(),
             "Exec" if exec.is_empty() => exec = v.to_string(),
+            "Keywords" if keywords.is_empty() => keywords = v.to_string(),
+            "GenericName" if generic.is_empty() => generic = v.to_string(),
             "Terminal" if !terminal => {
                 terminal = v.eq_ignore_ascii_case("true");
             }
@@ -100,5 +104,19 @@ fn parse_desktop(path: &Path) -> Option<App> {
     if name.is_empty() || exec.is_empty() {
         return None;
     }
-    Some(App { name, icon, exec, terminal })
+    // Keywords are ;-separated per spec; fold GenericName into the same
+    // lowercased search blob ("browser" → Firefox).
+    let mut blob = keywords.replace(';', " ");
+    if !generic.is_empty() {
+        blob.push(' ');
+        blob.push_str(&generic);
+    }
+    Some(App {
+        name_lc: name.to_lowercase(),
+        keywords: blob.to_lowercase(),
+        name,
+        icon,
+        exec,
+        terminal,
+    })
 }

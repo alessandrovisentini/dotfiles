@@ -1,6 +1,6 @@
 use gtk::prelude::*;
 
-use crate::apps::App;
+use crate::apps::{score, App};
 
 // Single source of truth for the per-child app index key.
 pub const APP_IDX_KEY: &str = "app_idx";
@@ -11,32 +11,38 @@ fn child_app_idx(child: &gtk::FlowBoxChild) -> Option<usize> {
     p.map(|p| unsafe { *p.as_ref() })
 }
 
-/// `query` must already be lowercased. We re-run the predicate manually
-/// because FlowBox's filter visibility isn't exposed on the child.
-pub fn child_matches(child: &gtk::FlowBoxChild, apps: &[App], query: &str) -> bool {
-    if query.is_empty() {
-        return true;
-    }
-    match child_app_idx(child) {
-        Some(i) => apps[i].name.to_lowercase().contains(query),
-        None => false,
-    }
+fn child_score(child: &gtk::FlowBoxChild, apps: &[App], query: &str) -> Option<u32> {
+    child_app_idx(child).and_then(|i| score(&apps[i], query))
 }
 
-/// First matching tile in reading order. `query` must already be lowercased.
-pub fn first_matching_child(
+/// `query` must already be lowercased. We re-run the matcher manually
+/// because FlowBox's filter visibility isn't exposed on the child.
+pub fn child_matches(child: &gtk::FlowBoxChild, apps: &[App], query: &str) -> bool {
+    child_score(child, apps, query).is_some()
+}
+
+/// Best-scoring tile; reading order breaks ties (alphabetical grid). The
+/// Enter target: a fuzzy or keyword match must not outrank a name match
+/// that happens to sit later in the grid.
+pub fn best_matching_child(
     flow: &gtk::FlowBox,
     apps: &[App],
     query: &str,
 ) -> Option<gtk::FlowBoxChild> {
+    let mut best: Option<(u32, gtk::FlowBoxChild)> = None;
     for c in flow.children() {
         if let Ok(fc) = c.downcast::<gtk::FlowBoxChild>() {
-            if child_matches(&fc, apps, query) {
-                return Some(fc);
+            if let Some(s) = child_score(&fc, apps, query) {
+                if s == 0 {
+                    return Some(fc); // can't beat a name-prefix match
+                }
+                if best.as_ref().map_or(true, |(bs, _)| s < *bs) {
+                    best = Some((s, fc));
+                }
             }
         }
     }
-    None
+    best.map(|(_, fc)| fc)
 }
 
 /// All matching tiles in reading order. `query` must already be lowercased.

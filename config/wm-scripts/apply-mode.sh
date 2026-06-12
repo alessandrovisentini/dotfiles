@@ -56,22 +56,24 @@ src=$(cat "${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/mode-source" 2>/dev/null || ec
 suffix=""
 [[ "$src" == "manual" ]] && suffix=" (manual)"
 
+# -e (transient): a mode change is state feedback, like a volume popup —
+# show the toast, but don't keep it in the notification center.
 if [[ "${MODE_QUIET:-0}" != "1" ]] && command -v notify-send >/dev/null 2>&1; then
     case "$mode" in
         tablet)
             if [[ "$src" == "manual" ]]; then desc="Tablet mode held manually"
             else                              desc="Keyboard detached — touch UI active"; fi
-            notify-send -t 1500 -i input-tablet \
+            notify-send -e -t 1500 -i input-tablet \
                 -a "mode-state" "Tablet mode${suffix}" "$desc" ;;
         external)
             if [[ "$src" == "manual" ]]; then desc="External-keyboard mode held manually"
             else                              desc="External keyboard connected"; fi
-            notify-send -t 1500 -i input-keyboard \
+            notify-send -e -t 1500 -i input-keyboard \
                 -a "mode-state" "External keyboard mode${suffix}" "$desc" ;;
         *)
             if [[ "$src" == "manual" ]]; then desc="Laptop mode held manually"
             else                              desc="Keyboard attached"; fi
-            notify-send -t 1500 -i input-keyboard \
+            notify-send -e -t 1500 -i input-keyboard \
                 -a "mode-state" "Laptop mode${suffix}" "$desc" ;;
     esac
 fi

@@ -8,30 +8,32 @@ use crate::apps::{launch_app, App};
 use crate::config::{FLASH_MS, SWIPE_THRESHOLD_PX_PER_S};
 
 use super::nav::{
-    child_matches, first_matching_child, flow_columns, matching_children,
+    best_matching_child, child_matches, flow_columns, matching_children,
     scroll_child_into_view, APP_IDX_KEY,
 };
 
 pub type AppsRef = Rc<RefCell<Vec<App>>>;
+// The lowercased query, written once per change. The filter func reads this
+// instead of re-fetching + lowercasing the entry text per tile per keystroke.
+pub type QueryRef = Rc<RefCell<String>>;
 
-pub fn wire_search(flow: &gtk::FlowBox, search: &gtk::SearchEntry, apps: AppsRef) {
-    // FlowBox filter: hide tiles whose app name doesn't contain the query.
+pub fn wire_search(
+    flow: &gtk::FlowBox,
+    search: &gtk::SearchEntry,
+    apps: AppsRef,
+    query: QueryRef,
+) {
+    // FlowBox filter: hide tiles that don't match the query (name prefix/
+    // substring/fuzzy subsequence, or Keywords/GenericName).
     {
         let apps_f = apps.clone();
-        let search_f = search.clone();
+        let query_f = query.clone();
         flow.set_filter_func(Some(Box::new(move |child| {
-            let q = search_f.text().to_string().to_lowercase();
+            let q = query_f.borrow();
             if q.is_empty() {
                 return true;
             }
-            let idx_ptr: Option<std::ptr::NonNull<usize>> =
-                unsafe { child.data::<usize>(APP_IDX_KEY) };
-            match idx_ptr {
-                Some(p) => unsafe {
-                    apps_f.borrow()[*p.as_ref()].name.to_lowercase().contains(&q)
-                },
-                None => true,
-            }
+            child_matches(child, &apps_f.borrow(), &q)
         })));
     }
 
@@ -39,12 +41,14 @@ pub fn wire_search(flow: &gtk::FlowBox, search: &gtk::SearchEntry, apps: AppsRef
         let flow_s = flow.clone();
         let search_s = search.clone();
         let apps_s = apps;
+        let query_s = query;
         search.connect_search_changed(move |_| {
+            *query_s.borrow_mut() = search_s.text().to_string().to_lowercase();
             flow_s.invalidate_filter();
-            // Pin the Enter target to the first match; don't steal focus
+            // Pin the Enter target to the best match; don't steal focus
             // from the entry (touch typing keeps OSK up).
-            let q = search_s.text().to_string().to_lowercase();
-            match first_matching_child(&flow_s, &apps_s.borrow(), &q) {
+            let q = query_s.borrow();
+            match best_matching_child(&flow_s, &apps_s.borrow(), &q) {
                 Some(fc) => {
                     flow_s.select_child(&fc);
                     if !search_s.has_focus() {
@@ -123,11 +127,13 @@ pub fn wire_keys(
     search: &gtk::SearchEntry,
     scroll: &gtk::ScrolledWindow,
     apps: AppsRef,
+    query: QueryRef,
 ) {
     let flow_k = flow.clone();
     let win_k = win.clone();
     let search_k = search.clone();
     let apps_k = apps;
+    let query_k = query;
     let scroll_k = scroll.clone();
     win.connect_key_press_event(move |_, ev| {
         let key = ev.keyval();
@@ -138,15 +144,16 @@ pub fn wire_keys(
         if key == gdk::keys::constants::Return
             || key == gdk::keys::constants::KP_Enter
         {
-            // Activate the selection if it still matches, else first match.
-            // No match → swallow Enter so we don't launch a stale tile.
-            let q = search_k.text().to_string().to_lowercase();
+            // Activate the selection if it still matches, else the best
+            // match. No match → swallow Enter so we don't launch a stale
+            // tile.
+            let q = query_k.borrow();
             let apps_b = apps_k.borrow();
             let target = flow_k
                 .selected_children()
                 .into_iter()
                 .find(|c| child_matches(c, &apps_b, &q))
-                .or_else(|| first_matching_child(&flow_k, &apps_b, &q));
+                .or_else(|| best_matching_child(&flow_k, &apps_b, &q));
             if let Some(c) = target {
                 flow_k.emit_by_name::<()>("child-activated", &[&c]);
             }
@@ -167,7 +174,7 @@ pub fn wire_keys(
             None
         };
         if let Some((step, vertical)) = arrow {
-            let q = search_k.text().to_string().to_lowercase();
+            let q = query_k.borrow();
             let matches = matching_children(&flow_k, &apps_k.borrow(), &q);
             if !matches.is_empty() {
                 let sel = flow_k.selected_children();
@@ -239,14 +246,19 @@ pub fn wire_show_reset(
     flow: &gtk::FlowBox,
     search: &gtk::SearchEntry,
     apps: AppsRef,
+    query: QueryRef,
 ) {
     let search_m = search.clone();
     let flow_m = flow.clone();
     let apps_m = apps;
+    let query_m = query;
     win.connect_map(move |_| {
+        // Reset the cache directly: SearchEntry's search-changed signal is
+        // debounced, but the filter must be correct on this frame.
+        query_m.borrow_mut().clear();
         search_m.set_text("");
         flow_m.invalidate_filter();
-        if let Some(fc) = first_matching_child(&flow_m, &apps_m.borrow(), "") {
+        if let Some(fc) = best_matching_child(&flow_m, &apps_m.borrow(), "") {
             flow_m.select_child(&fc);
             fc.grab_focus();
         }
