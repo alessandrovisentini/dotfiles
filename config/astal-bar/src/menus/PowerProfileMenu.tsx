@@ -22,6 +22,8 @@ import {
   igpuUsage,
   memFrac,
   memText,
+  startMetrics,
+  stopMetrics,
   tempFrac,
 } from "../services/metrics"
 import {
@@ -83,7 +85,7 @@ export function PowerProfileMenu() {
     [igpuPresent, igpuHasMem],
     (p, m) => p && m,
   )
-  return MenuWindow({
+  const win = MenuWindow({
     name: MENU.perf,
     klass: "perf",
     child: (
@@ -138,4 +140,11 @@ export function PowerProfileMenu() {
       </box>
     ),
   })
+
+  // Sample /proc + sysfs metrics only while this menu is open.
+  win.connect("notify::visible", () =>
+    win.visible ? startMetrics() : stopMetrics(),
+  )
+
+  return win
 }

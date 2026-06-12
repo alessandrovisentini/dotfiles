@@ -10,7 +10,7 @@ export function Brightness() {
     <button
       className="bar-button state-bright"
       visible={bind(hasBacklight)}
-      onClicked={tap(() => toggleMenu(MENU.brightness))}
+      onClicked={tap((self) => toggleMenu(MENU.brightness, self))}
       tooltipText="Brightness"
     >
       <box>

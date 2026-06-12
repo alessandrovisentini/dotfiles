@@ -12,3 +12,15 @@ export function toBinding<T>(v: Reactive<T>): Binding<T> {
   if (v && typeof (v as { as?: unknown }).as === "function") return v as Binding<T>
   return bind(Variable(v as T))
 }
+
+// Tie widget-scoped derived Variables to the widget's lifetime. JSX bindings
+// unsubscribe from a Variable on widget destroy, but Variable.derive keeps
+// its *own* dep subscriptions until drop() — without this, per-bar derives
+// leak handlers and timers every monitor hotplug. Use as `setup={own(a, b)}`.
+export const own =
+  (...vars: Array<Variable<unknown>>) =>
+  (self: { connect(sig: string, cb: () => void): number }) => {
+    self.connect("destroy", () => {
+      for (const v of vars) v.drop()
+    })
+  }

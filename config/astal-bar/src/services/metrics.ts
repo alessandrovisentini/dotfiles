@@ -4,6 +4,7 @@
 import { Variable } from "astal"
 import Gio from "gi://Gio"
 import GLib from "gi://GLib"
+import { readFile } from "../utils/sysfs"
 
 export const cpuUsage = Variable(0) // %
 export const memText = Variable("—") // used / total
@@ -36,15 +37,6 @@ export const dgpuTempFrac = Variable(0)
 
 const clamp = (v: number) => Math.max(0, Math.min(1, v))
 
-function readText(path: string): string | null {
-  try {
-    const [ok, data] = GLib.file_get_contents(path)
-    return ok ? new TextDecoder().decode(data) : null
-  } catch {
-    return null
-  }
-}
-
 // "used / total UNIT", both scaled to the total's unit.
 function pair(usedBytes: number, totalBytes: number): string {
   const units = ["B", "KiB", "MiB", "GiB", "TiB"]
@@ -62,7 +54,7 @@ function pair(usedBytes: number, totalBytes: number): string {
 let prevIdle = 0
 let prevTotal = 0
 function sampleCpu(): number {
-  const txt = readText("/proc/stat")
+  const txt = readFile("/proc/stat")
   if (!txt) return cpuUsage.get()
   const cols = txt.split("\n")[0].trim().split(/\s+/).slice(1).map(Number)
   if (cols.length < 4) return cpuUsage.get()
@@ -77,7 +69,7 @@ function sampleCpu(): number {
 }
 
 function sampleMem(): { text: string; frac: number } {
-  const txt = readText("/proc/meminfo")
+  const txt = readFile("/proc/meminfo")
   if (!txt) return { text: memText.get(), frac: 0 }
   const field = (k: string) => {
     const m = txt.match(new RegExp(`^${k}:\\s+(\\d+)`, "m"))
@@ -108,7 +100,7 @@ function findTempPath(): string | null {
     }
     let fallback: string | null = null
     for (const z of zones) {
-      const type = (readText(`${z}/type`) || "").trim()
+      const type = (readFile(`${z}/type`) || "").trim()
       if (type === "x86_pkg_temp") return `${z}/temp`
       if (!fallback && /coretemp|acpitz|cpu/i.test(type)) fallback = `${z}/temp`
     }
@@ -121,7 +113,7 @@ function findTempPath(): string | null {
 function sampleTemp(): number {
   if (tempPath === undefined) tempPath = findTempPath()
   if (!tempPath) return cpuTemp.get()
-  const txt = readText(tempPath)
+  const txt = readFile(tempPath)
   const milli = txt ? Number(txt.trim()) : NaN
   return Number.isFinite(milli) ? Math.round(milli / 1000) : cpuTemp.get()
 }
@@ -154,7 +146,7 @@ function listDrmCards(): string[] {
 
 function uevent(path: string): Record<string, string> {
   const out: Record<string, string> = {}
-  const txt = readText(path)
+  const txt = readFile(path)
   if (!txt) return out
   for (const line of txt.split("\n")) {
     const i = line.indexOf("=")
@@ -198,7 +190,7 @@ function deviceHwmon(device: string): string | null {
 }
 
 const numAt = (path: string): number => {
-  const txt = readText(path)
+  const txt = readFile(path)
   const n = txt ? Number(txt.trim()) : NaN
   return Number.isFinite(n) ? n : NaN
 }

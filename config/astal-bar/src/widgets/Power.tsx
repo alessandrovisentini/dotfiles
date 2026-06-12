@@ -7,7 +7,7 @@ export function Power() {
   return (
     <button
       className="bar-button state-power"
-      onClicked={tap(() => toggleMenu(MENU.power))}
+      onClicked={tap((self) => toggleMenu(MENU.power, self))}
       tooltipText="Power menu"
     >
       <label className="bar-icon" label={Icon.power} />

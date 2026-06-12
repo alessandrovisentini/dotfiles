@@ -1,28 +1,32 @@
 import { Variable, bind } from "astal"
 import { Gdk } from "astal/gtk3"
 import { Icon } from "../const/icons"
-import { addWorkspace, focusWorkspace, outputs, workspaces } from "../services/sway"
+import {
+  addWorkspace,
+  focusWorkspace,
+  focusWorkspaceByName,
+  outputNameFor,
+  outputs,
+  workspaces,
+} from "../services/sway"
 import { closeAllMenus } from "../services/menu"
+import type { SwayWorkspace } from "../types/sway"
 import { tap } from "../utils/gtk"
+import { own } from "../utils/reactive"
 
 // Per-output workspace list (matches the bar to its output reactively).
 export function Workspaces({ gdkmonitor }: { gdkmonitor?: Gdk.Monitor } = {}) {
-  const ownOutput = Variable.derive([bind(outputs)], (outs: any[]) => {
-    if (!gdkmonitor) return undefined
-    const x = gdkmonitor?.geometry?.x ?? 0
-    const y = gdkmonitor?.geometry?.y ?? 0
-    return outs.find((o) => o.rect?.x === x && o.rect?.y === y)?.name
-  })
   const list = Variable.derive(
-    [bind(workspaces), bind(ownOutput)],
-    (wss: any[], output: string | undefined) => {
+    [bind(workspaces), bind(outputs)],
+    (wss: SwayWorkspace[], outs) => {
+      const output = gdkmonitor ? outputNameFor(outs, gdkmonitor) : undefined
       const here = output ? wss.filter((ws) => ws.output === output) : wss
       return [...here].sort((a, b) => a.num - b.num)
     },
   )
   return (
-    <box className="workspaces">
-      {bind(list).as((wss: any[]) =>
+    <box className="workspaces" setup={own(list)}>
+      {bind(list).as((wss) =>
         wss.map((ws) => (
           <button
             className={`ws ${
@@ -30,10 +34,12 @@ export function Workspaces({ gdkmonitor }: { gdkmonitor?: Gdk.Monitor } = {}) {
             } ${ws.urgent ? "urgent" : ""}`}
             onClicked={tap(() => {
               closeAllMenus()
-              focusWorkspace(ws.num)
+              // Named workspaces report num = -1.
+              if (ws.num >= 1) focusWorkspace(ws.num)
+              else focusWorkspaceByName(ws.name)
             })}
           >
-            <label label={String(ws.num)} />
+            <label label={ws.num >= 1 ? String(ws.num) : ws.name} />
           </button>
         )),
       )}

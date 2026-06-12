@@ -5,6 +5,7 @@ import { MENU } from "../const/menu"
 import { poweredView } from "../services/bluetooth"
 import { toggleMenu } from "../services/menu"
 import { tap } from "../utils/gtk"
+import { own } from "../utils/reactive"
 
 export function Bluetooth() {
   const bt = AstalBluetooth.get_default()
@@ -30,8 +31,9 @@ export function Bluetooth() {
   return (
     <button
       className={bind(cls)}
-      onClicked={tap(() => toggleMenu(MENU.bluetooth))}
+      onClicked={tap((self) => toggleMenu(MENU.bluetooth, self))}
       tooltipText="Bluetooth"
+      setup={own(icon, cls)}
     >
       <label className="bar-icon" label={bind(icon)} />
     </button>

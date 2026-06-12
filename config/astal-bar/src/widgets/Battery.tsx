@@ -1,6 +1,7 @@
 import { Variable, bind } from "astal"
 import AstalBattery from "gi://AstalBattery"
 import { batteryIcon } from "../utils/icons"
+import { own } from "../utils/reactive"
 import { pct } from "../utils/shell"
 
 function timeText(secs: number): string {
@@ -36,6 +37,7 @@ export function Battery() {
       className={bind(cls)}
       visible={bind(bat, "isPresent")}
       tooltipText={bind(tip)}
+      setup={own(cls, icon, tip)}
     >
       <label className="module-icon" label={bind(icon)} />
       <label label={bind(bat, "percentage").as(pct)} />

@@ -2,6 +2,7 @@ import { Variable, bind } from "astal"
 import { Gdk, Gtk } from "astal/gtk3"
 import AstalTray from "gi://AstalTray"
 import GLib from "gi://GLib"
+import { own } from "../utils/reactive"
 
 // Press-and-hold opens the menu; a quick tap still left-clicks.
 const LONG_PRESS_MS = 500
@@ -91,6 +92,7 @@ export function SysTray() {
               className="bar-button"
               tooltipMarkup={bind(item, "tooltipMarkup")}
               visible={bind(hasIcon)}
+              setup={own(hasIcon)}
               onEnterNotifyEvent={(self: any) => {
                 if (!suppressHover) self.get_style_context().add_class("hl")
                 return false

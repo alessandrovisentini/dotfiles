@@ -52,12 +52,9 @@ export const Icon = {
   osk: "󰌌",
   wired: "󰈀",
   vpn: "󰦝",
-  remove: "󰧧",
   scan: "󰑐",
   settings: "󰒓",
   add: "󰐕",
-  clear: "󰩹",
-  close: "󰅖",
   // PowerMenu tiles
   lock: "󰌾",
   suspend: "󰒲",

@@ -99,6 +99,16 @@ window.Bar > centerbox { margin: 0 6px; }
   .bar-icon, .module-icon, label { color: $fg; } }
 
 .bar-icon { font-size: 19px; }
+// Pending-notification count, overlaid on the bell's top-right corner as a
+// small pill. Text color follows the state tint (orange pending, magenta DND).
+.notif-count {
+  font-size: 10px;
+  font-weight: bold;
+  background: rgba(28, 28, 28, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  padding: 0 3px;
+}
 // Power-mode glyph: a touch larger, colored by profile (matches the menu).
 .perf-icon { font-size: 26px; }
 .perf-icon.perf-power-saver { color: $batt-ok; }

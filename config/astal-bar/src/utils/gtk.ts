@@ -9,7 +9,7 @@ export function unstick(w: any) {
   })
 }
 
-export const tap = (fn: () => void) => (self: any) => {
-  fn()
+export const tap = (fn: (self: any) => void) => (self: any) => {
+  fn(self)
   unstick(self)
 }

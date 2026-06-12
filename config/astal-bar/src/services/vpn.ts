@@ -1,9 +1,9 @@
 // VPN connections aren't exposed by AstalNetwork's bindings, so we drive
 // them through nmcli. The service keeps a list of configured VPN/WireGuard
 // connections plus per-UUID busy state for the menu's spinners. A slow
-// poll catches state changes that originate outside the menu (CLI toggles,
-// auto-connect, drops); each user action triggers an immediate refresh on
-// top of that.
+// poll — running only while the network menu is open — catches state
+// changes that originate outside the menu (CLI toggles, auto-connect,
+// drops); each user action triggers an immediate refresh on top of that.
 //
 // nmcli can't fetch agent-owned secrets (password-flags=1) without a NM
 // secret agent, which sway sessions usually don't run. When the first
@@ -11,9 +11,11 @@
 // rofi and retry with a tmpfs `passwd-file`. Errors are surfaced through
 // notify-send so the row doesn't fail silently.
 import { Variable } from "astal"
-import { execAsync } from "astal/process"
 import GLib from "gi://GLib"
 import Gio from "gi://Gio"
+import { NEEDS_SECRETS, nmcli } from "../utils/nmcli"
+import { notify } from "../utils/notify"
+import { promptPassword } from "../utils/prompt"
 
 export type VpnEntry = {
   name: string
@@ -58,8 +60,8 @@ function splitTerse(line: string): string[] {
 async function fetchVpns(): Promise<VpnEntry[]> {
   try {
     const [all, active] = await Promise.all([
-      execAsync(["nmcli", "-t", "-f", "NAME,UUID,TYPE", "connection", "show"]),
-      execAsync(["nmcli", "-t", "-f", "UUID", "connection", "show", "--active"]),
+      nmcli(["-t", "-f", "NAME,UUID,TYPE", "connection", "show"]),
+      nmcli(["-t", "-f", "UUID", "connection", "show", "--active"]),
     ])
     const activeSet = new Set(
       active.split("\n").map((s) => s.trim()).filter(Boolean),
@@ -87,33 +89,18 @@ export async function refreshVpns() {
   vpns.set(await fetchVpns())
 }
 
-function notify(summary: string, body: string) {
-  execAsync([
-    "notify-send",
-    "-a",
-    "astal-bar",
-    "-i",
-    "network-vpn",
-    summary,
-    body,
-  ]).catch(() => {})
+// Polling is gated on menu visibility so nothing spawns nmcli in the
+// background while the menu is closed. Skip background refresh while a
+// toggle is in flight so the optimistic state we just wrote doesn't get
+// clobbered mid-transition.
+export function startVpnPolling() {
+  if (vpns.isPolling()) return
+  refreshVpns()
+  vpns.poll(8000, async () => (busyCount > 0 ? vpns.get() : fetchVpns()))
 }
 
-// rofi -password reads no entries from stdin; sh -c gives us an empty pipe
-// so rofi doesn't block on a terminal-less invocation.
-async function promptPassword(name: string): Promise<string | null> {
-  const safe = name.replace(/"/g, '\\"')
-  try {
-    const out = await execAsync([
-      "sh",
-      "-c",
-      `printf '' | rofi -dmenu -password -p "VPN: ${safe}" -lines 0`,
-    ])
-    const pass = out.replace(/\n$/, "")
-    return pass.length ? pass : null
-  } catch {
-    return null
-  }
+export function stopVpnPolling() {
+  vpns.stopPoll()
 }
 
 // Write the secret to a tmpfs file (XDG_RUNTIME_DIR) with mode 600, then
@@ -135,15 +122,7 @@ async function upWithPassword(
     return { ok: false, err: String(e?.message ?? e) }
   }
   try {
-    await execAsync([
-      "nmcli",
-      "connection",
-      "up",
-      "uuid",
-      uuid,
-      "passwd-file",
-      path,
-    ])
+    await nmcli(["connection", "up", "uuid", uuid, "passwd-file", path])
     return { ok: true }
   } catch (e: any) {
     return { ok: false, err: String(e?.message ?? e) }
@@ -154,30 +133,28 @@ async function upWithPassword(
   }
 }
 
-const NEEDS_SECRETS = /No valid secrets|secrets were required|not given/i
-
 async function bringUp(entry: VpnEntry): Promise<void> {
   try {
-    await execAsync(["nmcli", "connection", "up", "uuid", entry.uuid])
+    await nmcli(["connection", "up", "uuid", entry.uuid])
     return
   } catch (e: any) {
     const msg = String(e?.message ?? e)
     if (!NEEDS_SECRETS.test(msg)) {
-      notify(`VPN failed: ${entry.name}`, msg)
+      notify(`VPN failed: ${entry.name}`, msg, "network-vpn")
       return
     }
   }
-  const pass = await promptPassword(entry.name)
+  const pass = await promptPassword(`VPN: ${entry.name}`)
   if (!pass) return
   const res = await upWithPassword(entry.uuid, pass)
-  if (!res.ok) notify(`VPN failed: ${entry.name}`, res.err ?? "")
+  if (!res.ok) notify(`VPN failed: ${entry.name}`, res.err ?? "", "network-vpn")
 }
 
 async function bringDown(entry: VpnEntry): Promise<void> {
   try {
-    await execAsync(["nmcli", "connection", "down", "uuid", entry.uuid])
+    await nmcli(["connection", "down", "uuid", entry.uuid])
   } catch (e: any) {
-    notify(`VPN failed: ${entry.name}`, String(e?.message ?? e))
+    notify(`VPN failed: ${entry.name}`, String(e?.message ?? e), "network-vpn")
   }
 }
 
@@ -202,8 +179,3 @@ export async function toggleVpn(entry: VpnEntry) {
     busyCount--
   }
 }
-
-refreshVpns()
-// Skip background refresh while a toggle is in flight so the optimistic
-// state we just wrote doesn't get clobbered mid-transition.
-vpns.poll(8000, async () => (busyCount > 0 ? vpns.get() : fetchVpns()))

@@ -4,6 +4,7 @@ import { MENU } from "../const/menu"
 import { toggleMenu } from "../services/menu"
 import { activeProfile, perfMode } from "../services/powerProfile"
 import { tap } from "../utils/gtk"
+import { own } from "../utils/reactive"
 
 const NAME = {
   "power-saver": "Power Saver",
@@ -23,7 +24,8 @@ export function PowerMode() {
     <button
       className="bar-button"
       tooltipText={bind(tip)}
-      onClicked={tap(() => toggleMenu(MENU.perf))}
+      onClicked={tap((self) => toggleMenu(MENU.perf, self))}
+      setup={own(tip)}
     >
       <label className={cls} label={icon} />
     </button>

@@ -5,7 +5,7 @@ import AstalBluetooth from "gi://AstalBluetooth"
 import { BLUETOOTH_ICONS, Icon } from "../const/icons"
 import { MENU } from "../const/menu"
 import { BT_DISCOVERY_MS } from "../const/ui"
-import { poweredView, setPoweredIntent } from "../services/bluetooth"
+import { namedDevices, poweredView, setPoweredIntent } from "../services/bluetooth"
 import { EmptyState } from "../ui/EmptyState"
 import { HeaderButton } from "../ui/HeaderButton"
 import { Row } from "../ui/Row"
@@ -18,18 +18,28 @@ import { MenuWindow } from "./MenuWindow"
 export function BluetoothMenu() {
   const bt = AstalBluetooth.get_default()
   // Track per-device "action in flight" state so each row can show a spinner.
-  const busyMap = new Map<string, Variable<boolean>>()
+  // Entries are pruned when bluez forgets the device.
+  const busyMap = new Map<
+    string,
+    { v: Variable<boolean>; dev: AstalBluetooth.Device; id: number }
+  >()
   const busyFor = (dev: AstalBluetooth.Device) => {
-    let v = busyMap.get(dev.address)
-    if (!v) {
-      v = Variable(false)
-      busyMap.set(dev.address, v)
-      // External connect/disconnect should also clear the spinner. Registered
-      // once per device on first access so devices.changed re-renders don't
-      // leak listeners.
-      dev.connect("notify::connected", () => v!.set(false))
+    let e = busyMap.get(dev.address)
+    if (!e) {
+      const v = Variable(false)
+      // External connect/disconnect should also clear the spinner.
+      e = { v, dev, id: dev.connect("notify::connected", () => v.set(false)) }
+      busyMap.set(dev.address, e)
     }
-    return v
+    return e.v
+  }
+  const pruneBusy = (devs: AstalBluetooth.Device[]) => {
+    const alive = new Set(devs.map((d) => d.address))
+    for (const [addr, e] of busyMap) {
+      if (alive.has(addr)) continue
+      try { e.dev.disconnect(e.id) } catch {}
+      busyMap.delete(addr)
+    }
   }
 
   // dev.connect_device() silently no-ops in GJS without a callback.
@@ -51,6 +61,14 @@ export function BluetoothMenu() {
   const row = (dev: AstalBluetooth.Device) => {
     const busy = bind(busyFor(dev))
     const connected = bind(dev, "connected")
+    const status = Variable.derive(
+      [connected, busy, bind(dev, "batteryPercentage")],
+      (c: boolean, b: boolean, bat: number) => {
+        if (b) return c ? "Disconnecting…" : "Connecting…"
+        if (c) return bat > 0 ? `Connected · ${Math.round(bat * 100)}%` : "Connected"
+        return dev.paired ? "Paired" : "Not paired"
+      },
+    )
     return Row({
       icon: connected.as((c) =>
         c ? BLUETOOTH_ICONS.connected : BLUETOOTH_ICONS.powered,
@@ -58,18 +76,8 @@ export function BluetoothMenu() {
       name: dev.name ?? dev.address,
       active: connected,
       busy,
-      status: bind(
-        Variable.derive([connected, busy], (c: boolean, b: boolean) => {
-          if (b) return c ? "Disconnecting…" : "Connecting…"
-          if (c) {
-            const bat = dev.batteryPercentage
-            return bat > 0
-              ? `Connected · ${Math.round(bat * 100)}%`
-              : "Connected"
-          }
-          return dev.paired ? "Paired" : "Not paired"
-        }),
-      ),
+      status: bind(status),
+      owns: [status],
       onClicked: () => connect(dev),
     })
   }
@@ -105,10 +113,10 @@ export function BluetoothMenu() {
     <box>
       <switch
         valign={Gtk.Align.CENTER}
-        active={bind(bt, "isPowered")}
+        // poweredView (not raw isPowered) so the switch flips optimistically
+        // together with the bar icon instead of lagging until bluez settles.
+        active={bind(poweredView)}
         onStateSet={(_, state) => {
-          // Optimistic: flip the bar icon immediately; the service reverts
-          // it if the actual state never catches up.
           setPoweredIntent(state)
           // When the adapter is rfkill-blocked (Fn key, prior block), a bare
           // `bluetoothctl power on` succeeds silently without actually
@@ -135,12 +143,12 @@ export function BluetoothMenu() {
           "Bluetooth",
           ScrollList(
             Variable.derive(
-              [bind(bt, "devices"), bind(poweredView)],
+              [bind(namedDevices), bind(poweredView)],
               (devs: AstalBluetooth.Device[], powered: boolean) => {
                 if (!powered) return EmptyState("Bluetooth off")
-                const named = devs.filter((d) => d.name)
-                return named.length
-                  ? named.map((d) => row(d))
+                pruneBusy(devs)
+                return devs.length
+                  ? devs.map((d) => row(d))
                   : EmptyState("No devices")
               },
             )(),

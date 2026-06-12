@@ -4,7 +4,13 @@ import { Gtk } from "astal/gtk3"
 import AstalWp from "gi://AstalWp"
 import { Icon, MIC_ICONS, VOLUME_RAMP } from "../const/icons"
 import { MENU } from "../const/menu"
-import { defaultMicrophone, defaultSpeaker } from "../services/audio"
+import {
+  type EndpointState,
+  defaultMicrophone,
+  defaultSpeaker,
+  microphoneState,
+  speakerState,
+} from "../services/audio"
 import {
   audioNameOf,
   endpointConnected,
@@ -19,20 +25,34 @@ import { tap } from "../utils/gtk"
 import { pct, sh } from "../utils/shell"
 import { MenuWindow } from "./MenuWindow"
 
-function EndpointSlider(ep: any, onIcon: string, offIcon: string) {
+// Static widget driven by the flattened default-endpoint state; never
+// re-created on default changes (widget-creating `.as()` transforms next to
+// sibling bindings get orphaned by astal's binding plumbing — see audio.ts).
+function EndpointSlider(
+  state: Variable<EndpointState>,
+  current: () => AstalWp.Endpoint | null,
+  onIcon: string,
+  offIcon: string,
+) {
   return (
-    <box vertical>
+    <box vertical visible={bind(state).as((s) => s !== null)}>
       <label
         className="dev-name"
-        label={audioNameOf(ep)}
+        label={bind(state).as((s) => s?.name ?? "")}
         halign={Gtk.Align.START}
         truncate
       />
       <box className="vol-row">
-        <button className="icon-btn" onClicked={tap(() => (ep.mute = !ep.mute))}>
+        <button
+          className="icon-btn"
+          onClicked={tap(() => {
+            const ep = current()
+            if (ep) ep.mute = !ep.mute
+          })}
+        >
           <label
             className="dev-icon"
-            label={bind(ep, "mute").as((m: boolean) => (m ? offIcon : onIcon))}
+            label={bind(state).as((s) => (s?.mute ? offIcon : onIcon))}
           />
         </button>
         <slider
@@ -40,10 +60,13 @@ function EndpointSlider(ep: any, onIcon: string, offIcon: string) {
           min={0}
           max={1}
           step={0.01}
-          value={bind(ep, "volume")}
-          onDragged={({ value }: any) => (ep.volume = value)}
+          value={bind(state).as((s) => s?.volume ?? 0)}
+          onDragged={({ value }: any) => {
+            const ep = current()
+            if (ep) ep.volume = value
+          }}
         />
-        <label label={bind(ep, "volume").as(pct)} />
+        <label label={bind(state).as((s) => pct(s?.volume ?? 0))} />
       </box>
     </box>
   )
@@ -118,11 +141,17 @@ export function VolumeMenu() {
         {Section(
           "Sound",
           <box vertical>
-            {bind(defaultSpeaker()).as((sp: any) =>
-              sp ? EndpointSlider(sp, VOLUME_RAMP.full, VOLUME_RAMP.mute) : <box />,
+            {EndpointSlider(
+              speakerState(),
+              () => defaultSpeaker().get(),
+              VOLUME_RAMP.full,
+              VOLUME_RAMP.mute,
             )}
-            {bind(defaultMicrophone()).as((mic: any) =>
-              mic ? EndpointSlider(mic, MIC_ICONS.on, MIC_ICONS.off) : <box />,
+            {EndpointSlider(
+              microphoneState(),
+              () => defaultMicrophone().get(),
+              MIC_ICONS.on,
+              MIC_ICONS.off,
             )}
           </box>,
           HeaderButton(Icon.settings, () => sh(["pwvucontrol"]), "Settings"),

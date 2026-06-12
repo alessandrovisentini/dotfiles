@@ -6,6 +6,7 @@ import { toggleMenu } from "../services/menu"
 import { type WifiState, wifiState } from "../services/wifi"
 import { tap } from "../utils/gtk"
 import { wifiIcon } from "../utils/icons"
+import { own } from "../utils/reactive"
 
 export function Network() {
   const net = AstalNetwork.get_default()
@@ -32,8 +33,9 @@ export function Network() {
   return (
     <button
       className={bind(cls)}
-      onClicked={tap(() => toggleMenu(MENU.network))}
+      onClicked={tap((self) => toggleMenu(MENU.network, self))}
       tooltipText="Network"
+      setup={own(label, cls)}
     >
       <label label={bind(label)} />
     </button>

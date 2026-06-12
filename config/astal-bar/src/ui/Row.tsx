@@ -2,7 +2,7 @@ import { Gtk } from "astal/gtk3"
 import type { RowProps } from "../types/ui"
 import { Spinner } from "./Spinner"
 import { tap } from "../utils/gtk"
-import { toBinding } from "../utils/reactive"
+import { own, toBinding } from "../utils/reactive"
 
 // Generic device/AP row: icon (or spinner while busy) + name + optional status
 // sub-label + optional trailing action, with an `active` highlight. Every prop
@@ -30,6 +30,7 @@ export function Row(opts: RowProps) {
       className={active.as((a) => `dev-row ${opts.klass ?? ""} ${a ? "active" : ""}`)}
       visible={opts.visible ?? true}
       onClicked={tap(() => opts.onClicked?.())}
+      setup={opts.owns ? own(...opts.owns) : undefined}
     >
       <box>
         {icon}

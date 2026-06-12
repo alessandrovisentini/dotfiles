@@ -1,69 +1,35 @@
-import { Variable, bind } from "astal"
+import { bind } from "astal"
 import { Gtk } from "astal/gtk3"
-import AstalWp from "gi://AstalWp"
 import { MENU } from "../const/menu"
-import { defaultSpeaker } from "../services/audio"
+import { speakerState } from "../services/audio"
 import { toggleMenu } from "../services/menu"
 import { tap } from "../utils/gtk"
 import { volumeIcon } from "../utils/icons"
 import { pct } from "../utils/shell"
 
-type Endpoint = AstalWp.Endpoint
-
-// Flatten "default speaker → its mute" into a single observable Variable.
-function speakerMute(): Variable<boolean> {
-  const v = Variable(false)
-  let conn: { ep: Endpoint; id: number } | null = null
-  defaultSpeaker().subscribe((sp) => {
-    if (conn) {
-      try { conn.ep.disconnect(conn.id) } catch {}
-      conn = null
-    }
-    if (!sp) { v.set(false); return }
-    v.set(!!sp.mute)
-    conn = {
-      ep: sp,
-      id: sp.connect("notify::mute", () => v.set(!!sp.mute)),
-    }
-  })
-  return v
-}
-
 export function Volume() {
-  const audio = AstalWp.get_default()?.audio
-  if (!audio) return <box />
-  const mute = speakerMute()
+  const st = speakerState()
   return (
     <button
-      className={bind(mute).as((m) =>
-        `bar-button ${m ? "state-vol-mute" : "state-vol"}`,
+      className={bind(st).as((s) =>
+        `bar-button ${s?.mute ? "state-vol-mute" : "state-vol"}`,
       )}
-      onClicked={tap(() => toggleMenu(MENU.volume))}
+      visible={bind(st).as((s) => s !== null)}
+      onClicked={tap((self) => toggleMenu(MENU.volume, self))}
       tooltipText="Sound"
     >
-      {bind(defaultSpeaker()).as((sp) =>
-        sp ? (
-          // halign center: the button keeps a 28px touch target, wider than
-          // the lone mute glyph, so center the content or it packs left.
-          <box halign={Gtk.Align.CENTER}>
-            <label
-              className="module-icon"
-              label={bind(
-                Variable.derive(
-                  [bind(sp, "volume"), bind(sp, "mute")],
-                  (v: number, m: boolean) => volumeIcon(v, m),
-                ),
-              )}
-            />
-            <label
-              label={bind(sp, "volume").as(pct)}
-              visible={bind(sp, "mute").as((m) => !m)}
-            />
-          </box>
-        ) : (
-          <box />
-        ),
-      )}
+      {/* halign center: the button keeps a 28px touch target, wider than
+          the lone mute glyph, so center the content or it packs left. */}
+      <box halign={Gtk.Align.CENTER}>
+        <label
+          className="module-icon"
+          label={bind(st).as((s) => volumeIcon(s?.volume ?? 0, s?.mute ?? true))}
+        />
+        <label
+          label={bind(st).as((s) => pct(s?.volume ?? 0))}
+          visible={bind(st).as((s) => !!s && !s.mute)}
+        />
+      </box>
     </button>
   )
 }

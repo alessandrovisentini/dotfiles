@@ -1,3 +1,4 @@
+import type { Variable } from "astal"
 import type { Reactive } from "../utils/reactive"
 
 export interface RowProps {
@@ -11,6 +12,9 @@ export interface RowProps {
   busy?: Reactive<boolean>
   visible?: Reactive<boolean>
   action?: JSX.Element
+  // Derived Variables created for this row; dropped when the row is
+  // destroyed so list rebuilds don't leak their dep subscriptions.
+  owns?: Array<Variable<any>>
   onClicked?: () => void
 }
 

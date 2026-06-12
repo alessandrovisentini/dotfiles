@@ -48,6 +48,12 @@ export function focusWorkspace(num: number) {
   execAsync(["swaymsg", "workspace", "number", String(num)]).catch(() => {})
 }
 
+// Named workspaces report num = -1; focus those by name instead.
+export function focusWorkspaceByName(name: string) {
+  const quoted = `"${name.replace(/"/g, '\\"')}"`
+  execAsync(["swaymsg", `workspace ${quoted}`]).catch(() => {})
+}
+
 // Create + focus a new workspace. Number is global-max+1 so it never collides
 // across outputs. Sway auto-creates the workspace on focus.
 export function addWorkspace() {
@@ -56,10 +62,14 @@ export function addWorkspace() {
   focusWorkspace(max + 1)
 }
 
-// Resolve a Gdk.Monitor to its sway output name by matching geometry origin.
-// Returns undefined when outputs haven't loaded or no match exists.
-export function outputNameFor(monitor: any): string | undefined {
+// Resolve a Gdk.Monitor to its sway output name by matching geometry origin
+// against the given outputs. Returns undefined when no match exists (outputs
+// not loaded yet, or mid-hotplug before sway positions the output).
+export function outputNameFor(
+  outs: SwayOutput[],
+  monitor: { geometry?: { x: number; y: number } } | null | undefined,
+): string | undefined {
   const x = monitor?.geometry?.x ?? 0
   const y = monitor?.geometry?.y ?? 0
-  return outputs.get().find((o) => o.rect?.x === x && o.rect?.y === y)?.name
+  return outs.find((o) => o.rect?.x === x && o.rect?.y === y)?.name
 }

@@ -1,4 +1,5 @@
 import { Variable, bind } from "astal"
+import { Gtk } from "astal/gtk3"
 import { execAsync, subprocess } from "astal/process"
 import { NOTIFICATION_ICONS } from "../const/icons"
 import { closeAllMenus } from "../services/menu"
@@ -6,7 +7,7 @@ import { tap } from "../utils/gtk"
 import { sh } from "../utils/shell"
 
 // swaync handles the notification panel and toasts. We just subscribe to its
-// waybar feed so the bell reflects DND + has-notifications state.
+// waybar feed so the bell reflects DND + pending-notification state.
 const dnd = Variable(false)
 const count = Variable(0)
 
@@ -29,13 +30,19 @@ subprocess(
   () => {},
 )
 
+// Module-level (not per-bar) so hotplugged bars don't leak subscriptions.
+// The bell only tints orange while notifications are actually pending; DND
+// (magenta) wins over the pending tint.
+const bell = Variable.derive([dnd, count], (d: boolean, c: number) => ({
+  cls: `bar-button ${d ? "state-dnd" : c > 0 ? "state-notif" : ""}`,
+  icon: d ? NOTIFICATION_ICONS.dndOn : NOTIFICATION_ICONS.dndOff,
+  badge: c > 0 ? String(c) : "",
+}))
+
 export function Notifications() {
-  const cls = Variable.derive([bind(dnd)], (d) =>
-    `bar-button ${d ? "state-dnd" : "state-notif"}`,
-  )
   return (
     <button
-      className={bind(cls)}
+      className={bind(bell).as((b) => b.cls)}
       tooltipText="Notifications  ·  right-click: Do-Not-Disturb"
       onClicked={tap(() => {
         closeAllMenus()
@@ -52,12 +59,20 @@ export function Notifications() {
         return false
       }}
     >
-      <label
-        className="bar-icon"
-        label={bind(dnd).as((d) =>
-          d ? NOTIFICATION_ICONS.dndOn : NOTIFICATION_ICONS.dndOff,
-        )}
-      />
+      {/* Count badge overlaid on the bell's top-right corner. */}
+      <overlay>
+        <label
+          className="bar-icon"
+          label={bind(bell).as((b) => b.icon)}
+        />
+        <label
+          className="notif-count"
+          halign={Gtk.Align.END}
+          valign={Gtk.Align.START}
+          label={bind(bell).as((b) => b.badge)}
+          visible={bind(bell).as((b) => b.badge !== "")}
+        />
+      </overlay>
     </button>
   )
 }
