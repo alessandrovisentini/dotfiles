@@ -62,6 +62,9 @@ in {
         # launcher
         rofi
 
+        # emoji picker (floating, types into focused window)
+        rofimoji
+
         # bar
         astalBar
 

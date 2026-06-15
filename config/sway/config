@@ -38,6 +38,8 @@ bindsym $mod+d exec $menu
 bindsym $mod+m exec $menu
 # Touch app-grid; also on 3-finger-up gesture.
 bindsym $mod+Shift+d exec grid-toggle
+# Emoji picker (macOS-style ctrl+cmd+space); types the pick into the focused window.
+bindsym $mod+Ctrl+space exec rofimoji --action type
 
 # Focus
 bindsym $mod+$left focus left
