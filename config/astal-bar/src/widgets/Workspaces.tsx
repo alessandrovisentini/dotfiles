@@ -10,6 +10,7 @@ import {
   workspaces,
 } from "../services/sway"
 import { closeAllMenus } from "../services/menu"
+import { isTablet } from "../services/mode"
 import type { SwayWorkspace } from "../types/sway"
 import { tap } from "../utils/gtk"
 import { own } from "../utils/reactive"
@@ -45,6 +46,7 @@ export function Workspaces({ gdkmonitor }: { gdkmonitor?: Gdk.Monitor } = {}) {
       )}
       <button
         className="ws ws-add"
+        visible={bind(isTablet)}
         tooltipText="New workspace"
         onClicked={tap(() => {
           closeAllMenus()
