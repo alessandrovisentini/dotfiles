@@ -4,6 +4,7 @@
   ...
 }: {
   programs.bash.interactiveShellInit = ''
+    set -o vi
     eval "$(fzf --bash)"
   '';
 

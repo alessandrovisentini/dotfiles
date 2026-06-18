@@ -91,10 +91,6 @@ in {
 
   # Aliases
   environment.shellAliases = {
-    ns = "sudo nixos-rebuild switch";
-    nu = "sudo nix-channel --update & sudo nixos-rebuild switch --upgrade";
-    nd = "nix develop";
-
     t = "$REPOS_HOME/dotfiles/scripts/td.sh";
     tt = "$REPOS_HOME/dotfiles/scripts/tt.sh";
 
@@ -111,7 +107,7 @@ in {
   }: let
     dev = outerCfg.local.device;
   in {
-    home.stateVersion = "25.11";
+    home.stateVersion = "26.05";
 
     home.username = dev.userName;
 
