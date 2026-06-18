@@ -1,26 +1,6 @@
-# NixOS System Configuration
-/etc/nixos/hardware-configuration.nix
-hardware-configuration.nix
-
-# Per-machine device selector — symlink to one of nixos/devices/*.nix
-/etc/nixos/device.nix
-nixos/device.nix
-
-# Per-machine sway selector — symlink to one of config/sway/devices/*.conf
+# Per-machine sway selector — symlink to one of config/sway/devices/*.conf,
+# created on NixOS by the nixos repo's sway activation script.
 config/sway/device.conf
-
-# Nix build artifacts
-/result
-/nix/store/*
-/nix/var/nix/db/*
-/nix/var/nix/profiles/*
-/nix/var/nix/gcroots/*
-/nix/var/log/*
-/nix/var/cache/*
-/nix/var/spool/*
-/var/lib/nixos/*
-/var/log/*
-/var/tmp/*
 
 # Secrets and Sensitive Files
 secrets/
