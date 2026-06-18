@@ -23,29 +23,10 @@ sudo nixos-rebuild switch
 1. **packages** — installs software
 2. **symlinks** — links `config/*` into `~/.config/*`
 3. **nixos** *(NixOS only)* — symlinks `nixos/*.nix` into `/etc/nixos`
-4. **gnome** *(Fedora)* — applies GNOME settings from `config/gnome/dconf-settings.ini`
-5. **shell** — sources `config/shell/env.sh` from `.bashrc` / `.zshrc`
-6. **post** — runs OS-specific post-install commands
+4. **shell** — sources `config/shell/env.sh` from `.bashrc` / `.zshrc`
+5. **post** — runs OS-specific post-install commands
 
-## Fedora: pick a desktop environment
-
-On first run on Fedora, the installer asks:
-
-```
-1) gnome — GNOME only
-2) sway  — Sway only
-3) both  — install everything
-```
-
-Sway-only software (sway, astal-bar, rofi, swaync, gtklock, ...) is skipped when you pick `gnome`. GNOME-only software (gnome-shell, gnome-tweaks) and the dconf settings are skipped when you pick `sway`.
-
-Skip the prompt with `--de=`:
-
-```bash
-./install.sh --de=gnome
-./install.sh --de=sway
-./install.sh --de=both
-```
+Fedora and NixOS both target a Sway session; the package set is kept in sync between the two.
 
 ## Running only some steps
 

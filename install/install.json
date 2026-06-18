@@ -67,48 +67,22 @@
       ]
     },
     "fedora": {
-      "config_symlinks": {
-        "common": [
-          "alacritty",
-          "git",
-          "glow",
-          "lazygit",
-          "nvim",
-          "shell",
-          "tmux"
-        ],
-        "gnome": [],
-        "sway": [
-          "astal-bar",
-          "rofi",
-          "sway",
-          "swaync",
-          "wm-scripts"
-        ]
-      },
+      "config_symlinks": [
+        "alacritty",
+        "git",
+        "glow",
+        "lazygit",
+        "nvim",
+        "rofi",
+        "shell",
+        "sway",
+        "swaync",
+        "tmux",
+        "waybar",
+        "wm-scripts"
+      ],
       "nixos_symlinks": {
         "enabled": false
-      },
-      "gnome_dconf": {
-        "enabled": true,
-        "source": "config/gnome/dconf-settings.ini",
-        "path": "/"
-      },
-      "gnome_extensions": {
-        "enabled": true,
-        "ego": [
-          { "uuid": "simple-workspaces-bar@null-git",           "ext_id": 6394 },
-          { "uuid": "disable-workspace-switcher-overlay@cleardevice", "ext_id": 6358 }
-        ],
-        "local": [
-          { "uuid": "move-without-follow@local", "source": "nixos/extensions/move-without-follow" }
-        ],
-        "enable": [
-          "appindicatorsupport@rgcjonas.gmail.com",
-          "simple-workspaces-bar@null-git",
-          "disable-workspace-switcher-overlay@cleardevice",
-          "move-without-follow@local"
-        ]
       },
       "packages": {
         "dnf": {
@@ -119,7 +93,7 @@
           "copr": [
             "atim/lazygit"
           ],
-          "common": [
+          "packages": [
             "git-delta",
             "python3",
             "geary",
@@ -130,7 +104,6 @@
             "libreoffice",
             "f3d",
             "imv",
-            "gnome-system-monitor",
             "gnome-disk-utility",
             "yt-dlp",
             "vlc",
@@ -144,6 +117,7 @@
             "pdfarranger",
             "firefox",
             "gnome-keyring",
+            "seahorse",
             "nano",
             "wget",
             "htop",
@@ -151,6 +125,9 @@
             "wl-clipboard",
             "wl-screenrec",
             "gcc",
+            "make",
+            "cargo",
+            "golang",
             "bind-utils",
             "traceroute",
             "ripgrep",
@@ -179,13 +156,18 @@
             "playerctl",
             "pulseaudio-utils",
             "adwaita-icon-theme",
-            "nautilus",
+            "gnome-themes-extra",
+            "adwaita-qt5",
+            "adwaita-qt6",
+            "baobab",
             "gnome-calculator",
-            "gnome-contacts",
-            "gnome-font-viewer",
-            "gnome-snapshot",
-            "gnome-music",
+            "thunar",
+            "thunar-archive-plugin",
+            "thunar-volman",
+            "thunar-media-tags-plugin",
+            "tumbler",
             "papers",
+            "simple-scan",
             "deluge-gtk",
             "polkit",
             "pipewire",
@@ -194,18 +176,20 @@
             "pipewire-jack-audio-connection-kit",
             "wireplumber",
             "bluez",
-            "gvfs"
-          ],
-          "gnome": [
-            "gnome-shell",
-            "gnome-tweaks",
-            "gnome-shell-extension-appindicator"
-          ],
-          "sway": [
+            "gvfs",
+            "gsettings-desktop-schemas",
+            "NetworkManager-openvpn-gnome",
+            "upower",
+            "bolt",
+            "fprintd",
+            "fprintd-pam",
+            "tlp",
+            "intel-media-driver",
             "sway",
             "gtklock",
             "swayidle",
             "rofi-wayland",
+            "waybar",
             "SwayNotificationCenter",
             "libnotify",
             "brightnessctl",
@@ -220,8 +204,7 @@
             "lisgd",
             "wtype",
             "squeekboard",
-            "iio-sensor-proxy",
-            "playerctl"
+            "iio-sensor-proxy"
           ]
         },
         "flatpak": {
@@ -249,10 +232,12 @@
           ]
         },
         "npm_global": [
-          "@anthropic-ai/claude-code"
+          "@anthropic-ai/claude-code",
+          "markdownlint-cli"
         ],
         "pip_user": [
-          "spotdl"
+          "spotdl",
+          "rofimoji"
         ]
       },
       "post_install": [

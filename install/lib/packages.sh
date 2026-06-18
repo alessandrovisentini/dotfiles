@@ -107,17 +107,6 @@ install_packages_homebrew() {
     fi
 }
 
-# Collect dnf packages for the active DE groups (common + gnome and/or sway).
-# Must use `|| continue` (not `&&`) so the loop's last iteration doesn't
-# short-circuit to a non-zero exit under `set -e`.
-collect_dnf_de_packages() {
-    local json_file="$1" base=".os.fedora.packages.dnf"
-    for group in common gnome sway; do
-        de_group_active "$group" || continue
-        get_json_array "$json_file" "$base.$group"
-    done
-}
-
 install_dnf_rpm_repos() {
     local json_file="$1" repos
     repos=$(get_json_array "$json_file" ".os.fedora.packages.dnf.rpm_repos")
@@ -168,9 +157,9 @@ install_packages_dnf() {
     install_dnf_copr "$json_file"
 
     local packages
-    packages=$(collect_dnf_de_packages "$json_file")
+    packages=$(get_json_array "$json_file" ".os.fedora.packages.dnf.packages")
     if [[ -z "$packages" ]]; then
-        log_info "No dnf packages configured for current DE selection"
+        log_info "No dnf packages configured"
         return 0
     fi
 

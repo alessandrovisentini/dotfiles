@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Per-OS installer dispatcher. Supported: nixos, macos, fedora.
-# Steps: symlinks, packages, nixos, rebuild, gnome, shell, post, all
+# Steps: symlinks, packages, nixos, rebuild, shell, post, all
 
 set -e
 
@@ -10,7 +10,7 @@ source "$SCRIPT_DIR/lib/common.sh"
 
 show_help() {
     cat <<EOF
-Usage: $(basename "$0") [step ...] [--de=gnome|sway|both]
+Usage: $(basename "$0") [step ...]
 
 Run the dotfiles installer. With no arguments, runs all steps.
 
@@ -19,19 +19,15 @@ Steps:
   packages   Install software packages
   nixos      Setup NixOS system config symlinks (/etc/nixos)
   rebuild    Run \`sudo nixos-rebuild switch\` (NixOS)
-  gnome      Apply GNOME dconf settings (non-NixOS, when GNOME is active)
   shell      Setup shell environment sourcing (.bashrc/.zshrc)
   post       Run post-install commands
   all        Run everything (default)
 
-Fedora-only flag:
-  --de=gnome|sway|both   Skip the desktop-environment prompt and filter packages/symlinks.
-
 Examples:
-  $(basename "$0")                       # everything (prompts for DE on Fedora)
+  $(basename "$0")                       # everything
   $(basename "$0") symlinks              # only recreate symlinks
   $(basename "$0") symlinks post         # symlinks + post-install
-  $(basename "$0") --de=sway packages    # install only Sway-side packages
+  $(basename "$0") packages              # install packages only
 EOF
 }
 

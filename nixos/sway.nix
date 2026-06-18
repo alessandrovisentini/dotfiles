@@ -89,17 +89,17 @@ in {
   };
 
   # File manager
-  # programs.thunar = {
-  #   enable = true;
-  #   plugins = with pkgs; [
-  #     thunar-archive-plugin
-  #     thunar-volman
-  #     thunar-media-tags-plugin
-  #   ];
-  # };
-  # programs.xfconf.enable = true;
-  # services.tumbler.enable = true;
-  # services.gvfs.enable = true;
+  programs.thunar = {
+    enable = true;
+    plugins = with pkgs; [
+      thunar-archive-plugin
+      thunar-volman
+      thunar-media-tags-plugin
+    ];
+  };
+  programs.xfconf.enable = true;
+  services.tumbler.enable = true;
+  services.gvfs.enable = true;
 
   # Bluetooth
   services.blueman.enable = true;

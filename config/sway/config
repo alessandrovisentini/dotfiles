@@ -120,10 +120,11 @@ bindsym $mod+r mode "resize"
 
 floating_modifier $mod normal
 
-# Reload + respawn the Astal bar (the [a]gs.js pattern avoids matching pkill itself).
+# Reload + respawn the status bar (astal-bar on NixOS, waybar on Fedora).
+# The [a]gs.js pattern avoids matching pkill itself.
 # reload re-enables eDP-1, so re-disable it when the lid is shut; bindswitch
 # won't re-fire without a physical toggle.
-bindsym $mod+Shift+r reload; exec "grep -q closed /proc/acpi/button/lid/*/state && swaymsg output eDP-1 disable; pkill -f '[a]gs.js'; sleep 0.4; astal-bar"
+bindsym $mod+Shift+r reload; exec "grep -q closed /proc/acpi/button/lid/*/state && swaymsg output eDP-1 disable; if command -v astal-bar >/dev/null 2>&1; then pkill -f '[a]gs.js'; sleep 0.4; astal-bar; else pkill -x waybar; sleep 0.4; waybar; fi"
 
 # Exit + lock
 bindsym $mod+Shift+e exec swaynag -t warning -m 'Exit sway?' -B 'Yes' 'swaymsg exit'

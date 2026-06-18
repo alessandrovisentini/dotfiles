@@ -46,22 +46,10 @@ in {
 
   users.users.${dev.userName}.packages = with pkgs; [
     alacritty
-    baobab
+    baobab # disk analyzer
     gnome-calculator
     gnome-calendar
-    gnome-characters
-    gnome-clocks
-    gnome-connections
-    gnome-contacts
-    gnome-font-viewer
-    gnome-logs
-    gnome-maps
-    gnome-system-monitor
-    gnome-weather
-    loupe
-    nautilus
     papers
-    zathura
     simple-scan
     geary
     protonmail-bridge
@@ -91,7 +79,6 @@ in {
     vscodium
     pdfarranger
     unstable.claude-code
-    brave
   ];
 
   # Browsers
