@@ -117,29 +117,19 @@ in {
 
     dconf = {
       enable = true;
-      settings =
-        {
-          "org/gnome/desktop/interface" = {
-            color-scheme = "prefer-dark";
-            gtk-theme = "Adwaita-dark";
-            cursor-theme = "Adwaita";
-          };
-          "org/gnome/nm-applet" = {
-            disable-connected-notifications = true;
-            disable-disconnected-notifications = true;
-            disable-vpn-notifications = true;
-            suppress-wireless-networks-available = true;
-          };
-        }
-        # Default OSK height is too short; bump it, more in portrait.
-        // lib.optionalAttrs dev.hasTouchscreen {
-          "sm/puri/Squeekboard" = {
-            scale-in-vertical-screen-orientation =
-              lib.hm.gvariant.mkDouble 2.0;
-            scale-in-horizontal-screen-orientation =
-              lib.hm.gvariant.mkDouble 1.4;
-          };
+      settings = {
+        "org/gnome/desktop/interface" = {
+          color-scheme = "prefer-dark";
+          gtk-theme = "Adwaita-dark";
+          cursor-theme = "Adwaita";
         };
+        "org/gnome/nm-applet" = {
+          disable-connected-notifications = true;
+          disable-disconnected-notifications = true;
+          disable-vpn-notifications = true;
+          suppress-wireless-networks-available = true;
+        };
+      };
     };
 
     gtk = {
@@ -158,27 +148,6 @@ in {
     qt = {
       enable = true;
       style.name = "adwaita-dark";
-    };
-
-    # Squeekboard maps content_purpose to subdirs without falling back to
-    # the root layout, so the custom layout must be deployed in each subdir.
-    xdg.dataFile = lib.optionalAttrs dev.hasTouchscreen {
-      "squeekboard/keyboards/us.yaml".source =
-        ../config/squeekboard/us.yaml;
-      "squeekboard/keyboards/us_wide.yaml".source =
-        ../config/squeekboard/us_wide.yaml;
-      "squeekboard/keyboards/url/us.yaml".source =
-        ../config/squeekboard/us.yaml;
-      "squeekboard/keyboards/url/us_wide.yaml".source =
-        ../config/squeekboard/us_wide.yaml;
-      "squeekboard/keyboards/email/us.yaml".source =
-        ../config/squeekboard/us.yaml;
-      "squeekboard/keyboards/email/us_wide.yaml".source =
-        ../config/squeekboard/us_wide.yaml;
-      "squeekboard/keyboards/terminal/us.yaml".source =
-        ../config/squeekboard/us.yaml;
-      "squeekboard/keyboards/terminal/us_wide.yaml".source =
-        ../config/squeekboard/us_wide.yaml;
     };
   };
 }

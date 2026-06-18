@@ -27,25 +27,25 @@
         "image/heic"              = "imv.desktop";
         "image/svg+xml"           = "org.inkscape.Inkscape.desktop";
 
-        "video/mp4"               = "mpv.desktop";
-        "video/x-matroska"        = "mpv.desktop";
-        "video/x-msvideo"         = "mpv.desktop";
-        "video/webm"              = "mpv.desktop";
-        "video/quicktime"         = "mpv.desktop";
-        "video/mpeg"              = "mpv.desktop";
-        "video/ogg"               = "mpv.desktop";
-        "video/x-flv"             = "mpv.desktop";
-        "video/3gpp"              = "mpv.desktop";
+        "video/mp4"               = "vlc.desktop";
+        "video/x-matroska"        = "vlc.desktop";
+        "video/x-msvideo"         = "vlc.desktop";
+        "video/webm"              = "vlc.desktop";
+        "video/quicktime"         = "vlc.desktop";
+        "video/mpeg"              = "vlc.desktop";
+        "video/ogg"               = "vlc.desktop";
+        "video/x-flv"             = "vlc.desktop";
+        "video/3gpp"              = "vlc.desktop";
 
-        "audio/mpeg"              = "mpv.desktop";
-        "audio/ogg"               = "mpv.desktop";
-        "audio/flac"              = "mpv.desktop";
-        "audio/x-flac"            = "mpv.desktop";
-        "audio/x-wav"             = "mpv.desktop";
-        "audio/wav"               = "mpv.desktop";
-        "audio/mp4"               = "mpv.desktop";
-        "audio/aac"               = "mpv.desktop";
-        "audio/webm"              = "mpv.desktop";
+        "audio/mpeg"              = "vlc.desktop";
+        "audio/ogg"               = "vlc.desktop";
+        "audio/flac"              = "vlc.desktop";
+        "audio/x-flac"            = "vlc.desktop";
+        "audio/x-wav"             = "vlc.desktop";
+        "audio/wav"               = "vlc.desktop";
+        "audio/mp4"               = "vlc.desktop";
+        "audio/aac"               = "vlc.desktop";
+        "audio/webm"              = "vlc.desktop";
 
         "application/pdf"         = "org.gnome.Papers.desktop";
 

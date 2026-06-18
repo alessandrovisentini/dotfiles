@@ -39,32 +39,29 @@ in {
     android-tools
   ];
 
+  virtualisation.docker.enable = true;
+
   programs.nix-ld.enable = true; # runs dynamically-linked binaries
   services.fwupd.enable = true;
 
   users.users.${dev.userName}.packages = with pkgs; [
     alacritty
     baobab
-    decibels
     gnome-calculator
     gnome-calendar
     gnome-characters
     gnome-clocks
     gnome-connections
-    gnome-console
     gnome-contacts
     gnome-font-viewer
     gnome-logs
     gnome-maps
-    gnome-music
     gnome-system-monitor
-    gnome-text-editor
     gnome-weather
     loupe
     nautilus
     papers
     zathura
-    showtime
     simple-scan
     geary
     protonmail-bridge
@@ -76,7 +73,6 @@ in {
     pdftk
     libreoffice
     f3d
-    mpv
     imv
     yt-dlp
     vlc
@@ -92,9 +88,8 @@ in {
     musescore
     audacity
     transcribe
-    spotdl
     vscodium
-    unstable.pdfarranger
+    pdfarranger
     unstable.claude-code
     brave
   ];
@@ -113,17 +108,22 @@ in {
 
   programs.git.enable = true;
   programs.git.lfs.enable = true;
+
   programs.tmux.enable = true;
+
   programs.neovim = {
     enable = true;
     defaultEditor = true;
     # kickstart config uses vim.pack, which needs Neovim 0.12+
     package = unstable.neovim-unwrapped;
   };
+
   programs.tcpdump.enable = true;
+
   programs.lazygit.enable = true;
 
   programs.gnome-disks.enable = true;
+
   programs.seahorse.enable = true;
   services.gnome.sushi.enable = true;
   programs.steam = lib.mkIf dev.hasGaming {
@@ -137,6 +137,7 @@ in {
   environment.pathsToLink = ["/share/nautilus-python/extensions"];
 
   services.deluge.enable = true;
+
   programs.localsend = {
     enable = true;
     openFirewall = true;
@@ -148,6 +149,4 @@ in {
 
   # Spotify uses 57621 for local-network device discovery.
   networking.firewall.allowedTCPPorts = [57621];
-
-  virtualisation.docker.enable = true;
 }

@@ -11,8 +11,8 @@
       ./apps.nix
       ./display_manager.nix
       # ./gnome.nix
-      ./wm-common.nix
       ./sway.nix
+      ./tablet.nix
       ./development.nix
       ./transcription.nix
       ./printing.nix

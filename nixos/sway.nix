@@ -6,10 +6,6 @@
 }: let
   dev = config.local.device;
 
-  lisgdSway = pkgs.writeShellScriptBin "lisgd-sway" (builtins.readFile ../config/wm-scripts/lisgd-sway.sh);
-  swayRotate = pkgs.writeShellScriptBin "sway-rotate" (builtins.readFile ../config/wm-scripts/sway-rotate.sh);
-  swayWsShift = pkgs.writeShellScriptBin "sway-ws-shift" (builtins.readFile ../config/wm-scripts/sway-ws-shift.sh);
-
   # Lock wrapper: gtklock, plus gtklock-virtkb-module in tablet mode so
   # the password is typable on the touchscreen. virtkb is loaded via -m
   # at the wrapper rather than programs.gtklock.modules, so the OSK
@@ -42,13 +38,6 @@
     exec ${agsBar}/bin/ags run "$HOME/.config/astal-bar/app.ts" "$@"
   '';
 
-  touchPackages = with pkgs; [
-    # touchscreen gestures + key injection
-    lisgd
-    wtype
-    lisgdSway
-    swayWsShift
-  ];
 in {
   programs.sway = {
     enable = true;
@@ -96,22 +85,21 @@ in {
 
         # icons
         adwaita-icon-theme
-      ]
-      ++ lib.optionals dev.hasTouchscreen touchPackages;
+      ];
   };
 
   # File manager
-  programs.thunar = {
-    enable = true;
-    plugins = with pkgs; [
-      thunar-archive-plugin
-      thunar-volman
-      thunar-media-tags-plugin
-    ];
-  };
-  programs.xfconf.enable = true;
-  services.tumbler.enable = true;
-  services.gvfs.enable = true;
+  # programs.thunar = {
+  #   enable = true;
+  #   plugins = with pkgs; [
+  #     thunar-archive-plugin
+  #     thunar-volman
+  #     thunar-media-tags-plugin
+  #   ];
+  # };
+  # programs.xfconf.enable = true;
+  # services.tumbler.enable = true;
+  # services.gvfs.enable = true;
 
   # Bluetooth
   services.blueman.enable = true;
@@ -174,21 +162,4 @@ in {
     ${pkgs.coreutils}/bin/ln -sfn "devices/$devid.conf" "$repo/config/sway/device.conf"
     ${pkgs.coreutils}/bin/chown -h ${dev.userName}:${dev.userName} "$repo/config/sway/device.conf" 2>/dev/null || true
   '';
-
-  # Auto-rotation (started/stopped by apply-mode, tablet only)
-  systemd.user.services."sway-rotate" = lib.mkIf dev.hasAccelerometer {
-    description = "Auto-rotate the Sway panel from the accelerometer";
-    partOf = ["graphical-session.target"];
-    after = ["graphical-session.target"];
-    path = with pkgs; [iio-sensor-proxy sway coreutils gnugrep];
-    serviceConfig = {
-      Type = "simple";
-      ExecStart = "${swayRotate}/bin/sway-rotate ${dev.internalOutput}";
-      # always, not on-failure: monitor-sensor can exit cleanly when
-      # iio-sensor-proxy drops its claim across suspend, ending the
-      # script's read loop with exit 0 and leaving rotation dead.
-      Restart = "always";
-      RestartSec = 3;
-    };
-  };
 }

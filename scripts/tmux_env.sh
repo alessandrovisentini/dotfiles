@@ -70,12 +70,6 @@ if tmux has-session -t "$SESSION_NAME" 2>/dev/null; then
     exit 0
 fi
 
-# Pin the dev shell as a GC root; backgrounded so the popup closes immediately.
-if [ -f "$REPO_PATH/flake.nix" ]; then
-    (cd "$REPO_PATH" && nix develop --profile .nix-dev-profile --command true) >/dev/null 2>&1 &
-    disown
-fi
-
 tmux new-session -d -s "$SESSION_NAME" -c "$REPO_PATH" -n "editor"
 setup_window "$SESSION_NAME" "1" "$REPO_PATH" "nvim ."
 

@@ -86,23 +86,21 @@ clear_target_nix_files() {
     done
 }
 
+# Only configuration.nix needs to live in /etc/nixos; every other module
+# is pulled in through relative imports from it, so /etc/nixos stays down
+# to that symlink plus the machine's hardware-configuration.nix.
 link_source_nix_files() {
     local source_dir="$1" target_dir="$2"
-    log_info "Creating NixOS symlinks (requires sudo)..."
-    for nix_file in "$source_dir"/*.nix; do
-        [[ -f "$nix_file" ]] || continue
-        local filename
-        filename=$(basename "$nix_file")
-        is_excluded "$filename" && continue
+    log_info "Creating NixOS symlink (requires sudo)..."
 
-        local target_path="$target_dir/$filename"
-        if [[ -L "$target_path" && "$(readlink "$target_path")" == "$nix_file" ]]; then
-            log_info "Symlink already exists: $target_path -> $nix_file"
-            continue
-        fi
-        sudo ln -sf "$nix_file" "$target_path"
-        log_success "Created symlink: $target_path -> $nix_file"
-    done
+    local nix_file="$source_dir/configuration.nix"
+    local target_path="$target_dir/configuration.nix"
+    if [[ -L "$target_path" && "$(readlink "$target_path")" == "$nix_file" ]]; then
+        log_info "Symlink already exists: $target_path -> $nix_file"
+        return
+    fi
+    sudo ln -sf "$nix_file" "$target_path"
+    log_success "Created symlink: $target_path -> $nix_file"
 }
 
 setup_nixos_system_symlinks() {
