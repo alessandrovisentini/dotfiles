@@ -6,7 +6,7 @@ if [ -z "$TTRPG_NOTES_HOME" ]; then
 fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CONFIG_FILE="$SCRIPT_DIR/games.json"
+CONFIG_FILE="$SCRIPT_DIR/tt.json"
 
 if [ ! -f "$CONFIG_FILE" ]; then
     echo "Error: Config file not found at $CONFIG_FILE"

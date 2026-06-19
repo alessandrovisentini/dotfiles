@@ -129,7 +129,7 @@ return {
 
         local file = io.open(games_file, 'r')
         if not file then
-          vim.notify('games.json not found at ' .. games_file, vim.log.levels.WARN)
+          vim.notify('tt.json not found at ' .. games_file, vim.log.levels.WARN)
           return {}
         end
 
@@ -138,7 +138,7 @@ return {
 
         local ok, data = pcall(vim.json.decode, content)
         if not ok or not data.games then
-          vim.notify('Failed to parse games.json', vim.log.levels.WARN)
+          vim.notify('Failed to parse tt.json', vim.log.levels.WARN)
           return {}
         end
 
