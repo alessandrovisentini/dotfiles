@@ -27,14 +27,6 @@ export const BATTERY_RAMP = [
 ] as const
 export const BATTERY_CHARGING = "󰂄"
 
-// Performance-mode menu glyphs (speedometer ramp + an "auto" mark).
-export const PERF_ICONS = {
-  auto: "󰃨",
-  performance: "󰓅",
-  balanced: "󰾅",
-  "power-saver": "󰾆",
-} as const
-
 export const BLUETOOTH_ICONS = {
   connected: "󰂱",
   powered: "󰂯",

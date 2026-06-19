@@ -4,5 +4,4 @@ export type MenuName =
   | "bluetooth"
   | "volume"
   | "brightness"
-  | "perf"
   | "battery"

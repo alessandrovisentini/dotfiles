@@ -7,7 +7,6 @@ import {
   BrightnessMenu,
   NetworkMenu,
   PowerMenu,
-  PowerProfileMenu,
   VolumeMenu,
 } from "./src/menus"
 
@@ -35,13 +34,12 @@ App.start({
     App.connect("monitor-removed", (_app, m: Gdk.Monitor) => dropBar(m))
 
     // Menus are global singletons; each wires its own visibility-gated
-    // polling (metrics, VPN) internally.
+    // polling (VPN, battery history) internally.
     PowerMenu()
     NetworkMenu()
     BluetoothMenu()
     VolumeMenu()
     BrightnessMenu()
-    PowerProfileMenu()
     BatteryMenu()
   },
 })

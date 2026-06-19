@@ -8,7 +8,6 @@ import {
   Notifications,
   Osk,
   Power,
-  PowerMode,
   SysTray,
   Volume,
   Workspaces,
@@ -54,7 +53,6 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
             <Bluetooth />
             <Volume />
             <Brightness />
-            <PowerMode />
             <Battery />
             <Notifications />
           </box>

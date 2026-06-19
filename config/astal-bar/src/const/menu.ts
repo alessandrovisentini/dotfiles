@@ -6,7 +6,6 @@ export const MENU: Record<MenuName, string> = {
   bluetooth: "menu-bluetooth",
   volume: "menu-volume",
   brightness: "menu-brightness",
-  perf: "menu-perf",
   battery: "menu-battery",
 }
 

@@ -109,11 +109,6 @@ window.Bar > centerbox { margin: 0 6px; }
   border-radius: 999px;
   padding: 0 3px;
 }
-// Power-mode glyph: a touch larger, colored by profile (matches the menu).
-.perf-icon { font-size: 26px; }
-.perf-icon.perf-power-saver { color: $batt-ok; }
-.perf-icon.perf-balanced    { color: $accent; }
-.perf-icon.perf-performance { color: $crit; }
 .module-icon { margin-right: 6px; }
 // Muted hides the % label, so center the lone glyph and size it up.
 .bar-button.state-vol-mute .module-icon { margin-right: 0; font-size: 22px; }
@@ -313,20 +308,7 @@ window.Menu.bt     .menu-card { @include menu-accent($bt-rdy); }
 window.Menu.audio  .menu-card { @include menu-accent($vol); }
 window.Menu.bright  .menu-card { @include menu-accent($bright); }
 window.Menu.pwr     .menu-card { @include menu-accent($crit); }
-window.Menu.perf    .menu-card { @include menu-accent($batt-ok); }
 window.Menu.batt    .menu-card { @include menu-accent($batt-ok); }
-// Per-profile glyph colors (green / blue / red), mirrored on the bar button.
-window.Menu.perf .dev-row.perf-power-saver .dev-icon { color: $batt-ok; }
-window.Menu.perf .dev-row.perf-balanced    .dev-icon { color: $accent; }
-window.Menu.perf .dev-row.perf-performance .dev-icon { color: $crit; }
-// Section titles follow the *effective* profile, so the menu interior shows
-// the mode currently driving the machine (auto included).
-window.Menu.perf .menu-card .perf-now-power-saver  .section-title { color: $batt-ok; }
-window.Menu.perf .menu-card .perf-now-balanced     .section-title { color: $accent; }
-window.Menu.perf .menu-card .perf-now-performance  .section-title { color: $crit; }
-.metric { padding: 4px 4px 10px; }
-.metric label { font-size: 15px; }
-.metric-val { color: $muted; }
 
 // Battery menu: big state header + history graph legend.
 .batt-head { padding: 2px 4px 6px; }
