@@ -120,12 +120,6 @@ bindsym $mod+r mode "resize"
 
 floating_modifier $mod normal
 
-# Reload + respawn the status bar (astal-bar on NixOS, waybar on Fedora).
-# The [a]gs.js pattern avoids matching pkill itself.
-# reload re-enables eDP-1, so re-disable it when the lid is shut; bindswitch
-# won't re-fire without a physical toggle.
-bindsym $mod+Shift+r reload; exec "grep -q closed /proc/acpi/button/lid/*/state && swaymsg output eDP-1 disable; if command -v astal-bar >/dev/null 2>&1; then pkill -f '[a]gs.js'; sleep 0.4; astal-bar; else pkill -x waybar; sleep 0.4; waybar; fi"
-
 # Exit + lock
 bindsym $mod+Shift+e exec swaynag -t warning -m 'Exit sway?' -B 'Yes' 'swaymsg exit'
 bindsym $mod+Ctrl+q exec lock-screen
@@ -137,7 +131,15 @@ bindsym $mod+Shift+t exec mode-cycle
 bindsym $mod+Shift+c exec grim -g "$(slurp -p)" -t ppm - | convert - -format '%[pixel:p{0,0}]' txt:- | tail -n 1 | cut -d ' ' -f 4 | wl-copy
 
 # Per-machine inputs/outputs/execs. Symlink to one of devices/*.conf.
+# Also sets $bar (astal-bar on the X12, waybar on the P14s), used just below.
 include '$XDG_CONFIG_HOME/sway/device.conf'
+
+# Reload + respawn the status bar. $bar comes from the per-device config; the
+# kill differs because astal-bar runs as gjs (the [a]gs.js pattern avoids
+# matching this shell), while waybar is killed by name.
+# reload re-enables eDP-1, so re-disable it when the lid is shut; bindswitch
+# won't re-fire without a physical toggle.
+bindsym $mod+Shift+r reload; exec "grep -q closed /proc/acpi/button/lid/*/state && swaymsg output eDP-1 disable; if [ $bar = waybar ]; then pkill -x waybar; else pkill -f '[a]gs.js'; fi; sleep 0.4; $bar"
 
 include /etc/sway/config.d/*
 include '$XDG_CONFIG_HOME/sway/config.d/*.conf'
