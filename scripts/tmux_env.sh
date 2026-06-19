@@ -47,17 +47,8 @@ setup_window() {
     local REPO_PATH="$3"
     local CMD="$4"
 
-    if [ -f "$REPO_PATH/flake.nix" ]; then
-        if [ "$CMD" = "bash" ]; then
-            tmux send-keys -t "$SESSION":"$WINDOW_INDEX" "nix develop" C-m
-            tmux send-keys -t "$SESSION":"$WINDOW_INDEX" "clear" C-m
-        else
-            tmux send-keys -t "$SESSION":"$WINDOW_INDEX" "nix develop --command $CMD" C-m
-        fi
-    else
-        if [ "$CMD" != "bash" ]; then
-            tmux send-keys -t "$SESSION":"$WINDOW_INDEX" "$CMD" C-m
-        fi
+    if [ "$CMD" != "bash" ]; then
+        tmux send-keys -t "$SESSION":"$WINDOW_INDEX" "$CMD" C-m
     fi
 }
 
@@ -77,11 +68,6 @@ tmux new-window -t "$SESSION_NAME" -c "$REPO_PATH" -n "terminal"
 setup_window "$SESSION_NAME" "2" "$REPO_PATH" "bash"
 tmux split-window -h -c "$REPO_PATH" -t "$SESSION_NAME:2"
 setup_window "$SESSION_NAME" "2" "$REPO_PATH" "bash"
-
-if [ -d "$REPO_PATH/.git" ]; then
-    tmux new-window -t "$SESSION_NAME" -c "$REPO_PATH" -n "git"
-    setup_window "$SESSION_NAME" "3" "$REPO_PATH" "lazygit"
-fi
 
 tmux select-window -t "$SESSION_NAME:1"
 if [ -n "$TMUX" ]; then
