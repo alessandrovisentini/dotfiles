@@ -136,10 +136,11 @@ include '$XDG_CONFIG_HOME/sway/device.conf'
 
 # Reload + respawn the status bar. $bar comes from the per-device config; the
 # kill differs because astal-bar runs as gjs (the [a]gs.js pattern avoids
-# matching this shell), while waybar is killed by name.
+# matching this shell), while waybar's NixOS wrapper has comm .waybar-wrapped
+# (not waybar), so match both or refresh stacks a new bar every time.
 # reload re-enables eDP-1, so re-disable it when the lid is shut; bindswitch
 # won't re-fire without a physical toggle.
-bindsym $mod+Shift+r reload; exec "grep -q closed /proc/acpi/button/lid/*/state && swaymsg output eDP-1 disable; if [ $bar = waybar ]; then pkill -x waybar; else pkill -f '[a]gs.js'; fi; sleep 0.4; $bar"
+bindsym $mod+Shift+r reload; exec "grep -q closed /proc/acpi/button/lid/*/state && swaymsg output eDP-1 disable; if [ $bar = waybar ]; then pkill -x 'waybar|.waybar-wrapped'; else pkill -f '[a]gs.js'; fi; sleep 0.4; $bar"
 
 include /etc/sway/config.d/*
 include '$XDG_CONFIG_HOME/sway/config.d/*.conf'
