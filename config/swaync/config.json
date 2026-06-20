@@ -2,7 +2,7 @@
   "$schema": "/etc/xdg/swaync/configSchema.json",
 
   "positionX": "right",
-  "positionY": "top",
+  "positionY": "bottom",
 
   "control-center-margin-top": 8,
   "control-center-margin-bottom": 8,
@@ -24,7 +24,7 @@
 
   "fit-to-screen": false,
   "image-visibility": "when-available",
-  "transition-time": 200,
+  "transition-time": 0,
   "hide-on-clear": true,
   "hide-on-action": true,
 
