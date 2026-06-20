@@ -1,5 +1,0 @@
-**/.claude/settings.local.json
-
-# Nix dev shell GC-root pins created by scripts/tmux_env.sh
-.nix-dev-profile
-.nix-dev-profile-*-link

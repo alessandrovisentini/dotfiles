@@ -8,7 +8,7 @@ export XDG_STATE_HOME="$HOME/.local/state"
 export REPOS_HOME="$HOME/Development/repos"
 export TTRPG_NOTES_HOME="$REPOS_HOME/ttrpg-notes"
 
-alias t='$REPOS_HOME/dotfiles/scripts/td.sh'
+alias d='$REPOS_HOME/dotfiles/scripts/d.sh'
 alias tt='$REPOS_HOME/dotfiles/scripts/tt.sh'
 alias ai='$REPOS_HOME/dotfiles/scripts/ai/ai.sh'
 alias h='$REPOS_HOME/dotfiles/scripts/ai/h.sh'
