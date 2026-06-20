@@ -26,7 +26,7 @@ export function PowerMenu() {
     klass: "pwr",
     child: (
       <box className="power-grid" homogeneous halign={Gtk.Align.CENTER}>
-        {tile(Icon.lock, "Lock", ["lock-screen"])}
+        {tile(Icon.lock, "Lock", ["swaylock"])}
         {tile(Icon.suspend, "Suspend", ["systemctl", "suspend"])}
         {tile(Icon.logout, "Log out", ["swaymsg", "exit"])}
         {tile(Icon.restart, "Restart", ["systemctl", "reboot"])}
