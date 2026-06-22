@@ -1,3 +1,4 @@
+quitOnTopLevelReturn: true
 git:
   pagers:
     - colorArg: never
