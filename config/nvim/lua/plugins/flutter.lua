@@ -1,15 +1,13 @@
--- Flutter / Dart tooling. dap UI and nvim-dap are loaded by kickstart.plugins.debug.
+-- Flutter / Dart tooling. nvim-dap and dap-ui are loaded by plugins.debug.
 
 vim.pack.add {
   'https://github.com/stevearc/dressing.nvim',
   'https://github.com/nvim-flutter/flutter-tools.nvim',
 }
 
--- flutter-tools self-initialises and discovers Flutter via PATH; explicit setup keeps it predictable.
 require('flutter-tools').setup {}
 
--- Override the dap-ui layout that kickstart.plugins.debug applied with a bottom-row panel,
--- matching the layout used in the previous nvim config.
+-- Re-apply the dap-ui layout with a single bottom panel.
 require('dapui').setup {
   icons = { expanded = '▾', collapsed = '▸' },
   layouts = {

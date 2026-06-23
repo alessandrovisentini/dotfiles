@@ -1,5 +1,3 @@
--- Buffer tab line.
-
 vim.pack.add {
   'https://github.com/akinsho/bufferline.nvim',
   'https://github.com/famiu/bufdelete.nvim',

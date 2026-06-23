@@ -1,5 +1,3 @@
--- Zen mode (folke/zen-mode.nvim).
-
 vim.pack.add { 'https://github.com/folke/zen-mode.nvim' }
 
 require('zen-mode').setup {
@@ -63,7 +61,7 @@ require('zen-mode').setup {
       end,
     })
 
-    -- Rebind <leader>1..9 to switch buffers inside the zen float (since bufferline isn't shown).
+    -- Rebind <leader>1..9 to switch buffers inside the zen float (bufferline is hidden).
     for i = 1, 9 do
       vim.keymap.set('n', '<leader>' .. i, function()
         local buffers = vim.fn.getbufinfo { buflisted = 1 }

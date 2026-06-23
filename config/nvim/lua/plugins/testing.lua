@@ -1,5 +1,5 @@
--- Neotest + Vitest adapter, with DAP launch config for JS/TS.
--- Depends on nvim-dap which is loaded by kickstart.plugins.debug.
+-- Neotest + Vitest adapter, with a DAP launch config for JS/TS.
+-- Relies on nvim-dap, loaded by plugins.debug.
 
 vim.pack.add {
   'https://github.com/antoinemadec/FixCursorHold.nvim',
@@ -15,7 +15,7 @@ require('neotest').setup {
 
 local dap = require 'dap'
 
--- pwa-node adapter (provided by js-debug-adapter via Mason).
+-- pwa-node adapter, provided by js-debug-adapter via Mason.
 if not dap.adapters['pwa-node'] then
   dap.adapters['pwa-node'] = {
     type = 'server',
