@@ -1,7 +1,6 @@
 -- Flutter / Dart tooling. nvim-dap and dap-ui are loaded by plugins.debug.
 
 vim.pack.add {
-  'https://github.com/stevearc/dressing.nvim',
   'https://github.com/nvim-flutter/flutter-tools.nvim',
 }
 

@@ -2,11 +2,8 @@ vim.pack.add {
   'https://github.com/NMAC427/guess-indent.nvim',
   'https://github.com/folke/which-key.nvim',
   'https://github.com/projekt0n/github-nvim-theme',
-  'https://github.com/folke/todo-comments.nvim',
   'https://github.com/nvim-mini/mini.nvim',
 }
-
-if vim.g.have_nerd_font then vim.pack.add { 'https://github.com/nvim-tree/nvim-web-devicons' } end
 
 require('guess-indent').setup {}
 
@@ -33,7 +30,9 @@ require('which-key').setup {
 require('github-theme').setup {}
 vim.cmd.colorscheme 'github_dark_default'
 
-require('todo-comments').setup { signs = false }
+-- Provide file icons (Nerd Font) and stand in for nvim-web-devicons so other plugins find it.
+require('mini.icons').setup {}
+require('mini.icons').mock_nvim_web_devicons()
 
 require('mini.ai').setup {
   -- Avoid clashing with the built-in treesitter incremental-selection mappings.
@@ -45,6 +44,16 @@ require('mini.ai').setup {
 }
 
 require('mini.surround').setup()
+require('mini.pairs').setup {}
+
+local indentscope = require 'mini.indentscope'
+indentscope.setup {
+  symbol = '│',
+  draw = {
+    -- Draw the scope line instantly instead of animating it open.
+    animation = indentscope.gen_animation.none(),
+  },
+}
 
 local statusline = require 'mini.statusline'
 statusline.setup { use_icons = vim.g.have_nerd_font }
