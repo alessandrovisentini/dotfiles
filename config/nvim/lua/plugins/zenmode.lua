@@ -60,21 +60,9 @@ require('zen-mode').setup {
         vim.opt_local.foldcolumn = '0'
       end,
     })
-
-    -- Rebind <leader>1..9 to switch buffers inside the zen float (bufferline is hidden).
-    for i = 1, 9 do
-      vim.keymap.set('n', '<leader>' .. i, function()
-        local buffers = vim.fn.getbufinfo { buflisted = 1 }
-        if buffers[i] and vim.api.nvim_win_is_valid(win) then vim.api.nvim_win_set_buf(win, buffers[i].bufnr) end
-      end, { desc = 'Buffer ' .. i })
-    end
   end,
   on_close = function()
     pcall(vim.api.nvim_del_augroup_by_name, 'ZenModeBufferSwitch')
-    -- Restore the bufferline-driven jumps.
-    for i = 1, 9 do
-      vim.keymap.set('n', '<leader>' .. i, function() require('bufferline').go_to(i, true) end, { desc = 'Buffer ' .. i })
-    end
   end,
 }
 

@@ -11,7 +11,6 @@ require('which-key').setup {
   delay = 500,
   icons = { mappings = vim.g.have_nerd_font },
   spec = {
-    { '<leader>b', group = '[B]uffer' },
     { '<leader>c', group = '[C]ode', mode = { 'n', 'x' } },
     { '<leader>d', group = '[D]ebug' },
     { '<leader>g', group = '[G]it' },
