@@ -1,6 +1,7 @@
 {
   "includeCoAuthoredBy": false,
-  "model": "opus",
-  "skipDangerousModePermissionPrompt": true,
-  "tui": "fullscreen"
+  "model": "opus[1m]",
+  "effortLevel": "xhigh",
+  "tui": "fullscreen",
+  "skipDangerousModePermissionPrompt": true
 }
