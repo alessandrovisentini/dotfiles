@@ -1,6 +1,8 @@
 require 'core.options'
 require 'core.keymaps'
 require 'core.autocmds'
+require 'core.companion'
+require 'core.companion_chat'
 
 require 'plugins.ui'
 require 'plugins.telescope'
