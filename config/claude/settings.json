@@ -3,5 +3,17 @@
   "model": "opus[1m]",
   "effortLevel": "xhigh",
   "tui": "fullscreen",
-  "skipDangerousModePermissionPrompt": true
+  "skipDangerousModePermissionPrompt": true,
+  "hooks": {
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$REPOS_HOME/dotfiles/scripts/ai/notify.sh\" 'Claude needs your input'"
+          }
+        ]
+      }
+    ]
+  }
 }
