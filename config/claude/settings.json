@@ -1,9 +1,6 @@
 {
   "includeCoAuthoredBy": false,
-  "model": "opus[1m]",
-  "effortLevel": "xhigh",
-  "tui": "fullscreen",
-  "skipDangerousModePermissionPrompt": true,
+  "model": "claude-opus-4-8[1m]",
   "hooks": {
     "Notification": [
       {
@@ -15,5 +12,8 @@
         ]
       }
     ]
-  }
+  },
+  "effortLevel": "xhigh",
+  "tui": "fullscreen",
+  "skipDangerousModePermissionPrompt": true
 }
