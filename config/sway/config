@@ -122,7 +122,7 @@ floating_modifier $mod normal
 
 # Exit + lock
 bindsym $mod+Shift+e exec swaynag -t warning -m 'Exit sway?' -B 'Yes' 'swaymsg exit'
-bindsym $mod+Ctrl+q exec swaylock
+bindsym $mod+Ctrl+q exec swaylock -f
 
 # Tablet/laptop mode cycle
 bindsym $mod+Shift+t exec mode-cycle
