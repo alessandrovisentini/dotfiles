@@ -31,7 +31,6 @@ fi
 # Gesture spec: fingercount,direction,edge,distance,actmode,command
 # direction is start->end (swipe up = "DU"); actmode R = fire on release.
 exec lisgd -d "$dev" \
-    -g "3,DU,*,*,R,grid-toggle" \
     -g "4,UD,*,*,R,swaymsg kill" \
     -g "2,DU,*,*,R,wtype -k Up" \
     -g "2,UD,*,*,R,wtype -k Down" \
