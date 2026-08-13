@@ -46,13 +46,25 @@ vol() {
     esac
 }
 
+# Battery glyphs in 10% steps, empty first and full last. Charging keeps its own
+# set so the plug state still shows without stealing the level from the icon.
+bat_icons=('󰂎' '󰁺' '󰁻' '󰁼' '󰁽' '󰁾' '󰁿' '󰂀' '󰂁' '󰂂' '󰁹')
+bat_icons_charging=('󰢟' '󰢜' '󰂆' '󰂇' '󰂈' '󰢝' '󰂉' '󰢞' '󰂊' '󰂋' '󰂅')
+
 bat() {
     [ -n "$battery" ] || return
+    pct=$(cat "$battery/capacity" 2>/dev/null)
+    [ -n "$pct" ] || return
+
+    # 0-9% picks the first icon, 10-19% the second, and so on up to 100%.
+    step=$((pct / 10))
+    [ "$step" -gt 10 ] && step=10
+
     case "$(cat "$battery/status" 2>/dev/null)" in
-        Charging|Full) ic='󰂄' ;;
-        *)             ic='󰁹' ;;
+        Charging|Full) ic=${bat_icons_charging[$step]} ;;
+        *)             ic=${bat_icons[$step]} ;;
     esac
-    printf '%s %s%%' "$ic" "$(cat "$battery/capacity" 2>/dev/null)"
+    printf '%s %s%%' "$ic" "$pct"
 }
 
 # Day name comes from LC_TIME, so it follows the system locale.
