@@ -1,0 +1,15 @@
+OPTIONS=number_pad:0
+OPTIONS=hitpointbar
+OPTIONS=statushilites:10
+OPTIONS=showexp,color,lit_corridor,time,showscore
+OPTIONS=perm_invent
+OPTIONS=autopickup
+OPTIONS=pickup_types:$
+OPTIONS=pickup_burden:S
+OPTIONS=windowtype:curses
+OPTIONS=windowborders:1
+OPTIONS=align_message:bottom
+OPTIONS=align_status:bottom
+OPTIONS=statuslines:2
+OPTIONS=menu_headings:inverse
+OPTIONS=!implicit_uncursed
