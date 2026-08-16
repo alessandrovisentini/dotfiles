@@ -1,15 +1,39 @@
+# --- input ---
 OPTIONS=number_pad:0
-OPTIONS=hitpointbar
-OPTIONS=statushilites:10
-OPTIONS=showexp,color,lit_corridor,time,showscore
-OPTIONS=perm_invent
-OPTIONS=autopickup
-OPTIONS=pickup_types:$
-OPTIONS=pickup_burden:S
+OPTIONS=travel
+OPTIONS=runmode:leap
+
+# --- display ---
 OPTIONS=windowtype:curses
 OPTIONS=windowborders:1
-OPTIONS=align_message:bottom
+OPTIONS=align_message:top
 OPTIONS=align_status:bottom
 OPTIONS=statuslines:2
+OPTIONS=perm_invent
 OPTIONS=menu_headings:inverse
-OPTIONS=!implicit_uncursed
+OPTIONS=color,lit_corridor
+OPTIONS=time,showexp,showscore
+OPTIONS=msghistory:200
+
+# --- pickup ---
+OPTIONS=autopickup
+OPTIONS=pickup_types:$
+OPTIONS=pickup_thrown
+OPTIONS=pickup_burden:S
+
+# --- status hilites ---
+OPTIONS=hitpointbar
+OPTIONS=statushilites:10
+OPTIONS=hilite_status:hitpoints/100%/lightgreen
+OPTIONS=hilite_status:hitpoints/<100%/green
+OPTIONS=hilite_status:hitpoints/<66%/yellow
+OPTIONS=hilite_status:hitpoints/<50%/orange
+OPTIONS=hilite_status:hitpoints/<33%/red&bold
+OPTIONS=hilite_status:hitpoints/<15%/red&inverse
+OPTIONS=hilite_status:power/<33%/yellow
+OPTIONS=hilite_status:hunger/satiated/yellow/hungry/orange
+OPTIONS=hilite_status:hunger/weak/red/fainting/red&inverse
+OPTIONS=hilite_status:carrying-capacity/burdened/yellow/stressed/orange
+OPTIONS=hilite_status:carrying-capacity/strained/red/overtaxed/red&inverse
+OPTIONS=hilite_status:condition/major_troubles/red&inverse
+OPTIONS=hilite_status:condition/minor_troubles/orange
