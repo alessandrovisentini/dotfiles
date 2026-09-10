@@ -131,7 +131,7 @@ bindsym $mod+Shift+c exec grim -g "$(slurp -p)" -t ppm - | convert - -format '%[
 # Per-machine inputs/outputs/execs. Symlink to one of devices/*.conf.
 include '$XDG_CONFIG_HOME/sway/device.conf'
 
-# Reload. Sway respawns swaybar itself, so the bar needs nothing here.
+# Reload. `exec_always` in the bar config restarts waybar, so nothing extra here.
 # reload re-enables eDP-1, so re-disable it when the lid is shut; bindswitch
 # won't re-fire without a physical toggle.
 bindsym $mod+Shift+r reload; exec "grep -q closed /proc/acpi/button/lid/*/state && swaymsg output eDP-1 disable"

@@ -16,5 +16,6 @@
   "effortLevel": "xhigh",
   "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
+  "remoteControlAtStartup": false,
   "agentPushNotifEnabled": true
 }

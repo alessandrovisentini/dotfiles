@@ -1,0 +1,115 @@
+{
+    "position": "bottom",
+
+    "modules-left": [
+        "sway/workspaces",
+    ],
+
+    "modules-right": [
+        "tray",
+        "memory",
+        "cpu",
+        "temperature",
+        "backlight",
+        "pulseaudio",
+        "battery",
+        "clock",
+    ],
+
+    "sway/workspaces": {
+        "disable-scroll": true,
+   },
+
+   "clock": {
+        "interval": 1,
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "format": "{:%d/%m/%Y %H:%M:%S}"
+    },
+
+    "backlight": {
+        "device": "intel_backlight",
+        "format": "{icon} {percent}%",
+        "format-icons": [""]
+    },
+
+    "pulseaudio": {
+        "tooltip": false,
+        "scroll-step": 5,
+        "format": "{icon} {volume}%",
+        "format-muted": "🔇 {volume}%",
+        "format-source": "🎤 {volume}%",
+        "on-click": "pwvucontrol",
+        "format-icons": {
+            "headphone": "🎧",
+            "default": [
+                "🔈",
+                "🔉",
+                "🔊"
+            ]
+        },
+    },
+
+    "wireplumber": {
+        "tooltip": false,
+        "format": "{icon} {volume}%",
+        "format-muted": "🔇 {volume}%",
+        "format-source": "🎤 {volume}%",
+        "on-click": "helvum",
+        "max-volume": 150,
+        "scroll-step": 5,
+        "format-icons": {
+            "headphone": "🎧",
+            "default": [
+                "🔈",
+                "🔉",
+                "🔊"
+            ]
+        },
+    },
+
+    "battery": {
+        "interval": 1,
+        "format": "{icon} {capacity}%",
+        "states": {
+        "warning": 20,
+        "critical": 10 
+        },
+        "format-icons": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
+        "format-charging": "󰂄 {capacity}%",
+        "format-full": "󰂄 {capacity}%" 
+    },
+
+    "memory": {
+        "interval": 2,
+        "format": " {}%",
+        "states": {
+            "warning": 80,
+            "critical": 95
+        }
+    },
+
+    "cpu": {
+        "interval": 2,
+        "format": "󰍛 {usage}%",
+        "states": {
+            "warning": 70,
+            "critical": 90
+        }
+    },
+
+    "temperature": {
+        "critical-threshold": 80,
+        "thermal-zone": 8,
+        "format": "{icon} {temperatureC}°C",
+        "format-icons": ["", "", "", ""],
+        "states": {
+            "warning": 70,
+            "critical": 80
+        }
+    },
+
+    "tray": {
+        "icon-size": 16,
+        "spacing": 10
+    },
+}
