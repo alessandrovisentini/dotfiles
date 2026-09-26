@@ -122,9 +122,6 @@ floating_modifier $mod normal
 bindsym $mod+Shift+e exec swaynag -t warning -m 'Exit sway?' -B 'Yes' 'swaymsg exit'
 bindsym $mod+Ctrl+q exec swaylock -f
 
-# Tablet/laptop mode cycle
-bindsym $mod+Shift+t exec mode-cycle
-
 # Color picker
 bindsym $mod+Shift+c exec grim -g "$(slurp -p)" -t ppm - | convert - -format '%[pixel:p{0,0}]' txt:- | tail -n 1 | cut -d ' ' -f 4 | wl-copy
 
