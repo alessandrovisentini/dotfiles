@@ -7,10 +7,6 @@
 # status bar. Both signals are best-effort and skipped when unavailable, so
 # this stays safe on any machine.
 
-# Headless/one-shot Claude runs (e.g. the code companion) export this so their
-# own Stop/Notification hooks don't pop a desktop notification on every call.
-[ -n "$CLAUDE_NO_NOTIFY" ] && exit 0
-
 MSG="${1:-Claude needs you}"
 
 if command -v notify-send >/dev/null; then
