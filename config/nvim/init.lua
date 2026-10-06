@@ -19,5 +19,6 @@ require 'plugins.flutter'
 require 'plugins.markdown'
 require 'plugins.zenmode'
 require 'plugins.multicursor'
+require 'plugins.search-replace'
 
 -- vim: ts=2 sts=2 sw=2 et
