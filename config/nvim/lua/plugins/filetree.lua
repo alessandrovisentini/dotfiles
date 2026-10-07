@@ -18,6 +18,18 @@ local function on_attach(bufnr)
       end
     end
   end, opts 'View image with imv')
+
+  vim.keymap.set('n', '<C-o>', function()
+    local node = api.tree.get_node_under_cursor()
+    if not node then return end
+    if vim.fn.has 'mac' == 1 then
+      -- Finder selects the item itself when given -R
+      vim.fn.jobstart({ 'open', '-R', node.absolute_path }, { detach = true })
+      return
+    end
+    local dir = node.type == 'directory' and node.absolute_path or vim.fn.fnamemodify(node.absolute_path, ':h')
+    vim.fn.jobstart({ 'xdg-open', dir }, { detach = true })
+  end, opts 'Reveal in system file manager')
 end
 
 local FIXED_WIDTH = 40
