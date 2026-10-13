@@ -1,6 +1,4 @@
-# Amethyst configuration
-# Loaded from ~/.amethyst.yml — symlinked by config/macos/defaults.sh.
-# Restart Amethyst after edits. If changes don't apply:
+# Linked to ~/.amethyst.yml by config/macos/defaults.sh. If changes do not apply:
 #   defaults delete com.amethyst.Amethyst && killall Amethyst
 
 layouts:

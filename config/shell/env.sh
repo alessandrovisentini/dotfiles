@@ -13,7 +13,7 @@ alias tt='$REPOS_HOME/dotfiles/scripts/tt.sh'
 alias ai='$REPOS_HOME/dotfiles/scripts/ai/ai.sh'
 alias h='$REPOS_HOME/dotfiles/scripts/ai/h.sh'
 
-# Homebrew nvm; check both prefixes for Intel + Apple Silicon parity.
+# Homebrew nvm, both prefixes for Intel and Apple Silicon.
 if [[ "$(uname)" == "Darwin" ]]; then
     export NVM_DIR="$HOME/.nvm"
     [ -d "$NVM_DIR" ] || mkdir -p "$NVM_DIR"

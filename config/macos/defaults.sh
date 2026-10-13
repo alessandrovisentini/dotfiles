@@ -14,9 +14,7 @@ defaults write NSGlobalDomain InitialKeyRepeat -int 15
 defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 defaults write NSGlobalDomain com.apple.keyboard.fnState -bool true
 
-# Caps Lock → Escape is set manually in System Settings > Keyboard
-# > Keyboard Shortcuts > Modifier Keys. Clean up the legacy LaunchAgent
-# in case an earlier hidutil-based remap is still around.
+# Caps Lock to Escape is set by hand in System Settings. Remove the old hidutil LaunchAgent if any.
 LEGACY_CAPSLOCK_AGENT="$HOME/Library/LaunchAgents/com.user.capslock-to-esc.plist"
 if [[ -f "$LEGACY_CAPSLOCK_AGENT" ]]; then
     launchctl unload "$LEGACY_CAPSLOCK_AGENT" 2>/dev/null || true

@@ -33,9 +33,7 @@ local function file_extension(path)
   return ext and ext:lower() or nil
 end
 
--- glow for markdown, treesitter buffer previewer for everything else.
--- Reuses the previewer's pool buffer; recreates it if a previous markdown
--- preview turned it into a terminal buffer.
+-- glow for markdown, treesitter for the rest. A terminal buffer left by glow gets recreated.
 local custom_file_previewer = function(opts)
   opts = opts or {}
   return previewers.new_buffer_previewer {

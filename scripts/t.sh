@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-# Opens (or attaches to) a tmux session for a repo. With no args it shows an fzf
-# picker of repos under $REPOS_HOME; with a path it targets that repo directly.
+# tmux session per repo: an fzf picker under $REPOS_HOME, or a path given directly.
 
 run_session() {
     local BASE_PATH="$REPOS_HOME"
@@ -83,8 +82,7 @@ run_session() {
     fi
 }
 
-# --session is the entry point used from inside a tmux popup, where we run the
-# picker directly instead of opening another popup.
+# --session runs the picker directly, for use inside a tmux popup.
 if [ "$1" = "--session" ]; then
     shift
     run_session "$@"

@@ -15,7 +15,7 @@ local function run_build(name, cmd, cwd)
   end
 end
 
--- Run compilation steps for plugins that need them after install or update.
+-- Build steps some plugins need after an install or update.
 vim.api.nvim_create_autocmd('PackChanged', {
   callback = function(ev)
     local name = ev.data.spec.name

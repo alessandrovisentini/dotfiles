@@ -36,7 +36,7 @@ bindsym $mod+Shift+q kill
 # Launchers
 bindsym $mod+d exec $menu
 bindsym $mod+m exec $menu
-# Emoji picker (macOS-style ctrl+cmd+space); types the pick into the focused window.
+# Emoji picker, types the pick into the focused window.
 bindsym $mod+Ctrl+space exec rofimoji --action type
 
 # Focus
@@ -128,9 +128,7 @@ bindsym $mod+Shift+c exec grim -g "$(slurp -p)" -t ppm - | convert - -format '%[
 # Per-machine inputs/outputs/execs. Symlink to one of devices/*.conf.
 include '$XDG_CONFIG_HOME/sway/device.conf'
 
-# Reload. `exec_always` in the bar config restarts waybar, so nothing extra here.
-# reload re-enables eDP-1, so re-disable it when the lid is shut; bindswitch
-# won't re-fire without a physical toggle.
+# reload turns eDP-1 back on, so disable it again when the lid is shut.
 bindsym $mod+Shift+r reload; exec "grep -q closed /proc/acpi/button/lid/*/state && swaymsg output eDP-1 disable"
 
 include /etc/sway/config.d/*

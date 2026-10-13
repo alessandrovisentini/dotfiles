@@ -1,11 +1,6 @@
 #!/usr/bin/env bash
 
-# Notifies you that Claude wants attention. Sends a desktop notification using
-# whatever the host provides (notify-send on Linux, osascript on macOS, same
-# path as the rest of the dotfiles' notifications) and, when running inside
-# tmux, also rings the bell on Claude's pane so the window gets flagged in the
-# status bar. Both signals are best-effort and skipped when unavailable, so
-# this stays safe on any machine.
+# Desktop notification that Claude wants attention, plus a tmux bell so the window gets flagged.
 
 MSG="${1:-Claude needs you}"
 
@@ -18,15 +13,13 @@ if command -v notify-send >/dev/null; then
         "Claude Code" \
         "$MSG"
 elif command -v osascript >/dev/null; then
-    # Escape backslashes and double quotes so the message can't break out of
-    # the AppleScript string literal.
+    # Keep the message inside the AppleScript string literal.
     ESCAPED=${MSG//\\/\\\\}
     ESCAPED=${ESCAPED//\"/\\\"}
     osascript -e "display notification \"$ESCAPED\" with title \"Claude Code\""
 fi
 
-# Inside tmux, a bell character on the pane tty makes tmux flag the window via
-# monitor-bell, so you notice it from another window/pane too.
+# The bell on the pane tty makes tmux flag the window via monitor-bell.
 if [ -n "$TMUX" ] && [ -n "$TMUX_PANE" ]; then
     PANE_TTY=$(tmux display-message -p -t "$TMUX_PANE" '#{pane_tty}' 2>/dev/null)
     [ -n "$PANE_TTY" ] && printf '\a' > "$PANE_TTY"

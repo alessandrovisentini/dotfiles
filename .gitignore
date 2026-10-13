@@ -1,5 +1,4 @@
-# Per-machine sway selector — symlink to one of config/sway/devices/*.conf,
-# created on NixOS by the nixos repo's sway activation script.
+# Per-machine sway selector, symlink to one of config/sway/devices/*.conf.
 config/sway/device.conf
 
 # Secrets and Sensitive Files

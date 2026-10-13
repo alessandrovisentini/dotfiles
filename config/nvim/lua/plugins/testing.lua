@@ -1,5 +1,4 @@
--- Neotest + Vitest adapter, with a DAP launch config for JS/TS.
--- Relies on nvim-dap, loaded by plugins.debug.
+-- Needs nvim-dap, loaded by plugins.debug.
 
 vim.pack.add {
   'https://github.com/antoinemadec/FixCursorHold.nvim',

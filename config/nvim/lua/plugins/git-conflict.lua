@@ -1,8 +1,7 @@
 vim.pack.add { 'https://github.com/akinsho/git-conflict.nvim' }
 
 require('git-conflict').setup {
-  -- Mappings are wired per-buffer below so they only exist while a file
-  -- actually has conflicts, and so they carry our own descriptions.
+  -- Mapped per buffer below, only while a file has conflicts.
   default_mappings = false,
   default_commands = true,
   -- Built-in toggle calls vim.diagnostic.disable, removed in nvim 0.12.
@@ -25,8 +24,7 @@ local conflict_maps = {
   { '<leader>gx', '<cmd>GitConflictListQf<cr>', 'git conflict list (quickfi[x])', { 'n' } },
 }
 
--- Wire the keymaps up only when a conflict is detected, so co/ct/cb/c0 don't
--- shadow the default change operators (ct{char}, cb, c0) in normal files.
+-- Only while a conflict exists, so co/ct/cb/c0 do not shadow the change operators elsewhere.
 vim.api.nvim_create_autocmd('User', {
   pattern = 'GitConflictDetected',
   callback = function(args)

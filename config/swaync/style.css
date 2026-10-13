@@ -1,4 +1,4 @@
-/* Theme aligned with the Astal bar: dark surface + per-app accent. */
+/* Dark surface, per-app accent. */
 
 * {
     font-family: "DejaVuSansM Nerd Font Mono", monospace;
@@ -114,13 +114,8 @@
     color: #ffffff;
 }
 
-/* ---- Header: title + switch + clear-all icon, all on one row.
-   swaync renders the title and dnd widgets as separate vertical boxes, so
-   we paint the title row tall enough to host the switch, leave a gap on
-   its right for the clear-all icon, then pull the dnd widget up onto that
-   row with a negative top-margin. The clear-all sits in the title widget's
-   own button slot, the switch in the dnd widget's slot — each keeps its
-   own hit area where its glyph is drawn. ---- */
+/* ---- Header: title, switch and clear-all on one row. swaync draws the title and dnd widgets
+   as separate boxes, so the dnd row is pulled up onto the title row with a negative margin. ---- */
 .widget-title {
     background: #303030;
     border-radius: 12px 12px 0 0;
@@ -134,7 +129,7 @@
     font-weight: bold;
 }
 
-/* clear-all button — mirrors .icon-btn from the bar (40x40, 22px glyph) */
+/* clear-all button, same 40x40 as the bar's icon buttons */
 .widget-title > button,
 .widget-title button.clear-all-button,
 .widget-title #clear-all-button {
@@ -172,8 +167,7 @@
     color: #ffffff;
 }
 
-/* DND row sits below the title row, sharing the card background and the
-   bottom-rounded corners so the two rows read as one header card. */
+/* DND row shares the title's background and rounds the bottom, so both read as one card. */
 .widget-dnd {
     background: #303030;
     border-radius: 0 0 12px 12px;
@@ -201,12 +195,8 @@
     color: #ffffff;
 }
 
-/* ---- GTK switch — identical pill to the bar's bluetooth switch.
-   swaync hard-binds checked = DND on, so the natural mapping is:
-     switch off (default) → notifications enabled / DND off
-     switch on            → DND on / notifications muted
-   This is the standard iOS/macOS "Do Not Disturb" semantic and the only
-   polarity swaync's widget supports. ---- */
+/* ---- GTK switch, same pill as the bar's bluetooth switch. Checked means DND on,
+   swaync supports no other polarity. ---- */
 .widget-dnd switch,
 window switch {
     min-width: 46px;

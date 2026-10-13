@@ -39,8 +39,7 @@ local function apply_setup()
   require('nvim-tree').setup {
     on_attach = on_attach,
     disable_netrw = true,
-    -- The built-in directory hijack creates a blank buffer under vim.pack's opt
-    -- loading on Neovim 0.12; we open the tree ourselves on VimEnter instead.
+    -- The built-in hijack leaves a blank buffer under vim.pack on 0.12, VimEnter opens the tree.
     hijack_directories = {
       enable = false,
     },

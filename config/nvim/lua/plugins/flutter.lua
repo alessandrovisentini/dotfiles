@@ -1,4 +1,4 @@
--- Flutter / Dart tooling. nvim-dap and dap-ui are loaded by plugins.debug.
+-- nvim-dap and dap-ui come from plugins.debug.
 
 vim.pack.add {
   'https://github.com/nvim-flutter/flutter-tools.nvim',
@@ -6,7 +6,7 @@ vim.pack.add {
 
 require('flutter-tools').setup {}
 
--- Re-apply the dap-ui layout with a single bottom panel.
+-- One bottom panel instead of the default dap-ui layout.
 require('dapui').setup {
   icons = { expanded = '▾', collapsed = '▸' },
   layouts = {

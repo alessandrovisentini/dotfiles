@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-# Single-instance guard: sway's `exec_always` re-runs this script on
-# every config reload, so without a lock the loops pile up and the
-# critical notification fires once per running copy.
+# exec_always re-runs this on every reload, so lock to a single instance.
 exec 9>"${XDG_RUNTIME_DIR:-/tmp}/battery_notification.lock"
 flock -n 9 || exit 0
 

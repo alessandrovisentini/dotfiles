@@ -29,7 +29,7 @@ require('which-key').setup {
 require('github-theme').setup {}
 vim.cmd.colorscheme 'github_dark_default'
 
--- Provide file icons (Nerd Font) and stand in for nvim-web-devicons so other plugins find it.
+-- Stands in for nvim-web-devicons so other plugins find it.
 require('mini.icons').setup {}
 require('mini.icons').mock_nvim_web_devicons()
 

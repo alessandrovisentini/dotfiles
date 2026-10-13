@@ -5,7 +5,7 @@ local function setup_render_markdown()
     'https://github.com/MeanderingProgrammer/render-markdown.nvim',
   }
 
-  -- GitHub Dark palette pinned for heading backgrounds and links.
+  -- GitHub Dark palette
   local colors = {
     blue = '#58a6ff',
     purple = '#d2a8ff',
@@ -84,8 +84,7 @@ local function setup_render_markdown()
 end
 
 local function load_obsidian_workspaces()
-  -- TTRPG_GAMES_CONFIG points at a JSON file like {games:[{name, path}]}.
-  -- TTRPG_NOTES_HOME is the vault root each `$TTRPG_NOTES_HOME/...` path expands against.
+  -- TTRPG_GAMES_CONFIG is JSON like {games:[{name, path}]}, paths may use $TTRPG_NOTES_HOME.
   local games_file = os.getenv 'TTRPG_GAMES_CONFIG'
   if not games_file then return {} end
 
@@ -158,8 +157,7 @@ local function setup_obsidian()
     end,
   })
 
-  -- obsidian-ls attaches to markdown buffers, firing the global LspAttach autocmd
-  -- that rebinds gd to telescope. Re-bind to follow_link after attach.
+  -- obsidian-ls attaching fires the LspAttach that rebinds gd to telescope, so rebind after it.
   vim.api.nvim_create_autocmd('LspAttach', {
     group = vim.api.nvim_create_augroup('custom-obsidian-md-lsp', { clear = true }),
     callback = function(args)
