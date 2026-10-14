@@ -24,11 +24,6 @@ window#waybar {
     padding: 5px;
 }
 
-#workspaces button.persistent {
-    color: @muted;
-    font-size: 10px
-}
-
 #workspaces button:hover {
     box-shadow: inherit;
     text-shadow: inherit;
@@ -42,7 +37,6 @@ window#waybar {
 }
 
 #clock,
-#wireplumber,
 #pulseaudio,
 #backlight,
 #battery,
@@ -53,10 +47,6 @@ window#waybar {
     padding-left: 8px;
     padding-right: 8px;
     color: @fg;
-}
-
-#wireplumber.muted {
-    color: @muted;
 }
 
 #temperature.critical {

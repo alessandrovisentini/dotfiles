@@ -35,7 +35,6 @@ bindsym $mod+Shift+q kill
 
 # Launchers
 bindsym $mod+d exec $menu
-bindsym $mod+m exec $menu
 # Emoji picker, types the pick into the focused window.
 bindsym $mod+Ctrl+space exec rofimoji --action type
 
@@ -124,9 +123,6 @@ bindsym $mod+Ctrl+q exec swaylock -f
 
 # Color picker
 bindsym $mod+Shift+c exec grim -g "$(slurp -p)" -t ppm - | convert - -format '%[pixel:p{0,0}]' txt:- | tail -n 1 | cut -d ' ' -f 4 | wl-copy
-
-# Per-machine inputs/outputs/execs. Symlink to one of devices/*.conf.
-include '$XDG_CONFIG_HOME/sway/device.conf'
 
 # reload turns eDP-1 back on, so disable it again when the lid is shut.
 bindsym $mod+Shift+r reload; exec "grep -q closed /proc/acpi/button/lid/*/state && swaymsg output eDP-1 disable"

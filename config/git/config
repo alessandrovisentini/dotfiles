@@ -11,7 +11,7 @@
 	untracked-line-numbers = true
 [merge]
 	conflictstyle = zdiff3
-[page]
+[pager]
 	diff = delta
 	show = delta
 	log = delta

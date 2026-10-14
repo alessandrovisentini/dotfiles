@@ -99,6 +99,6 @@ vim.keymap.set('n', '<leader>tt', function()
     api.tree.find_file { open = true, focus = true }
   end
 end, { noremap = true, silent = true, desc = '[T]ree [T]oggle' })
-vim.api.nvim_set_keymap('n', '<leader>tc', ':NvimTreeClose<CR>', { noremap = true, silent = true, desc = '[T]ree [C]lose' })
-vim.api.nvim_set_keymap('n', '<leader>tb', ':wincmd p<CR>', { noremap = true, silent = true, desc = '[T]ree [B]uffer focus' })
+vim.keymap.set('n', '<leader>tc', '<Cmd>NvimTreeClose<CR>', { silent = true, desc = '[T]ree [C]lose' })
+vim.keymap.set('n', '<leader>te', '<Cmd>wincmd p<CR>', { silent = true, desc = '[T]ree to [E]ditor' })
 vim.keymap.set('n', '<leader>tw', toggle_adaptive_width, { noremap = true, silent = true, desc = '[T]ree [W]idth toggle' })

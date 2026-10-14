@@ -21,7 +21,6 @@ require('which-key').setup {
     { '<leader>r', group = '[R]ename' },
     { '<leader>s', group = '[S]earch', mode = { 'n', 'v' } },
     { '<leader>t', group = '[T]oggle' },
-    { '<leader>w', group = '[W]orkspace' },
     { 'g', group = '[G]oto' },
   },
 }
@@ -34,10 +33,10 @@ require('mini.icons').setup {}
 require('mini.icons').mock_nvim_web_devicons()
 
 require('mini.ai').setup {
-  -- Avoid clashing with the built-in treesitter incremental-selection mappings.
+  -- an/in are the built-in treesitter node selection, aa would hide the argument object.
   mappings = {
-    around_next = 'aa',
-    inside_next = 'ii',
+    around_next = 'aN',
+    inside_next = 'iN',
   },
   n_lines = 500,
 }

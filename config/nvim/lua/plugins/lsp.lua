@@ -1,3 +1,8 @@
+-- Drop the global gr* defaults so plain `gr` fires without a timeoutlen wait.
+for _, lhs in ipairs { 'grr', 'gri', 'grn', 'gra', 'grt', 'grx' } do
+  pcall(vim.keymap.del, 'n', lhs)
+end
+
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('lsp-attach', { clear = true }),
   callback = function(event)
@@ -10,10 +15,11 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
     local builtin = require 'telescope.builtin'
     map('gd', builtin.lsp_definitions, '[G]oto [D]efinition')
+    map('gr', builtin.lsp_references, '[G]oto [R]eferences')
     map('gI', builtin.lsp_implementations, '[G]oto [I]mplementation')
+    map('gO', builtin.lsp_document_symbols, 'Open Document Symbols')
+    map('gW', builtin.lsp_dynamic_workspace_symbols, 'Open Workspace Symbols')
     map('<leader>D', builtin.lsp_type_definitions, 'Type [D]efinition')
-    map('<leader>ds', builtin.lsp_document_symbols, '[D]ocument [S]ymbols')
-    map('<leader>ws', builtin.lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
     map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
     map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction', { 'n', 'x' })
 
@@ -58,10 +64,6 @@ local servers = {
     },
   },
 
-  stylua = {},
-  alejandra = {},
-  markdownlint = {},
-
   lua_ls = {
     on_init = function(client)
       -- Formatting is handled by stylua via conform.
@@ -95,6 +97,9 @@ local servers = {
   },
 }
 
+-- Formatters that mason installs, not language servers.
+local tools = { 'stylua', 'prettier' }
+
 vim.pack.add {
   'https://github.com/neovim/nvim-lspconfig',
   'https://github.com/mason-org/mason.nvim',
@@ -104,7 +109,7 @@ vim.pack.add {
 
 require('mason').setup {}
 
-local ensure_installed = vim.tbl_keys(servers or {})
+local ensure_installed = vim.list_extend(vim.tbl_keys(servers), tools)
 require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
 for name, server in pairs(servers) do

@@ -130,9 +130,7 @@
 }
 
 /* clear-all button, same 40x40 as the bar's icon buttons */
-.widget-title > button,
-.widget-title button.clear-all-button,
-.widget-title #clear-all-button {
+.widget-title > button {
     font-family: "DejaVuSansM Nerd Font Mono", monospace;
     font-size: 22px;
     min-width: 40px;
@@ -147,23 +145,17 @@
     box-shadow: none;
 }
 
-.widget-title > button label,
-.widget-title button.clear-all-button label,
-.widget-title #clear-all-button label {
+.widget-title > button label {
     font-size: 22px;
     color: #ffffff;
 }
 
-.widget-title > button:hover,
-.widget-title button.clear-all-button:hover,
-.widget-title #clear-all-button:hover {
+.widget-title > button:hover {
     background: #3584e4;
     color: #ffffff;
 }
 
-.widget-title > button:hover label,
-.widget-title button.clear-all-button:hover label,
-.widget-title #clear-all-button:hover label {
+.widget-title > button:hover label {
     color: #ffffff;
 }
 
@@ -178,21 +170,6 @@
 .widget-dnd > label {
     color: #ffffff;
     font-size: 11pt;
-}
-
-.widget-mpris,
-.widget-volume,
-.widget-backlight,
-.widget-buttons-grid,
-.widget-menubar {
-    background: #303030;
-    border-radius: 12px;
-    padding: 10px;
-    margin: 4px 4px 8px 4px;
-}
-
-.widget-label > label {
-    color: #ffffff;
 }
 
 /* ---- GTK switch, same pill as the bar's bluetooth switch. Checked means DND on,
@@ -224,29 +201,4 @@ window switch slider {
 window switch:checked {
     background: #3584e4;
     background-image: none;
-}
-
-/* ---- Scale (volume / backlight widgets) ---- */
-scale {
-    margin: 0 4px;
-}
-
-scale trough {
-    min-height: 8px;
-    border-radius: 6px;
-    background: #45454a;
-}
-
-scale trough highlight,
-scale highlight {
-    border-radius: 6px;
-    background: #3584e4;
-}
-
-scale slider {
-    min-width: 16px;
-    min-height: 16px;
-    border-radius: 50%;
-    background: #ffffff;
-    margin: -6px;
 }

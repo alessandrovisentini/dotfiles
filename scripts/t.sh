@@ -46,17 +46,6 @@ run_session() {
 
     local SESSION_NAME="$REPO_NAME"
 
-    setup_window() {
-        local SESSION="$1"
-        local WINDOW_INDEX="$2"
-        local REPO_PATH="$3"
-        local CMD="$4"
-
-        if [ "$CMD" != "bash" ]; then
-            tmux send-keys -t "$SESSION":"$WINDOW_INDEX" "$CMD" C-m
-        fi
-    }
-
     if tmux has-session -t "$SESSION_NAME" 2>/dev/null; then
         if [ -n "$TMUX" ]; then
             tmux switch-client -t "$SESSION_NAME"
@@ -67,12 +56,10 @@ run_session() {
     fi
 
     tmux new-session -d -s "$SESSION_NAME" -c "$REPO_PATH" -n "editor"
-    setup_window "$SESSION_NAME" "1" "$REPO_PATH" "nvim ."
+    tmux send-keys -t "$SESSION_NAME:1" "nvim ." C-m
 
     tmux new-window -t "$SESSION_NAME" -c "$REPO_PATH" -n "terminal"
-    setup_window "$SESSION_NAME" "2" "$REPO_PATH" "bash"
     tmux split-window -h -c "$REPO_PATH" -t "$SESSION_NAME:2"
-    setup_window "$SESSION_NAME" "2" "$REPO_PATH" "bash"
 
     tmux select-window -t "$SESSION_NAME:1"
     if [ -n "$TMUX" ]; then

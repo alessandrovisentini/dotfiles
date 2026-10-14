@@ -27,4 +27,4 @@ No markdown, no fences, no extra text. Keep it to 1-2 lines max.
 
 Question: $*"
 
-claude --print --model claude-haiku-4-5-20251001 -p "$PROMPT" 2>/dev/null
+claude -p --model claude-haiku-4-5-20251001 "$PROMPT" 2>/dev/null

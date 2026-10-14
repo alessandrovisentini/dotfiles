@@ -53,7 +53,7 @@ local custom_file_previewer = function(opts)
         local glow_style = vim.fn.expand '~/.config/glow/github-dark.json'
         local width = vim.api.nvim_win_get_width(self.state.winid)
         local cmd = 'sed "' .. obsidian_sed_cmd .. '" ' .. vim.fn.shellescape(p) .. ' | glow -s ' .. vim.fn.shellescape(glow_style) .. ' -w ' .. width .. ' -'
-        vim.api.nvim_buf_call(self.state.bufnr, function() vim.fn.termopen({ 'sh', '-c', cmd }) end)
+        vim.api.nvim_buf_call(self.state.bufnr, function() vim.fn.jobstart({ 'sh', '-c', cmd }, { term = true }) end)
       else
         conf.buffer_previewer_maker(p, self.state.bufnr, {
           bufname = self.state.bufname,
@@ -95,7 +95,7 @@ local delta_git_previewer = previewers.new_buffer_previewer {
       if p and p ~= '' then conf.buffer_previewer_maker(p, self.state.bufnr, { bufname = self.state.bufname, winid = self.state.winid }) end
     else
       local cmd = 'git diff HEAD -- ' .. vim.fn.shellescape(file) .. ' | delta'
-      vim.api.nvim_buf_call(self.state.bufnr, function() vim.fn.termopen({ 'sh', '-c', cmd }) end)
+      vim.api.nvim_buf_call(self.state.bufnr, function() vim.fn.jobstart({ 'sh', '-c', cmd }, { term = true }) end)
     end
   end,
 }
@@ -119,7 +119,7 @@ pcall(require('telescope').load_extension, 'ui-select')
 local builtin = require 'telescope.builtin'
 
 -- Ignore heavy build/dependency directories in the "all files" searches.
-local heavy_dir_globs = { '!**/node_modules/**', '!{target,build,dist,.next,coverage,.nuxt,vendor,__pycache__,.cache,.temp,.tmp,.git}/**' }
+local heavy_dir_globs = { '!**/{node_modules,target,build,dist,.next,coverage,.nuxt,vendor,__pycache__,.cache,.temp,.tmp,.git}/**' }
 local heavy_dir_patterns = {
   'node_modules/.*', '%.git/.*', 'target/.*', 'build/.*', 'dist/.*', '%.next/.*',
   'coverage/.*', '%.nuxt/.*', 'vendor/.*', '__pycache__/.*', '%.cache/.*', '%.temp/.*', '%.tmp/.*',
@@ -134,7 +134,6 @@ vim.keymap.set('n', '<leader>sF', function()
 end, { desc = '[S]earch in All [F]iles (inc. gitignored)' })
 vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
 vim.keymap.set({ 'n', 'v' }, '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
-vim.keymap.set('n', '<leader>se', function() builtin.find_files { follow = true } end, { desc = '[S]earch [E]xplore files' })
 vim.keymap.set('n', '<leader>sg', function()
   builtin.live_grep { additional_args = function() return { '--fixed-strings' } end }
 end, { desc = '[S]earch by [G]rep' })
@@ -149,11 +148,11 @@ vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iag
 vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
 vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
 vim.keymap.set('n', '<leader>sc', builtin.commands, { desc = '[S]earch [C]ommands' })
-vim.keymap.set('n', '<leader>sdf', function()
+vim.keymap.set('n', '<leader>sp', function()
   local dir = vim.fn.input('Directory: ', '', 'dir')
   if dir ~= '' then builtin.find_files { follow = true, cwd = dir } end
-end, { desc = '[S]earch [D]irectory [F]iles' })
-vim.keymap.set('n', '<leader>sdg', function()
+end, { desc = '[S]earch files in [P]ath' })
+vim.keymap.set('n', '<leader>sP', function()
   local dir = vim.fn.input('Directory: ', '', 'dir')
   if dir ~= '' then
     builtin.live_grep {
@@ -161,23 +160,8 @@ vim.keymap.set('n', '<leader>sdg', function()
       search_dirs = { dir },
     }
   end
-end, { desc = '[S]earch [D]irectory [G]rep' })
+end, { desc = '[S]earch grep in [P]ath' })
 vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
-
--- Drop the nvim 0.11+ global gr* defaults so plain `gr` fires without a timeoutlen wait.
-for _, lhs in ipairs { 'grr', 'gri', 'grn', 'gra' } do
-  pcall(vim.keymap.del, 'n', lhs)
-end
-
-vim.api.nvim_create_autocmd('LspAttach', {
-  group = vim.api.nvim_create_augroup('telescope-lsp-attach', { clear = true }),
-  callback = function(event)
-    local buf = event.buf
-    vim.keymap.set('n', 'gr', builtin.lsp_references, { buffer = buf, desc = '[G]oto [R]eferences' })
-    vim.keymap.set('n', 'gO', builtin.lsp_document_symbols, { buffer = buf, desc = 'Open Document Symbols' })
-    vim.keymap.set('n', 'gW', builtin.lsp_dynamic_workspace_symbols, { buffer = buf, desc = 'Open Workspace Symbols' })
-  end,
-})
 
 vim.keymap.set('n', '<leader>/', function()
   builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {

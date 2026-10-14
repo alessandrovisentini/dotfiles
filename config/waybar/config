@@ -49,26 +49,7 @@
         },
     },
 
-    "wireplumber": {
-        "tooltip": false,
-        "format": "{icon} {volume}%",
-        "format-muted": "🔇 {volume}%",
-        "format-source": "🎤 {volume}%",
-        "on-click": "helvum",
-        "max-volume": 150,
-        "scroll-step": 5,
-        "format-icons": {
-            "headphone": "🎧",
-            "default": [
-                "🔈",
-                "🔉",
-                "🔊"
-            ]
-        },
-    },
-
     "battery": {
-        "interval": 1,
         "format": "{icon} {capacity}%",
         "states": {
         "warning": 20,
@@ -99,7 +80,8 @@
 
     "temperature": {
         "critical-threshold": 80,
-        "thermal-zone": 8,
+        "hwmon-path-abs": "/sys/devices/platform/coretemp.0/hwmon",
+        "input-filename": "temp1_input",
         "format": "{icon} {temperatureC}°C",
         "format-icons": ["", "", "", ""],
         "states": {

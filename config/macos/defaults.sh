@@ -49,8 +49,8 @@ defaults write com.apple.finder ShowPathbar -bool true
 # Mission Control
 
 defaults write com.apple.dock mru-spaces -bool false
-# Instant cross-fade instead of horizontal slide.
-defaults write com.apple.universalaccess reduceMotion -bool true
+# Instant cross-fade instead of horizontal slide. Needs Full Disk Access, skipped when denied.
+defaults write com.apple.universalaccess reduceMotion -bool true || true
 
 # Option+<n> → Desktop n
 # Symbolic hotkey IDs: 118=Desktop1 .. 127=Desktop10. Parameters: (ASCII, keycode, modifier=524288).

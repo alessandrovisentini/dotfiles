@@ -2,7 +2,6 @@ vim.pack.add {
   'https://github.com/mfussenegger/nvim-dap',
   'https://github.com/rcarriga/nvim-dap-ui',
   'https://github.com/nvim-neotest/nvim-nio',
-  'https://github.com/mason-org/mason.nvim',
   'https://github.com/jay-babu/mason-nvim-dap.nvim',
 }
 
@@ -32,6 +31,19 @@ require('mason-nvim-dap').setup {
 ---@diagnostic disable-next-line: missing-fields
 dapui.setup {
   icons = { expanded = '▾', collapsed = '▸', current_frame = '*' },
+  -- One bottom panel instead of the default side layout.
+  layouts = {
+    {
+      elements = {
+        { id = 'scopes', size = 0.25 },
+        'breakpoints',
+        'stacks',
+        'watches',
+      },
+      size = 10,
+      position = 'bottom',
+    },
+  },
   ---@diagnostic disable-next-line: missing-fields
   controls = {
     icons = {

@@ -55,7 +55,6 @@ cat > "$FULL_PATH/.markdownlint.jsonc" << 'EOF'
 }
 EOF
 
-export TTRPG_GAME_NAME="$GAME"
 export TTRPG_GAMES_CONFIG="$CONFIG_FILE"
 
 cd "$FULL_PATH" && nvim .
