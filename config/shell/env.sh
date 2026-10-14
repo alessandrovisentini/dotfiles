@@ -12,6 +12,7 @@ alias t='$REPOS_HOME/dotfiles/scripts/t.sh'
 alias tt='$REPOS_HOME/dotfiles/scripts/tt.sh'
 alias ai='$REPOS_HOME/dotfiles/scripts/ai/ai.sh'
 alias h='$REPOS_HOME/dotfiles/scripts/ai/h.sh'
+alias rip-cd='$REPOS_HOME/dotfiles/scripts/rip-cd.sh'
 
 # Homebrew nvm, both prefixes for Intel and Apple Silicon.
 if [[ "$(uname)" == "Darwin" ]]; then

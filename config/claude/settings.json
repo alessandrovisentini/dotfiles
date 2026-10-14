@@ -1,6 +1,6 @@
 {
   "includeCoAuthoredBy": false,
-  "model": "fable",
+  "model": "opus",
   "hooks": {
     "Notification": [
       {
