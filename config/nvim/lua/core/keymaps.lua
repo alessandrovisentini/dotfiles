@@ -5,11 +5,18 @@ vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open float
 
 -- Spell checking
 vim.keymap.set('n', '<leader>ts', function() vim.o.spell = not vim.o.spell end, { desc = '[T]oggle [S]pell checking' })
+vim.keymap.set('n', '<leader>tl', function()
+  if vim.o.spelllang == 'en_us' then
+    vim.o.spelllang = 'it'
+  else
+    vim.o.spelllang = 'en_us'
+  end
+  vim.notify('Spell language: ' .. vim.o.spelllang)
+end, { desc = '[T]oggle spell [L]anguage (en/it)' })
 vim.keymap.set('n', 'zn', ']s', { desc = 'Next misspelled word' })
 vim.keymap.set('n', 'zp', '[s', { desc = 'Previous misspelled word' })
 vim.keymap.set('n', 'za', 'zg', { desc = 'Add word to dictionary' })
 vim.keymap.set('n', 'zr', 'zw', { desc = 'Remove word from dictionary' })
-vim.keymap.set('n', 'zs', 'z=', { desc = 'Suggest spelling corrections' })
 
 vim.keymap.set('n', '<leader>tn', function()
   vim.o.relativenumber = not vim.o.relativenumber
