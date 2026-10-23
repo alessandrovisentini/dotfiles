@@ -37,6 +37,15 @@ vim.o.spell = true
 vim.o.spelllang = 'en_us'
 vim.o.spelloptions = 'camel'
 
+-- Words added with zg go to the dotfiles, one file per language so the toggle keeps them apart.
+local function set_spellfile()
+  local dir = vim.fn.stdpath 'config' .. '/spell'
+  vim.fn.mkdir(dir, 'p')
+  vim.o.spellfile = dir .. '/' .. vim.o.spelllang:match '^%a+' .. '.utf-8.add'
+end
+set_spellfile()
+vim.api.nvim_create_autocmd('OptionSet', { pattern = 'spelllang', callback = set_spellfile })
+
 vim.diagnostic.config {
   update_in_insert = false,
   severity_sort = true,

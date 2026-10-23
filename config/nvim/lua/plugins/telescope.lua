@@ -178,4 +178,4 @@ vim.keymap.set('n', '<leader>s/', function()
 end, { desc = '[S]earch [/] in Open Files' })
 
 vim.keymap.set('n', '<leader>sn', function() builtin.find_files { cwd = vim.fn.stdpath 'config' } end, { desc = '[S]earch [N]eovim files' })
-vim.keymap.set('n', 'zs', function() builtin.spell_suggest(require('telescope.themes').get_cursor()) end, { desc = 'Suggest spelling corrections' })
+vim.keymap.set('n', '<leader>Ss', function() builtin.spell_suggest(require('telescope.themes').get_cursor()) end, { desc = '[S]pelling: [S]uggestions' })

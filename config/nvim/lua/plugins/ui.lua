@@ -20,6 +20,7 @@ require('which-key').setup {
     { '<leader>o', group = '[O]bsidian' },
     { '<leader>r', group = '[R]ename' },
     { '<leader>s', group = '[S]earch', mode = { 'n', 'v' } },
+    { '<leader>S', group = '[S]pelling' },
     { '<leader>t', group = '[T]oggle' },
     { 'g', group = '[G]oto' },
   },

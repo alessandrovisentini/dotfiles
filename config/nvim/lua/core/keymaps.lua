@@ -4,19 +4,23 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open float diagnostic' })
 
 -- Spell checking
-vim.keymap.set('n', '<leader>ts', function() vim.o.spell = not vim.o.spell end, { desc = '[T]oggle [S]pell checking' })
-vim.keymap.set('n', '<leader>tl', function()
+vim.keymap.set('n', '<leader>St', function()
+  vim.o.spell = not vim.o.spell
+  vim.notify('Spell check: ' .. (vim.o.spell and 'on' or 'off'))
+end, { desc = '[S]pelling: [T]oggle check' })
+vim.keymap.set('n', '<leader>Sl', function()
   if vim.o.spelllang == 'en_us' then
     vim.o.spelllang = 'it'
   else
     vim.o.spelllang = 'en_us'
   end
   vim.notify('Spell language: ' .. vim.o.spelllang)
-end, { desc = '[T]oggle spell [L]anguage (en/it)' })
-vim.keymap.set('n', 'zn', ']s', { desc = 'Next misspelled word' })
-vim.keymap.set('n', 'zp', '[s', { desc = 'Previous misspelled word' })
-vim.keymap.set('n', 'za', 'zg', { desc = 'Add word to dictionary' })
-vim.keymap.set('n', 'zr', 'zw', { desc = 'Remove word from dictionary' })
+end, { desc = '[S]pelling: switch [L]anguage (en/it)' })
+vim.keymap.set('n', '<leader>Sn', ']s', { desc = '[S]pelling: [N]ext misspelled word' })
+vim.keymap.set('n', '<leader>Sp', '[s', { desc = '[S]pelling: [P]revious misspelled word' })
+vim.keymap.set('n', '<leader>Sa', 'zg', { desc = '[S]pelling: [A]dd word to dictionary' })
+vim.keymap.set('n', '<leader>Sr', 'zug', { desc = '[S]pelling: [R]emove word from dictionary' })
+vim.keymap.set('n', '<leader>Sw', 'zw', { desc = '[S]pelling: mark word as [W]rong' })
 
 vim.keymap.set('n', '<leader>tn', function()
   vim.o.relativenumber = not vim.o.relativenumber

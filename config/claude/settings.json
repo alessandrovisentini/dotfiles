@@ -23,6 +23,7 @@
   },
   "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
+  "switchModelsOnFlag": false,
   "remoteControlAtStartup": false,
   "agentPushNotifEnabled": true
 }
