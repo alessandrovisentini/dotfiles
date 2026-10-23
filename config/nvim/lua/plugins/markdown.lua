@@ -153,7 +153,9 @@ local function setup_obsidian()
     group = vim.api.nvim_create_augroup('custom-obsidian-md', { clear = true }),
     callback = function(args)
       bind_follow_link(args.buf)
-      vim.opt_local.spell = false
+      -- Only the vault skips spellcheck, other markdown (docs, READMEs) keeps it.
+      local vault = os.getenv 'TTRPG_NOTES_HOME'
+      if vault and vim.api.nvim_buf_get_name(args.buf):find(vim.fs.normalize(vault), 1, true) then vim.opt_local.spell = false end
     end,
   })
 
