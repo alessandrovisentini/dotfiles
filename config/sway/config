@@ -128,4 +128,4 @@ bindsym $mod+Shift+c exec grim -g "$(slurp -p)" -t ppm - | convert - -format '%[
 bindsym $mod+Shift+r reload; exec "grep -q closed /proc/acpi/button/lid/*/state && swaymsg output eDP-1 disable"
 
 include /etc/sway/config.d/*
-include '$XDG_CONFIG_HOME/sway/config.d/*.conf'
+include '$HOME/.config/sway/config.d/*.conf'
