@@ -26,8 +26,17 @@ require('gitsigns').setup {
       vim.keymap.set(mode, l, r, opts)
     end
 
+    -- Run git from the file's own directory so other repos and submodules resolve correctly.
+    local function git(args)
+      local dir = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(bufnr), ':h')
+      local result = vim.system(vim.list_extend({ 'git' }, args), { cwd = dir, text = true }):wait()
+      if result.code ~= 0 then return nil end
+      return vim.trim(result.stdout)
+    end
+
     local function get_repo_url()
-      local remote = vim.fn.system({ 'git', 'remote', 'get-url', 'origin' }):gsub('%s+$', '')
+      local remote = git { 'remote', 'get-url', 'origin' }
+      if not remote or remote == '' then return nil end
       remote = remote:gsub('ssh://git@([^/]+)/', 'https://%1/')
       remote = remote:gsub('^git@([^:]+):', 'https://%1/')
       remote = remote:gsub('%.git$', '')
@@ -35,13 +44,10 @@ require('gitsigns').setup {
     end
 
     local function get_blame_sha()
-      local file = vim.fn.expand '%'
       local line = vim.fn.line '.'
-      local sha = vim.fn.system({ 'git', 'blame', '-l', '-L', line .. ',' .. line, '--', file }):match '^(%x+)'
-      if not sha or sha:match '^0+$' then
-        vim.notify('No commit found for this line', vim.log.levels.WARN)
-        return nil
-      end
+      local out = git { 'blame', '-l', '-L', line .. ',' .. line, '--', vim.api.nvim_buf_get_name(bufnr) }
+      local sha = out and out:match '^%^?(%x+)'
+      if not sha or sha:match '^0+$' then return nil end
       return sha
     end
 
@@ -49,8 +55,10 @@ require('gitsigns').setup {
     -- Open the current line's commit on the origin host.
     map('n', '<leader>gc', function()
       local sha = get_blame_sha()
-      if not sha then return end
-      vim.ui.open(get_repo_url() .. '/commit/' .. sha)
+      if not sha then return vim.notify('No commit found for this line', vim.log.levels.WARN) end
+      local url = get_repo_url()
+      if not url then return vim.notify('No origin remote for this repo', vim.log.levels.WARN) end
+      vim.ui.open(url .. '/commit/' .. sha)
     end, { desc = 'git open [c]ommit in browser' })
     map('n', '<leader>gd', gitsigns.diffthis, { desc = 'git [d]iff against index' })
     map('n', '<leader>gD', function() gitsigns.diffthis '@' end, { desc = 'git [D]iff against last commit' })

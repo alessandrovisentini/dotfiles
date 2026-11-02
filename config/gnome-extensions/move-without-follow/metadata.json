@@ -1,0 +1,6 @@
+{
+  "uuid": "move-without-follow@local",
+  "name": "Move Window Without Follow",
+  "description": "Binds Super+Shift+{1..9} to send the focused window to workspace N without switching to it.",
+  "shell-version": ["48", "49", "50"]
+}

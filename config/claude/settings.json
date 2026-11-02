@@ -1,18 +1,6 @@
 {
   "includeCoAuthoredBy": false,
   "model": "opus",
-  "hooks": {
-    "Notification": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "\"$REPOS_HOME/dotfiles/scripts/ai/notify.sh\" 'Claude needs your input'"
-          }
-        ]
-      }
-    ]
-  },
   "modelSettings": {
     "claude-opus-5-5": {
       "effortLevel": "xhigh"
@@ -24,6 +12,5 @@
   "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
   "switchModelsOnFlag": false,
-  "remoteControlAtStartup": false,
-  "agentPushNotifEnabled": true
+  "remoteControlAtStartup": false
 }

@@ -6,13 +6,9 @@ export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_STATE_HOME="$HOME/.local/state"
 
 export REPOS_HOME="$HOME/Development/repos"
-export TTRPG_NOTES_HOME="$REPOS_HOME/ttrpg-notes"
 export NETHACKOPTIONS="@$REPOS_HOME/dotfiles/config/nethack/nethackrc"
 
 alias t='$REPOS_HOME/dotfiles/scripts/t.sh'
-alias tt='$REPOS_HOME/dotfiles/scripts/tt.sh'
-alias ai='$REPOS_HOME/dotfiles/scripts/ai/ai.sh'
-alias h='$REPOS_HOME/dotfiles/scripts/ai/h.sh'
 alias rip-cd='$REPOS_HOME/dotfiles/scripts/rip-cd.sh'
 
 # Homebrew nvm, both prefixes for Intel and Apple Silicon.

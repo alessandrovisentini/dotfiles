@@ -14,18 +14,6 @@ local previewers = require 'telescope.previewers'
 local from_entry = require 'telescope.from_entry'
 local conf = require('telescope.config').values
 
--- Obsidian wiki link substitutions so glow renders them as plain text.
-local obsidian_sed_cmd = table.concat({
-  's/\\[\\[\\([^]|]*\\)|\\([^]]*\\)\\]\\]/***\\2***/g',
-  's/!\\[\\[\\([^]|]*\\)|\\([^]]*\\)\\]\\]/***🔗 \\2***/g',
-  's/!\\[\\[\\([^]#^|]*\\)[#^][^]]*\\]\\]/***🔗 \\1***/g',
-  's/!\\[\\[\\([^]]*\\)\\]\\]/***🔗 \\1***/g',
-  's/\\[\\[\\([^]#^|]*\\)#\\([^]|]*\\)\\]\\]/***\\2***/g',
-  's/\\[\\[\\([^]#^|]*\\)\\^\\([^]|]*\\)\\]\\]/***\\2***/g',
-  's/\\[\\[\\([^]]*\\)\\]\\]/***\\1***/g',
-}, '; ')
-
-local markdown_extensions = { 'md', 'markdown', 'mkd', 'mdx' }
 local image_extensions = { 'png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'bmp', 'ico' }
 
 local function file_extension(path)
@@ -33,47 +21,22 @@ local function file_extension(path)
   return ext and ext:lower() or nil
 end
 
--- glow for markdown, treesitter for the rest. A terminal buffer left by glow gets recreated.
-local custom_file_previewer = function(opts)
-  opts = opts or {}
-  return previewers.new_buffer_previewer {
-    title = 'File Preview',
-    define_preview = function(self, entry)
-      local p = from_entry.path(entry, true, false)
-      if p == nil or p == '' then return end
-
-      if vim.api.nvim_buf_is_valid(self.state.bufnr) and vim.bo[self.state.bufnr].buftype == 'terminal' then
-        pcall(vim.api.nvim_buf_delete, self.state.bufnr, { force = true })
-        self.state.bufnr = vim.api.nvim_create_buf(false, true)
-        pcall(vim.api.nvim_win_set_buf, self.state.winid, self.state.bufnr)
-      end
-
-      local ext = file_extension(p)
-      if ext and vim.tbl_contains(markdown_extensions, ext) then
-        local glow_style = vim.fn.expand '~/.config/glow/github-dark.json'
-        local width = vim.api.nvim_win_get_width(self.state.winid)
-        local cmd = 'sed "' .. obsidian_sed_cmd .. '" ' .. vim.fn.shellescape(p) .. ' | glow -s ' .. vim.fn.shellescape(glow_style) .. ' -w ' .. width .. ' -'
-        vim.api.nvim_buf_call(self.state.bufnr, function() vim.fn.jobstart({ 'sh', '-c', cmd }, { term = true }) end)
-      else
-        conf.buffer_previewer_maker(p, self.state.bufnr, {
-          bufname = self.state.bufname,
-          winid = self.state.winid,
-        })
-      end
-    end,
-  }
-end
-
+-- Returns true when the selection was an image and imv took it.
 local view_image_with_imv = function(prompt_bufnr)
   local entry = action_state.get_selected_entry()
-  if not entry then return end
+  if not entry then return false end
   local filepath = entry.path or entry.filename or entry.value
-  if not filepath then return end
+  if not filepath then return false end
   local ext = file_extension(filepath)
-  if ext and vim.tbl_contains(image_extensions, ext) then
-    actions.close(prompt_bufnr)
-    vim.fn.jobstart({ 'imv', filepath }, { detach = true })
-  end
+  if not (ext and vim.tbl_contains(image_extensions, ext)) then return false end
+  actions.close(prompt_bufnr)
+  vim.fn.jobstart({ 'imv', filepath }, { detach = true })
+  return true
+end
+
+-- <C-v> keeps telescope's vertical split for anything that is not an image.
+local imv_or_vsplit = function(prompt_bufnr)
+  if not view_image_with_imv(prompt_bufnr) then actions.select_vertical(prompt_bufnr) end
 end
 
 -- delta for tracked git diffs, treesitter buffer previewer for untracked files.
@@ -102,9 +65,8 @@ local delta_git_previewer = previewers.new_buffer_previewer {
 
 require('telescope').setup {
   defaults = {
-    file_previewer = custom_file_previewer,
     mappings = {
-      i = { ['<C-v>'] = view_image_with_imv },
+      i = { ['<C-v>'] = imv_or_vsplit },
       n = { ['v'] = view_image_with_imv },
     },
   },

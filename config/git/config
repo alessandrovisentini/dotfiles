@@ -11,12 +11,6 @@
 	untracked-line-numbers = true
 [merge]
 	conflictstyle = zdiff3
-[pager]
-	diff = delta
-	show = delta
-	log = delta
-	blame = delta
-	reflog = delta
 [init]
 	defaultBranch = main
 [filter "lfs"]

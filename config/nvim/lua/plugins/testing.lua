@@ -1,7 +1,6 @@
 -- Needs nvim-dap, loaded by plugins.debug.
 
 vim.pack.add {
-  'https://github.com/antoinemadec/FixCursorHold.nvim',
   'https://github.com/nvim-neotest/neotest',
   'https://github.com/marilari88/neotest-vitest',
 }
