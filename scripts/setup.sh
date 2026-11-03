@@ -53,13 +53,13 @@ add_source_line "$HOME/.profile" "$DOTFILES/config/shell/env.sh"
 add_source_line "$HOME/.bashrc" "$DOTFILES/config/shell/interactive.sh"
 
 # Configs
-for name in alacritty git lazygit nvim tmux; do
+for name in alacritty git lazygit nvim tmux gtk-3.0/settings.ini; do
     link "$DOTFILES/config/$name" "$CONFIG_DIR/$name"
 done
 
 # Sway
 if command -v sway >/dev/null; then
-    for name in rofi sway swaylock swaync waybar xdg-desktop-portal gtk-3.0/settings.ini; do
+    for name in rofi sway swaylock swaync waybar xdg-desktop-portal; do
         link "$DOTFILES/config/$name" "$CONFIG_DIR/$name"
     done
 fi
