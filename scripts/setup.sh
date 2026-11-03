@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Link the dotfiles into place and load the shell vars and GNOME settings. Safe to run again.
+# Link the dotfiles into place and load the shell vars and GNOME settings.
 
 set -euo pipefail
 
@@ -76,4 +76,4 @@ if command -v gnome-shell >/dev/null; then
 fi
 
 echo
-echo "Done. Open a new terminal for the shell vars, log out and back in for GNOME."
+echo "Done."
