@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# tmux session per repo: an fzf picker under $REPOS_HOME, or a path given directly.
+# tmux session per repo: an fzf picker under $REPOS_HOME, or on a path given directly.
 
 run_session() {
     local BASE_PATH="$REPOS_HOME"
