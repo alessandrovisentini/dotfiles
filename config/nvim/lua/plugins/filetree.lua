@@ -1,0 +1,96 @@
+vim.pack.add { 'https://github.com/nvim-tree/nvim-tree.lua' }
+
+local function on_attach(bufnr)
+  local api = require 'nvim-tree.api'
+
+  local function opts(desc) return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, silent = true, nowait = true } end
+
+  api.config.mappings.default_on_attach(bufnr)
+
+  vim.keymap.set('n', 'v', function()
+    local node = api.tree.get_node_under_cursor()
+    if node and node.type == 'file' then
+      local extension = node.name:match '^.+%.(.+)$'
+      if extension and vim.tbl_contains({ 'png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'bmp', 'ico' }, extension:lower()) then
+        vim.fn.jobstart({ 'imv', node.absolute_path }, { detach = true })
+      end
+    end
+  end, opts 'View image with imv')
+
+  vim.keymap.set('n', '<C-o>', function()
+    local node = api.tree.get_node_under_cursor()
+    if not node then return end
+    if vim.fn.has 'mac' == 1 then
+      -- The finder selects the item itself
+      vim.fn.jobstart({ 'open', '-R', node.absolute_path }, { detach = true })
+      return
+    end
+    local dir = node.type == 'directory' and node.absolute_path or vim.fn.fnamemodify(node.absolute_path, ':h')
+    vim.fn.jobstart({ 'xdg-open', dir }, { detach = true })
+  end, opts 'Reveal in system file manager')
+end
+
+local FIXED_WIDTH = 40
+local adaptive_mode = false
+
+local function apply_setup()
+  require('nvim-tree').setup {
+    on_attach = on_attach,
+    hijack_directories = {
+      enable = false,
+    },
+    update_focused_file = {
+      enable = true,
+      update_root = {
+        enable = true,
+      },
+    },
+    view = {
+      adaptive_size = adaptive_mode,
+      width = FIXED_WIDTH,
+    },
+    git = {
+      ignore = false,
+    },
+    filters = {
+      git_ignored = false,
+    },
+  }
+end
+
+apply_setup()
+
+vim.api.nvim_create_autocmd('VimEnter', {
+  callback = function(data)
+    if vim.fn.isdirectory(data.file) ~= 1 then return end
+    vim.cmd.cd(data.file)
+    local api = require 'nvim-tree.api'
+    vim.schedule(function()
+      api.tree.open()
+      if vim.api.nvim_buf_is_valid(data.buf) then pcall(vim.api.nvim_buf_delete, data.buf, { force = true }) end
+    end)
+  end,
+})
+
+local function toggle_adaptive_width()
+  adaptive_mode = not adaptive_mode
+  local api = require 'nvim-tree.api'
+  api.tree.close()
+  apply_setup()
+  api.tree.open()
+  local mode_name = adaptive_mode and 'adaptive' or 'fixed (' .. FIXED_WIDTH .. ')'
+  vim.notify('NvimTree width: ' .. mode_name, vim.log.levels.INFO)
+end
+
+vim.keymap.set('n', '\\', '<Cmd>NvimTreeFindFile<CR>', { desc = 'NvimTree reveal', silent = true })
+vim.keymap.set('n', '<leader>tt', function()
+  local api = require 'nvim-tree.api'
+  if vim.bo.filetype == 'NvimTree' then
+    api.tree.close()
+  else
+    api.tree.find_file { open = true, focus = true }
+  end
+end, { silent = true, desc = '[T]ree [T]oggle' })
+vim.keymap.set('n', '<leader>tc', '<Cmd>NvimTreeClose<CR>', { silent = true, desc = '[T]ree [C]lose' })
+vim.keymap.set('n', '<leader>te', '<Cmd>wincmd p<CR>', { silent = true, desc = '[T]ree to [E]ditor' })
+vim.keymap.set('n', '<leader>tw', toggle_adaptive_width, { silent = true, desc = '[T]ree [W]idth toggle' })

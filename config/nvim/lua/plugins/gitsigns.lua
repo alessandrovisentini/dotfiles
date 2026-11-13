@@ -1,0 +1,91 @@
+vim.pack.add { 'https://github.com/lewis6991/gitsigns.nvim' }
+
+require('gitsigns').setup {
+  signs = {
+    add = { text = '+' }, ---@diagnostic disable-line: missing-fields
+    change = { text = '~' }, ---@diagnostic disable-line: missing-fields
+    delete = { text = '_' }, ---@diagnostic disable-line: missing-fields
+    topdelete = { text = '‾' }, ---@diagnostic disable-line: missing-fields
+    changedelete = { text = '~' }, ---@diagnostic disable-line: missing-fields
+  },
+  current_line_blame = true,
+  on_attach = function(bufnr)
+    local gitsigns = require 'gitsigns'
+
+    local function map(mode, l, r, opts)
+      opts = opts or {}
+      opts.buffer = bufnr
+      vim.keymap.set(mode, l, r, opts)
+    end
+
+    local function git(args)
+      local dir = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(bufnr), ':h')
+      local result = vim.system(vim.list_extend({ 'git' }, args), { cwd = dir, text = true }):wait()
+      if result.code ~= 0 then return nil end
+      return vim.trim(result.stdout)
+    end
+
+    local function get_repo_url()
+      local remote = git { 'remote', 'get-url', 'origin' }
+      if not remote or remote == '' then return nil end
+      remote = remote:gsub('ssh://git@([^/]+)/', 'https://%1/')
+      remote = remote:gsub('^git@([^:]+):', 'https://%1/')
+      remote = remote:gsub('%.git$', '')
+      return remote
+    end
+
+    local function get_blame_sha()
+      local line = vim.fn.line '.'
+      local out = git { 'blame', '-l', '-L', line .. ',' .. line, '--', vim.api.nvim_buf_get_name(bufnr) }
+      local sha = out and out:match '^%^?(%x+)'
+      if not sha or sha:match '^0+$' then return nil end
+      return sha
+    end
+
+    map('n', '<leader>gb', function() gitsigns.blame_line { full = true } end, { desc = 'git [b]lame line' })
+    -- Open the current line's commit
+    map('n', '<leader>gc', function()
+      local sha = get_blame_sha()
+      if not sha then return vim.notify('No commit found for this line', vim.log.levels.WARN) end
+      local url = get_repo_url()
+      if not url then return vim.notify('No origin remote for this repo', vim.log.levels.WARN) end
+      vim.ui.open(url .. '/commit/' .. sha)
+    end, { desc = 'git open [c]ommit in browser' })
+    map('n', '<leader>gd', gitsigns.diffthis, { desc = 'git [d]iff against index' })
+    map('n', '<leader>gD', function() gitsigns.diffthis '@' end, { desc = 'git [D]iff against last commit' })
+
+    -- Navigation
+    map('n', ']c', function()
+      if vim.wo.diff then
+        vim.cmd.normal { ']c', bang = true }
+      else
+        gitsigns.nav_hunk 'next'
+      end
+    end, { desc = 'Jump to next git [c]hange' })
+
+    map('n', '[c', function()
+      if vim.wo.diff then
+        vim.cmd.normal { '[c', bang = true }
+      else
+        gitsigns.nav_hunk 'prev'
+      end
+    end, { desc = 'Jump to previous git [c]hange' })
+
+    -- Actions
+    map('v', '<leader>hs', function() gitsigns.stage_hunk { vim.fn.line '.', vim.fn.line 'v' } end, { desc = 'git [s]tage hunk' })
+    map('v', '<leader>hr', function() gitsigns.reset_hunk { vim.fn.line '.', vim.fn.line 'v' } end, { desc = 'git [r]eset hunk' })
+    map('n', '<leader>hs', gitsigns.stage_hunk, { desc = 'git [s]tage hunk' })
+    map('n', '<leader>hr', gitsigns.reset_hunk, { desc = 'git [r]eset hunk' })
+    map('n', '<leader>hS', gitsigns.stage_buffer, { desc = 'git [S]tage buffer' })
+    map('n', '<leader>hR', gitsigns.reset_buffer, { desc = 'git [R]eset buffer' })
+    map('n', '<leader>hp', gitsigns.preview_hunk, { desc = 'git [p]review hunk' })
+    map('n', '<leader>hi', gitsigns.preview_hunk_inline, { desc = 'git preview hunk [i]nline' })
+    map('n', '<leader>hQ', function() gitsigns.setqflist 'all' end, { desc = 'git hunk [Q]uickfix list (all files in repo)' })
+    map('n', '<leader>hq', gitsigns.setqflist, { desc = 'git hunk [q]uickfix list (all changes in this file)' })
+    -- Toggles
+    map('n', '<leader>tb', gitsigns.toggle_current_line_blame, { desc = '[T]oggle git show [b]lame line' })
+
+    -- Text object
+    map({ 'o', 'x' }, 'ih', gitsigns.select_hunk)
+  end,
+}

@@ -1,0 +1,92 @@
+* {
+    bg0:    #222226;
+    bg1:    #1d1d20;
+    bg2:    #36363a80;
+    bg3:    #4A4A4D;
+    fg0:    #ffffff;
+    fg1:    #ffffff;
+    fg2:    #9a9996;
+    fg3:    #5e5c64;
+
+    font:   "DejaVuSansM Nerd Font Mono 13";
+
+    background-color:   transparent;
+    text-color:         @fg1;
+
+    margin:     0px;
+    padding:    0px;
+    spacing:    0px;
+}
+
+window {
+    location:       north;
+    anchor:         north;
+    y-offset:       20%;
+
+    width:          480;
+
+    background-color:   @bg0;
+    border:             2px;
+    border-color:       @fg3;
+}
+
+mainbox {
+    padding:    12px;
+}
+
+inputbar {
+    background-color:   @bg1;
+    border-color:       @bg3;
+
+    border:         2px;
+
+    padding:    8px 16px;
+    spacing:    8px;
+    children:   [ prompt, entry ];
+}
+
+prompt {
+    text-color: @fg2;
+}
+
+message {
+    margin:             12px 0 0;
+    border-color:       @bg2;
+    background-color:   @bg2;
+}
+
+textbox {
+    padding:    8px 24px;
+}
+
+listview {
+    background-color:   transparent;
+
+    margin:     12px 0 0;
+    lines:      8;
+    columns:    1;
+
+    fixed-height: false;
+}
+
+element {
+    padding:        8px 16px;
+    spacing:        8px;
+}
+
+element normal active {
+    text-color: @bg3;
+}
+
+element selected normal, element selected active {
+    background-color:   @bg3;
+}
+
+element-icon {
+    size:           1em;
+    vertical-align: 0.5;
+}
+
+element-text {
+    text-color: inherit;
+}

@@ -1,0 +1,84 @@
+/* Dark surface, per-app accent. */
+
+* {
+    font-family: "DejaVuSansM Nerd Font Mono", monospace;
+    font-size: 11pt;
+}
+
+.notification-row {
+    background: transparent;
+    margin: 6px;
+}
+
+.notification {
+    background: #303030;
+    color: #ffffff;
+    border: 1px solid #1a1a1a;
+    border-radius: 12px;
+    padding: 8px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+}
+
+.notification.low {
+    background: #2a2a2a;
+    color: #9a9996;
+}
+
+.notification.normal {
+    background: #303030;
+    color: #ffffff;
+}
+
+.notification.critical {
+    background: #303030;
+    color: #ffffff;
+    border-color: #e8434b;
+}
+
+.notification-content {
+    padding: 8px 10px;
+}
+
+.summary {
+    font-weight: bold;
+    color: inherit;
+    margin-bottom: 2px;
+}
+
+.body {
+    color: inherit;
+    opacity: 0.92;
+}
+
+.image {
+    border-radius: 6px;
+    margin-right: 8px;
+}
+
+.close-button {
+    background: transparent;
+    color: #ffffff;
+    border: none;
+    padding: 4px;
+    margin: 0;
+    border-radius: 8px;
+}
+
+.close-button:hover {
+    background: #3584e4;
+    color: #ffffff;
+}
+
+.notification-action {
+    background: #2a2a2a;
+    color: #3584e4;
+    border: 1px solid #3584e4;
+    border-radius: 8px;
+    padding: 4px 10px;
+    margin: 2px;
+}
+
+.notification-action:hover {
+    background: #3584e4;
+    color: #ffffff;
+}
