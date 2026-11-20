@@ -54,6 +54,9 @@ in {
     baobab # disk analyzer
     gnome-calculator
     gnome-calendar
+    gnome-text-editor
+    gnome-font-viewer
+    file-roller # archives, also used by thunar-archive-plugin
     deja-dup
     newsflash
 

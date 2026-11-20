@@ -6,9 +6,8 @@ set $fg         #ffffff
 set $muted      #9a9996
 set $accent     #3584e4
 set $danger     #c01c28
-set $focus      #6fb6ff
 
-client.focused          $focus   $headerbar $fg    $focus   $focus
+client.focused          $accent  $headerbar $fg    $accent  $accent
 client.unfocused        $surface $surface   $muted $surface $surface
 client.focused_inactive $surface $headerbar $muted $surface $surface
 client.urgent           $danger  $surface   $fg    $danger  $danger
@@ -37,6 +36,8 @@ bindsym $mod+Shift+q kill
 bindsym $mod+d exec $menu
 # Emoji picker, types the pick into the focused window.
 bindsym $mod+Ctrl+space exec rofimoji --action type
+# Notification center
+bindsym $mod+n exec swaync-client -t -sw
 
 # Focus
 bindsym $mod+$left focus left
@@ -122,7 +123,7 @@ bindsym $mod+Shift+e exec swaynag -t warning -m 'Exit sway?' -B 'Yes' 'swaymsg e
 bindsym $mod+Ctrl+q exec swaylock -f
 
 # Color picker
-bindsym $mod+Shift+c exec grim -g "$(slurp -p)" -t ppm - | convert - -format '%[pixel:p{0,0}]' txt:- | tail -n 1 | cut -d ' ' -f 4 | wl-copy
+bindsym $mod+Shift+c exec grim -g "$(slurp -p)" -t ppm - | magick - -depth 8 -format '#%[hex:p{0,0}]' info:- | wl-copy
 
 bindsym $mod+Shift+r reload
 

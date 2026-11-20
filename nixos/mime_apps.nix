@@ -68,12 +68,12 @@
 
     "inode/directory" = "thunar.desktop";
 
-    "application/zip" = "org.gnome.Nautilus.desktop";
-    "application/x-tar" = "org.gnome.Nautilus.desktop";
-    "application/x-compressed-tar" = "org.gnome.Nautilus.desktop";
-    "application/x-bzip2-compressed-tar" = "org.gnome.Nautilus.desktop";
-    "application/x-xz-compressed-tar" = "org.gnome.Nautilus.desktop";
-    "application/x-7z-compressed" = "org.gnome.Nautilus.desktop";
-    "application/x-rar" = "org.gnome.Nautilus.desktop";
+    "application/zip" = "org.gnome.FileRoller.desktop";
+    "application/x-tar" = "org.gnome.FileRoller.desktop";
+    "application/x-compressed-tar" = "org.gnome.FileRoller.desktop";
+    "application/x-bzip2-compressed-tar" = "org.gnome.FileRoller.desktop";
+    "application/x-xz-compressed-tar" = "org.gnome.FileRoller.desktop";
+    "application/x-7z-compressed" = "org.gnome.FileRoller.desktop";
+    "application/x-rar" = "org.gnome.FileRoller.desktop";
   };
 }

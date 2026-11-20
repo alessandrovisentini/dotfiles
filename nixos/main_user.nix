@@ -11,15 +11,13 @@
     uid = 1000;
     group = settings.username;
     description = settings.username;
-    extraGroups = ["networkmanager" "wheel" "video" "audio" "disk" "pcap" "input"];
+    extraGroups = ["networkmanager" "wheel" "video" "audio" "pcap" "input" "docker" "scanner" "lp"];
   };
   users.groups.${settings.username} = {
     gid = 1000;
   };
 
   xdg.mime.enable = true;
-  xdg.portal.enable = true;
-  xdg.portal.wlr.enable = true;
 
   # Polkit
   security.polkit.enable = true;
@@ -50,7 +48,6 @@
     XDG_STATE_HOME = "$HOME/.local/state";
 
     NIXOS_OZONE_WL = "1";
-    MOZ_ENABLE_WAYLAND = "1";
   };
 
   # Desktop defaults from the dotfiles

@@ -7,6 +7,7 @@
     fg1:    #ffffff;
     fg2:    #9a9996;
     fg3:    #5e5c64;
+    accent: #3584e4;
 
     font:   "DejaVuSansM Nerd Font Mono 13";
 
@@ -75,7 +76,7 @@ element {
 }
 
 element normal active {
-    text-color: @bg3;
+    text-color: @accent;
 }
 
 element selected normal, element selected active {

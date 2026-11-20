@@ -6,9 +6,6 @@ export XDG_STATE_HOME="$HOME/.local/state"
 export REPOS_HOME="$HOME/Development/repos"
 export NETHACKOPTIONS="@$REPOS_HOME/dotfiles/config/nethack/nethackrc"
 
-alias t='$REPOS_HOME/dotfiles/scripts/t.sh'
-alias rip-cd='$REPOS_HOME/dotfiles/scripts/rip-cd.sh'
-
 if [[ "$(uname)" == "Darwin" ]]; then
     export NVM_DIR="$HOME/.nvm"
     [ -d "$NVM_DIR" ] || mkdir -p "$NVM_DIR"

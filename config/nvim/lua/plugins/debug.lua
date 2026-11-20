@@ -65,9 +65,10 @@ dapui.setup {
   },
 }
 
-vim.api.nvim_set_hl(0, 'DapBreak', { fg = '#e51400' })
-vim.api.nvim_set_hl(0, 'DapStop', { fg = '#ffcc00' })
-vim.api.nvim_set_hl(0, 'DapStoppedLine', { bg = '#2e4d2e' })
+-- Colors from the colorscheme
+vim.api.nvim_set_hl(0, 'DapBreak', { link = 'DiagnosticError' })
+vim.api.nvim_set_hl(0, 'DapStop', { link = 'DiagnosticWarn' })
+vim.api.nvim_set_hl(0, 'DapStoppedLine', { link = 'DiffAdd' })
 
 vim.fn.sign_define('DapBreakpoint', { text = '●', texthl = 'DapBreak' })
 vim.fn.sign_define('DapBreakpointCondition', { text = '⊜', texthl = 'DapBreak' })

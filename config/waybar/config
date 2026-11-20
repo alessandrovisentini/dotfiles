@@ -36,15 +36,14 @@
         "tooltip": false,
         "scroll-step": 5,
         "format": "{icon} {volume}%",
-        "format-muted": "🔇 {volume}%",
-        "format-source": "🎤 {volume}%",
+        "format-muted": "󰝟 {volume}%",
         "on-click": "pwvucontrol",
         "format-icons": {
-            "headphone": "🎧",
+            "headphone": "󰋋",
             "default": [
-                "🔈",
-                "🔉",
-                "🔊"
+                "󰕿",
+                "󰖀",
+                "󰕾"
             ]
         },
     },
@@ -52,12 +51,12 @@
     "battery": {
         "format": "{icon} {capacity}%",
         "states": {
-        "warning": 20,
-        "critical": 10 
+            "warning": 20,
+            "critical": 15
         },
         "format-icons": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
         "format-charging": "󰂄 {capacity}%",
-        "format-full": "󰂄 {capacity}%" 
+        "format-full": "󰂄 {capacity}%"
     },
 
     "memory": {

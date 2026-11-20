@@ -44,27 +44,29 @@ run_session() {
     fi
 
     local SESSION_NAME="$REPO_NAME"
+    # Exact match, and the trailing ":" stops a "." in the name being read as window.pane
+    local TARGET="=$SESSION_NAME:"
 
-    if tmux has-session -t "$SESSION_NAME" 2>/dev/null; then
+    if tmux has-session -t "$TARGET" 2>/dev/null; then
         if [ -n "$TMUX" ]; then
-            tmux switch-client -t "$SESSION_NAME"
+            tmux switch-client -t "$TARGET"
         else
-            tmux attach -t "$SESSION_NAME"
+            tmux attach -t "$TARGET"
         fi
         exit 0
     fi
 
     tmux new-session -d -s "$SESSION_NAME" -c "$REPO_PATH" -n "editor"
-    tmux send-keys -t "$SESSION_NAME:1" "nvim ." C-m
+    tmux send-keys -t "${TARGET}1" "nvim ." C-m
 
-    tmux new-window -t "$SESSION_NAME" -c "$REPO_PATH" -n "terminal"
-    tmux split-window -h -c "$REPO_PATH" -t "$SESSION_NAME:2"
+    tmux new-window -t "$TARGET" -c "$REPO_PATH" -n "terminal"
+    tmux split-window -h -c "$REPO_PATH" -t "${TARGET}2"
 
-    tmux select-window -t "$SESSION_NAME:1"
+    tmux select-window -t "${TARGET}1"
     if [ -n "$TMUX" ]; then
-        tmux switch-client -t "$SESSION_NAME"
+        tmux switch-client -t "$TARGET"
     else
-        tmux attach -t "$SESSION_NAME"
+        tmux attach -t "$TARGET"
     fi
 }
 

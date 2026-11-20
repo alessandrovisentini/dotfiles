@@ -36,6 +36,11 @@ window#waybar {
     color: @fg;
 }
 
+#workspaces button.urgent {
+    color: @fg;
+    background: @danger;
+}
+
 #clock,
 #pulseaudio,
 #backlight,

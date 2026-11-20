@@ -76,7 +76,7 @@ main() {
     done
 
     if command -v sway >/dev/null; then
-        for name in rofi sway swaylock swaync waybar xdg-desktop-portal; do
+        for name in rofi sway swaylock swaync waybar; do
             link "$DOTFILES/config/$name" "$CONFIG_DIR/$name"
         done
     fi
