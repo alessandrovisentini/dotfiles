@@ -9,7 +9,7 @@ REPO_DIR="$HOME/Development/repos/dotfiles"
 CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}"
 
 run_git() {
-    # Fresh NixOS has no git until the first rebuild
+    # Fresh NixOS has no git from the start
     if ! command -v git >/dev/null && command -v nix-shell >/dev/null; then
         nix-shell -p git --run "git $(printf '%q ' "$@")"
     else
@@ -34,7 +34,6 @@ link() {
         echo "backup  $target -> $backup"
     fi
 
-    # -n replaces a symlink to a directory instead of linking inside it
     $sudo ln -sfn "$source" "$target"
     echo "linked  $target"
 }

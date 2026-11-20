@@ -22,7 +22,7 @@ run_session() {
             fi
         done)
         ACTIVE=$(echo "$ACTIVE_SESSIONS" | while read -r session; do
-            if [ -n "$session" ] && [ "$session" != "_launcher" ]; then
+            if [ -n "$session" ]; then
                 printf '\033[32m%s (active)\033[0m\n' "$session"
             fi
         done)
@@ -68,14 +68,4 @@ run_session() {
     fi
 }
 
-if [ "$1" = "--session" ]; then
-    shift
-    run_session "$@"
-elif [ $# -gt 0 ]; then
-    run_session "$@"
-elif [ -n "$TMUX" ]; then
-    tmux display-popup -E "$0 --session"
-else
-    tmux new-session -d -s _launcher 2>/dev/null
-    tmux attach -t _launcher \; display-popup -E "$0 --session" \; kill-session -t _launcher
-fi
+run_session "$@"
