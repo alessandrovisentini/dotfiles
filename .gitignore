@@ -1,1 +1,13 @@
 .DS_Store
+
+# nixos-rebuild build output
+result
+
+# Secrets
+secrets/
+*.key
+*.pem
+*.crt
+*.enc
+*.gpg
+*.asc
