@@ -1,8 +1,8 @@
 quitOnTopLevelReturn: true
 git:
-  pagers:
+  diffRenderers:
     - colorArg: never
-      pager: bash ~/.config/lazygit/delta-wrapper.sh
+      command: bash ~/.config/lazygit/delta-wrapper.sh
 gui:
   sidePanelWidth: 0.20
   mainPanelSplitMode: 'horizontal'
