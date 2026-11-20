@@ -1,1 +1,6 @@
+configuration {
+    show-icons: true;
+    icon-theme: "Adwaita";
+}
+
 @theme "~/.config/rofi/theme.rasi"

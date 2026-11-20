@@ -84,10 +84,11 @@ element selected normal, element selected active {
 }
 
 element-icon {
-    size:           1em;
+    size:           1.5em;
     vertical-align: 0.5;
 }
 
 element-text {
-    text-color: inherit;
+    text-color:     inherit;
+    vertical-align: 0.5;
 }
