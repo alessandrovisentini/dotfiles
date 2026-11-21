@@ -44,7 +44,7 @@ run_session() {
     fi
 
     local SESSION_NAME="$REPO_NAME"
-    # Exact match, and the trailing ":" stops a "." in the name being read as window.pane
+    # Exact match. The trailing ":" stops a "." in the name being read as window.pane
     local TARGET="=$SESSION_NAME:"
 
     if tmux has-session -t "$TARGET" 2>/dev/null; then

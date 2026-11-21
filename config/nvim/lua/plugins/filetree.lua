@@ -17,7 +17,8 @@ local function on_attach(bufnr)
     end
   end, opts 'View image with imv')
 
-  vim.keymap.set('n', '<C-o>', function()
+  -- Not <C-o>, that's jump back
+  vim.keymap.set('n', '<C-f>', function()
     local node = api.tree.get_node_under_cursor()
     if not node then return end
     if vim.fn.has 'mac' == 1 then
