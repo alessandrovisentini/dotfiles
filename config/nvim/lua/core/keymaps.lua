@@ -4,10 +4,11 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open float diagnostic' })
 
 -- Spell checking
-vim.keymap.set('n', '<leader>St', function()
+local function toggle_spell()
   vim.o.spell = not vim.o.spell
   vim.notify('Spell check: ' .. (vim.o.spell and 'on' or 'off'))
-end, { desc = '[S]pelling: [T]oggle check' })
+end
+vim.keymap.set('n', '<leader>St', toggle_spell, { desc = '[S]pelling: [T]oggle check' })
 vim.keymap.set('n', '<leader>Sl', function()
   if vim.o.spelllang == 'en_us' then
     vim.o.spelllang = 'it'
@@ -26,6 +27,7 @@ vim.keymap.set('n', '<leader>tn', function()
   vim.o.relativenumber = not vim.o.relativenumber
   vim.o.number = true
 end, { desc = '[T]oggle line [N]umbers (relative/absolute)' })
+vim.keymap.set('n', '<leader>tS', toggle_spell, { desc = '[T]oggle [S]pell check' })
 
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 

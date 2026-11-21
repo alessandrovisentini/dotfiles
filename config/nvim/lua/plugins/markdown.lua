@@ -32,6 +32,23 @@ vim.api.nvim_set_hl(0, '@markup.link', { fg = colors.blue, bold = true, italic =
 vim.api.nvim_set_hl(0, 'RenderMarkdownCode', { bg = colors.bg_dark })
 vim.api.nvim_set_hl(0, 'RenderMarkdownCodeInline', { fg = colors.red, bg = colors.bg_dark })
 
+-- Keep the link colors above instead of markdown-oxide's
+vim.api.nvim_set_hl(0, '@lsp.type.decorator.markdown', {})
+vim.api.nvim_set_hl(0, '@lsp.type.comment.markdown', {})
+
+-- Links to missing notes in red, markdown-oxide tags them as comments.
+-- High priority to win over render-markdown's link color.
+vim.api.nvim_set_hl(0, 'MarkdownUnresolvedLink', { fg = colors.red })
+vim.api.nvim_create_autocmd('LspTokenUpdate', {
+  callback = function(args)
+    local token = args.data.token
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if token.type == 'comment' and client and client.name == 'markdown_oxide' then
+      vim.lsp.semantic_tokens.highlight_token(token, args.buf, client.id, 'MarkdownUnresolvedLink', { priority = 5000 })
+    end
+  end,
+})
+
 require('render-markdown').setup {
   render_modes = { 'n', 'c' },
   anti_conceal = { enabled = false },

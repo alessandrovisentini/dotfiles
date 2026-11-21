@@ -92,6 +92,26 @@ local servers = {
       },
     },
   },
+
+  -- Obsidian links, backlinks and note completion
+  markdown_oxide = {
+    -- Vaults can be nested, so prefer the one nvim was opened in or is already using
+    root_dir = function(bufnr, on_dir)
+      local file = vim.api.nvim_buf_get_name(bufnr)
+      local dirs = { vim.fn.getcwd() }
+      for _, client in ipairs(vim.lsp.get_clients { name = 'markdown_oxide' }) do
+        dirs[#dirs + 1] = client.root_dir
+      end
+      for _, dir in ipairs(dirs) do
+        if vim.uv.fs_stat(dir .. '/.obsidian') and vim.fs.relpath(dir, file) then return on_dir(dir) end
+      end
+      -- Outside a vault, the git repo is the vault
+      local vault = vim.fs.root(bufnr, '.obsidian') or vim.fs.root(bufnr, '.git')
+      if vault then on_dir(vault) end
+    end,
+    -- Links to missing notes are shown in red instead, see markdown.lua
+    handlers = { ['textDocument/publishDiagnostics'] = function() end },
+  },
 }
 
 -- Formatters
